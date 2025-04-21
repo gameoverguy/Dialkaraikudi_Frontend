@@ -1,7 +1,9 @@
+import Business_Det from "./Pages/Business_detail";
+
 function App() {
   return (
     <>
-      <h1>Vite + React</h1>
+      <Business_Det />
     </>
   );
 }
