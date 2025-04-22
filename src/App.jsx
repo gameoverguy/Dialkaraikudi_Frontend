@@ -1,7 +1,7 @@
 import BusinessDetails from "./Pages/BusinessDetail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import StarRating from "./Pages/Business_detail/ReviewStar";
 import MainLayout from "./Components/MainLayout";
+import StarRating from "./Pages/BusinessDetail/ReviewStar";
 
 function App() {
 

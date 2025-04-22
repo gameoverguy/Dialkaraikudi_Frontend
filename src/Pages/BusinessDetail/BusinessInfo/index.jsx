@@ -10,7 +10,7 @@ const BusinessInfo = ({formData}) => {
   return (
     <React.Fragment>
         {formData.map((business) => (
-              <div key={business.id} className="rounded-md border border-gray-200 mx-4">
+              <div key={business.id} className="rounded-md border border-gray-200 mx-4 p-2">
                 <h1 className="flex text-xl font-bold gap-2 md:text-xl lg:text-2xl">
                   <span className="flex items-center text-sm px-2 bg-gray-600 rounded-md text-white">
                     <FaThumbsUp />
