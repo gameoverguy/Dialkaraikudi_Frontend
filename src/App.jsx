@@ -1,9 +1,9 @@
-import Business_Det from "./Pages/Business_detail";
+import BusinessDetails from "./Pages/BusinessDetail";
 
 function App() {
   return (
     <>
-      <Business_Det />
+      <BusinessDetails />
     </>
   );
 }
