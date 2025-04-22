@@ -5,9 +5,9 @@ import Footer from './Footer'
 
 const MainLayout = () => {
     return (
-        <div className='w-11/12 mx-auto'>
+        <div className='w-full mx-auto'>
             <Header />
-            <div className='min-h-127'>
+            <div className='min-h-127 w-11/12 mx-auto p-2'>
                 <Outlet />
             </div>
             <Footer />
