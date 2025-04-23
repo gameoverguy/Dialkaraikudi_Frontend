@@ -28,74 +28,34 @@ const BusinessDetails = () => {
     }
   };
 
+  const tabs = [
+    { name: "Overview", id: "overview", key: "overview" },
+    { name: "Services", id: "services", key: "services" },
+    { name: "Quick Info", id: "quickinfo", key: "quick-info" },
+    { name: "Photos", id: "photos", key: "photos" },
+    { name: "Explore", id: "explore", key: "explore" },
+    { name: "Reviews", id: "reviews", key: "reviews" },
+  ];
+
   return (
     <React.Fragment>
       <div className="bg-white shadow-xl">
         <BusinessInfo formData={formData} />
-
-        <div className="flex gap-6 mx-4 p-2 sticky top-0 bg-white z-10">
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "overview"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("overview", "overview")}
-          >
-            Overview
-          </div>
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "services"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("services", "services")}
-          >
-            Services
-          </div>
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "quick-info"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("quick-info", "quickinfo")}
-          >
-            Quick Info
-          </div>
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "photos"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("photos", "photos")}
-          >
-            Photos
-          </div>
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "explore"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("explore", "explore")}
-          >
-            Explore
-          </div>
-          <div
-            className={`py-2 font-medium text-md cursor-pointer ${
-              activeTab === "reviews"
-                ? "border-b-4 border-blue-500 text-blue-500"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => handleTabClick("reviews", "reviews")}
-          >
-            Reviews
-          </div>
+        <div className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide">
+          {tabs.map((tab) => (
+            <div
+              key={tab.key}
+              className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${
+                activeTab === tab.key
+                  ? "border-b-4 border-blue-500 text-blue-500"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+              onClick={() => handleTabClick(tab.key, tab.id)}
+            >
+              {tab.name}
+            </div>
+          ))}
         </div>
-
         <div className="mx-4 space-y-8 pb-10">
           <div id="overview">
             <div id="services">
@@ -111,7 +71,7 @@ const BusinessDetails = () => {
               <Explore />
             </div>
             <div id="reviews">
-              <Reviews />
+              <Reviews  formData={formData[0]}/>
             </div>
           </div>
         </div>

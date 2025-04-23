@@ -13,11 +13,11 @@ const Explore = () => {
       businesses: [
         {
           id: 2,
-          name: "Divine Blessings (Pandits)",
+          name: "Divine Blessings",
           image: "https://dummyimage.com/250x150/000/fff",
           star: 4.8,
           rating: 120,
-          address: "Some Area, Karaikudi",
+          address: "Kalanivasal, Karaikudi",
           experience: "5 years",
           contact: 9876543211,
         },
@@ -121,92 +121,64 @@ const Explore = () => {
         <h1 className="flex items-center font-bold text-xl mb-4 p-2">
           You might want to explore
         </h1>
-        <div className="flex overflow-x-auto gap-4 mb-4 p-2">
-          {exploreData.map((item) => (
-            <button
-              key={item.category}
-              className={`px-4 py-2 rounded text-sm font-medium focus:outline-none ${
-                selectedCategory === item.category
-                  ? "bg-blue-100 text-blue-600"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-              onClick={() => handleCategoryClick(item.category)}
+        <div className="overflow-x-auto">
+          <div className="flex gap-3 mb-4 px-2 whitespace-nowrap">
+            {exploreData.map((item) => (
+              <button
+                key={item.category}
+                className={`px-4 py-2 rounded text-sm font-medium shrink-0 transition-all duration-200 border-1 border-gray-200 ${
+                  selectedCategory === item.category
+                    ? "bg-blue-100 text-blue-600"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+                onClick={() => handleCategoryClick(item.category)}
+              >
+                {item.category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {currentBusinesses.map((business) => (
+            <div
+              key={business.id}
+              className="flex flex-col p-4 border border-gray-300 rounded-md shadow-sm"
             >
-              {item.category}
-            </button>
+              <img
+                src={business.image}
+                alt={business.name}
+                className="w-full h-32 object-cover rounded-md mb-3"
+              />
+              <h2 className="text-base font-semibold text-gray-800 mb-1">
+                {business.name}
+              </h2>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center bg-green-600 text-white px-2 py-0.5 text-sm rounded">
+                  {business.star}
+                  <MdOutlineStar className="ml-1 text-sm" />
+                </div>
+                <span className="text-sm text-gray-500">
+                  {business.rating} Ratings
+                </span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600 mb-3">
+                <SlLocationPin className="mr-1 text-gray-500" />
+                {business.address}
+              </div>
+              <div className="flex gap-2 mt-auto">
+                <button className="flex items-center gap-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+                  <FaPhone />
+                  Show Number
+                </button>
+                <button className="flex items-center gap-2 text-sm border px-3 py-1 rounded text-gray-800 bg-white hover:shadow">
+                  <PiWhatsappLogoFill className="text-[#25D366] text-xl" />
+                  WhatsApp
+                </button>
+              </div>
+            </div>
           ))}
         </div>
-        {currentBusinesses.map((business) => (
-          <div
-            key={business.id}
-            className="flex mb-4 p-2 border border-gray-200 rounded-md"
-          >
-            <img src={business.image} alt="" />
-            <h1 className="flex text-xl font-bold gap-2 md:text-xl lg:text-2xl">
-              <span className="flex items-center w-fit text-sm px-2 bg-gray-600 rounded-md text-white">
-                <FaThumbsUp />
-              </span>
-              {business.name}
-            </h1>
-            <div className="flex items-center mt-1 p-2">
-              <div className="flex justify-between w-fit bg-green-600 px-2 rounded text-white items-center">
-                <p>{business.star}</p>
-                <span className="flex items-center">
-                  <MdOutlineStar />
-                </span>
-              </div>
-              <p className="px-2 font-light">{business.rating} Ratings</p>
-            </div>
-            <div className="flex flex-col md:flex-row p-2 gap-2">
-              <p className="flex items-center font-semibold">
-                <span className="px-2">
-                  <SlLocationPin />
-                </span>
-                {business.address}
-              </p>
-              {business.experience && (
-                <p className="font-light">{business.experience} in Business</p>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-2 p-2">
-              {business.contact && (
-                <div className="flex justify-between w-fit bg-green-600 px-2 rounded text-white items-center">
-                  <p className="flex items-center p-2 gap-2">
-                    <span
-                      className="animate-bounce"
-                      style={{ animationDuration: "0.7s" }}
-                    >
-                      <FaPhone />
-                    </span>
-                    {business.contact}
-                  </p>
-                </div>
-              )}
-              <div className="flex justify-between w-fit bg-blue-600 px-2 rounded text-white items-center">
-                <p className="flex items-center p-2 gap-2 font-bold">
-                  <span className="text-xl font-black">
-                    <FaRegComment />
-                  </span>
-                  Enquire Now
-                </p>
-              </div>
-              <div className="flex justify-between w-fit bg-white shadow-2xs border px-2 rounded text-black items-center">
-                <p className="flex items-center p-2 gap-2 font-bold">
-                  <span className="text-[#25D366] text-3xl">
-                    <PiWhatsappLogoFill />
-                  </span>
-                  WhatsApp
-                </p>
-              </div>
-              <div className="flex items-center text-2xl rounded-md border-gray-200 border p-3">
-                <RiShareForwardLine className="text-gray-500" />
-              </div>
-              <div className="flex items-center text-2xl rounded-md border-gray-200 border p-3">
-                <HiOutlinePencil className="text-gray-500" />
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </React.Fragment>
   );

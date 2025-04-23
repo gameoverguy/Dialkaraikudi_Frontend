@@ -1,7 +1,7 @@
 import BusinessDetails from "./Pages/BusinessDetail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./Components/MainLayout";
-import StarRating from "./Pages/BusinessDetail/ReviewStar";
+import ContactDetail from "./Pages/ContactDetail";
 
 function App() {
 
@@ -10,8 +10,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<StarRating />} />
             <Route path="/detail" element={<BusinessDetails />}/>
+            <Route path="/contactdetail" element={<ContactDetail />}/>
           </Route>
         </Routes>
       </BrowserRouter>
