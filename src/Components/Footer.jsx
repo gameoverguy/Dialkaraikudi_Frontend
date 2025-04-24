@@ -11,13 +11,7 @@ const Footer = () => {
                     <div>
                         <h1 className='text-xl mb-6'>Quick Links</h1>
                         {footer.map((data, i) => (
-                            <li className='list-none '>{data}</li>
-                        ))}
-                    </div>
-                    <div>
-                        <h1 className='text-xl mb-6'>Quick Links</h1>
-                        {footer.map((data, i) => (
-                            <li className='list-none '>{data}</li>
+                            <li className='list-none ' key={i}>{data}</li>
                         ))}
                     </div>
                 </div>

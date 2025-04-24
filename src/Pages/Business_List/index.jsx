@@ -157,13 +157,13 @@ const Bussiness_List = () => {
                             <h2 className="text-xl font-semibold">{data.businessName}</h2>
                             <h3><span className='bg-green-600 text-sm p-1 text-center rounded'> {data.starRating}⭐</span>  {data.overallRating} Ratings</h3>
                             <p className="flex items-center"><CiLocationOn /> {data.address} - {data.distanceKm} km</p>
-                            <p>
+                            <div>
                                 <AmentiesModal
                                     data={data}
                                     isExpanded={expandedBusinessId === data.id}
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
-                            </p>
+                            </div>
                             <div className='text-sm flex gap-2'>
                                 <button className='bg-green-600 hover:bg-green-300 hover:text-black flex rounded px-2 py-1 items-center text-white'><span className='text-md text-black px-1 '><FaPhoneAlt /></span> 987654456</button>
                                 <button className='flex items-center border  border-gray-600 px-2 py-1 rounded font-medium group hover:bg-green-600'><span className='text-xl px-1 text-green-600 group-hover:text-white'><FaWhatsappSquare /></span> WhatsApp</button>

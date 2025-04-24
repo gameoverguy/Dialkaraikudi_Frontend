@@ -4,6 +4,7 @@ import { CiLocationOn } from 'react-icons/ci'
 import { IoSearchOutline } from 'react-icons/io5'
 import { MdNotificationsActive } from 'react-icons/md'
 import { LuCircleUserRound } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
     return (
@@ -11,7 +12,6 @@ const Header = () => {
             <div className='md:w-11/12 mx-auto flex'>
                 <div className='w-full xl:w-7/12 flex space-x-6 items-center'>
                     <img src={Logo} alt="" className='h-10 md:h-14' />
-
                     <p className='hidden border whitespace-nowrap max-w-[300px] border-gray-400 bg-gray-100 p-2 md:flex items-center gap-1 rounded shadow-md hover:bg-gray-300'><CiLocationOn /> Current Location, Karaikudi</p>
                     <div className="hidden lg:block relative w-full">
                         <input
