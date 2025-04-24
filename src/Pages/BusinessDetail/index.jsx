@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import BusinessInfo from "./BusinessInfo";
-import Overview from "./Overview";
 import Services from "./Services";
 import QuickInfo from "./QuickInfo";
 import Photos from "./Photos";
@@ -21,91 +20,59 @@ const BusinessDetails = () => {
   ]);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const handleTabClick = (tabName) => {
+  const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
-    if (tabName === "quick-info") {
-      const quickInfoSection = document.getElementById("quickinfo");
-      if (quickInfoSection) {
-        quickInfoSection.scrollIntoView({ behavior: 'smooth' });
-      }
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  const tabs = [
+    { name: "Overview", id: "overview", key: "overview" },
+    { name: "Services", id: "services", key: "services" },
+    { name: "Quick Info", id: "quickinfo", key: "quick-info" },
+    { name: "Photos", id: "photos", key: "photos" },
+    { name: "Explore", id: "explore", key: "explore" },
+    { name: "Reviews", id: "reviews", key: "reviews" },
+  ];
+
   return (
     <React.Fragment>
-      <div className="bg-gray-100">
-        <div className="mx-auto w-11/12 bg-white min-h-screen">
-          <BusinessInfo formData={formData} />
-
-          <div className="flex gap-6 mx-4">
+      <div className="bg-white shadow-xl">
+        <BusinessInfo formData={formData} />
+        <div className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide">
+          {tabs.map((tab) => (
             <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "overview"
+              key={tab.key}
+              className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${
+                activeTab === tab.key
                   ? "border-b-4 border-blue-500 text-blue-500"
                   : "text-gray-500 hover:text-gray-700"
               }`}
-              onClick={() => handleTabClick("overview")}
+              onClick={() => handleTabClick(tab.key, tab.id)}
             >
-              Overview
+              {tab.name}
             </div>
-            <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "services"
-                  ? "border-b-4 border-blue-500 text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleTabClick("services")}
-            >
-              Services
+          ))}
+        </div>
+        <div className="mx-4 space-y-8 pb-10">
+          <div id="overview">
+            <div id="services">
+              <Services />
             </div>
-            <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "quick-info"
-                  ? "border-b-4 border-blue-500 text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleTabClick("quick-info")}
-            >
-              Quick Info
+            <div id="quickinfo">
+              <QuickInfo />
             </div>
-            <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "photos"
-                  ? "border-b-4 border-blue-500 text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleTabClick("photos")}
-            >
-              Photos
+            <div id="photos">
+              <Photos />
             </div>
-            <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "explore"
-                  ? "border-b-4 border-blue-500 text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleTabClick("explore")}
-            >
-              Explore
+            <div id="explore">
+              <Explore />
             </div>
-            <div
-              className={`py-2 font-medium text-md focus:outline-none ${
-                activeTab === "reviews"
-                  ? "border-b-4 border-blue-500 text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-              onClick={() => handleTabClick("reviews")}
-            >
-              Reviews
+            <div id="reviews">
+              <Reviews  formData={formData[0]}/>
             </div>
-          </div>
-          <div className="mx-4">
-            {activeTab === "overview" && <Overview />}
-            {activeTab === "services" && <Services />}
-            {activeTab === "quick-info" && <QuickInfo />}
-            {activeTab === "photos" && <Photos />}
-            {activeTab === "explore" && <Explore />}
-            {activeTab === "reviews" && <Reviews />}
           </div>
         </div>
       </div>

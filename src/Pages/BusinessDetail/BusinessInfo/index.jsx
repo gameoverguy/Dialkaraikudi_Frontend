@@ -1,81 +1,106 @@
-import React from 'react';
+import React from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 import { FaThumbsUp, FaRegComment, FaPhone } from "react-icons/fa6";
 import { PiWhatsappLogoFill } from "react-icons/pi";
 import { RiShareForwardLine } from "react-icons/ri";
 import { HiOutlinePencil } from "react-icons/hi2";
+import { CiLocationArrow1 } from "react-icons/ci";
+import StarRating from "../ReviewStar";
 
-const BusinessInfo = ({formData}) => {
+const BusinessInfo = ({ formData }) => {
   return (
-    <React.Fragment>
-        {formData.map((business) => (
-              <div key={business.id} className="rounded-md border border-gray-200 mx-4">
-                <h1 className="flex text-xl font-bold gap-2 md:text-xl lg:text-2xl">
-                  <span className="flex items-center text-sm px-2 bg-gray-600 rounded-md text-white">
-                    <FaThumbsUp />
-                  </span>
-                  {business.name}
-                </h1>
-                <div className="flex items-center mt-1 p-2">
-                  <div className="flex justify-between w-fit bg-green-600 px-2 rounded text-white items-center">
-                    <p>{business.star}</p>
-                    <span className="flex items-center">
-                      <MdOutlineStar />
-                    </span>
+    <>
+      {formData.map((business) => (
+        <div
+          key={business.id}
+          className="rounded-md border border-gray-200 mx-4 p-4 bg-white"
+        >
+          <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
+            <span className="text-white bg-gray-600 p-1 rounded-md text-sm">
+              <FaThumbsUp />
+            </span>
+            {business.name}
+          </h1>
+          <div className="flex items-center gap-2 mt-2 text-sm md:text-base">
+            <div className="flex items-center bg-green-600 text-white px-2 py-1 rounded">
+              {business.star}
+              <MdOutlineStar className="ml-1" />
+            </div>
+            <span className="text-gray-600">{business.rating} Ratings</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">
+            <p className="flex items-center font-semibold text-gray-700">
+              <SlLocationPin className="mr-1 text-base" />
+              {business.address}
+            </p>
+            <p className="text-gray-500">{business.experience} in Business</p>
+          </div>
+          <div className="flex justify-between">
+            <div className="md:flex flex-wrap gap-2 mt-4 text-sm">
+              <div className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2">
+                <FaPhone
+                  className="animate-bounce mr-2"
+                  style={{ animationDuration: "0.7s" }}
+                />
+                {business.contact}
+              </div>
+              <div className="md:hidden flex justify-around text-center">
+                <div className="flex flex-col items-center w-20">
+                  <div className="bg-blue-600 text-white rounded flex items-center justify-center p-2">
+                    <FaPhone
+                      className="animate-bounce text-xl"
+                      style={{ animationDuration: "0.7s" }}
+                    />
                   </div>
-                  <p className="px-2 font-light">{business.rating} Ratings</p>
+                  <p className="mt-1 text-sm">Call Now</p>
                 </div>
-                <div className="flex flex-col md:flex-row p-2 gap-2">
-                  <p className="flex items-center font-semibold">
-                    <span className="px-2">
-                      <SlLocationPin />
-                    </span>
-                    {business.address}
-                  </p>
-                  <p className="font-light">
-                    {business.experience} in Business
-                  </p>
+
+                <div className="flex flex-col items-center w-20 mb-2">
+                  <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
+                    <PiWhatsappLogoFill className="text-[#25D366] text-xl" />
+                  </div>
+                  <p className="mt-1 text-sm">Whatsapp</p>
                 </div>
-                <div className="flex flex-wrap gap-2 p-2">
-                  <div className="flex justify-between w-fit bg-green-600 px-2 rounded text-white items-center">
-                    <p className="flex items-center p-2 gap-2">
-                      <span
-                        className="animate-bounce"
-                        style={{ animationDuration: "0.7s" }}
-                      >
-                        <FaPhone />
-                      </span>
-                      {business.contact}
-                    </p>
+
+                <div className="flex flex-col items-center w-20">
+                  <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
+                    <CiLocationArrow1 className="text-black text-xl" />
                   </div>
-                  <div className="flex justify-between w-fit bg-blue-600 px-2 rounded text-white items-center">
-                    <p className="flex items-center p-2 gap-2 font-bold">
-                      <span className="text-xl font-black">
-                        <FaRegComment />
-                      </span>
-                      Enquire Now
-                    </p>
+                  <p className="mt-1 text-sm">Direction</p>
+                </div>
+
+                <div className="flex flex-col items-center w-20">
+                  <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
+                    <RiShareForwardLine className="text-black text-xl" />
                   </div>
-                  <div className="flex justify-between w-fit bg-white shadow-2xs border px-2 rounded text-black items-center">
-                    <p className="flex items-center p-2 gap-2 font-bold">
-                      <span className="text-[#25D366] text-3xl">
-                        <PiWhatsappLogoFill />
-                      </span>
-                      WhatsApp
-                    </p>
-                  </div>
-                  <div className="flex items-center text-2xl rounded-md border-gray-200 border p-3">
-                    <RiShareForwardLine className="text-gray-500" />
-                  </div>
-                  <div className="flex items-center text-2xl rounded-md border-gray-200 border p-3">
-                    <HiOutlinePencil className="text-gray-500" />
-                  </div>
+                  <p className="mt-1 text-sm">Share</p>
                 </div>
               </div>
-            ))}
-    </React.Fragment>
-  )
-}
+              <div className="w-[90%] bg-blue-600 text-white font-bold rounded flex items-center justify-center md:w-fit px-3 py-2">
+                <FaRegComment className="mr-2 text-lg" />
+                Enquire Now
+              </div>
+              <div className="hidden border shadow-sm bg-white rounded md:flex items-center px-2 py-1 text-black font-bold">
+                <PiWhatsappLogoFill className="text-[#25D366] text-2xl mr-2" />
+                WhatsApp
+              </div>
+              <div className="hidden border rounded-md p-2 text-gray-600 text-xl">
+                <RiShareForwardLine />
+              </div>
+              <div className="hidden border rounded-md p-2 text-gray-600 text-xl">
+                <HiOutlinePencil />
+              </div>
+            </div>
+            <div className="hidden">
+              <p className="flex justify-end font-semibold">Click to Rate</p>
+              <StarRating />
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
-export default BusinessInfo
+export default BusinessInfo;
