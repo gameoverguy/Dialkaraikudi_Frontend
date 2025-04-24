@@ -1,34 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import FloatingInput from "../../Components/FloatingInput";
 
 const ContactDetail = () => {
+  const [mobile, setMobile] = useState("");
+  console.log(mobile);
+  
   return (
-    <div className="bg-white shadow-xl">
-      <div className="grid grid-cols-2">
-        <div></div>
-        <div>
-          <h1 className="font-bold text-2xl">Add Contact Details</h1>
-          <label
-            className="block mb-2 font-medium text-gray-700"
-            htmlFor="title"
-          >
-            Title
-          </label>
-          <select
-            id="title"
-            name="title"
-            className="w-fit border border-gray-300 rounded-md px-3 py-2 focus:outline-none"
-          >
-            <option value="">Select</option>
-            <option value="Mr">Mr</option>
-            <option value="Mrs">Mrs</option>
-            <option value="Ms">Ms</option>
-          </select>
-          <label className="block mb-2 font-medium text-gray-700" htmlFor="title">
-            Contact Person
-          </label>
-          <input type="text" className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none"/>
-        </div>
-      </div>
+    <div className="mt-2">
+      <FloatingInput
+        id="mobile"
+        name="mobile"
+        value={mobile}
+        required
+        onChange={(e) => setMobile(e.target.value)}
+        placeholder="Enter Mobile Number"
+        maxLength={10}
+        prefix={
+          <div className="flex items-center gap-1">
+            <img
+              src="https://akam.cdn.jdmagicbox.com/images/icontent/listingbusiness/india_flag.svg"
+              alt="India"
+              className="w-5 h-5 object-cover"
+            />
+            +91
+          </div>
+        }
+      />
     </div>
   );
 };
