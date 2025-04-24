@@ -3,12 +3,17 @@ import ContactDetails from "./business/contact";
 import BusinessLogin from "./business/login";
 
 function App() {
+
   return (
     <>
-      <h1>Vite + React</h1>
-      <BusinessLogin />
-      <BusinessDetails/>
-      <ContactDetails/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route path="/detail" element={<BusinessDetails />}/>
+            <Route path="/contactdetail" element={<ContactDetail />}/>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
