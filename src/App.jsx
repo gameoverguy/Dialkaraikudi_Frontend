@@ -1,6 +1,7 @@
-import BusinessDetails from "./business/BusinessDetails";
-import ContactDetails from "./business/contact";
-import BusinessLogin from "./business/login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import BusinessLogin from "./business/login.jsx";
+import MainLayout from "./Components/MainLayout.jsx";
+import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 
 function App() {
 
@@ -9,8 +10,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route path="/detail" element={<BusinessDetails />}/>
-            <Route path="/contactdetail" element={<ContactDetail />}/>
+            <Route path="/detailform" element={<BusinessDetailForm />} />
+            <Route path="/login" element={<BusinessLogin />} />
           </Route>
         </Routes>
       </BrowserRouter>

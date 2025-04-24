@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const BusinessDetails = () => {
+const BusinessDetailForm = () => {
     const [formData, setFormData] = useState({
         businessName: '',
         pincode: '',
@@ -14,8 +14,8 @@ const BusinessDetails = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-       
+
+
         if (name === 'pincode') {
             const numericValue = value.replace(/[^0-9]/g, '');
             setFormData(prevState => ({
@@ -143,4 +143,4 @@ const BusinessDetails = () => {
     );
 };
 
-export default BusinessDetails;
+export default BusinessDetailForm;
