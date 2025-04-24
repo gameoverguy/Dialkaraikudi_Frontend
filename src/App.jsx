@@ -1,7 +1,7 @@
 import BusinessDetails from "./Pages/BusinessDetail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./Components/MainLayout";
-import ContactDetail from "./Pages/ContactDetail";
+import Bussiness_List from "./Pages/Business_List";
 
 function App() {
 
@@ -10,8 +10,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route path="/detail" element={<BusinessDetails />}/>
-            <Route path="/contactdetail" element={<ContactDetail />}/>
+            <Route path="/list" element={<Bussiness_List />} />
+            <Route path="/detail" element={<BusinessDetails />} />
           </Route>
         </Routes>
       </BrowserRouter>
