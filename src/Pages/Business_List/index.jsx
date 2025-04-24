@@ -1,19 +1,34 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React, { useState } from 'react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { CiLocationOn } from 'react-icons/ci';
+import AmentiesModal from './amentiesModal';
+import SwiperModal from './Swiper';
+import { FaPhoneAlt, FaWhatsappSquare } from 'react-icons/fa';
+import FilterModal from './filter';
 
 const Bussiness_List = () => {
 
     const HotelDeatils = [
         {
+            "id": 1,
             "businessName": "GreenLeaf Cafe",
             "starRating": 4.5,
             "overallRating": 92,
-            "address": "123 Lakeview Road, Karaikudi, Tamil Nadu, India",
+            "address": "123 Lakeview Road, Karaikudi",
             "distanceKm": 2.3,
             "amenities": [
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
                 "Free WiFi",
                 "Outdoor Seating",
                 "Pet Friendly",
@@ -25,16 +40,29 @@ const Bussiness_List = () => {
             "images": [
                 "https://dummyimage.com/180x180/000/fff",
                 "https://dummyimage.com/180x180/000/fff",
-                "https://dummyimage.com/180x180/000/fff"
+                "https://dummyimage.com/180x180/000/fff",
+                "https://dummyimage.com/180x180/000/fff",
+
             ]
         },
         {
+            "id": 2,
             "businessName": "GreenLeaf Cafe",
             "starRating": 4.5,
             "overallRating": 92,
-            "address": "123 Lakeview Road, Karaikudi, Tamil Nadu, India",
+            "address": "123 Lakeview Road, Karaikudi",
             "distanceKm": 2.3,
             "amenities": [
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
                 "Free WiFi",
                 "Outdoor Seating",
                 "Pet Friendly",
@@ -46,16 +74,29 @@ const Bussiness_List = () => {
             "images": [
                 "https://dummyimage.com/180x180/000/fff",
                 "https://dummyimage.com/180x180/000/fff",
-                "https://dummyimage.com/180x180/000/fff"
+                "https://dummyimage.com/180x180/000/fff",
+                "https://dummyimage.com/180x180/000/fff",
+
             ]
         },
         {
+            "id": 3,
             "businessName": "GreenLeaf Cafe",
             "starRating": 4.5,
             "overallRating": 92,
-            "address": "123 Lakeview Road, Karaikudi, Tamil Nadu, India",
+            "address": "123 Lakeview Road, Karaikudi",
             "distanceKm": 2.3,
             "amenities": [
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
+                "Free WiFi",
+                "Outdoor Seating",
+                "Pet Friendly",
+                "Live Music",
+                "Parking Available",
                 "Free WiFi",
                 "Outdoor Seating",
                 "Pet Friendly",
@@ -67,65 +108,71 @@ const Bussiness_List = () => {
             "images": [
                 "https://dummyimage.com/180x180/000/fff",
                 "https://dummyimage.com/180x180/000/fff",
-                "https://dummyimage.com/180x180/000/fff"
+                "https://dummyimage.com/180x180/000/fff",
+                "https://dummyimage.com/180x180/000/fff",
+
             ]
-        }
+        },
+
     ];
 
+    const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+
+    const toggleAmenities = (id) => {
+        setExpandedBusinessId(expandedBusinessId === id ? null : id);
+    };
+
+    const [filterOpen, setFilterOpen] = useState(false)
+
     return (
-        <div className="p-4">
+        <div className="md:p-4">
             <div>
                 <p className="text-sm text-gray-500">Karaikudi &gt; Hotel &gt; kimikimi , kraikudi</p>
             </div>
-
             <div className="mt-2">
                 <h1 className="text-lg font-bold">Best Deals - Top Hotels in Krishna Garden, Karaikudi</h1>
             </div>
-
-            <div className="mt-4">
-                <button className='border border-gray-400 px-2 py-1 rounded'>Filter</button>
+            <div className="relative bg-white">
+                <div className="sticky top-20 bg-white py-2">
+                    <button className='border border-gray-400 px-2 py-1 rounded'>
+                        Filter
+                    </button>
+                    <button className='absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded' onClick={() => setFilterOpen(true)}>
+                        All Filter
+                    </button>
+                </div>
             </div>
+            <FilterModal setFilterOpen={setFilterOpen} filterOpen={filterOpen} />
 
-            <div className='mt-6 w-full gap-5 flex p-4 flex-wrap justify-center'>
+            <div className='mt-2 w-full gap-5 flex md:p-4 flex-wrap'>
                 {HotelDeatils.map((data, i) => (
-                    <div key={i} className="flex w-5/12 gap-4 border p-2">
+                    <div key={i} className="inline md:flex w-full xl:w-[49%] md:gap-10 border p-3">
                         {/* Swiper Image Slider */}
-                        <div className="min-w-[160px] max-w-[160px]">
-                            <Swiper
-                                modules={[Navigation]}
-                                spaceBetween={10}
-                                slidesPerView={1}
-                                // enables default arrows
-                                className="mySwiper"
-                            >
-                                {data.images.map((imgUrl, index) => (
-                                    <SwiperSlide key={index}>
-                                        <img
-                                            src={imgUrl}
-                                            alt={`Slide ${index + 1}`}
-                                            className="h-40 w-40 object-cover rounded-lg"
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
+                        <div className='w-full md:w-[25%]'>
+                            <SwiperModal data={data} />
                         </div>
 
                         {/* Business Info */}
-                        <div className="flex flex-col justify-between">
-                            <div>
-                                <h2 className="text-xl font-semibold">{data.businessName}</h2>
-                                <p className="text-gray-600">{data.address}</p>
-                                <p className="text-sm text-gray-500">{data.distanceKm} km away</p>
-                            </div>
-                            <div className="text-sm text-gray-700 mt-2">
-                                ⭐ {data.starRating} Stars | {data.overallRating}% Positive Reviews
+                        <div className="mt-5 md:mt-0 w-full md:w-[70%] space-y-1">
+                            <h2 className="text-xl font-semibold">{data.businessName}</h2>
+                            <h3><span className='bg-green-600 text-sm p-1 text-center rounded'> {data.starRating}⭐</span>  {data.overallRating} Ratings</h3>
+                            <p className="flex items-center"><CiLocationOn /> {data.address} - {data.distanceKm} km</p>
+                            <p>
+                                <AmentiesModal
+                                    data={data}
+                                    isExpanded={expandedBusinessId === data.id}
+                                    toggleExpand={() => toggleAmenities(data.id)}
+                                />
+                            </p>
+                            <div className='text-sm flex gap-2'>
+                                <button className='bg-green-600 hover:bg-green-300 hover:text-black flex rounded px-2 py-1 items-center text-white'><span className='text-md text-black px-1 '><FaPhoneAlt /></span> 987654456</button>
+                                <button className='flex items-center border  border-gray-600 px-2 py-1 rounded font-medium group hover:bg-green-600'><span className='text-xl px-1 text-green-600 group-hover:text-white'><FaWhatsappSquare /></span> WhatsApp</button>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-
-        </div>
+        </div >
     );
 };
 
