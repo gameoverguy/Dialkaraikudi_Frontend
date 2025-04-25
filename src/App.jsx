@@ -6,6 +6,7 @@ import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
 import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
+import ContactDetails from "./business/contact.jsx";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/businessdetails" element={<BusinessDetails />} />
             <Route path="/businesstiming" element={<BusinessTiming />}/>
             <Route path="/businesscategory" element={<BusinessCategory />}/>
+            <Route path="/Contact" element={<ContactDetails/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
