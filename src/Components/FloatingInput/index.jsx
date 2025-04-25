@@ -47,16 +47,15 @@ const FloatingInput = ({
             required={required}
             maxLength={maxLength}
             placeholder=" "
-            className={`peer block w-full h-[48px] ${
-              icon ? "pl-8" : "px-2.5"
-            } pt-4 pb-4 text-sm text-gray-900 bg-white border appearance-none focus:outline-none focus:ring-0 rounded-md
+            className={`peer block w-full h-[48px] ${icon ? "pl-8" : "px-2.5"
+              } pt-4 pb-4 text-sm text-gray-900 bg-white border appearance-none focus:outline-none focus:ring-0 rounded-md
               ${error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-600"}`}
           />
           <label
             htmlFor={id}
             className={`absolute left-2.5 top-3 text-sm text-gray-500 bg-white px-1 transition-all duration-200 ease-in-out 
               peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 
-              peer-valid:-top-2 peer-valid:text-xs ${icon ? "ml-6":"px-2.5"}
+              peer-valid:-top-2 peer-valid:text-xs ${icon ? "ml-6" : "px-2.5"}
               ${error ? "peer-focus:text-red-500 peer-valid:text-red-500" : ""}`}
           >
             {placeholder}
