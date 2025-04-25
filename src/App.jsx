@@ -7,6 +7,7 @@ import ContactDetails from "./business/contact.jsx";
 import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
 import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
+import HomePage from "./business/HomePage.jsx";
 
 function App() {
 
@@ -18,10 +19,11 @@ function App() {
             <Route path="/list" element={<Bussiness_List />} />
             <Route path="/detailform" element={<BusinessDetailForm />} />
             <Route path="/login" element={<BusinessLogin />} />
-            <Route path="/Contact" element={<ContactDetails/>}/>
+            <Route path="/Contact" element={<ContactDetails />} />
             <Route path="/businessdetails" element={<BusinessDetails />} />
-            <Route path="/businesstiming" element={<BusinessTiming />}/>
-            <Route path="/businesscategory" element={<BusinessCategory />}/>
+            <Route path="/businesstiming" element={<BusinessTiming />} />
+            <Route path="/businesscategory" element={<BusinessCategory />} />
+            <Route path="/home" element={<HomePage />} />
           </Route>
         </Routes>
       </BrowserRouter>
