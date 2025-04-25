@@ -10,6 +10,7 @@ const allCategories = [
   "Pet Food Dealers",
   "Cat Food Retailers",
   "Pet Accessory Dealers",
+  "Restaurants"
 ];
 
 const BusinessCategory = () => {
@@ -76,7 +77,7 @@ const BusinessCategory = () => {
               {selectedCategories.map((cat, index) => (
                 <div
                   key={index}
-                  className="bg-blue-600 text-white px-3 py-1 rounded-full flex items-center gap-2 text-sm"
+                  className="bg-blue-600 text-white px-3 py-2 rounded-full flex items-center gap-2 text-sm"
                 >
                   {cat}
                   <button
