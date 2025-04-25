@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BusinessLogin from "./business/login.jsx";
 import MainLayout from "./Components/MainLayout.jsx";
 import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
+import ContactDetails from "./business/contact.jsx";
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route path="/detailform" element={<BusinessDetailForm />} />
             <Route path="/login" element={<BusinessLogin />} />
+            <Route path="/Contact" element={<ContactDetails/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

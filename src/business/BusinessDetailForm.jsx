@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import FloatingInput from '../Components/FloatingInput';
 
 const BusinessDetailForm = () => {
     const [formData, setFormData] = useState({
@@ -48,86 +49,77 @@ const BusinessDetailForm = () => {
                 <h1 className="text-2xl font-bold mb-6">Enter Your Business Details</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="businessName"
                         name="businessName"
                         value={formData.businessName}
                         onChange={handleChange}
                         placeholder="Business Name"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="pincode"
                         name="pincode"
+                        type="text"
                         value={formData.pincode}
                         onChange={handleChange}
                         placeholder="Pincode"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         maxLength={6}
-                        inputMode="numeric"
-                        pattern="[0-9]*"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="plotNo"
                         name="plotNo"
                         value={formData.plotNo}
                         onChange={handleChange}
                         placeholder="Plot No. / Bldg No. / Wing / Shop No. / Floor"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="buildingName"
                         name="buildingName"
                         value={formData.buildingName}
                         onChange={handleChange}
                         placeholder="Building Name / Market / Colony / Society"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="streetName"
                         name="streetName"
                         value={formData.streetName}
                         onChange={handleChange}
                         placeholder="Street / Road Name"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="landmark"
                         name="landmark"
                         value={formData.landmark}
                         onChange={handleChange}
                         placeholder="Landmark"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="city"
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
                         placeholder="City"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
 
-                    <input
-                        type="text"
+                    <FloatingInput
+                        id="state"
                         name="state"
                         value={formData.state}
                         onChange={handleChange}
                         placeholder="State"
-                        className="w-full p-3 border-2 rounded-xl focus:border-blue-500 outline-none"
                         required
                     />
                 </div>
