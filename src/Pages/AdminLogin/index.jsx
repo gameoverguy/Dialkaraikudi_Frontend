@@ -3,8 +3,10 @@ import FloatingInput from "../../Components/FloatingInput";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -15,48 +17,53 @@ const AdminLogin = () => {
     });
     const [showPassword, setShowPassword] = useState(false);
 
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-        if (name === 'email') {
-            const emailValue = value.replace(/\s/g, '');
-            if (emailValue.length <= 50) {
-                setFormData(prev => ({ ...prev, [name]: emailValue }));
-                setErrors(prev => ({
-                    ...prev,
-                    email: !emailValue ? "Email is required" : 
-                          !emailRegex.test(emailValue) ? "Please enter a valid email" : ""
-                }));
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    let errorMessage = "";
+
+    if (name === 'email') {
+        const emailValue = value.replace(/\s/g, '').toLowerCase();
+        setFormData(prev => ({ ...prev, [name]: emailValue }));
+        if (specialCharRegex.test(emailValue) && !emailValue.includes('@') && !emailValue.includes('.')) {
+            errorMessage = "Special characters are not allowed";
+        }else if (emailValue.length > 50) {
+            errorMessage = "Email must not exceed 50 characters";
+        }else if (emailValue.includes('@')) {
+            errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
+        }
+        setErrors(prev => ({ ...prev, email: errorMessage }));
+
+    } else if (name === 'password') {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        if (value.length > 20) {
+                errorMessage = "Password must not exceed 20 characters";
             }
-        } else if (name === 'password') {
-            if (value.length <= 20) {
-                setFormData(prev => ({ ...prev, [name]: value }));
-                setErrors(prev => ({
-                    ...prev,
-                    password: !value ? "Password is required" : 
-                              value.length > 20 ? "Password must not exceed 20 characters" : ""
-                }));
-            }
+
+            setErrors(prev => ({ ...prev, password: errorMessage }));
         }
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = {
-            email: !formData.email ? "Email is required" : 
-                  formData.email.length < 10 ? "Email must be at least 10 characters" :
-                  formData.email.length > 50 ? "Email must not exceed 50 characters" :
-                  !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
-            password: !formData.password ? "Password is required" : 
-                     formData.password.length < 6 ? "Password must be at least 6 characters" :
-                     formData.password.length > 20 ? "Password must not exceed 20 characters" : ""
+            email: !formData.email ? "Email is required" :
+                formData.email.length < 10 ? "Email must be at least 10 characters" :
+                    formData.email.length > 50 ? "Email must not exceed 50 characters" :
+                        !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
+            password: !formData.password ? "Password is required" :
+                formData.password.length < 6 ? "Password must be at least 6 characters" :
+                    formData.password.length > 20 ? "Password must not exceed 20 characters" : ""
         };
         setErrors(newErrors);
 
         if (!newErrors.email && !newErrors.password) {
             console.log(formData);
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
         }
     };
 
@@ -87,6 +94,7 @@ const AdminLogin = () => {
                                     icon={<MdOutlineEmail className="w-5 h-5" />}
                                     iconPosition="left"
                                     error={errors.email}
+                                    maxLength={50}
                                 />
 
                                 <div className="relative">
@@ -100,6 +108,7 @@ const AdminLogin = () => {
                                         icon={<RiLockPasswordLine className="w-5 h-5" />}
                                         iconPosition="left"
                                         error={errors.password}
+                                        maxLength={20}
                                     />
                                     {formData.password && (
                                         <button

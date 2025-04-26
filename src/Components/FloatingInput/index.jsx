@@ -88,7 +88,7 @@ const FloatingInput = ({
         </div>
       </div>
 
-      <div className="h-6">
+      <div className="flex justify-end h-6">
         {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
     </div>
