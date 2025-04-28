@@ -37,7 +37,6 @@ const ForgotPassword = ({ isOpen, onClose }) => {
             setError(errorMessage);
         } else {
             console.log("Reset password for:", email);
-            onClose();
             setShowOTP(true);
         }
     };
