@@ -9,6 +9,8 @@ import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
 import ContactDetails from "./business/contact.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
 import HomePage from "./business/HomePage.jsx";
+import ForgotPassword from "./Pages/AdminLogin/ForgotPassword/index.jsx";
+import AdminPanel from "./Pages/AdminPanel/index.jsx";
 
 function App() {
 
@@ -27,6 +29,8 @@ function App() {
             <Route path="/home" element={<HomePage />} />
           </Route>
           <Route path="/adminlogin" element={<AdminLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
     </>

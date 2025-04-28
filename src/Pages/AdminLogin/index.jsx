@@ -62,7 +62,7 @@ const AdminLogin = () => {
         if (!newErrors.email && !newErrors.password) {
             console.log(formData);
             setTimeout(() => {
-                navigate('/');
+                navigate('/home');
             }, 2000);
         }
     };
