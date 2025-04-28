@@ -1,192 +1,164 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import 'swiper/css/bundle';
+
+const serviceCategories = {
+  essentialServices: [
+    { name: 'Restaurants', icon: '🍽️', path: '/restaurants' },
+    { name: 'Hotels', icon: '🏨', path: '/hotels' },
+    { name: 'Hospitals', icon: '🏥', path: '/hospitals' },
+    { name: 'Education', icon: '🎓', path: '/education' },
+    { name: 'Beauty Spa', icon: '💆‍♀️', path: '/beauty-spa' },
+    { name: 'Home Decor', icon: '🏠', path: '/home-decor' },
+    { name: 'Wedding', icon: '👰', path: '/wedding' },
+    { name: 'Rent & Hire', icon: '🔑', path: '/rent' },
+    { name: 'Contractors', icon: '👷', path: '/contractors' },
+    { name: 'Pet Shops', icon: '🐾', path: '/pet-shops' },
+  ],
+  additionalServices: [
+    { name: 'PG/Hostels', icon: '🛏️', path: '/hostels' },
+    { name: 'Estate ', icon: '🏘️', path: '/estate' },
+    { name: 'Dentists', icon: '🦷', path: '/dentists' },
+    { name: 'Gym', icon: '💪', path: '/gym' },
+    { name: 'Loans', icon: '💰', path: '/loans' },
+    { name: 'Event ', icon: '🎉', path: '/events' },
+    { name: 'Driving ', icon: '🚗', path: '/driving' },
+    { name: 'Packers', icon: '📦', path: '/packers' },
+    { name: 'Courier ', icon: '📬', path: '/courier' },
+    { name: 'Popular Categories', icon: '📋', path: '/categories' },
+    
+  ]
+};
 
 const HomePage = () => {
-     const [activeSection, setActiveSection] = useState(null);
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .swiper-button-next, .swiper-button-prev {
+        color: grey !important;
+        font-size: 1.2rem !important;
+        width: 50px !important;
+        height: 50px !important;
+      }
+      .swiper-button-next::after, .swiper-button-prev::after {
+        font-size: 1.2rem !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
 
-     const serviceIcons = [
-          { id: 1, title: 'Plumbing', icon: '🔧' },
-          { id: 2, title: 'Electrical', icon: '⚡' },
-          { id: 3, title: 'Cleaning', icon: '🧹' },
-          { id: 4, title: 'Painting', icon: '🎨' },
-          { id: 5, title: 'Carpentry', icon: '🔨' },
-     ];
+  return (
+    <div className="p-5">
+      {/* Swiper section */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-8'>
 
-     const productIcons = [
-          { id: 1, title: 'Electronics', icon: '📱' },
-          { id: 2, title: 'Furniture', icon: '🪑' },
-          { id: 3, title: 'Clothing', icon: '👕' },
-          { id: 4, title: 'Books', icon: '📚' },
-          { id: 5, title: 'Sports', icon: '⚽' }
-     ];
-
-     const categories = [
-          {
-               title: 'Wedding Requisites',
-               items: [
-                    { id: 1, name: 'Banquet Halls', image: 'https://www.iraluxe.com/public/uploads/blogs/20230616102042.jpg' },
-                    { id: 2, name: 'Bridal Requisite', image: 'https://static.india.com/wp-content/uploads/2017/08/bridal-accessories.jpg?impolicy=Medium_Resize&w=1200&h=800' },
-                    { id: 3, name: 'Caterers', image: 'https://www.weddingsutra.com/images/Vendor_Images/Catering/gyanjee-caterers/gyanjee-caterers-10.jpg' },
-               ]
-          },
-          {
-               title: 'Beauty & Spa',
-               items: [
-                    { id: 1, name: 'Beauty Parlours', image: 'https://www.glittergirlsbeautyparlour.com/assets/img/services/bridal1.png' },
-                    { id: 2, name: 'Spa & Massages', image: 'https://content.jdmagicbox.com/v2/comp/karur/e7/9999p4324.4324.181016121143.h6e7/catalogue/apple-spa-karur-karur-body-massage-centres-01tb0mszeh.jpg' },
-                    { id: 3, name: 'Salons', image: 'https://t4.ftcdn.net/jpg/04/33/36/05/360_F_433360513_EyYtlNaz3fCJU5UHaPhURBodPCwNIMVN.jpg' },
-               ]
-          },
-          {
-               title: 'Repairs & Services',
-               items: [
-                    { id: 1, name: 'AC Service', image: 'https://www.rightcliq.in/blogs/images/blogs/ac-repair-service.jpg' },
-                    { id: 2, name: 'Car Service', image: 'https://www.seat.ps/content/dam/public/seat-website/seat-cars/car-maintenance/article-single-image-maintenance/seat-services-and-repair-maintenance.jpg' },
-                    { id: 3, name: 'Bike Service', image: 'https://5.imimg.com/data5/SELLER/Default/2023/5/311462412/PQ/NQ/ZL/22874813/bike-repairing-services.jpg' },
-               ]
-          },
-
-     ];
-
-
-
-     return (
-          <div className=" container mx-auto px-4">
-
-               {/* <div className="flex  py-4">
-        <h1 className="text-xl">Search across <span className="font-bold">'4.7 Crore+'</span> Businesses</h1>
-
-      </div> */}
-               {/* 
-
-      <div className="flex gap-2 mb-8">
-        <input
-          type="text"
-          placeholder="Search Location"
-          className="border p-2 rounded-lg w-1/4"
-        />
-        <div className="relative flex-1">
-          <input
-            type="text"
-            placeholder="Search for Pest Control Services"
-            className="border p-2 rounded-lg w-full"
-          />
-          <span className="absolute right-3 top-1/2 transform -translate-y-1/2">🎤</span>
+        <div className="swiper-container">
+          <Swiper
+            spaceBetween={30}
+            centeredSlides={true}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            modules={[Autoplay, Pagination, Navigation]}
+            className="w-full h-[250px] bg-gray-200 rounded-lg"
+          >
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_leads.webp" alt="Slide 1" className=" w-fit md:w-[100%] h-[100%]  object-cover rounded" />
+            </SwiperSlide>
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_bills_2024.webp" alt="Slide 2" className="w-[100%] h-[100%] object-cover rounded" />
+            </SwiperSlide>
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_hotels_2024.webp" alt="Slide 3" className="w-[100%] h-[100%] object-cover rounded" />
+            </SwiperSlide>
+          </Swiper>
         </div>
-      </div> */}
 
-               {/* 
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        {serviceCategories.map(service => (
-          <div key={service.id} className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-3xl mb-2">{service.icon}</div>
-            <h3 className="font-bold">{service.title}</h3>
-            <p className="text-sm text-gray-600">{service.subtitle}</p>
-          </div>
-        ))}
-      </div> */}
-
-
-               <div className=" flex  justify-center py-8 items-center   gap-6 mb-8">
-                    <div className=" w-4/12 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg shadow-lg">
-                         <h3 className="text-2xl font-bold mb-3">Services</h3>
-                         <p className="mb-4">Find the best services near you</p>
-                         <button
-                              onClick={() => setActiveSection(activeSection === 'services' ? null : 'services')}
-                              className="bg-white text-blue-600 px-3 py-3 rounded-md hover:bg-blue-50 transition-colors w-40"
-                         >
-                              Explore Services
-                         </button>
-                    </div>
-                    <div className="  w-4/12 bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-lg shadow-lg">
-                         <h3 className="text-2xl font-bold mb-3">Products</h3>
-                         <p className="mb-4">Discover quality products</p>
-                         <button
-                              onClick={() => setActiveSection(activeSection === 'products' ? null : 'products')}
-                              className="bg-white text-purple-600 px-3 py-3 rounded-md hover:bg-purple-50 transition-colors w-40"
-                         >
-                              Browse Products
-                         </button>
-                    </div>
-               </div>
-
-
-               {activeSection && (
-                    <>
-                         <div className=''></div>
-                         <div className="bg-black/70 h-screen fixed inset-0 bg-opacity-10 flex items-center justify-center z-1">
-                              <div className="bg-white rounded-lg p-6 w-3/4 max-h-[80vh] overflow-y-auto">
-                                   <div className="flex justify-between items-center mb-4">
-                                        <h2 className="text-2xl font-bold">
-                                             {activeSection === 'services' ? 'Services' : 'Products'}
-                                        </h2>
-                                        <button
-                                             onClick={() => setActiveSection(null)}
-                                             className="text-gray-500 hover:text-gray-700"
-                                        >
-                                             ✕
-                                        </button>
-                                   </div>
-                                   <div className="grid grid-cols-5 gap-4">
-                                        {(activeSection === 'services' ? serviceIcons : productIcons).map(item => (
-                                             <div key={item.id} className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                                                  <span className="text-3xl mb-2">{item.icon}</span>
-                                                  <span className="text-sm text-center">{item.title}</span>
-                                             </div>
-                                        ))}
-                                   </div>
-                              </div>
-                         </div>
-                    </>
-               )}
-
-               {/* Dynamic Icons Section */}
-               {/* {activeSection && (
-        <div className="grid grid-cols-5 gap-4 mb-8 bg-gray-50 p-6 rounded-lg">
-          {(activeSection === 'services' ? serviceIcons : productIcons).map(item => (
-            <div key={item.id} className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <span className="text-3xl mb-2">{item.icon}</span>
-              <span className="text-sm text-center">{item.title}</span>
-            </div>
-          ))}
+        {/* Second Swiper */}
+        <div className="swiper-container">
+          <Swiper
+            spaceBetween={30}
+            centeredSlides={true}
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            modules={[Autoplay, Pagination, Navigation]}
+            className="w-full h-[250px] bg-gray-200 rounded-lg"
+          >
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/summerweb.png" alt="Slide 4" className="w-full md:w-[100%] h-[100%] object-cover rounded" />
+            </SwiperSlide>
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_interiordesigners_2024.webp" alt="Slide 5" className="w-[100%] h-[100%] object-cover rounded" />
+            </SwiperSlide>
+            <SwiperSlide className="flex items-center justify-center bg-gray-100 text-center">
+              <img src="https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/ipl2025web.png" alt="Slide 6" className="w-[100%] h-[100%] object-cover rounded" />
+            </SwiperSlide>
+          </Swiper>
         </div>
-      )} */}
+      </div>
 
-               {/* Business Categories Grid */}
-               {/* <div className="grid grid-cols-5 gap-8">
-        {businessCategories.map(category => (
-          <Link key={category.id} to={`/category/${category.title.toLowerCase()}`} className="flex flex-col items-center">
-            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full mb-2">
-              <span className="text-2xl">{category.icon}</span>
-            </div>
-            <span className="text-sm text-center">{category.title}</span>
-          </Link>
-        ))}
-      </div> */}
-               <div className="mb-8">
-                    {categories.map((category) => (
-                         <div key={category.title} className="mb-8">
-                              <h2 className="text-xl font-semibold mb-4">{category.title}</h2>
-                              <div className="grid grid-cols-3 gap-4">
-                                   {category.items.map((item) => (
-                                        <Link key={item.id} to={`/category/${item.name.toLowerCase().replace(/\s+/g, '-')}`}
-                                             className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow">
-                                             <img
-                                                  src={item.image}
-                                                  alt={item.name}
-                                                  className="w-full h-48 object-cover"
-                                             />
-                                             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
-                                                  <p className="text-center">{item.name}</p>
-                                             </div>
-                                        </Link>
-                                   ))}
-                              </div>
-                         </div>
-                    ))}
-               </div>
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 text-center font-serif">
+        <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">Products</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {serviceCategories.essentialServices.map((service, index) => (
+              <a
+                key={index}
+                href={service.path}
+                className="group flex flex-col items-center justify-center p-3 hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="w-[80px] h-[80px] mb-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 border border-gray-100">
+                  <span className="text-4xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">{service.icon}</span>
+                </div>
+                <span className="text-sm text-center text-gray-600 font-medium group-hover:text-gray-900 transition-colors duration-300">
+                  {service.name}
+                </span>
+              </a>
+            ))}
           </div>
-     );
+        </div>
+        
+        <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">Services</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {serviceCategories.additionalServices.map((service, index) => (
+              <a
+                key={index}
+                href={service.path}
+                className="group flex flex-col items-center justify-center p-3 hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="w-[80px] h-[80px] mb-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 border border-gray-100">
+                  <span className="text-4xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">{service.icon}</span>
+                </div>
+                <span className="text-sm text-center text-gray-600 font-medium group-hover:text-gray-900 transition-colors duration-300">
+                  {service.name}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default HomePage;
