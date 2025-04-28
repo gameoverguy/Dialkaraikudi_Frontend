@@ -11,6 +11,7 @@ import AdminLogin from "./Pages/AdminLogin/index.jsx";
 import HomePage from "./business/HomePage.jsx";
 import ForgotPassword from "./Pages/AdminLogin/ForgotPassword/index.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
+import SignUp from "./Pages/SignUp/index.jsx";
 
 function App() {
 
@@ -28,8 +29,6 @@ function App() {
             <Route path="/Contact" element={<ContactDetails />} />
             <Route path="/home" element={<HomePage />} />
           </Route>
-          <Route path="/adminlogin" element={<AdminLogin />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/adminpanel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
