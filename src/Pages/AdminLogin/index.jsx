@@ -107,7 +107,7 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
         e.preventDefault();
         onClose();
         if (setIsForgotPasswordOpen) {
-            setIsForgotPasswordOpen(true); // Open the forgot password modal
+            setIsForgotPasswordOpen(true); // Only open the ForgotPassword modal
         }
     };
     return (

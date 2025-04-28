@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiCloseLine } from "react-icons/ri";
 
-const OTP = ({ email, onClose }) => {
+const OTP = ({ email, isOpen, onClose}) => {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [error, setError] = useState('');
     const [timer, setTimer] = useState(30);
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(true);
     useEffect(() => {
         let interval;
         if (isOpen && timer > 0) {

@@ -8,12 +8,15 @@ import { useNavigate } from 'react-router-dom'
 import AdminLogin from '../Pages/AdminLogin'
 import SignupModal from '../Pages/SignUp'
 import ForgotPassword from '../Pages/AdminLogin/ForgotPassword'
+import OTP from '../Pages/AdminLogin/OTP'
 
 const Header = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
     const navigate = useNavigate()
+    const [showOTPModal, setShowOTPModal] = useState(false); // New state for OTP modal
+    const [otpEmail, setOtpEmail] = useState('');
     return (
         <>
             <div className='sticky top-0 bg-white z-40 w-full px-2 py-2 md:px-8 md:py-4 items-center shadow-2xl border-gray-200'>
@@ -73,6 +76,13 @@ const Header = () => {
             <ForgotPassword
                 isOpen={isForgotPasswordOpen}
                 onClose={() => setIsForgotPasswordOpen(false)}
+                setShowOTPModal={setShowOTPModal} // Pass setShowOTPModal
+                setOtpEmail={setOtpEmail}
+            />
+            <OTP
+                isOpen={showOTPModal}
+                onClose={() => setShowOTPModal(false)}
+                email={otpEmail}
             />
         </>
     )

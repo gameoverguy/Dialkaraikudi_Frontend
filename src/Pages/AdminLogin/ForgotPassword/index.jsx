@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import FloatingInput from "../../../Components/FloatingInput";
 import OTP from "../OTP";
 
-const ForgotPassword = ({ isOpen, onClose }) => {
+const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
-    const [showOTP, setShowOTP] = useState(false);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleChange = (e) => {
         const value = e.target.value;
@@ -37,9 +36,14 @@ const ForgotPassword = ({ isOpen, onClose }) => {
             setError(errorMessage);
         } else {
             console.log("Reset password for:", email);
-            setShowOTP(true);
+            if (setOtpEmail && setShowOTPModal) {
+                setOtpEmail(email); // Set the email in Header
+                setShowOTPModal(true); // Open the OTP modal directly
+            }
+            onClose(); // Close the ForgotPassword modal after triggering OTP
         }
     };
+
     if (!isOpen) return null;
 
     return (
@@ -78,7 +82,6 @@ const ForgotPassword = ({ isOpen, onClose }) => {
                     </div>
                 </div>
             </div>
-            {showOTP && <OTP email={email} onClose={() => setShowOTP(false)} />}
         </>
     );
 };
