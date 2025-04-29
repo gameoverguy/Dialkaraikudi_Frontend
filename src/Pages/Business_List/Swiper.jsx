@@ -15,11 +15,6 @@ const SwiperModal = ({ data }) => {
                         clickable: true
                     }}
                     slidesPerView={1}
-                    breakpoints={{
-                        0: { slidesPerView: 2.2 },
-                        600: { slidesPerView: 3 },
-                        768: { slidesPerView: 1 },
-                    }}
                     className="mySwiper"
                 >
                     {data?.images.map((imgUrl, index) => (
@@ -27,7 +22,7 @@ const SwiperModal = ({ data }) => {
                             <img
                                 src={imgUrl}
                                 alt={`Slide ${index + 1}`}
-                                className="h-40 w-40 object-cover rounded-lg"
+                                className="h-40 w-full object-cover rounded-lg"
                             />
                         </SwiperSlide>
                     ))}
