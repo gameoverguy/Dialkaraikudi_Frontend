@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 import { FaPhone } from "react-icons/fa6";
@@ -6,8 +6,19 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { CiLocationArrow1 } from "react-icons/ci";
 import StarRating from "../ReviewStar";
+import { useLoginModal } from "../../../context/LoginContext";
 
 const BusinessInfo = ({ formData }) => {
+  const [showContact, setShowContact] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const { handleOpenLoginModal } = useLoginModal();
+  const handleShowContact = () => {
+    if (isLoggedin) {
+        setShowContact(prev => !prev);
+    } else {
+        handleOpenLoginModal();
+    }
+};
   return (
     <>
       {formData.map((business) => (
@@ -30,16 +41,18 @@ const BusinessInfo = ({ formData }) => {
               <SlLocationPin className="mr-1 text-base" />
               {business.address}
             </p>
-            <p className="text-gray-500">{business.experience} in Business</p>
           </div>
           <div className="flex justify-between">
             <div className="md:flex flex-wrap gap-2 mt-4 text-sm">
-              <div className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2">
+              <div
+                className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2 cursor-pointer hover:bg-green-700"
+                onClick={handleShowContact}
+              >
                 <FaPhone
                   className="animate-bounce mr-2"
                   style={{ animationDuration: "0.7s" }}
                 />
-                {business.contact}
+                {showContact && isLoggedin ? business.contact : "Show Number"}
               </div>
               <div className="md:hidden flex justify-around text-center">
                 <div className="flex flex-col items-center w-20">
@@ -72,7 +85,7 @@ const BusinessInfo = ({ formData }) => {
                 <HiOutlinePencil />
               </div>
             </div>
-            <div className="hidden">
+            <div className="hidden md:block">
               <p className="flex justify-end font-semibold">Click to Rate</p>
               <StarRating />
             </div>

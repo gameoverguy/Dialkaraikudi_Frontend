@@ -9,26 +9,30 @@ import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
 import ContactDetails from "./business/contact.jsx";
 import HomePage from "./business/HomePage.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
+import { LoginModalProvider } from "./context/LoginContext.jsx";
 
 function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route path="/list" element={<Bussiness_List />} />
-            <Route path="/detailform" element={<BusinessDetailForm />} />
-            <Route path="/login" element={<BusinessLogin />} />
-            <Route path="/businessdetails" element={<BusinessDetails />} />
-            <Route path="/businesstiming" element={<BusinessTiming />} />
-            <Route path="/businesscategory" element={<BusinessCategory />} />
-            <Route path="/Contact" element={<ContactDetails />} />
-            <Route path="/home" element={<HomePage />} />
-          </Route>
-          <Route path="/adminpanel" element={<AdminPanel />} />
-        </Routes>
-      </BrowserRouter>
+      <LoginModalProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="/list" element={<Bussiness_List />} />
+              <Route path="/detailform" element={<BusinessDetailForm />} />
+              <Route path="/login" element={<BusinessLogin />} />
+              <Route path="/businessdetails" element={<BusinessDetails />} />
+              <Route path="/businesstiming" element={<BusinessTiming />} />
+              <Route path="/businesscategory" element={<BusinessCategory />} />
+              <Route path="/Contact" element={<ContactDetails />} />
+              <Route path="/home" element={<HomePage />} />
+            </Route>
+            <Route path="/adminpanel" element={<AdminPanel />} />
+          </Routes>
+
+        </BrowserRouter >
+      </LoginModalProvider>
     </>
   );
 }

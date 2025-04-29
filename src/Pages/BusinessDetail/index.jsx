@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BusinessInfo from "./BusinessInfo";
 import Photos from "./Photos";
 import Reviews from "./Reviews";
+import Description from "./Description";
 
 const BusinessDetails = () => {
   const [formData] = useState([
@@ -27,6 +28,7 @@ const BusinessDetails = () => {
 
   const tabs = [
     { name: "Overview", id: "overview", key: "overview" },
+    { name: "Description", id: "description", key: "description" },
     { name: "Photos", id: "photos", key: "photos" },
     { name: "Reviews", id: "reviews", key: "reviews" },
   ];
@@ -52,6 +54,9 @@ const BusinessDetails = () => {
         </div>
         <div className="mx-4 space-y-8 pb-10">
           <div id="overview">
+            <div id="description">
+              <Description />
+            </div>
             <div id="photos">
               <Photos />
             </div>
