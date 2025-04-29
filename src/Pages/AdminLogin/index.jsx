@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FloatingInput from "../../Components/FloatingInput";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { RiCloseLine, RiLockPasswordLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
-const AdminLogin = () => {
+
+const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIsForgotPasswordOpen }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -16,74 +19,113 @@ const AdminLogin = () => {
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-
+    useEffect(() => {
+        if (!isOpen) {
+            setFormData({ email: "", password: "" });
+            setErrors({ email: "", password: "" });
+            setShowPassword(false);
+            // setIsSignupOpen(false);
+        }
+    }, [isOpen]);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const handleChange = (e) => {
         const { name, value } = e.target;
         const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-    let errorMessage = "";
+        let errorMessage = "";
 
-    if (name === 'email') {
-        const emailValue = value.replace(/\s/g, '').toLowerCase();
-        setFormData(prev => ({ ...prev, [name]: emailValue }));
-        if (specialCharRegex.test(emailValue) && !emailValue.includes('@') && !emailValue.includes('.')) {
-            errorMessage = "Special characters are not allowed";
-        }else if (emailValue.length > 50) {
-            errorMessage = "Email must not exceed 50 characters";
-        }else if (emailValue.includes('@')) {
-            errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
-        }
-        setErrors(prev => ({ ...prev, email: errorMessage }));
+        if (name === 'email') {
+            const emailValue = value.replace(/[^a-zA-Z0-9@.]/g, '').toLowerCase();
+            setFormData(prev => ({ ...prev, [name]: emailValue }));
 
-    } else if (name === 'password') {
-            setFormData(prev => ({ ...prev, [name]: value }));
-        if (value.length > 20) {
+            if (value !== emailValue) {
+                errorMessage = "Special characters and spaces are not allowed";
+            } else if (emailValue.length > 50) {
+                errorMessage = "Email must not exceed 50 characters";
+            } else if (emailValue.includes('@')) {
+                errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
+            }
+            setErrors(prev => ({ ...prev, email: errorMessage }));
+        } else if (name === 'password') {
+            const passwordValue = value.replace(/\s/g, '');
+            setFormData(prev => ({ ...prev, [name]: passwordValue }));
+            if (passwordValue.length > 20) {
                 errorMessage = "Password must not exceed 20 characters";
+            } else if (value !== passwordValue) {
+                errorMessage = "Spaces are not allowed in password";
             }
 
             setErrors(prev => ({ ...prev, password: errorMessage }));
         }
     };
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         const newErrors = {
             email: !formData.email ? "Email is required" :
                 formData.email.length < 10 ? "Email must be at least 10 characters" :
                     formData.email.length > 50 ? "Email must not exceed 50 characters" :
                         !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
             password: !formData.password ? "Password is required" :
-                formData.password.length < 6 ? "Password must be at least 6 characters" :
+                formData.password.length < 6 ? "Password must be at least 8 characters" :
                     formData.password.length > 20 ? "Password must not exceed 20 characters" : ""
         };
         setErrors(newErrors);
-
+        // try {
         if (!newErrors.email && !newErrors.password) {
             console.log(formData);
             setTimeout(() => {
+                onClose();
                 navigate('/home');
             }, 2000);
         }
+        //     const res = await axios.post("http://192.168.1.33:5000/auth/login", formData);
+        //     console.log(res.data, "res");
+        //     const decoded = jwtDecode(res.data.token);
+        //     console.log(decoded);
+
+        //     if (decoded.role) {
+        //         // Admin
+        //     } else if (decoded.userType) {
+        //         // User
+        //     }
+
+        // } catch (error) {
+        //     console.log(error);
+
+        // }
+
     };
-
+    if (!isOpen) return null;
+    const handleSignupClick = () => {
+        onClose();
+        if (setIsSignupOpen) {
+            setIsSignupOpen(true);
+        }
+    };
+    const handleForgotPasswordClick = (e) => {
+        e.preventDefault();
+        onClose();
+        if (setIsForgotPasswordOpen) {
+            setIsForgotPasswordOpen(true); // Only open the ForgotPassword modal
+        }
+    };
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 p-4">
-            <div className="container mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 max-w-6xl">
-                <div className="hidden lg:block lg:w-1/2">
-                    <img
-                        src="/src/assets/img.png"
-                        alt="Login illustration"
-                        className="w-full h-auto object-cover rounded-lg"
-                    />
-                </div>
+        <>
+            <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50" onClick={() => onClose()}>
+                <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
+                    <button
+                        onClick={onClose}
+                        className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+                    >
+                        <RiCloseLine className="w-6 h-6" />
+                    </button>
 
-                <div className="w-full lg:w-1/2 max-w-md">
-                    <div className="bg-white p-8 rounded-lg shadow-xl">
+                    <div className="p-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-8">Welcome Back!</h1>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="space-y-8">
+                            <div className="space-y-4">
                                 <FloatingInput
                                     type="email"
                                     placeholder="Email Address"
@@ -114,7 +156,7 @@ const AdminLogin = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                            className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                                         >
                                             {showPassword ? (
                                                 <AiOutlineEye className="w-5 h-5" />
@@ -126,15 +168,6 @@ const AdminLogin = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-end">
-                                <a
-                                    href="/forgot-password"
-                                    className="text-sm text-purple-600 hover:text-purple-800"
-                                >
-                                    Forgot Password?
-                                </a>
-                            </div>
-
                             <button
                                 type="submit"
                                 className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
@@ -142,10 +175,28 @@ const AdminLogin = () => {
                                 LOGIN
                             </button>
                         </form>
+
+                        <div className="flex justify-between items-center mt-4 text-sm">
+                            <div>
+                                <span className="text-gray-600">Don't have an account? </span>
+                                <button
+                                    onClick={handleSignupClick}
+                                    className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
+                                >
+                                    Sign up
+                                </button>
+                            </div>
+                            <a
+                                onClick={handleForgotPasswordClick}
+                                className="text-purple-600 hover:text-purple-800 cursor-pointer"
+                            >
+                                Forgot Password?
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

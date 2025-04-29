@@ -1,87 +1,95 @@
-import React, { useState } from "react";
-import FloatingInput from "../../../Components/FloatingInput";
+import React, { useEffect, useState } from "react";
+import { RiCloseLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
-import OTP from "../OTP/index.jsx";
+import FloatingInput from "../../../Components/FloatingInput";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
-    const [showOTP, setShowOTP] = useState(false);
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    const handleChange = (e) => {
-        const value = e.target.value.replace(/\s/g, '').toLowerCase();
-        setEmail(value);
-        
-        if (value && !emailRegex.test(value)) {
-            setError("Please enter a valid email");
-        } else {
+    useEffect(() => {
+        if (!isOpen) {
+            setEmail("");
             setError("");
         }
-    };
+    }, [isOpen]);
+    const handleChange = (e) => {
+        const value = e.target.value;
+        const emailValue = value.replace(/\s/g, '').replace(/[^a-zA-Z0-9@.]/g, '').toLowerCase();
+        setEmail(emailValue);
 
+        let errorMessage = "";
+        if (value.includes(' ')) {
+            errorMessage = "Spaces are not allowed";
+        } else if (value !== emailValue) {
+            errorMessage = "Special characters are not allowed";
+        } else if (emailValue.length > 50) {
+            errorMessage = "Email must not exceed 50 characters";
+        } else if (emailValue.includes('@')) {
+            errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
+        }
+        setError(errorMessage);
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        if (!email) {
-            setError("Email is required");
-            return;
-        }
+        const errorMessage = !email ? "Email is required" :
+            email.length < 10 ? "Email must be at least 10 characters" :
+                email.length > 50 ? "Email must not exceed 50 characters" :
+                    !emailRegex.test(email) ? "Please enter a valid email" : "";
 
-        if (!emailRegex.test(email)) {
-            setError("Please enter a valid email");
-            return;
+        if (errorMessage) {
+            setError(errorMessage);
+        } else {
+            console.log("Reset password for:", email);
+            if (setOtpEmail && setShowOTPModal) {
+                setOtpEmail(email); // Set the email in Header
+                setShowOTPModal(true); // Open the OTP modal directly
+            }
+            setEmail("");
+            setError("");
+            onClose(); // Close the ForgotPassword modal after triggering OTP
         }
-
-        // Here you would make an API call to send OTP
-        setShowOTP(true);
     };
 
-    if (showOTP) {
-        return <OTP email={email} />;
-    }
+    if (!isOpen) return null;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 p-4">
-            <div className="w-full max-w-md">
-                <div className="bg-white p-8 rounded-lg shadow-xl">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-6">Forgot Password</h1>
-                    <p className="text-gray-600 mb-8">
-                        Enter your email address to receive a verification code.
-                    </p>
+        <>
+            <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
+                <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
+                    <button onClick={onClose} className="absolute right-4 top-4 text-gray-500 hover:text-gray-700">
+                        <RiCloseLine className="w-6 h-6" />
+                    </button>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <FloatingInput
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                            value={email}
-                            onChange={handleChange}
-                            required
-                            icon={<MdOutlineEmail className="w-5 h-5" />}
-                            iconPosition="left"
-                            error={error}
-                        />
+                    <div className="p-8">
+                        <h1 className="text-3xl font-bold text-gray-800 mb-4">Forgot Password</h1>
+                        <p className="text-gray-600 mb-6">Enter your email address to reset your password.</p>
 
-                        <div className="flex flex-col gap-4">
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <FloatingInput
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={email}
+                                onChange={handleChange}
+                                required
+                                icon={<MdOutlineEmail className="w-5 h-5" />}
+                                iconPosition="left"
+                                error={error}
+                                maxLength={50}
+                            />
+
                             <button
                                 type="submit"
                                 className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
                             >
-                                Send Verification Code
+                                RESET PASSWORD
                             </button>
-                            <a
-                                href="/adminlogin"
-                                className="text-center text-sm text-purple-600 hover:text-purple-800"
-                            >
-                                Back to Login
-                            </a>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
