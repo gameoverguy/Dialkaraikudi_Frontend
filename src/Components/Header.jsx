@@ -9,6 +9,7 @@ import AdminLogin from '../Pages/AdminLogin'
 import SignupModal from '../Pages/SignUp'
 import ForgotPassword from '../Pages/AdminLogin/ForgotPassword'
 import OTP from '../Pages/AdminLogin/OTP'
+import ResetPassword from '../Pages/AdminLogin/ResetPassword'
 
 const Header = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -17,6 +18,7 @@ const Header = () => {
     const navigate = useNavigate()
     const [showOTPModal, setShowOTPModal] = useState(false); // New state for OTP modal
     const [otpEmail, setOtpEmail] = useState('');
+    const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
     return (
         <>
             <div className='sticky top-0 bg-white z-40 w-full px-2 py-2 md:px-8 md:py-4 items-center shadow-2xl border-gray-200'>
@@ -69,20 +71,26 @@ const Header = () => {
                 onClose={() => setIsSignupOpen(false)}
                 onLoginClick={() => {
                     setIsSignupOpen(false);
-                    setShowLoginModal(true); // Open login modal after signup closes
+                    setShowLoginModal(true);
                 }}
-                setShowLoginModal={setShowLoginModal} // Pass setShowLoginModal
+                setShowLoginModal={setShowLoginModal}
             />
             <ForgotPassword
                 isOpen={isForgotPasswordOpen}
                 onClose={() => setIsForgotPasswordOpen(false)}
-                setShowOTPModal={setShowOTPModal} // Pass setShowOTPModal
+                setShowOTPModal={setShowOTPModal}
                 setOtpEmail={setOtpEmail}
             />
-            <OTP
+             <OTP
                 isOpen={showOTPModal}
                 onClose={() => setShowOTPModal(false)}
                 email={otpEmail}
+                setShowResetPasswordModal={setShowResetPasswordModal}
+            />
+            <ResetPassword
+                isOpen={showResetPasswordModal}
+                onClose={() => setShowResetPasswordModal(false)}
+                setShowLoginModal={setShowLoginModal}
             />
         </>
     )

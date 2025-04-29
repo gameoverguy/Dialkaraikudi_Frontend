@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import FloatingInput from "../../../Components/FloatingInput";
-import OTP from "../OTP";
 
 const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    useEffect(() => {
+        if (!isOpen) {
+            setEmail("");
+            setError("");
+        }
+    }, [isOpen]);
     const handleChange = (e) => {
         const value = e.target.value;
         const emailValue = value.replace(/\s/g, '').replace(/[^a-zA-Z0-9@.]/g, '').toLowerCase();
@@ -40,6 +45,8 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
                 setOtpEmail(email); // Set the email in Header
                 setShowOTPModal(true); // Open the OTP modal directly
             }
+            setEmail("");
+            setError("");
             onClose(); // Close the ForgotPassword modal after triggering OTP
         }
     };

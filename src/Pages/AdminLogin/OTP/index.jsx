@@ -1,12 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiCloseLine } from "react-icons/ri";
 
-const OTP = ({ email, isOpen, onClose}) => {
+const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [error, setError] = useState('');
-    const [timer, setTimer] = useState(30);
+    const [timer, setTimer] = useState(60);
     const navigate = useNavigate();
+
+    const otpRefs = [
+        useRef(null),
+        useRef(null),
+        useRef(null),
+        useRef(null),
+    ];
+    useEffect(() => {
+        if (!isOpen) {
+            setOtp(['', '', '', '']);
+            setError('');
+        }
+    }, [isOpen]);
     useEffect(() => {
         let interval;
         if (isOpen && timer > 0) {
@@ -17,49 +30,67 @@ const OTP = ({ email, isOpen, onClose}) => {
         return () => clearInterval(interval);
     }, [isOpen, timer]);
 
-    const handleChange = (element, index) => {
-        if (isNaN(element.value)) return false;
+    useEffect(() => {
+        if (isOpen && otpRefs[0].current) {
+            setTimeout(() => otpRefs[0].current.focus(), 0);
+        }
+    }, [isOpen]);
 
-        setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+    const handleChange = (index, value) => {
+        if (!/^\d?$/.test(value)) return;
 
-        if (element.nextSibling && element.value !== '') {
-            element.nextSibling.focus();
+        const newOtp = [...otp];
+        newOtp[index] = value;
+        setOtp(newOtp);
+
+        if (value && index < 3) {
+            otpRefs[index + 1].current.focus();
         }
     };
 
-    const handleKeyDown = (e, index) => {
-        if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            const prevInput = e.target.previousSibling;
-            if (prevInput) {
-                prevInput.focus();
-            }
+    const handleKeyDown = (index, e) => {
+        if (e.key === "Backspace" && !otp[index] && index > 0) {
+            otpRefs[index - 1].current.focus();
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const otpValue = otp.join('');
-        
-        if (otpValue.length !== 4) {
+        const isComplete = otp.every(digit => digit !== '');
+
+        if (!isComplete) {
             setError('Please enter all digits');
             return;
         }
-
-        // Here you would verify OTP with API
-        console.log('OTP Verified');
-        setIsOpen(false);
+        console.log('OTP Verified:', otpValue);
+        setOtp(['', '', '', '']);
+        setError('');
         onClose();
-        navigate('/reset-password');
+        setShowResetPasswordModal(true); // Open reset password modal instead of navigating
     };
 
     const handleResendOTP = () => {
         setOtp(['', '', '', '']);
         setError('');
-        setTimer(30);
-        // Add API call to resend OTP
+        setTimer(60);
         console.log('Resending OTP to:', email);
     };
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
 
+    const handlePaste = (event) => {
+        const pastedValue = event.clipboardData.getData('Text');
+        if (/^\d{4}$/.test(pastedValue)) {
+            const pastedOtp = pastedValue.split('');
+            setOtp(pastedOtp);
+            // Focus the last input after successful paste
+            otpRefs[3].current.focus();
+        }
+    };
     if (!isOpen) return null;
 
     return (
@@ -75,7 +106,7 @@ const OTP = ({ email, isOpen, onClose}) => {
                         We have sent a verification code to <span className="font-medium">{email}</span>
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-3">
                         <div className="flex justify-center gap-4">
                             {otp.map((data, index) => (
                                 <input
@@ -83,17 +114,20 @@ const OTP = ({ email, isOpen, onClose}) => {
                                     type="text"
                                     maxLength="1"
                                     value={data}
-                                    onChange={e => handleChange(e.target, index)}
-                                    onKeyDown={e => handleKeyDown(e, index)}
+                                    onChange={e => handleChange(index, e.target.value)}
+                                    onKeyDown={e => handleKeyDown(index, e)}
+                                    onPaste={index === 0 ? handlePaste : undefined}
+                                    ref={otpRefs[index]}
                                     className="w-14 h-14 text-center text-2xl border-2 rounded-lg focus:border-purple-500 focus:outline-none"
-                                    autoFocus={index === 0}
                                 />
                             ))}
                         </div>
 
-                        {error && (
-                            <p className="text-red-500 text-sm text-center">{error}</p>
-                        )}
+                        <div className='h-3'>
+                            {error && (
+                                <p className="text-red-500 text-sm text-center">{error}</p>
+                            )}
+                        </div>
 
                         <div className="flex flex-col gap-4">
                             <button
@@ -102,11 +136,11 @@ const OTP = ({ email, isOpen, onClose}) => {
                             >
                                 Verify Code
                             </button>
-                            
+
                             <div className="text-center">
                                 {timer > 0 ? (
                                     <p className="text-sm text-gray-600">
-                                        Resend code in <span className="font-medium">{timer}s</span>
+                                        Time Left : <span className="font-medium">{formatTime(timer)}</span>
                                     </p>
                                 ) : (
                                     <button
