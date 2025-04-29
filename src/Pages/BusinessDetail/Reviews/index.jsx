@@ -69,7 +69,6 @@ const Reviews = ({ formData }) => {
               />
               <div>
                 <p className="font-semibold">{review.name}</p>
-                <p className="text-sm text-gray-500">1 review</p>
               </div>
             </div>
             <p className="text-sm text-gray-500">{review.date}</p>
@@ -95,27 +94,6 @@ const Reviews = ({ formData }) => {
             </div>
           )}
           <p className="text-sm text-gray-700 mb-3">{review.review}</p>
-
-          <div className="flex gap-6 text-sm text-gray-500">
-            <button className="flex items-center gap-2 text-black">
-              <span>
-                <FaRegThumbsUp />
-              </span>
-              Helpful
-            </button>
-            <button className="flex items-center gap-2 text-black">
-              <span>
-                <FaRegCommentAlt />
-              </span>
-              Comment
-            </button>
-            <button className="flex items-center gap-2 text-black">
-              <span>
-                <IoArrowRedoSharp />
-              </span>
-              Share
-            </button>
-          </div>
         </div>
       ))}
     </div>

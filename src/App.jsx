@@ -7,31 +7,32 @@ import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
 import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
 import ContactDetails from "./business/contact.jsx";
-import AdminLogin from "./Pages/AdminLogin/index.jsx";
 import HomePage from "./business/HomePage.jsx";
-import ForgotPassword from "./Pages/AdminLogin/ForgotPassword/index.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
-import SignUp from "./Pages/SignUp/index.jsx";
+import { LoginModalProvider } from "./context/LoginContext.jsx";
 
 function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route path="/list" element={<Bussiness_List />} />
-            <Route path="/detailform" element={<BusinessDetailForm />} />
-            <Route path="/login" element={<BusinessLogin />} />
-            <Route path="/businessdetails" element={<BusinessDetails />} />
-            <Route path="/businesstiming" element={<BusinessTiming />} />
-            <Route path="/businesscategory" element={<BusinessCategory />} />
-            <Route path="/Contact" element={<ContactDetails />} />
-            <Route path="/home" element={<HomePage />} />
-          </Route>
-          <Route path="/adminpanel" element={<AdminPanel />} />
-        </Routes>
-      </BrowserRouter>
+      <LoginModalProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="/list" element={<Bussiness_List />} />
+              <Route path="/detailform" element={<BusinessDetailForm />} />
+              <Route path="/login" element={<BusinessLogin />} />
+              <Route path="/businessdetails" element={<BusinessDetails />} />
+              <Route path="/businesstiming" element={<BusinessTiming />} />
+              <Route path="/businesscategory" element={<BusinessCategory />} />
+              <Route path="/Contact" element={<ContactDetails />} />
+              <Route path="/home" element={<HomePage />} />
+            </Route>
+            <Route path="/adminpanel" element={<AdminPanel />} />
+          </Routes>
+
+        </BrowserRouter >
+      </LoginModalProvider>
     </>
   );
 }

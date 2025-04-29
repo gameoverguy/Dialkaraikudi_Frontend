@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import BusinessInfo from "./BusinessInfo";
-import Services from "./Services";
-import QuickInfo from "./QuickInfo";
 import Photos from "./Photos";
-import Explore from "./Explore";
 import Reviews from "./Reviews";
+import Description from "./Description";
 
 const BusinessDetails = () => {
   const [formData] = useState([
@@ -30,10 +28,8 @@ const BusinessDetails = () => {
 
   const tabs = [
     { name: "Overview", id: "overview", key: "overview" },
-    { name: "Services", id: "services", key: "services" },
-    { name: "Quick Info", id: "quickinfo", key: "quick-info" },
+    { name: "Description", id: "description", key: "description" },
     { name: "Photos", id: "photos", key: "photos" },
-    { name: "Explore", id: "explore", key: "explore" },
     { name: "Reviews", id: "reviews", key: "reviews" },
   ];
 
@@ -58,17 +54,11 @@ const BusinessDetails = () => {
         </div>
         <div className="mx-4 space-y-8 pb-10">
           <div id="overview">
-            <div id="services">
-              <Services />
-            </div>
-            <div id="quickinfo">
-              <QuickInfo />
+            <div id="description">
+              <Description />
             </div>
             <div id="photos">
               <Photos />
-            </div>
-            <div id="explore">
-              <Explore />
             </div>
             <div id="reviews">
               <Reviews  formData={formData[0]}/>
