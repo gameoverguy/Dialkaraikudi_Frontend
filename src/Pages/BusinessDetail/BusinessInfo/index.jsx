@@ -1,8 +1,7 @@
 import React from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
-import { FaThumbsUp, FaRegComment, FaPhone } from "react-icons/fa6";
-import { PiWhatsappLogoFill } from "react-icons/pi";
+import { FaPhone } from "react-icons/fa6";
 import { RiShareForwardLine } from "react-icons/ri";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { CiLocationArrow1 } from "react-icons/ci";
@@ -17,9 +16,6 @@ const BusinessInfo = ({ formData }) => {
           className="rounded-md border border-gray-200 mx-4 p-4 bg-white"
         >
           <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
-            <span className="text-white bg-gray-600 p-1 rounded-md text-sm">
-              <FaThumbsUp />
-            </span>
             {business.name}
           </h1>
           <div className="flex items-center gap-2 mt-2 text-sm md:text-base">
@@ -55,14 +51,6 @@ const BusinessInfo = ({ formData }) => {
                   </div>
                   <p className="mt-1 text-sm">Call Now</p>
                 </div>
-
-                <div className="flex flex-col items-center w-20 mb-2">
-                  <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
-                    <PiWhatsappLogoFill className="text-[#25D366] text-xl" />
-                  </div>
-                  <p className="mt-1 text-sm">Whatsapp</p>
-                </div>
-
                 <div className="flex flex-col items-center w-20">
                   <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
                     <CiLocationArrow1 className="text-black text-xl" />
@@ -77,18 +65,10 @@ const BusinessInfo = ({ formData }) => {
                   <p className="mt-1 text-sm">Share</p>
                 </div>
               </div>
-              <div className="w-[90%] bg-blue-600 text-white font-bold rounded flex items-center justify-center md:w-fit px-3 py-2">
-                <FaRegComment className="mr-2 text-lg" />
-                Enquire Now
-              </div>
-              <div className="hidden border shadow-sm bg-white rounded md:flex items-center px-2 py-1 text-black font-bold">
-                <PiWhatsappLogoFill className="text-[#25D366] text-2xl mr-2" />
-                WhatsApp
-              </div>
-              <div className="hidden border rounded-md p-2 text-gray-600 text-xl">
+              <div className="hidden border md:block rounded-md p-2 text-gray-600 text-xl">
                 <RiShareForwardLine />
               </div>
-              <div className="hidden border rounded-md p-2 text-gray-600 text-xl">
+              <div className="hidden border md:block rounded-md p-2 text-gray-600 text-xl">
                 <HiOutlinePencil />
               </div>
             </div>
