@@ -4,6 +4,7 @@ import { RiCloseLine, RiLockPasswordLine, RiUserLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { BsTelephone } from "react-icons/bs";
+import CustomModal from "../../Components/modal";
 
 const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
     const [formData, setFormData] = useState({
@@ -136,150 +137,148 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
-                <button onClick={onClose} className="absolute right-4 top-4 text-gray-500 hover:text-gray-700">
-                    <RiCloseLine className="w-6 h-6" />
-                </button>
+        <CustomModal
+            isOpen={isOpen}
+            onClose={onClose}
+            // title="Create Account"
+            classname="w-full max-w-md"
+        >
+            <div className="p-2">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">Create Account</h1>
+                <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="space-y-3">
+                        <FloatingInput
+                            type="text"
+                            placeholder="Full Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            icon={<RiUserLine className="w-5 h-5" />}
+                            iconPosition="left"
+                            error={errors.name}
+                            maxLength={50}
+                        />
 
-                <div className="p-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-8">Create Account</h1>
-
-                    <form onSubmit={handleSubmit} className="space-y-3">
-                        <div className="space-y-3">
+                        <FloatingInput
+                            type="email"
+                            placeholder="Email Address"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            icon={<MdOutlineEmail className="w-5 h-5" />}
+                            iconPosition="left"
+                            error={errors.email}
+                            maxLength={50}
+                        />
+                        <FloatingInput
+                            type="tel"
+                            placeholder="Phone Number"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            required
+                            icon={<BsTelephone className="w-5 h-5" />}
+                            iconPosition="left"
+                            error={errors.phone}
+                            maxLength={10}
+                        />
+                        <div className="relative">
                             <FloatingInput
-                                type="text"
-                                placeholder="Full Name"
-                                name="name"
-                                value={formData.name}
+                                type={showPassword.password ? "text" : "password"}
+                                placeholder="Password"
+                                name="password"
+                                value={formData.password}
                                 onChange={handleChange}
                                 required
-                                icon={<RiUserLine className="w-5 h-5" />}
+                                icon={<RiLockPasswordLine className="w-5 h-5" />}
                                 iconPosition="left"
-                                error={errors.name}
-                                maxLength={50}
+                                error={errors.password}
+                                maxLength={20}
                             />
-
-                            <FloatingInput
-                                type="email"
-                                placeholder="Email Address"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                icon={<MdOutlineEmail className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={errors.email}
-                                maxLength={50}
-                            />
-                            <FloatingInput
-                                type="tel"
-                                placeholder="Phone Number"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                required
-                                icon={<BsTelephone className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={errors.phone}
-                                maxLength={10}
-                            />
-                            <div className="relative">
-                                <FloatingInput
-                                    type={showPassword.password ? "text" : "password"}
-                                    placeholder="Password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                    icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                    iconPosition="left"
-                                    error={errors.password}
-                                    maxLength={20}
-                                />
-                                {formData.password && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(prev => ({ ...prev, password: !prev.password }))}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                    >
-                                        {showPassword.password ? (
-                                            <AiOutlineEye className="w-5 h-5" />
-                                        ) : (
-                                            <AiOutlineEyeInvisible className="w-5 h-5" />
-                                        )}
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className="relative">
-                                <FloatingInput
-                                    type={showPassword.confirmPassword ? "text" : "password"}
-                                    placeholder="Confirm Password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    required
-                                    icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                    iconPosition="left"
-                                    error={errors.confirmPassword}
-                                    maxLength={20}
-                                />
-                                {formData.confirmPassword && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(prev => ({ ...prev, confirmPassword: !prev.confirmPassword }))}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                    >
-                                        {showPassword.confirmPassword ? (
-                                            <AiOutlineEye className="w-5 h-5" />
-                                        ) : (
-                                            <AiOutlineEyeInvisible className="w-5 h-5" />
-                                        )}
-                                    </button>
-                                )}
-                            </div>
+                            {formData.password && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(prev => ({ ...prev, password: !prev.password }))}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword.password ? (
+                                        <AiOutlineEye className="w-5 h-5" />
+                                    ) : (
+                                        <AiOutlineEyeInvisible className="w-5 h-5" />
+                                    )}
+                                </button>
+                            )}
                         </div>
-                        <div className="flex items-start space-x-2 mt-4">
-                            <input
-                                type="checkbox"
-                                name="acceptTerms"
-                                id="acceptTerms"
-                                checked={formData.acceptTerms}
+
+                        <div className="relative">
+                            <FloatingInput
+                                type={showPassword.confirmPassword ? "text" : "password"}
+                                placeholder="Confirm Password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
                                 onChange={handleChange}
-                                className="mt-1"
+                                required
+                                icon={<RiLockPasswordLine className="w-5 h-5" />}
+                                iconPosition="left"
+                                error={errors.confirmPassword}
+                                maxLength={20}
                             />
-                            <label htmlFor="acceptTerms" className="text-sm text-gray-600">
-                                I agree to the{" "}
-                                <a href="/terms" className="text-purple-600 hover:text-purple-800">
-                                    Terms and Conditions
-                                </a>
-                            </label>
+                            {formData.confirmPassword && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(prev => ({ ...prev, confirmPassword: !prev.confirmPassword }))}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword.confirmPassword ? (
+                                        <AiOutlineEye className="w-5 h-5" />
+                                    ) : (
+                                        <AiOutlineEyeInvisible className="w-5 h-5" />
+                                    )}
+                                </button>
+                            )}
                         </div>
-                        {errors.acceptTerms && (
-                            <p className="text-red-500 text-sm mt-1">{errors.acceptTerms}</p>
-                        )}
-
-                        <button
-                            type="submit"
-                            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
-                        >
-                            SIGN UP
-                        </button>
-                    </form>
-
-                    <div className="text-center mt-4 text-sm">
-                        <span className="text-gray-600">Already have an account? </span>
-                        <button
-                            onClick={handleLoginClick}
-                            className="text-purple-600 hover:text-purple-800 font-medium"
-                        >
-                            Login
-                        </button>
                     </div>
+                    <div className="flex items-start space-x-2 mt-4">
+                        <input
+                            type="checkbox"
+                            name="acceptTerms"
+                            id="acceptTerms"
+                            checked={formData.acceptTerms}
+                            onChange={handleChange}
+                            className="mt-1"
+                        />
+                        <label htmlFor="acceptTerms" className="text-sm text-gray-600">
+                            I agree to the{" "}
+                            <a href="/terms" className="text-purple-600 hover:text-purple-800">
+                                Terms and Conditions
+                            </a>
+                        </label>
+                    </div>
+                    {errors.acceptTerms && (
+                        <p className="text-red-500 text-sm mt-1">{errors.acceptTerms}</p>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                    >
+                        SIGN UP
+                    </button>
+                </form>
+
+                <div className="text-center mt-4 text-sm">
+                    <span className="text-gray-600">Already have an account? </span>
+                    <button
+                        onClick={handleLoginClick}
+                        className="text-purple-600 hover:text-purple-800 font-medium"
+                    >
+                        Login
+                    </button>
                 </div>
             </div>
-        </div>
+        </CustomModal>
     );
 };
 

@@ -37,7 +37,6 @@ const AdminPanel = () => {
 
     // Initial check
     handleResize();
-
     // Add event listener
     window.addEventListener('resize', handleResize);
 
@@ -96,13 +95,14 @@ const AdminPanel = () => {
 
   const renderMenuItem = (item) => {
     const isSelected = selectedKey === item.key;
-    const isExpanded = expandedMenu === item.key; // Changed from includes to direct comparison
+    const isExpanded = expandedMenu === item.key;
+    const hasSelectedChild = item.children?.some(child => child.key === selectedKey);
 
     return (
       <div key={item.key}>
         <div
           className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-200 
-            ${isSelected ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+            ${isSelected || hasSelectedChild ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
           onClick={() => item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)}
         >
           <span className="flex items-center">{item.icon}</span>
@@ -117,7 +117,7 @@ const AdminPanel = () => {
             </>
           )}
         </div>
-        {!collapsed && item.children && isExpanded && (
+        {!collapsed && item.children && (isExpanded || hasSelectedChild) && (
           <div className="pl-11 mt-1">
             {item.children.map(subItem => (
               <div
@@ -133,7 +133,7 @@ const AdminPanel = () => {
         )}
       </div>
     );
-  };
+};
 
   // Component mapping object
   const componentMap = {
@@ -151,7 +151,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 overflow-hidden">
+    <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
       {/* Sidebar - Fixed position */}
       <div className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
         ${collapsed ? 'w-20' : 'w-64'}`}>
@@ -187,10 +187,8 @@ const AdminPanel = () => {
 
         {/* Scrollable main content */}
         <main className="flex-1 p-6 mt-16 relative h-[calc(100vh-4rem)]">
-          <div className="bg-white rounded-lg shadow-sm p-6 min-w-full overflow-x-auto">
-            <div className="min-w-[800px]">
-              {getCurrentComponent()}
-            </div>
+          <div className="bg-white rounded-lg shadow-sm p-6 ">
+            {getCurrentComponent()}
           </div>
         </main>
       </div>

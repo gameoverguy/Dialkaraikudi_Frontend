@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa";
+import CustomModal from "../../../Components/modal";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-const Photos = () => {
-  const [imageUrls] = useState([
-    { url: "https://dummyimage.com/250x150/000/fff", label: "All" },
-    { url: "https://dummyimage.com/250x150/000/fff", label: "Exterior" },
-    { url: "https://dummyimage.com/250x150/000/fff", label: "Interior" },
-    { url: "https://dummyimage.com/250x150/000/fff", label: "Room" },
-    { url: "https://dummyimage.com/250x150/000/fff", label: "Dining" },
-  ]);
+const Photos = ({formData}) => {
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [initialSlide, setInitialSlide] = useState(0);
+
+  const handleImageClick = (index) => {
+    setInitialSlide(index);
+    setShowImageModal(true);
+  };
 
   return (
     <div className="rounded-md border border-gray-200 p-4 bg-white" id="photos">
@@ -16,26 +21,48 @@ const Photos = () => {
       
       <div className="overflow-x-auto mt-4">
         <div className="flex gap-4">
-          {imageUrls.map((image, index) => (
-            <div key={index} className="min-w-[10rem]">
+          {formData.imageUrls.map((image, index) => (
+            <div 
+              key={index} 
+              className="min-w-[10rem] cursor-pointer" 
+              onClick={() => handleImageClick(index)}
+            >
               <img
                 src={image.url}
                 alt={`Photo ${index + 1}`}
-                className="w-full h-32 object-cover rounded-md shadow-md"
+                className="w-full h-32 object-cover rounded-md shadow-md hover:opacity-90 transition-opacity"
               />
-              <p className="text-sm font-bold text-gray-700 mt-1">{image.label}</p>
-              <p className="text-sm text-gray-500">{image.label.length} Photos</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-4">
-        <button className="flex items-center justify-center gap-2 w-full md:w-auto bg-blue-600 text-white font-medium px-4 py-2 rounded-md shadow hover:bg-blue-700 transition">
-          <FaCloudUploadAlt className="text-lg" />
-          Upload Photos
-        </button>
-      </div>
+      <CustomModal
+        isOpen={showImageModal}
+        onClose={() => setShowImageModal(false)}
+        classname="w-11/12 md:w-3/4 lg:w-4/5"
+        title="Photo Gallery"
+      >
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+          initialSlide={initialSlide}
+          className="h-[70vh]"
+        >
+          {formData.imageUrls.map((image, index) => (
+            <SwiperSlide key={index}>
+              <div className="w-full h-full flex items-center justify-center">
+                <img
+                  src={image.url}
+                  alt={`Gallery ${index + 1}`}
+                  className="min-h-full min-w-full object-contain"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </CustomModal>
     </div>
   );
 };

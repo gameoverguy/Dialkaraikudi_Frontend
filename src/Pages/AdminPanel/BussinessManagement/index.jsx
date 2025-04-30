@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CustomTable from '../../../Components/Table';
 import CustomModal from '../../../Components/modal';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import ConfirmationModal from '../../../Components/ConfirmationModal';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -14,9 +16,56 @@ const BusinessManagement = () => {
     category: '',
     phone: '',
     email: '',
-    address: '',
+    address: '',  // Changed to simple string
     photos: []
   });
+
+  // Add API endpoints
+  const API_BASE_URL = 'http://192.168.1.33:5000';
+
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
+
+  const fetchBusinesses = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/business`);
+      const data = await response.json();
+
+      // Transform the data to match our simplified table structure
+      const transformedData = data.data.map(business => ({
+        id: business._id,
+        name: business.businessName,
+        description: business.description,
+        category: business.category,
+        phone: business.contactDetails.phone,
+        email: business.contactDetails.email,
+        address: business.address.addressArea,
+        photos: business.photos
+      }));
+
+      setBusinesses(transformedData);
+    } catch (error) {
+      console.error('Error fetching businesses:', error);
+      toast.error('Failed to fetch businesses');
+    }
+  };
+
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      category: '',
+      phone: '',
+      email: '',
+      address: '',
+      photos: []
+    });
+    setImagePreview([]);
+    setErrors({});
+  };
+
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState([]);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
@@ -51,18 +100,8 @@ const BusinessManagement = () => {
       key: 'email',
       label: 'Email'
     },
+
     
-    {
-      key: 'photos',
-      label: 'Photos',
-      render: (row) => (
-        <img 
-          src={row.photos[0]} 
-          alt={row.name} 
-          className="w-16 h-16 object-cover rounded"
-        />
-      )
-    },
     {
       key: 'actions',
       label: 'Actions',
@@ -96,7 +135,7 @@ const BusinessManagement = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name) {
       newErrors.name = 'Business name is required';
     } else if (formData.name.length > 30) {
@@ -143,7 +182,7 @@ const BusinessManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     let validatedValue = value;
     let error = '';
 
@@ -197,7 +236,7 @@ const BusinessManagement = () => {
     }
 
     const validFiles = acceptedFiles.filter(file => file.size <= 2 * 1024 * 1024);
-    
+
     if (validFiles.length !== acceptedFiles.length) {
       setErrors(prev => ({
         ...prev,
@@ -222,67 +261,7 @@ const BusinessManagement = () => {
     maxFiles: 6
   });
 
-  // Mock API data
-  const mockBusinesses = [
-    {
-      id: 1,
-      name: "Tech Solutions",
-      description: "Leading technology solutions provider with innovative products",
-      category: "Electronics",
-      phone: "9876543210",
-      email: "tech@example.com",
-      address: "123 Tech Street, Innovation City",
-      photos: ["https://picsum.photos/200/200?random=1"]
-    }
-  ];
-
-  useEffect(() => {
-    const fetchBusinesses = () => {
-      setTimeout(() => {
-        setBusinesses(mockBusinesses);
-      }, 500);
-    };
-
-    fetchBusinesses();
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      if (selectedBusiness) {
-        // Handle update
-        const updatedBusinesses = businesses.map(business => {
-          if (business.id === selectedBusiness.id) {
-            return {
-              ...business,
-              ...formData,
-              photos: formData.photos.map(photo => 
-                typeof photo === 'string' ? photo : URL.createObjectURL(photo)
-              )
-            };
-          }
-          return business;
-        });
-        setBusinesses(updatedBusinesses);
-        toast.success('Business updated successfully');
-      } else {
-        // Handle new business
-        const newBusiness = {
-          id: businesses.length + 1,
-          ...formData,
-          photos: formData.photos.map(photo => URL.createObjectURL(photo))
-        };
-        setBusinesses([...businesses, newBusiness]);
-        toast.success('Business added successfully');
-      }
-      
-      setShowModal(false);
-      setImagePreview([]);
-      setErrors({});
-      setFormData({ name: '', description: '', category: '', phone: '', email: '', address: '', photos: [] });
-      setSelectedBusiness(null);
-    }
-  };
+  console.log(businesses, "Geteddd");
 
   const handleView = (business) => {
     setSelectedBusiness(business);
@@ -292,17 +271,90 @@ const BusinessManagement = () => {
   const handleEdit = (business) => {
     setSelectedBusiness(business);
     setFormData({
-      ...business,
-      photos: []
+      name: business.name,
+      description: business.description,
+      category: business.category,
+      phone: business.phone,
+      email: business.email,
+      address: business.address,  // This will now contain just the addressArea
+      photos: [...business.photos]
     });
-    setImagePreview(business.photos);
+    setImagePreview([...business.photos]);
     setShowModal(true);
   };
 
-  const handleDelete = (business) => {
-    if (window.confirm('Are you sure you want to delete this business?')) {
-      setBusinesses(businesses.filter(b => b.id !== business.id));
-      toast.success('Business deleted successfully');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const requestBody = {
+          businessName: formData.name,
+          description: formData.description,
+          category: formData.category,
+          contactDetails: {
+            phone: formData.phone,
+            email: formData.email
+          },
+          address: {
+            addressArea: formData.address  // Just send the address as addressArea
+          },
+          photos: formData.photos.map(photo =>
+            typeof photo === 'string' ? photo : URL.createObjectURL(photo)
+          )
+        };
+
+        if (selectedBusiness) {
+          // Handle update with API
+          const response = await fetch(`${API_BASE_URL}/business/${selectedBusiness.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to update business');
+          }
+
+          console.log("sucess");
+
+          toast.success('Business updated successfully');
+          await fetchBusinesses();
+
+        } else {
+          // Handle new business
+          const response = await fetch(`${API_BASE_URL}/business`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to create business');
+          }
+          toast.success('Business added successfully');
+          await fetchBusinesses();
+        }
+        setShowModal(false);
+        setImagePreview([]);
+        setErrors({});
+        setFormData({
+          name: '',
+          description: '',
+          category: '',
+          phone: '',
+          email: '',
+          address: '',
+          photos: []
+        });
+        setSelectedBusiness(null);
+      } catch (error) {
+        console.error('Error handling business:', error);
+        toast.error('Failed to process business');
+      }
     }
   };
 
@@ -312,6 +364,34 @@ const BusinessManagement = () => {
       photos: prev.photos.filter((_, i) => i !== index)
     }));
     setImagePreview(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [businessToDelete, setBusinessToDelete] = useState(null);
+
+  const handleDelete = (business) => {
+    setBusinessToDelete(business);
+    setShowConfirmModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      // Implement delete API call here
+      const response = await fetch(`${API_BASE_URL}/business/${businessToDelete.id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
+        toast.success('Business deleted successfully');
+      } else {
+        throw new Error('Failed to delete business');
+      }
+    } catch (error) {
+      toast.error('Failed to delete business');
+    } finally {
+      setShowConfirmModal(false);
+    }
   };
 
   return (
@@ -351,9 +431,8 @@ const BusinessManagement = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.name ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Enter business name"
               maxLength={30}
             />
@@ -370,9 +449,8 @@ const BusinessManagement = () => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.description ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Enter business description"
               rows={4}
             />
@@ -391,9 +469,8 @@ const BusinessManagement = () => {
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.category ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.category ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Search and select category"
             />
             <datalist id="categories">
@@ -415,9 +492,8 @@ const BusinessManagement = () => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Enter phone number"
               maxLength={10}
             />
@@ -435,9 +511,8 @@ const BusinessManagement = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Enter email address"
             />
             {errors.email && (
@@ -453,9 +528,8 @@ const BusinessManagement = () => {
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.address ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.address ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
               placeholder="Enter business address"
               rows={3}
             />
@@ -471,9 +545,8 @@ const BusinessManagement = () => {
             {imagePreview.length < 6 && (
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition duration-200 ${
-                  isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500'
-                }`}
+                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition duration-200 ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500'
+                  }`}
               >
                 <input {...getInputProps()} />
                 <FaCloudUploadAlt className="mx-auto h-12 w-12 text-gray-400" />
@@ -577,14 +650,18 @@ const BusinessManagement = () => {
             </div>
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Photos</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {selectedBusiness.photos.map((photo, index) => (
-                  <img
-                    key={index}
-                    src={photo}
-                    alt={`${selectedBusiness.name} photo ${index + 1}`}
-                    className="h-32 w-full object-cover rounded-lg"
-                  />
+                  <div key={index} className="relative group">
+                    <img
+                      src={photo}
+                      alt={`${selectedBusiness.name} photo ${index + 1}`}
+                      className="h-32 w-full object-cover rounded-lg transition-transform duration-200 hover:scale-105"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs py-1 px-2 rounded-b-lg">
+                      Photo {index + 1}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -603,8 +680,30 @@ const BusinessManagement = () => {
           </div>
         )}
       </CustomModal>
+      <ToastContainer
+        position="top-right"
+        autoClose={7000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ zIndex: 9999 }}
+      />
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={confirmDelete}
+        title="Delete Business"
+        message="Are you sure you want to delete this business? This action cannot be undone."
+      />
     </div>
   );
 };
 
 export default BusinessManagement;
+
+
