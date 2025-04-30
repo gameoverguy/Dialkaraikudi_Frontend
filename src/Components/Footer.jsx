@@ -4,6 +4,7 @@ import { FaSquareInstagram } from "react-icons/fa6";
 import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { FaInstagram } from "react-icons/fa";
+import { CiYoutube } from "react-icons/ci";
 
 const Footer = () => {
 
@@ -11,11 +12,9 @@ const Footer = () => {
         { title: <FaInstagram size={25} /> },
         { title: <TiSocialFacebook size={25} /> },
         { title: <IoLogoWhatsapp size={25} /> },
+        { title: <CiYoutube size={25} /> },
         
       ];
-
-    
-
     return (
         <>
         <div className='flex justify-center items-center w-12/12 bg-[#F3F4F6]'>
