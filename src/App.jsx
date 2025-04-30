@@ -13,7 +13,6 @@ import { LoginModalProvider } from "./context/LoginContext.jsx";
 
 
 function App() {
-
   return (
     <>
       <LoginModalProvider>
