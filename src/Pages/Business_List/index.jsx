@@ -256,7 +256,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-2 xl:w-[83%] gap-5 flex flex-col md:p-4">
+            <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
               {HotelDeatils.map((data, i) => (
                 <div
                   key={i}
@@ -280,7 +280,7 @@ const Bussiness_List = () => {
                       {data.overallRating} Ratings
                     </h3>
                     <p className="flex items-center">
-                      <CiLocationOn /> {data.address} - {data.distanceKm} km
+                      <CiLocationOn /> {data.address}
                     </p>
                     {/* <div>
                                 <AmentiesModal
