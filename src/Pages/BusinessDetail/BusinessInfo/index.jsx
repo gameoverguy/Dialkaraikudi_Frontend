@@ -8,7 +8,7 @@ import CustomModal from "../../../Components/modal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 
-const BusinessInfo = ({ formData }) => {
+const BusinessInfo = ({ formData,businessId }) => {
   const [showContact, setShowContact] = useState(false);
   const [isLoggedin, setIsLoggedin] = useState(false);
   const { handleOpenLoginModal } = useLoginModal();
@@ -30,7 +30,7 @@ const BusinessInfo = ({ formData }) => {
     <>
       {formData.map((business) => (
         <div
-          key={business.id}
+          key={business.businessId}
           className="rounded-md mx-4 bg-white"
         >
           <div className="md:hidden mb-6 overflow-hidden">
@@ -188,7 +188,7 @@ const BusinessInfo = ({ formData }) => {
               </div>
               <div className="hidden md:block">
                 <p className="flex justify-end font-semibold">Click to Rate</p>
-                <StarRating />
+                <StarRating businessId={businessId}/>
               </div>
             </div>
           </div>

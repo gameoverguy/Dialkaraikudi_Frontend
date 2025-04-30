@@ -7,7 +7,7 @@ import { IoIosArrowForward } from "react-icons/io";
 const BusinessDetails = () => {
   const [formData] = useState([
     {
-      id: 1,
+      businessId: 1,
       name: "Hotel Pl Grand",
       star: 4.9,
       rating: 175,
@@ -54,7 +54,7 @@ const BusinessDetails = () => {
         <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">Hotels in Karaikudi <span><IoIosArrowForward/></span></p>
         <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">Hotel PL Grand</p>
         </div>
-        <BusinessInfo formData={formData} />
+        <BusinessInfo formData={formData} businessId={formData[0].businessId}/>
         <div className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide">
           {tabs.map((tab) => (
             <div
@@ -64,7 +64,7 @@ const BusinessDetails = () => {
                   ? "border-b-4 border-blue-500 text-blue-500"
                   : "text-gray-500 hover:text-gray-700"
               }`}
-              onClick={() => handleTabClick(tab.key, tab.id)}
+              onClick={() => handleTabClick(tab.key, tab.businessId)}
             >
               {tab.name}
             </div>

@@ -5,6 +5,7 @@ import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
 import HomePage from "./business/HomePage.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
+import ReviewPage from "./Pages/ReviewPage/index.jsx";
 // import BusinessLogin from "./business/login.jsx";
 // import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 // import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
@@ -22,6 +23,7 @@ function App() {
               <Route index element={<HomePage />} />
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/businessdetails" element={<BusinessDetails />} />
+              <Route path="/review" element={<ReviewPage />} />
               {/* <Route path="/detailform" element={<BusinessDetailForm />} /> */}
               {/* <Route path="/login" element={<BusinessLogin />} /> */}
               {/* <Route path="/businesstiming" element={<BusinessTiming />} /> */}
