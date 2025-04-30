@@ -37,7 +37,6 @@ const AdminPanel = () => {
 
     // Initial check
     handleResize();
-
     // Add event listener
     window.addEventListener('resize', handleResize);
 

@@ -3,12 +3,15 @@ import { FaEye, FaTrash } from 'react-icons/fa';
 import CustomTable from '../../../Components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationModal from '../../../Components/ConfirmationModal';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -51,15 +54,19 @@ const UserTable = () => {
   };
 
   const handleDelete = async (user) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        // Implement delete API call here
-        setUsers(users.filter(u => u.id !== user.id));
-        setShowModal(false);
-        toast.success('User deleted successfully',);
-      } catch (error) {
-        toast.error('Failed to delete user', );
-      }
+    setUserToDelete(user);
+    setShowConfirmModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      // Implement delete API call here
+      setUsers(users.filter(u => u.id !== userToDelete.id));
+      setShowModal(false);
+      setShowConfirmModal(false);
+      toast.success('User deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete user');
     }
   };
 
@@ -94,7 +101,7 @@ const UserTable = () => {
     if (!user) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-md">
           <h2 className="text-xl font-bold mb-4">User Details</h2>
           <div className="space-y-3">
@@ -157,6 +164,14 @@ const UserTable = () => {
           }}
         />
       )}
+      
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={confirmDelete}
+        title="Delete User"
+        message="Are you sure you want to delete this user? This action cannot be undone."
+      />
     </div>
   );
 };
