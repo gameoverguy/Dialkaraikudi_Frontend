@@ -273,34 +273,193 @@ const HomePage = () => {
             font-size: 20px;
           }
         `}</style>
-
-
       </div>
 
-      <div className="max-w-8xl mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Find the Product Requirement</h3>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Enter Pincode or City"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-5 container mx-auto px-4 mt-10">
+        <div className="mb-12 border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 bg-white text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <a href="/movies" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://thetigernews.org/wp-content/uploads/2025/02/UpdatedEmily-Henderson-Current-Animated-Movies-1670x1541-1.jpg"
+                  alt="Movies"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
                 />
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 font-medium">
-                  CHANGE
-                </button>
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Movies</h3>
+                </div>
               </div>
-            </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg flex items-center justify-center">
-              <img
-                src="https://img.freepik.com/free-vector/location-concept-illustration_114360-1266.jpg?w=740&t=st=1709707843~exp=1709708443~hmac=7823c4c604fb30fb02f841454774a4c6f1e71eb3a0f8a68d7e8f6dc8ce53f1b8"
-                alt="Location illustration"
-                className="max-w-[300px] h-auto"
-              />
-            </div>
+            </a>
+
+            <a href="/grocery" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2Farchive%2F2d4ea32ed14a1f75cf1b454748dfa99cd4a1fa62"
+                  alt="Grocery"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Grocery</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/electricians" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://bloximages.chicago2.vip.townnews.com/tucson.com/content/tncms/assets/v3/editorial/a/b9/ab974212-26d6-11ec-b389-fb7e012632e9/615df0fce4220.image.jpg?resize=1200%2C800"
+                  alt="Electricians"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Electricians</h3>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
+
+
+        <div className="mb-12 border border-gray-100 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 bg-white text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Services</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <a href="/ac-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://5.imimg.com/data5/SELLER/Default/2024/12/476609932/HR/BY/GQ/83264471/package-ac-repair-and-service.jpg"
+                  alt="AC Service"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">AC Service</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/car-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://media.istockphoto.com/id/1589417945/photo/hand-of-mechanic-holding-car-service-and-checking.jpg?s=612x612&w=0&k=20&c=02eGeLsQDyppYAK7k7WwxGUyxgG2a5n43yetegKvIfI="
+                  alt="Car Service"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Car Service</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/bike-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://img1.wsimg.com/isteam/ip/89b284c1-91d6-451e-a493-9b63171cfc6e/1000047769.jpg/:/cr=t:12.58%25,l:0%25,w:100%25,h:74.85%25/rs=w:600,h:300,cg:true"
+                  alt="Bike Service"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Bike Service</h3>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-5 container mx-auto px-4 mt-5">
+        <div className="mb-12 border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 bg-white text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <a href="/movies" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://itsastampede.com/wp-content/uploads/2021/06/list-of-kung-fu-panda-movies.jpg?w=600"
+                  alt="Movies"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Movies</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/grocery" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://olamor.in/cdn/shop/files/GlistenKeratinShampoo1L.jpg?v=1700474623&width=1500"
+                  alt="Grocery"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Grocery</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/electricians" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIilimZGaeb0Hetalk2ncxe_JZeg0s2vttSQ&s"
+                  alt="Electricians"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Electricians</h3>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+
+        <div className="mb-12 border border-gray-100 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 bg-white text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Services</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <a href="/ac-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://electronicparadise.in/cdn/shop/files/Voltas_1.5_Ton_5_Star_Split_Air_Conditioner_185V_Vectra_Elite_5.webp?v=1728976295&width=1406"
+                  alt="AC Service"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">AC Service</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/car-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px] ">
+                <img
+                  src="https://images.pexels.com/photos/100653/pexels-photo-100653.jpeg"
+                  alt="Car Service"
+                  className="w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Car Service</h3>
+                </div>
+              </div>
+            </a>
+
+            <a href="/bike-service" className="group">
+              <div className="rounded-xl overflow-hidden h-[250px]">
+                <img
+                  src="https://images.moneycontrol.com/static-mcnews/2023/06/5-rahul-gandhi-bike-shop-delhi.jpg"
+                  alt="Bike Service"
+                  className=" w-50 h-40 object-cover rounded-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="p-4 bg-white">
+                  <h3 className="text-lg font-medium text-gray-800 group-hover:text-blue-600 transition-colors duration-300">Bike Service</h3>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
 
 
@@ -308,5 +467,4 @@ const HomePage = () => {
 
   );
 };
-
 export default HomePage;
