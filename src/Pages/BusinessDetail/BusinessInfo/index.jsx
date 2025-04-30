@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
 import { FaPhone } from "react-icons/fa6";
-import { RiShareForwardLine } from "react-icons/ri";
-import { HiOutlinePencil } from "react-icons/hi2";
-import { CiLocationArrow1 } from "react-icons/ci";
 import StarRating from "../ReviewStar";
 import { useLoginModal } from "../../../context/LoginContext";
+import CustomModal from "../../../Components/modal";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
 
-const BusinessInfo = ({ formData }) => {
+const BusinessInfo = ({ formData,businessId }) => {
   const [showContact, setShowContact] = useState(false);
   const [isLoggedin, setIsLoggedin] = useState(false);
   const { handleOpenLoginModal } = useLoginModal();
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [initialSlide, setInitialSlide] = useState(0);
   const handleShowContact = () => {
     if (isLoggedin) {
       setShowContact(prev => !prev);
@@ -19,18 +21,39 @@ const BusinessInfo = ({ formData }) => {
       handleOpenLoginModal();
     }
   };
+
+  const handleImageClick = (index) => {
+    setInitialSlide(index);
+    setShowImageModal(true);
+  };
   return (
     <>
       {formData.map((business) => (
         <div
-          key={business.id}
-          className="rounded-md border border-gray-200 mx-4 bg-white"
+          key={business.businessId}
+          className="rounded-md mx-4 bg-white"
         >
-          <div className="mb-6">
+          <div className="md:hidden mb-6 overflow-hidden">
+            {business.imageUrls.length > 0 ? (
+              <div className="cursor-pointer" onClick={() => handleImageClick(0)}>
+                <img
+                  src={business.imageUrls[0].url}
+                  alt="Main"
+                  className="w-full h-64 object-cover rounded-t-lg"
+                />
+              </div>
+            ) : (
+              <div className="h-64 bg-gray-100 flex items-center justify-center rounded-t-lg">
+                <span className="text-gray-400">No Images Available</span>
+              </div>
+            )}
+          </div>
+          {/* Desktop view - Grid layout */}
+          <div className="hidden md:block mb-6 max-h-100 overflow-hidden">
             <div className="grid grid-cols-4 gap-2">
               {/* Main large image */}
               {business.imageUrls.length > 0 ? (
-                <div className="col-span-2 row-span-2 overflow-hidden max-h-90">
+                <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer" onClick={() => handleImageClick(0)}>
                   <img
                     src={business.imageUrls[0].url}
                     alt="Main"
@@ -48,8 +71,9 @@ const BusinessInfo = ({ formData }) => {
                 <div
                   key={index}
                   className={`${index === 2 ? 'rounded-tr-lg' :
-                      index === 4 ? 'rounded-br-lg' : ''
-                    } relative`}
+                    index === 4 ? 'rounded-br-lg' : ''
+                    } relative cursor-pointer`}
+                  onClick={() => business.imageUrls[index] && handleImageClick(index)}
                 >
                   {business.imageUrls[index] ? (
                     <img
@@ -65,7 +89,7 @@ const BusinessInfo = ({ formData }) => {
                     </div>
                   )}
                   {index === 4 && business.imageUrls.length > 5 && (
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center">
                       <span className="text-white text-lg font-semibold">
                         +{business.imageUrls.length - 5} more
                       </span>
@@ -75,7 +99,32 @@ const BusinessInfo = ({ formData }) => {
               ))}
             </div>
           </div>
-
+          <CustomModal
+            isOpen={showImageModal}
+            onClose={() => setShowImageModal(false)}
+            classname="w-11/12 md:w-3/4 lg:w-4/5"
+            title="Gallery"
+          >
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              initialSlide={initialSlide}
+              className="h-[70vh]"
+            >
+              {business.imageUrls.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img
+                      src={image.url}
+                      alt={`Gallery ${index + 1}`}
+                      className="min-h-full min-w-full object-contain"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </CustomModal>
           <div className="p-4">
             <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
               {business.name}
@@ -116,30 +165,30 @@ const BusinessInfo = ({ formData }) => {
                     </div>
                     <p className="mt-1 text-sm">Call Now</p>
                   </div>
-                  <div className="flex flex-col items-center w-20">
+                  {/* <div className="flex flex-col items-center w-20">
                     <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
                       <CiLocationArrow1 className="text-black text-xl" />
                     </div>
                     <p className="mt-1 text-sm">Direction</p>
-                  </div>
+                  </div> */}
 
-                  <div className="flex flex-col items-center w-20">
+                  {/* <div className="flex flex-col items-center w-20">
                     <div className="border shadow-sm bg-white rounded flex items-center justify-center p-2 text-black font-bold">
                       <RiShareForwardLine className="text-black text-xl" />
                     </div>
                     <p className="mt-1 text-sm">Share</p>
-                  </div>
+                  </div> */}
                 </div>
-                <div className="hidden border md:block rounded-md p-2 text-gray-600 text-xl">
+                {/* <div className="hidden border md:block rounded-md p-2 text-gray-600 text-xl">
                   <RiShareForwardLine />
                 </div>
                 <div className="hidden border md:block rounded-md p-2 text-gray-600 text-xl">
                   <HiOutlinePencil />
-                </div>
+                </div> */}
               </div>
               <div className="hidden md:block">
                 <p className="flex justify-end font-semibold">Click to Rate</p>
-                <StarRating />
+                <StarRating businessId={businessId}/>
               </div>
             </div>
           </div>

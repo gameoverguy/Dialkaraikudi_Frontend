@@ -15,9 +15,10 @@ import {
 import UserManagement from './UserMangement';
 import CategoryManagement from './OrganizationMaterial/Category';
 import BusinessManagement from './BussinessManagement';
+import DashBoard from './DashBoard';
 
 // Placeholder components - Replace these with your actual components
-const Dashboard = () => <div>Dashboard Content</div>;
+
 const PlatformInfo = () => <div>Platform Info Content</div>;
 const GatewayConfig = () => <div>Gateway Configuration Content</div>;
 
@@ -50,7 +51,6 @@ const AdminPanel = () => {
   ];
 
   const organizationItems = [
-
     { key: 'categories', label: 'Categories' },
   ];
 
@@ -136,8 +136,16 @@ const AdminPanel = () => {
 };
 
   // Component mapping object
+  const handleMenuSelect = (key) => {
+    setSelectedKey(key);
+    if (key === 'categories') {
+      setExpandedMenu('5'); // Open the Organizational Units submenu
+    }
+  };
+
+  // Update the component mapping to pass the handler
   const componentMap = {
-    '1': <Dashboard />,
+    '1': <DashBoard onMenuSelect={handleMenuSelect} />,
     '2': <UserManagement />,
     '3': <BusinessManagement />,
     'platform': <PlatformInfo />,

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
 import CustomTable from '../../../Components/Table';
 import CustomModal from '../../../Components/modal';
 import { toast, ToastContainer } from 'react-toastify';
@@ -17,6 +18,8 @@ const CategoryManagement = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   const columns = [
     {
@@ -44,13 +47,7 @@ const CategoryManagement = () => {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2 justify-center">
-          {/* <button
-            onClick={() => handleView(row)}
-            className="p-2 text-blue-500   transition-colors"
-            title="View"
-          >
-            <FaEye className="text-sm" />
-          </button> */}
+        
           <button
             onClick={() => handleEdit(row)}
             className="p-2 text-green-500 transition-colors"
@@ -147,78 +144,106 @@ const CategoryManagement = () => {
     maxFiles: 1
   });
 
-  // Mock API data
-  const mockCategories = [
-    {
-      id: 1,
-      name: "Electronics",
-      imageUrl: "https://picsum.photos/200/200?random=1"
-    },
-    {
-      id: 2,
-      name: "Fashion",
-      imageUrl: "https://picsum.photos/200/200?random=2"
-    },
-    {
-      id: 3,
-      name: "Home Decor",
-      imageUrl: "https://picsum.photos/200/200?random=3"
-    }
-  ];
 
-  useEffect(() => {
-    // Simulate API call
-    const fetchCategories = () => {
-      setTimeout(() => {
-        setCategories(mockCategories);
-      }, 500);
-    };
+  const API_BASE_URL = 'http://192.168.1.33:5000';
 
-    fetchCategories();
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      if (selectedCategory) {
-        // Update existing category
-        const updatedCategories = categories.map(cat => {
-          if (cat.id === selectedCategory.id) {
-            return {
-              ...cat,
-              name: formData.name,
-              imageUrl: formData.image ? URL.createObjectURL(formData.image) : selectedCategory.imageUrl
-            };
-          }
-          return cat;
-        });
-        
-        setCategories(updatedCategories);
-        toast.success('Category updated successfully');
-      } else {
-        // Create new category
-        const newCategory = {
-          id: categories.length + 1,
-          name: formData.name,
-          imageUrl: URL.createObjectURL(formData.image)
-        };
-        setCategories([...categories, newCategory]);
-        toast.success('Category added successfully');
-      }
-      
-      // Reset form
-      setShowModal(false);
-      setImagePreview(null);
-      setErrors({});
-      setFormData({ name: '', image: null });
-      setSelectedCategory(null);
+  // Fetch categories
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/categories`);
+      const transformedData = response.data.data.map(category => ({
+        id: category._id,
+        name: category.displayName,
+        imageUrl: category.iconUrl || 'placeholder-image-url'
+      }));
+      setCategories(transformedData);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast.error('Failed to fetch categories');
     }
   };
 
-  // const handleView = (category) => {
-  //   setSelectedCategory(category);
-  //   setViewModalOpen(true);
-  // };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const formDataToSend = new FormData();
+        // Convert display name to category name format (lowercase with underscores)
+        const categoryName = formData.name
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '_');
+        
+        // Append all required fields to FormData
+        formDataToSend.append('categoryName', categoryName);
+        formDataToSend.append('displayName', formData.name.trim());
+        formDataToSend.append('isActive', true);
+        
+        if (formData.image) {
+          formDataToSend.append('iconUrl', formData.image);
+        }
+  
+        if (selectedCategory) {
+          // Update existing category
+          await axios.put(
+            `${API_BASE_URL}/categories/${selectedCategory.id}`,
+            formDataToSend,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+          toast.success('Category updated successfully');
+        } else {
+          // Create new category
+          const response = await axios.post(
+            `${API_BASE_URL}/categories`,
+            formDataToSend,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+          
+          if (response.data) {
+            toast.success('Category added successfully');
+          }
+        }
+        
+        // Refresh categories list
+        await fetchCategories();
+        
+        // Reset form
+        setShowModal(false);
+        setImagePreview(null);
+        setErrors({});
+        setFormData({ name: '', image: null });
+        setSelectedCategory(null);
+      } catch (error) {
+        console.error('Error handling category:', error);
+        toast.error(error.response?.data?.message || 'Failed to process category');
+      }
+    }
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`${API_BASE_URL}/categories/${categoryToDelete.id}`);
+      await fetchCategories();
+      toast.success('Category deleted successfully');
+      setShowDeleteModal(false);
+      setCategoryToDelete(null);
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      toast.error('Failed to delete category');
+    }
+  };
 
   const handleEdit = (category) => {
     setSelectedCategory(category);
@@ -231,11 +256,11 @@ const CategoryManagement = () => {
   };
 
   const handleDelete = (category) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      setCategories(categories.filter(c => c.id !== category.id));
-      toast.success('Category deleted successfully');
-    }
+    setCategoryToDelete(category);
+    setShowDeleteModal(true);
   };
+
+
 
   return (
     <div className="p-6">
@@ -308,7 +333,8 @@ const CategoryManagement = () => {
                 </p>
               </div>
             ) : (
-              <div className="relative">
+              <div className=" flex justify-center">
+                <span className='relative'>
                 <img
                   src={imagePreview}
                   alt="Preview"
@@ -320,12 +346,14 @@ const CategoryManagement = () => {
                     setImagePreview(null);
                     setFormData(prev => ({ ...prev, image: null }));
                   }}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-200"
+                  className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-200 cursor-pointer"
                 >
+                 
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
                 </button>
+                </span>
               </div>
             )}
             {errors.image && (
@@ -394,6 +422,38 @@ const CategoryManagement = () => {
           </div>
         )}
       </CustomModal>
+
+      <CustomModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setCategoryToDelete(null);
+        }}
+        title="Delete Category"
+      >
+        <div className="space-y-4">
+          <p className="text-gray-600">
+            Are you sure you want to delete this category? This action cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-3 pt-4">
+            <button
+              onClick={() => {
+                setShowDeleteModal(false);
+                setCategoryToDelete(null);
+              }}
+              className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDelete}
+              className="px-6 py-2.5 rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-200"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </CustomModal>
       <ToastContainer
       position="top-right"
       autoClose={3000}
@@ -412,3 +472,5 @@ const CategoryManagement = () => {
 };
 
 export default CategoryManagement;
+
+ 
