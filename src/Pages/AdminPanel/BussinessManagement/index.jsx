@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../../Components/ConfirmationModal';
+import axios from 'axios';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -29,11 +30,9 @@ const BusinessManagement = () => {
 
   const fetchBusinesses = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/business`);
-      const data = await response.json();
-
-      // Transform the data to match our simplified table structure
-      const transformedData = data.data.map(business => ({
+      const response = await axios.get(`${API_BASE_URL}/business`);
+      console.log(response.data);
+            const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,
         description: business.description,
@@ -43,6 +42,9 @@ const BusinessManagement = () => {
         address: business.address.addressArea,
         photos: business.photos
       }));
+
+console.log(transformedData, "Geteddd");
+
 
       setBusinesses(transformedData);
     } catch (error) {
@@ -90,7 +92,8 @@ const BusinessManagement = () => {
     },
     {
       key: 'category',
-      label: 'Category'
+      label: 'Category',
+      render: (row) => row.category?.displayName || 'N/A'
     },
     {
       key: 'phone',
@@ -273,10 +276,10 @@ const BusinessManagement = () => {
     setFormData({
       name: business.name,
       description: business.description,
-      category: business.category,
+      category: business.category?.displayName || '',
       phone: business.phone,
       email: business.email,
-      address: business.address,  // This will now contain just the addressArea
+      address: business.address,
       photos: [...business.photos]
     });
     setImagePreview([...business.photos]);
@@ -290,13 +293,15 @@ const BusinessManagement = () => {
         const requestBody = {
           businessName: formData.name,
           description: formData.description,
-          category: formData.category,
+          category: {
+            displayName: formData.category
+          },
           contactDetails: {
             phone: formData.phone,
             email: formData.email
           },
           address: {
-            addressArea: formData.address  // Just send the address as addressArea
+            addressArea: formData.address
           },
           photos: formData.photos.map(photo =>
             typeof photo === 'string' ? photo : URL.createObjectURL(photo)
@@ -304,52 +309,18 @@ const BusinessManagement = () => {
         };
 
         if (selectedBusiness) {
-          // Handle update with API
-          const response = await fetch(`${API_BASE_URL}/business/${selectedBusiness.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to update business');
-          }
-
-          console.log("sucess");
-
+          // Handle update with Axios
+          await axios.put(`${API_BASE_URL}/business/${selectedBusiness.id}`, requestBody);
           toast.success('Business updated successfully');
-          await fetchBusinesses();
-
         } else {
-          // Handle new business
-          const response = await fetch(`${API_BASE_URL}/business`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to create business');
-          }
+          // Handle new business with Axios
+          await axios.post(`${API_BASE_URL}/business`, requestBody);
           toast.success('Business added successfully');
-          await fetchBusinesses();
         }
+
+        await fetchBusinesses();
         setShowModal(false);
-        setImagePreview([]);
-        setErrors({});
-        setFormData({
-          name: '',
-          description: '',
-          category: '',
-          phone: '',
-          email: '',
-          address: '',
-          photos: []
-        });
+        resetForm();
         setSelectedBusiness(null);
       } catch (error) {
         console.error('Error handling business:', error);
@@ -376,18 +347,11 @@ const BusinessManagement = () => {
 
   const confirmDelete = async () => {
     try {
-      // Implement delete API call here
-      const response = await fetch(`${API_BASE_URL}/business/${businessToDelete.id}`, {
-        method: 'DELETE'
-      });
-      
-      if (response.ok) {
-        setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
-        toast.success('Business deleted successfully');
-      } else {
-        throw new Error('Failed to delete business');
-      }
+      await axios.delete(`${API_BASE_URL}/business/${businessToDelete.id}`);
+      setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
+      toast.success('Business deleted successfully');
     } catch (error) {
+      console.error('Error deleting business:', error);
       toast.error('Failed to delete business');
     } finally {
       setShowConfirmModal(false);
@@ -629,7 +593,7 @@ const BusinessManagement = () => {
               </div>
               <div>
                 <h3 className="text-lg font-medium text-gray-900">Category</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.category}</p>
+                <p className="mt-1 text-gray-600">{selectedBusiness.category?.displayName || 'N/A'}</p>
               </div>
               <div className="col-span-2">
                 <h3 className="text-lg font-medium text-gray-900">Description</h3>

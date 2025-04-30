@@ -14,7 +14,6 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import SignUp from "./Pages/SignUp/index.jsx";
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
@@ -29,7 +28,7 @@ function App() {
             <Route path="/Contact" element={<ContactDetails />} />
             <Route path="/home" element={<HomePage />} />
           </Route>
-          <Route path="/adminpanel" element={<AdminPanel />} />
+          <Route path="/adminpanel/*" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
     </>
