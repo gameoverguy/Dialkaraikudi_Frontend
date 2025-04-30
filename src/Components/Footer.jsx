@@ -43,15 +43,14 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row justify-center items-start w-12/12 bg-[#F3F4F6] py-5">
-      
-        <div className="w-1/12 py-10"></div>
+      <div className="flex flex-col xl:flex-row justify-center items-center w-full bg-[#F3F4F6] py-5">
+        {/* <div className="w-1/12 py-10"></div> */}
         <div className="flex flex-col w-full xl:w-4/12 px-5 xl:px-0 gap-5 py-10">
           <p className="text-[15px] xl:text-xl font-bold">
             One-Stop for All Local Services Across India
           </p>
           <div className="w-[125px] h-[50px] flex justify-center items-center">
-          <img src={Logo} alt="" />
+            <img src={Logo} alt="" />
           </div>
           <p className="text-sm text-[#4B5563] text-justify">
             Dialkaraikudi is a premier digital platform in India that connects
@@ -79,7 +78,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="w-full xl:w-2/12 flex justify-center items-start flex-col px-5 xl:px-19 xl:py-10">
+        <div className="w-full xl:w-3/12 flex justify-center items-start flex-col px-5 xl:px-19 xl:py-10">
           <p className="text-xl font-bold pb-5">Quick Links</p>
           <div className="flex flex-col gap-3">
             {footText1.map((item, i) => (
@@ -105,9 +104,11 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="w-full xl:w-2/12 flex justify-center items-start py-10 flex-col px-5">
-          <p className="text-xl font-bold pb-5">Dialkaraikudi Domains</p>
-          <div className="flex flex-col gap-3">
+        <div className="w-full xl:w-2/12 flex justify-center items-end py-10 flex-col px-5">
+          <p className="text-xl text-end font-bold pb-5">
+            Dialkaraikudi Domains
+          </p>
+          <div className="flex flex-col text-end gap-3">
             {footText3.map((item, i) => (
               <div key={i}>
                 <p className="text-sm text-[#4B5563] cursor-pointer">
@@ -117,7 +118,6 @@ const Footer = () => {
             ))}
           </div>
         </div>
-        
       </div>
     </>
   );
