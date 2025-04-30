@@ -6,6 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import CustomModal from "../../Components/modal";
 
 
 const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIsForgotPasswordOpen }) => {
@@ -112,90 +113,85 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
     };
     return (
         <>
-            <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50" onClick={() => onClose()}>
-                <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
-                    <button
-                        onClick={onClose}
-                        className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
-                    >
-                        <RiCloseLine className="w-6 h-6" />
-                    </button>
+            <CustomModal
+                isOpen={isOpen}
+                onClose={onClose}
+                // title="Welcome Back!"
+                classname="w-full max-w-md"
+            >
+                <div className="p-2">
+                <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome Back!</h1>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-4">
+                            <FloatingInput
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                icon={<MdOutlineEmail className="w-5 h-5" />}
+                                iconPosition="left"
+                                error={errors.email}
+                                maxLength={50}
+                            />
 
-                    <div className="p-8">
-                        <h1 className="text-3xl font-bold text-gray-800 mb-8">Welcome Back!</h1>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="space-y-4">
+                            <div className="relative">
                                 <FloatingInput
-                                    type="email"
-                                    placeholder="Email Address"
-                                    name="email"
-                                    value={formData.email}
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Password"
+                                    name="password"
+                                    value={formData.password}
                                     onChange={handleChange}
                                     required
-                                    icon={<MdOutlineEmail className="w-5 h-5" />}
+                                    icon={<RiLockPasswordLine className="w-5 h-5" />}
                                     iconPosition="left"
-                                    error={errors.email}
-                                    maxLength={50}
+                                    error={errors.password}
+                                    maxLength={20}
                                 />
-
-                                <div className="relative">
-                                    <FloatingInput
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
-                                        icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                        iconPosition="left"
-                                        error={errors.password}
-                                        maxLength={20}
-                                    />
-                                    {formData.password && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                        >
-                                            {showPassword ? (
-                                                <AiOutlineEye className="w-5 h-5" />
-                                            ) : (
-                                                <AiOutlineEyeInvisible className="w-5 h-5" />
-                                            )}
-                                        </button>
-                                    )}
-                                </div>
+                                {formData.password && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    >
+                                        {showPassword ? (
+                                            <AiOutlineEye className="w-5 h-5" />
+                                        ) : (
+                                            <AiOutlineEyeInvisible className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                )}
                             </div>
-
-                            <button
-                                type="submit"
-                                className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
-                            >
-                                LOGIN
-                            </button>
-                        </form>
-
-                        <div className="flex justify-between items-center mt-4 text-sm">
-                            <div>
-                                <span className="text-gray-600">Don't have an account? </span>
-                                <button
-                                    onClick={handleSignupClick}
-                                    className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
-                                >
-                                    Sign up
-                                </button>
-                            </div>
-                            <a
-                                onClick={handleForgotPasswordClick}
-                                className="text-purple-600 hover:text-purple-800 cursor-pointer"
-                            >
-                                Forgot Password?
-                            </a>
                         </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                        >
+                            LOGIN
+                        </button>
+                    </form>
+
+                    <div className="flex justify-between items-center mt-4 text-sm">
+                        <div>
+                            <span className="text-gray-600">Don't have an account? </span>
+                            <button
+                                onClick={handleSignupClick}
+                                className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
+                            >
+                                Sign up
+                            </button>
+                        </div>
+                        <a
+                            onClick={handleForgotPasswordClick}
+                            className="text-purple-600 hover:text-purple-800 cursor-pointer"
+                        >
+                            Forgot Password?
+                        </a>
                     </div>
                 </div>
-            </div>
+            </CustomModal>
         </>
     );
 };

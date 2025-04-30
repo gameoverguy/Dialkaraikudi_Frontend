@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
 import FloatingInput from "../../../Components/FloatingInput";
+import CustomModal from "../../../Components/modal";
 
 const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
     const [email, setEmail] = useState("");
@@ -55,40 +56,38 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
 
     return (
         <>
-            <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-                <div className="bg-white rounded-lg shadow-xl w-full max-w-md m-4 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
-                    <button onClick={onClose} className="absolute right-4 top-4 text-gray-500 hover:text-gray-700">
-                        <RiCloseLine className="w-6 h-6" />
-                    </button>
+            <CustomModal
+                isOpen={isOpen}
+                onClose={onClose}
+                // title="Forgot Password"
+                classname="w-full max-w-md"
+            >
+                <div className="p-2">
+                    <h1 className="text-3xl font-bold text-gray-800 mb-4">Forgot Password</h1>
+                    <p className="text-gray-600 mb-6">Enter your email address to reset your password.</p>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <FloatingInput
+                            type="email"
+                            placeholder="Email Address"
+                            name="email"
+                            value={email}
+                            onChange={handleChange}
+                            required
+                            icon={<MdOutlineEmail className="w-5 h-5" />}
+                            iconPosition="left"
+                            error={error}
+                            maxLength={50}
+                        />
 
-                    <div className="p-8">
-                        <h1 className="text-3xl font-bold text-gray-800 mb-4">Forgot Password</h1>
-                        <p className="text-gray-600 mb-6">Enter your email address to reset your password.</p>
-
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <FloatingInput
-                                type="email"
-                                placeholder="Email Address"
-                                name="email"
-                                value={email}
-                                onChange={handleChange}
-                                required
-                                icon={<MdOutlineEmail className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={error}
-                                maxLength={50}
-                            />
-
-                            <button
-                                type="submit"
-                                className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
-                            >
-                                RESET PASSWORD
-                            </button>
-                        </form>
-                    </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                        >
+                            RESET PASSWORD
+                        </button>
+                    </form>
                 </div>
-            </div>
+            </CustomModal>
         </>
     );
 };
