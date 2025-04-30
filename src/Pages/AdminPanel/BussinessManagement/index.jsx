@@ -7,6 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../../Components/ConfirmationModal';
 import axios from 'axios';
+import { API } from '../../../../config/config'
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -22,17 +23,25 @@ const BusinessManagement = () => {
   });
 
   // Add API endpoints
-  const API_BASE_URL = 'http://192.168.1.33:5000';
+  // const API = 'http://192.168.1.33:5000';
 
-  useEffect(() => {
-    fetchBusinesses();
-  }, []);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${API}/categories`);
+      setCategories(response.data.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast.error('Failed to fetch categories');
+    }
+  };
+
+
 
   const fetchBusinesses = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/business`);
+      const response = await axios.get(`${API}/business`);
       console.log(response.data);
-            const transformedData = response.data.data.map(business => ({
+      const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,
         description: business.description,
@@ -43,7 +52,7 @@ const BusinessManagement = () => {
         photos: business.photos
       }));
 
-console.log(transformedData, "Geteddd");
+      console.log(transformedData, "Geteddd");
 
 
       setBusinesses(transformedData);
@@ -53,6 +62,10 @@ console.log(transformedData, "Geteddd");
     }
   };
 
+  useEffect(() => {
+    fetchBusinesses();
+    fetchCategories();
+  }, []);
 
   const resetForm = () => {
     setFormData({
@@ -72,6 +85,8 @@ console.log(transformedData, "Geteddd");
   const [imagePreview, setImagePreview] = useState([]);
   const [selectedBusiness, setSelectedBusiness] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+
 
   // Mock categories data
   const mockCategories = [
@@ -104,7 +119,7 @@ console.log(transformedData, "Geteddd");
       label: 'Email'
     },
 
-    
+
     {
       key: 'actions',
       label: 'Actions',
@@ -276,7 +291,7 @@ console.log(transformedData, "Geteddd");
     setFormData({
       name: business.name,
       description: business.description,
-      category: business.category?.displayName || '',
+      category: business.category?._id || '', // Make sure we're using the category ID
       phone: business.phone,
       email: business.email,
       address: business.address,
@@ -293,9 +308,7 @@ console.log(transformedData, "Geteddd");
         const requestBody = {
           businessName: formData.name,
           description: formData.description,
-          category: {
-            displayName: formData.category
-          },
+          category: formData.category, // This will now be the category ID
           contactDetails: {
             phone: formData.phone,
             email: formData.email
@@ -309,12 +322,10 @@ console.log(transformedData, "Geteddd");
         };
 
         if (selectedBusiness) {
-          // Handle update with Axios
-          await axios.put(`${API_BASE_URL}/business/${selectedBusiness.id}`, requestBody);
+          await axios.put(`${API}/business/${selectedBusiness.id}`, requestBody);
           toast.success('Business updated successfully');
         } else {
-          // Handle new business with Axios
-          await axios.post(`${API_BASE_URL}/business`, requestBody);
+          await axios.post(`${API}/business`, requestBody);
           toast.success('Business added successfully');
         }
 
@@ -347,7 +358,7 @@ console.log(transformedData, "Geteddd");
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`${API_BASE_URL}/business/${businessToDelete.id}`);
+      await axios.delete(`${API}/business/${businessToDelete.id}`);
       setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
       toast.success('Business deleted successfully');
     } catch (error) {
@@ -364,7 +375,7 @@ console.log(transformedData, "Geteddd");
       <CustomTable
         columns={columns}
         data={businesses}
-        itemsPerPage={5}
+        itemsPerPage={10}
         addButton="Add Business"
         onAddClick={() => {
           setSelectedBusiness(null);
@@ -427,21 +438,21 @@ console.log(transformedData, "Geteddd");
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Category
             </label>
-            <input
-              type="text"
-              list="categories"
+            <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.category ? 'border-red-500' : 'border-gray-300'
+              className={`w-full h-10 px-4 py-2 rounded-lg border ${errors.category ? 'border-red-500' : 'border-gray-300'
                 } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Search and select category"
-            />
-            <datalist id="categories">
-              {mockCategories.map(category => (
-                <option key={category.id} value={category.name} />
+              style={{ padding: '8px' }}
+            >
+              <option value="">Select a category</option>
+              {categories.map(category => (
+                <option key={category._id} value={category._id}>
+                  {category.displayName}
+                </option>
               ))}
-            </datalist>
+            </select>
             {errors.category && (
               <p className="mt-2 text-sm text-red-500">{errors.category}</p>
             )}
@@ -531,7 +542,7 @@ console.log(transformedData, "Geteddd");
                     <img
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="h-32 w-full object-cover rounded-lg"
+                      className="h-32 w-32 object-cover rounded-lg"
                     />
                     <button
                       type="button"

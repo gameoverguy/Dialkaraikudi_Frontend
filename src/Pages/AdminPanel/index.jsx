@@ -164,8 +164,8 @@ const AdminPanel = () => {
       <div className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
         ${collapsed ? 'w-20' : 'w-64'}`}>
         <div className="p-4">
-          <div className="bg-gray-900 text-white h-12 rounded-lg flex items-center justify-center font-bold">
-            {!collapsed ? 'ADMIN PANEL' : 'AP'}
+          <div className="bg-gray-700 text-white h-12 rounded-lg flex items-center justify-center font-bold">
+            {!collapsed ? 'DIAL KKDI' : 'DK'}
           </div>
         </div>
 

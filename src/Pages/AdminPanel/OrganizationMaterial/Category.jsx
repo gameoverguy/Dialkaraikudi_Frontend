@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import {API} from '../../../../config/config'
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -78,15 +79,16 @@ const CategoryManagement = () => {
       newErrors.name = 'Only letters and spaces are allowed';
     }
 
-    if (!formData.image) {
+    // Only validate image if it's a new category or if user is changing the image
+    if (!selectedCategory && !formData.image) {
       newErrors.image = 'Image is required';
-    } else if (formData.image.size > 2 * 1024 * 1024) {
+    } else if (formData.image && formData.image.size > 2 * 1024 * 1024) {
       newErrors.image = 'Image size must be less than 2MB';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -144,13 +146,9 @@ const CategoryManagement = () => {
     maxFiles: 1
   });
 
-
-  const API_BASE_URL = 'http://192.168.1.33:5000';
-
-  // Fetch categories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/categories`);
+      const response = await axios.get(`${API}/categories`);
       const transformedData = response.data.data.map(category => ({
         id: category._id,
         name: category.displayName,
@@ -190,7 +188,7 @@ const CategoryManagement = () => {
         if (selectedCategory) {
           // Update existing category
           await axios.put(
-            `${API_BASE_URL}/categories/${selectedCategory.id}`,
+            `${API}/categories/${selectedCategory.id}`,
             formDataToSend,
             {
               headers: {
@@ -199,10 +197,15 @@ const CategoryManagement = () => {
             }
           );
           toast.success('Category updated successfully');
+          await fetchCategories(); // Refresh the list
+          setShowModal(false);
+          setSelectedCategory(null);
+          setFormData({ name: '', image: null });
+          setImagePreview(null);
         } else {
           // Create new category
           const response = await axios.post(
-            `${API_BASE_URL}/categories`,
+            `${API}/categories`,
             formDataToSend,
             {
               headers: {
@@ -234,7 +237,7 @@ const CategoryManagement = () => {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`${API_BASE_URL}/categories/${categoryToDelete.id}`);
+      await axios.delete(`${API}/categories/${categoryToDelete.id}`);
       await fetchCategories();
       toast.success('Category deleted successfully');
       setShowDeleteModal(false);
