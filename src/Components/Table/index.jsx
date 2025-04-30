@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FaSort, FaSortUp, FaSortDown, FaSearch } from 'react-icons/fa';
+import { FaSort, FaSortUp, FaSortDown, FaSearch, FaArrowAltCircleLeft, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const CustomTable = ({
   columns,
@@ -86,7 +86,7 @@ const CustomTable = ({
       {/* Table */}
       <div className="overflow-x-auto shadow-md rounded-lg">
         <table className="min-w-full bg-white border-collapse">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-200">
             <tr>
               {columns.map((column) => (
                 <th
@@ -114,7 +114,10 @@ const CustomTable = ({
                     className="px-6 py-4 text-sm text-gray-800"
                   >
                     <div className="flex items-center justify-center">
-                      {column.render ? column.render(item, index) : item[column.key]}
+                      {column.render ? 
+                        column.render(item, ((currentPage - 1) * itemsPerPage) + index ) : 
+                        item[column.key]
+                      }
                     </div>
                   </td>
                 ))}
@@ -135,27 +138,19 @@ const CustomTable = ({
             disabled={currentPage === 1}
             className="px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
-            Previous
+            <FaArrowLeft />
           </button>
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-4 py-2 text-sm font-medium rounded border transition-colors ${
-                currentPage === i + 1 
-                  ? 'bg-blue-500 text-white border-blue-500' 
-                  : 'hover:bg-gray-50'
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
+          <button
+            className="px-4 py-2 text-sm font-medium rounded border bg-blue-500 text-white border-blue-500"
+          >
+            {currentPage}
+          </button>
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
-            Next
+            <FaArrowRight />
           </button>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CustomTable from '../../../Components/Table';
 import CustomModal from '../../../Components/modal';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
@@ -179,24 +180,45 @@ const CategoryManagement = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const newCategory = {
-        id: categories.length + 1,
-        name: formData.name,
-        imageUrl: URL.createObjectURL(formData.image)
-      };
-      setCategories([...categories, newCategory]);
+      if (selectedCategory) {
+        // Update existing category
+        const updatedCategories = categories.map(cat => {
+          if (cat.id === selectedCategory.id) {
+            return {
+              ...cat,
+              name: formData.name,
+              imageUrl: formData.image ? URL.createObjectURL(formData.image) : selectedCategory.imageUrl
+            };
+          }
+          return cat;
+        });
+        
+        setCategories(updatedCategories);
+        toast.success('Category updated successfully');
+      } else {
+        // Create new category
+        const newCategory = {
+          id: categories.length + 1,
+          name: formData.name,
+          imageUrl: URL.createObjectURL(formData.image)
+        };
+        setCategories([...categories, newCategory]);
+        toast.success('Category added successfully');
+      }
+      
+      // Reset form
       setShowModal(false);
       setImagePreview(null);
       setErrors({});
       setFormData({ name: '', image: null });
-      toast.success('Category added successfully');
+      setSelectedCategory(null);
     }
   };
 
-  const handleView = (category) => {
-    setSelectedCategory(category);
-    setViewModalOpen(true);
-  };
+  // const handleView = (category) => {
+  //   setSelectedCategory(category);
+  //   setViewModalOpen(true);
+  // };
 
   const handleEdit = (category) => {
     setSelectedCategory(category);
@@ -372,6 +394,19 @@ const CategoryManagement = () => {
           </div>
         )}
       </CustomModal>
+      <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+      style={{ zIndex: 9999 }}  // This ensures toast appears above modals
+    />
     </div>
   );
 };
