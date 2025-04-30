@@ -1,8 +1,7 @@
 import React from "react";
 import { MdOutlineStar } from "react-icons/md";
 import StarRating from "../ReviewStar";
-import { IoArrowRedoSharp } from "react-icons/io5";
-import { FaRegCommentAlt, FaRegThumbsUp } from "react-icons/fa";
+import { FaRegThumbsUp } from "react-icons/fa";
 
 const Reviews = ({ formData }) => {
   const reviews = [

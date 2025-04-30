@@ -14,15 +14,28 @@ const BusinessDetails = () => {
       address: "Sekkalai, Karaikudi",
       experience: "1 year",
       contact: 98945426808,
+      imageUrls: [
+        { url: "https://dummyimage.com/250x150/000/fff", label: "All" },
+        { url: "https://dummyimage.com/250x150/000/fff", label: "Exterior" },
+        { url: "https://dummyimage.com/250x150/000/fff", label: "Interior" },
+        { url: "https://dummyimage.com/250x150/000/fff", label: "Room" },
+        { url: "https://dummyimage.com/250x150/000/fff", label: "Dining" },
+        { url: "https://dummyimage.com/250x150/000/fff", label: "Dining" }, 
+      ]
     },
   ]);
   const [activeTab, setActiveTab] = useState("overview");
-
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
     const section = document.getElementById(sectionId);
+    const navbarHeight = 120;
+
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      const offsetTop = section.offsetTop - navbarHeight;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -58,7 +71,7 @@ const BusinessDetails = () => {
               <Description />
             </div>
             <div id="photos">
-              <Photos />
+              <Photos formData={formData[0]}/>
             </div>
             <div id="reviews">
               <Reviews  formData={formData[0]}/>
