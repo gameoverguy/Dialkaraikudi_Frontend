@@ -90,7 +90,7 @@ const UserTable = () => {
         <div className="flex space-x-2 text-center justify-center">
                    <FaEye size={16}
              onClick={() => handleView(row)}
-            className="text-blue-600 hover:text-blue-800"
+            className="text-blue-600 hover:text-blue-800 cursor-pointer"
             title="View Details"/>
         </div>
       )
@@ -125,13 +125,13 @@ const UserTable = () => {
           <div className="mt-6 flex justify-between">
             <button
               onClick={() => handleDelete(user)}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-red-600"
             >
               Delete User
             </button>
             <button
               onClick={onClose}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              className="bg-gray-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-gray-600"
             >
               Close
             </button>

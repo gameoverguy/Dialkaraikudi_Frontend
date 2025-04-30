@@ -68,7 +68,7 @@ const CustomTable = ({
           <input
             type="text"
             placeholder={searchPlaceholder}
-            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -76,7 +76,7 @@ const CustomTable = ({
         {addButton && (
           <button
             onClick={onAddClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="bg-[#0A8A3D] text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-[#0A8A3D]/80 transition-colors"
           >
             {addButton}
           </button>

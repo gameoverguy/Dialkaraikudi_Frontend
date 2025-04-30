@@ -130,21 +130,21 @@ const BusinessManagement = () => {
             className="p-2 text-blue-500 transition-colors"
             title="View"
           >
-            <FaEye className="text-sm" />
+            <FaEye className="text-sm cursor-pointer" />
           </button>
           <button
             onClick={() => handleEdit(row)}
             className="p-2 text-green-500 transition-colors"
             title="Edit"
           >
-            <FaEdit className="text-sm" />
+            <FaEdit className="text-sm cursor-pointer" />
           </button>
           <button
             onClick={() => handleDelete(row)}
             className="p-2 text-red-500 transition-colors"
             title="Delete"
           >
-            <FaTrashAlt className="text-sm" />
+            <FaTrashAlt className="text-sm cursor-pointer" />
           </button>
         </div>
       )

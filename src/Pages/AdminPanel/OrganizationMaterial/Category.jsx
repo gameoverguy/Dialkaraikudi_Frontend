@@ -54,14 +54,14 @@ const CategoryManagement = () => {
             className="p-2 text-green-500 transition-colors"
             title="Edit"
           >
-            <FaEdit className="text-sm" />
+            <FaEdit className="text-sm cursor-pointer" />
           </button>
           <button
             onClick={() => handleDelete(row)}
             className="p-2 text-red-500 transition-colors"
             title="Delete"
           >
-            <FaTrashAlt className="text-sm" />
+            <FaTrashAlt className="text-sm cursor-pointer" />
           </button>
         </div>
       )
@@ -374,13 +374,13 @@ const CategoryManagement = () => {
                 setErrors({});
                 setSelectedCategory(null);
               }}
-              className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
+              className="px-6 py-2.5 cursor-pointer rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
+              className="px-6 py-2.5 rounded-lg cursor-pointer text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
             >
               {selectedCategory ? "Update Category" : "Add Category"}
             </button>

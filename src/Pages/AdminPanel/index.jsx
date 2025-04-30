@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   MdDashboard,
   MdPeople,
-  MdSecurity,
   MdBusiness,
-  MdRateReview,
   MdSettings,
   MdFolder,
   MdExpandLess,
@@ -16,12 +14,12 @@ import UserManagement from './UserMangement';
 import CategoryManagement from './OrganizationMaterial/Category';
 import BusinessManagement from './BussinessManagement';
 import DashBoard from './DashBoard';
+import logo from '../../assets/bulb.png'
+import logo1 from '../../assets/logo_01.png'
 
 // Placeholder components - Replace these with your actual components
-
 const PlatformInfo = () => <div>Platform Info Content</div>;
 const GatewayConfig = () => <div>Gateway Configuration Content</div>;
-
 
 const AdminPanel = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -87,25 +85,36 @@ const AdminPanel = () => {
 
   const handleMenuClick = (key) => {
     setSelectedKey(key);
+    // Close any open submenu if clicking a non-submenu item
+    if (!menuItems.find(item => item.children?.some(child => child.key === key))) {
+      setExpandedMenu(null);
+    }
   };
 
   const toggleSubmenu = (key) => {
-    setExpandedMenu(expandedMenu === key ? null : key);
+    // Close other submenus when opening a new one
+    if (key !== expandedMenu) {
+      setExpandedMenu(key);
+    } else {
+      setExpandedMenu(null);
+    }
   };
 
   const renderMenuItem = (item) => {
     const isSelected = selectedKey === item.key;
     const isExpanded = expandedMenu === item.key;
     const hasSelectedChild = item.children?.some(child => child.key === selectedKey);
-
+  
     return (
       <div key={item.key}>
         <div
           className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-200 
-            ${isSelected || hasSelectedChild ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+            ${isSelected ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : hasSelectedChild ? '' : 'hover:bg-gray-100'}`}
           onClick={() => item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)}
         >
-          <span className="flex items-center">{item.icon}</span>
+          <span className={`flex items-center ${isSelected ? 'text-[#0A8A3D]' : 'text-[#F7941D]'}`}>
+            {item.icon}
+          </span>
           {!collapsed && (
             <>
               <span className="ml-3 flex-1">{item.label}</span>
@@ -118,12 +127,12 @@ const AdminPanel = () => {
           )}
         </div>
         {!collapsed && item.children && (isExpanded || hasSelectedChild) && (
-          <div className="pl-11 mt-1">
+          <div className="mt-1">
             {item.children.map(subItem => (
               <div
                 key={subItem.key}
-                className={`py-2 px-3 rounded-md cursor-pointer text-sm transition-all duration-200
-                  ${selectedKey === subItem.key ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+                className={`py-2 px-12 rounded-md cursor-pointer text-sm transition-all duration-200
+                  ${selectedKey === subItem.key ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : 'hover:bg-gray-100'}`}
                 onClick={() => handleMenuClick(subItem.key)}
               >
                 {subItem.label}
@@ -133,7 +142,18 @@ const AdminPanel = () => {
         )}
       </div>
     );
-};
+  };
+
+  // Update the collapse button styles
+  <div
+    className="transition-all duration-200"
+    onClick={() => setCollapsed(!collapsed)}
+  >
+    {collapsed ? 
+      <MdChevronRight size={20} className='bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer p-1'/> : 
+      <MdChevronLeft size={20} className='bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer p-1'/>
+    }
+  </div>
 
   // Component mapping object
   const handleMenuSelect = (key) => {
@@ -142,7 +162,6 @@ const AdminPanel = () => {
       setExpandedMenu('5'); // Open the Organizational Units submenu
     }
   };
-
   // Update the component mapping to pass the handler
   const componentMap = {
     '1': <DashBoard onMenuSelect={handleMenuSelect} />,
@@ -162,23 +181,24 @@ const AdminPanel = () => {
     <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
       {/* Sidebar - Fixed position */}
       <div className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
-        ${collapsed ? 'w-20' : 'w-64'}`}>
-        <div className="p-4">
-          <div className="bg-gray-700 text-white h-12 rounded-lg flex items-center justify-center font-bold">
-            {!collapsed ? 'DIAL KKDI' : 'DK'}
+        ${collapsed ? 'w-20 hover:${!collapsed} absoulute' : 'w-64'} `}>
+          
+        <div className={`p-4 flex  ${collapsed ? 'flex-col gap-5 items-center':'justify-between items-center'}`}>
+          <div>
+          {!collapsed ? <img src={logo1} className='h-14' /> : <img src={logo} className='h-14'/>}
           </div>
+          <div
+          className="transition-all duration-200 "
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? <MdChevronRight size={20} className='bg-[#0A8A3D] rounded-2xl text-2xl cursor-pointer'/> : <MdChevronLeft size={20} className='bg-[#F7941D] rounded-2xl text-2xl cursor-pointer'/>}
         </div>
-
+        </div>
+      
         <div className="mt-4 space-y-1 px-2 h-[calc(100vh-140px)] overflow-y-auto">
           {menuItems.map(renderMenuItem)}
         </div>
-
-        <div
-          className="absolute bottom-4 w-full flex justify-center cursor-pointer p-2 hover:bg-gray-100 transition-all duration-200"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? <MdChevronRight size={20} /> : <MdChevronLeft size={20} />}
-        </div>
+      
       </div>
 
       {/* Main content wrapper */}
@@ -201,7 +221,7 @@ const AdminPanel = () => {
         </main>
       </div>
     </div>
-);
+  );
 };
 
 export default AdminPanel;
