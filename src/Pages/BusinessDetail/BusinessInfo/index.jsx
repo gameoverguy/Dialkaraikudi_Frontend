@@ -31,7 +31,7 @@ const BusinessInfo = ({ formData }) => {
       {formData.map((business) => (
         <div
           key={business.id}
-          className="rounded-md border border-gray-200 mx-4 bg-white"
+          className="rounded-md mx-4 bg-white"
         >
           <div className="md:hidden mb-6 overflow-hidden">
             {business.imageUrls.length > 0 ? (
