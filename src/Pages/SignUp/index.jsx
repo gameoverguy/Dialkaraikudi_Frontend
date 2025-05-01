@@ -126,8 +126,13 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
 
                 if (response.data) {
                     console.log('Registration successful:', response.data);
-                    toast.success('Registration successful');
-                    onClose();
+                    toast.success('Registration successful!');
+                    setTimeout(() => {
+                        onClose();
+                        if (setShowLoginModal) {
+                            setShowLoginModal(true);
+                        }
+                    }, 1500);
                 }
             } catch (error) {
                 console.error('Registration failed:', error);
