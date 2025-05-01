@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import FloatingInput from "../../Components/FloatingInput";
-import { RiCloseLine, RiLockPasswordLine, RiUserLine } from "react-icons/ri";
-import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { BsTelephone } from "react-icons/bs";
 import CustomModal from "../../Components/modal";
+import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
     const [formData, setFormData] = useState({
@@ -25,6 +25,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         password: false,
         confirmPassword: false
     });
+    const [errorOverall, setErrorOverall] = useState("");
 
     useEffect(() => {
         if (!isOpen) {
@@ -46,12 +47,10 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         }
         switch (name) {
             case 'name':
-                const nameValue = value.replace(/[^a-zA-Z]/g, '');
+                const nameValue = value.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ').trim();
                 setFormData(prev => ({ ...prev, [name]: nameValue }));
                 if (value !== nameValue) {
-                    errorMessage = "Only letters are allowed (no spaces, numbers, or special characters)";
                 } else if (nameValue.length > 50) {
-                    errorMessage = "Name must not exceed 50 characters";
                 }
                 break;
 
@@ -59,24 +58,22 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                 const emailValue = value.replace(/[^a-zA-Z0-9@.]/g, '').toLowerCase();
                 setFormData(prev => ({ ...prev, [name]: emailValue }));
                 if (value !== emailValue) {
-                    errorMessage = "Special characters and spaces are not allowed";
                 } else if (emailValue.length > 50) {
-                    errorMessage = "Email must not exceed 50 characters";
                 } else if (emailValue.includes('@')) {
-                    errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
                 }
                 break;
 
             case 'phone':
-                const phoneRegex = /^[6-9]\d{0,9}$/;
                 const phoneValue = value.replace(/[^0-9]/g, '');
+                // Check if first digit is between 6-9
+                if (phoneValue.length > 0 && !['6', '7', '8', '9'].includes(phoneValue[0])) {
+                    setFormData(prev => ({ ...prev, [name]: prev.phone }));
+                    break;
+                }
                 const validPhoneValue = phoneValue.slice(0, 10);
                 setFormData(prev => ({ ...prev, [name]: validPhoneValue }));
 
-                if (!phoneRegex.test(phoneValue)) {
-                    errorMessage = "Phone number must start with 6-9";
-                } else if (phoneValue.length !== 10) {
-                    errorMessage = "Phone number must be 10 digits";
+                if (validPhoneValue.length > 0 && validPhoneValue.length !== 10) {
                 }
                 break;
 
@@ -85,9 +82,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                 const passwordValue = value.replace(/\s/g, '');
                 setFormData(prev => ({ ...prev, [name]: passwordValue }));
                 if (value !== passwordValue) {
-                    errorMessage = "Spaces are not allowed";
                 } else if (passwordValue.length > 20) {
-                    errorMessage = "Password must not exceed 20 characters";
                 }
                 if (name === 'confirmPassword' && passwordValue !== formData.password) {
                     errorMessage = "Passwords do not match";
@@ -101,7 +96,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         setErrors(prev => ({ ...prev, [name]: errorMessage }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {
             name: !formData.name ? "Name is required" :
@@ -118,9 +113,27 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
             acceptTerms: !formData.acceptTerms ? "You must accept the terms and conditions" : ""
         };
 
+        setErrors(newErrors);
+        setErrorOverall("");
         if (!Object.values(newErrors).some(error => error !== "")) {
-            console.log(formData);
-            onClose();
+            try {
+                const response = await axios.post('http://192.168.1.33:5000/user/signup', {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    password: formData.password
+                });
+
+                if (response.data) {
+                    console.log('Registration successful:', response.data);
+                    toast.success('Registration successful');
+                    onClose();
+                }
+            } catch (error) {
+                console.error('Registration failed:', error);
+                toast.error('Registration failed. Please try again.');
+                setErrorOverall(error.response?.data?.message || 'Registration failed. Please try again.');
+            }
         }
     };
 
@@ -137,148 +150,169 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
     };
 
     return (
-        <CustomModal
-            isOpen={isOpen}
-            onClose={onClose}
-            // title="Create Account"
-            classname="w-full max-w-md"
-        >
-            <div className="p-2">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">Create Account</h1>
-                <form onSubmit={handleSubmit} className="space-y-3">
-                    <div className="space-y-3">
-                        <FloatingInput
-                            type="text"
-                            placeholder="Full Name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                            icon={<RiUserLine className="w-5 h-5" />}
-                            iconPosition="left"
-                            error={errors.name}
-                            maxLength={50}
-                        />
-
-                        <FloatingInput
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            icon={<MdOutlineEmail className="w-5 h-5" />}
-                            iconPosition="left"
-                            error={errors.email}
-                            maxLength={50}
-                        />
-                        <FloatingInput
-                            type="tel"
-                            placeholder="Phone Number"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            required
-                            icon={<BsTelephone className="w-5 h-5" />}
-                            iconPosition="left"
-                            error={errors.phone}
-                            maxLength={10}
-                        />
-                        <div className="relative">
+        <>
+            <CustomModal
+                isOpen={isOpen}
+                onClose={onClose}
+                // title="Create Account"
+                classname="w-full max-w-md"
+            >
+                <div className="p-2">
+                    <h1 className="text-lg font-bold text-gray-800 mb-4">Register</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div className="2">
                             <FloatingInput
-                                type={showPassword.password ? "text" : "password"}
-                                placeholder="Password"
-                                name="password"
-                                value={formData.password}
+                                type="text"
+                                placeholder="Full Name"
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
-                                required
-                                icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={errors.password}
-                                maxLength={20}
+                                // required
+                                // icon={<RiUserLine className="w-5 h-5" />}
+                                // iconPosition="left"
+                                error={errors.name}
+                                maxLength={50}
                             />
-                            {formData.password && (
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(prev => ({ ...prev, password: !prev.password }))}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                >
-                                    {showPassword.password ? (
-                                        <AiOutlineEye className="w-5 h-5" />
-                                    ) : (
-                                        <AiOutlineEyeInvisible className="w-5 h-5" />
-                                    )}
-                                </button>
+
+                            <FloatingInput
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                // required
+                                // icon={<MdOutlineEmail className="w-5 h-5" />}
+                                // iconPosition="left"
+                                error={errors.email}
+                                maxLength={50}
+                            />
+                            <FloatingInput
+                                type="tel"
+                                placeholder="Phone Number"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                // required
+                                // icon={<BsTelephone className="w-5 h-5" />}
+                                // iconPosition="left"
+                                error={errors.phone}
+                                maxLength={10}
+                            />
+                            <div className="relative">
+                                <FloatingInput
+                                    type={showPassword.password ? "text" : "password"}
+                                    placeholder="Password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    // required
+                                    // icon={<RiLockPasswordLine className="w-5 h-5" />}
+                                    // iconPosition="left"
+                                    error={errors.password}
+                                    maxLength={20}
+                                />
+                                {formData.password && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(prev => ({ ...prev, password: !prev.password }))}
+                                        className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    >
+                                        {showPassword.password ? (
+                                            <AiOutlineEye className="w-5 h-5" />
+                                        ) : (
+                                            <AiOutlineEyeInvisible className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="relative">
+                                <FloatingInput
+                                    type={showPassword.confirmPassword ? "text" : "password"}
+                                    placeholder="Confirm Password"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    // required
+                                    // icon={<RiLockPasswordLine className="w-5 h-5" />}
+                                    // iconPosition="left"
+                                    error={errors.confirmPassword}
+                                    maxLength={20}
+                                />
+                                {formData.confirmPassword && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(prev => ({ ...prev, confirmPassword: !prev.confirmPassword }))}
+                                        className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    >
+                                        {showPassword.confirmPassword ? (
+                                            <AiOutlineEye className="w-5 h-5" />
+                                        ) : (
+                                            <AiOutlineEyeInvisible className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex items-start">
+                            <input
+                                type="checkbox"
+                                name="acceptTerms"
+                                id="acceptTerms"
+                                checked={formData.acceptTerms}
+                                onChange={handleChange}
+                                className="mt-1 mr-2"
+                            />
+                            <label htmlFor="acceptTerms" className="text-xs text-gray-600">
+                                I agree to the{" "}
+                                <a href="/terms" className="text-purple-600 hover:text-purple-800">
+                                    Terms and Conditions
+                                </a>
+                            </label>
+                        </div>
+                        <div className="h-4 mb-2">
+                            {errors.acceptTerms && (
+                                <p className="text-red-500 text-xs mt-1">{errors.acceptTerms}</p>
                             )}
                         </div>
-
-                        <div className="relative">
-                            <FloatingInput
-                                type={showPassword.confirmPassword ? "text" : "password"}
-                                placeholder="Confirm Password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                required
-                                icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={errors.confirmPassword}
-                                maxLength={20}
-                            />
-                            {formData.confirmPassword && (
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(prev => ({ ...prev, confirmPassword: !prev.confirmPassword }))}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                >
-                                    {showPassword.confirmPassword ? (
-                                        <AiOutlineEye className="w-5 h-5" />
-                                    ) : (
-                                        <AiOutlineEyeInvisible className="w-5 h-5" />
-                                    )}
-                                </button>
+                        <div className="h-2 mb-2">
+                            {errorOverall && (
+                                <p className="text-red-500 text-xs text-center">{errorOverall}</p>
                             )}
                         </div>
-                    </div>
-                    <div className="flex items-start space-x-2 mt-4">
-                        <input
-                            type="checkbox"
-                            name="acceptTerms"
-                            id="acceptTerms"
-                            checked={formData.acceptTerms}
-                            onChange={handleChange}
-                            className="mt-1"
-                        />
-                        <label htmlFor="acceptTerms" className="text-sm text-gray-600">
-                            I agree to the{" "}
-                            <a href="/terms" className="text-purple-600 hover:text-purple-800">
-                                Terms and Conditions
-                            </a>
-                        </label>
-                    </div>
-                    {errors.acceptTerms && (
-                        <p className="text-red-500 text-sm mt-1">{errors.acceptTerms}</p>
-                    )}
+                        <button
+                            type="submit"
+                            className="w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                        >
+                            REGISTER
+                        </button>
+                    </form>
 
-                    <button
-                        type="submit"
-                        className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
-                    >
-                        SIGN UP
-                    </button>
-                </form>
-
-                <div className="text-center mt-4 text-sm">
-                    <span className="text-gray-600">Already have an account? </span>
-                    <button
-                        onClick={handleLoginClick}
-                        className="text-purple-600 hover:text-purple-800 font-medium"
-                    >
-                        Login
-                    </button>
+                    <div className="text-center mt-4 text-xs">
+                        <span className="text-gray-600">Already have an account? </span>
+                        <button
+                            onClick={handleLoginClick}
+                            className="text-purple-600 hover:text-purple-800 font-medium"
+                        >
+                            Login
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </CustomModal>
+            </CustomModal>
+            <ToastContainer
+                position="top-right"
+                autoClose={7000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                style={{ zIndex: 9999 }}
+            />
+        </>
     );
 };
 

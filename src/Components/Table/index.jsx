@@ -15,7 +15,7 @@ const CustomTable = ({
 
   // Search functionality
   const filteredData = useMemo(() => {
-    return data.filter(item =>
+    return data?.filter(item =>
       Object.keys(item).some(key =>
         String(item[key])
           .toLowerCase()
@@ -40,8 +40,8 @@ const CustomTable = ({
   }, [filteredData, sortConfig]);
 
   // Pagination
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-  const paginatedData = sortedData.slice(
+  const totalPages = Math.ceil(sortedData?.length / itemsPerPage);
+  const paginatedData = sortedData?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -68,7 +68,7 @@ const CustomTable = ({
           <input
             type="text"
             placeholder={searchPlaceholder}
-            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -76,7 +76,7 @@ const CustomTable = ({
         {addButton && (
           <button
             onClick={onAddClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="bg-[#0A8A3D] text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-[#0A8A3D]/80 transition-colors"
           >
             {addButton}
           </button>
@@ -92,7 +92,7 @@ const CustomTable = ({
                 <th
                   key={column.key}
                   onClick={() => requestSort(column.key)}
-                  className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 border-b"
+                  className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-orange-100 border-b"
                 >
                   <div className="flex items-center justify-center space-x-1">
                     <span>{column.label}</span>
@@ -103,10 +103,10 @@ const CustomTable = ({
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((item, index) => (
+            {paginatedData?.map((item, index) => (
               <tr 
                 key={index} 
-                className="hover:bg-gray-50 transition-colors duration-150 ease-in-out border-b last:border-b-0"
+                className="hover:bg-green-100 transition-colors duration-150 ease-in-out border-b last:border-b-0"
               >
                 {columns.map((column) => (
                   <td 
@@ -130,13 +130,13 @@ const CustomTable = ({
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-700">
-          Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, sortedData.length)} of {sortedData.length} entries
+          Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, sortedData?.length)} of {sortedData?.length} entries
         </div>
         <div className="flex space-x-2">
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
+            className="cursor-pointer  px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
             <FaArrowLeft />
           </button>
@@ -148,7 +148,7 @@ const CustomTable = ({
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
+            className="cursor-pointer px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
             <FaArrowRight />
           </button>
