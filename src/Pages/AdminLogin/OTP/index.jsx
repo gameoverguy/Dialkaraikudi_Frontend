@@ -61,14 +61,14 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
         const isComplete = otp.every(digit => digit !== '');
 
         if (!isComplete) {
-            setError('Please enter all digits');
+            setError('Please enter all fields');
             return;
         }
         console.log('OTP Verified:', otpValue);
         setOtp(['', '', '', '']);
         setError('');
         onClose();
-        setShowResetPasswordModal(true); // Open reset password modal instead of navigating
+        setShowResetPasswordModal(true);
     };
 
     const handleResendOTP = () => {

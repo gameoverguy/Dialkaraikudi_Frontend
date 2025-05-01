@@ -77,7 +77,7 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
             console.log(formData);
             setTimeout(() => {
                 onClose();
-                navigate('/home');
+                navigate('/');
             }, 2000);
         }
         //     const res = await axios.post("http://192.168.1.33:5000/auth/login", formData);

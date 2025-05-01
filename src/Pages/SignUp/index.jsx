@@ -201,8 +201,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(prev => ({ ...prev, password: !prev.password }))}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                >
+                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    >
                                     {showPassword.password ? (
                                         <AiOutlineEye className="w-5 h-5" />
                                     ) : (
@@ -229,8 +229,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(prev => ({ ...prev, confirmPassword: !prev.confirmPassword }))}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                >
+                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    >
                                     {showPassword.confirmPassword ? (
                                         <AiOutlineEye className="w-5 h-5" />
                                     ) : (
