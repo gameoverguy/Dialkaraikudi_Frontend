@@ -4,6 +4,10 @@ import CustomTable from '../../../Components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModal from '../../../Components/ConfirmationModal';
+import { API } from '../../../../config/config'
+import axios from 'axios';
+import CustomModal from '../../../Components/modal';
+
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -20,30 +24,15 @@ const UserTable = () => {
   const fetchUsers = async () => {
     try {
       // Replace with your actual API call
-      setUsers([
-        {
-          id: 1,
-          name: 'John Doe',
-          mobile: '+91 9876543210',
-          email: 'john@example.com',
-          password: '********',
-        },
-        {
-          id: 2,
-          name: 'Jane Smith',
-          mobile: '+91 9876543211',
-          email: 'jane@example.com',
-          password: '********',
-        },
-        {
-          id: 3,
-          name: 'Mike Johnson',
-          mobile: '+91 9876543212',
-          email: 'mike@example.com',
-          password: '********',
-        }
-      ]);
-    } finally {
+
+      const response = await axios.get(`${API}/user`)
+      console.log(response.data);
+      setUsers(response.data);
+    }
+    catch (error) {
+      console.error('Error fetching users:', error);
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -54,6 +43,7 @@ const UserTable = () => {
   };
 
   const handleDelete = async (user) => {
+    setShowModal(false);
     setUserToDelete(user);
     setShowConfirmModal(true);
   };
@@ -61,7 +51,7 @@ const UserTable = () => {
   const confirmDelete = async () => {
     try {
       // Implement delete API call here
-      setUsers(users.filter(u => u.id !== userToDelete.id));
+      setUsers(users.filter(u => u._id !== userToDelete._id));
       setShowModal(false);
       setShowConfirmModal(false);
       toast.success('User deleted successfully');
@@ -71,15 +61,15 @@ const UserTable = () => {
   };
 
   const columns = [
-    { 
+    {
       key: 'name',
       label: 'Name'
     },
-    { 
-      key: 'mobile',
+    {
+      key: 'phone',
       label: 'Mobile Number'
     },
-    { 
+    {
       key: 'email',
       label: 'Email'
     },
@@ -88,10 +78,10 @@ const UserTable = () => {
       label: 'Actions',
       render: (row) => (
         <div className="flex space-x-2 text-center justify-center">
-                   <FaEye size={16}
-             onClick={() => handleView(row)}
+          <FaEye size={16}
+            onClick={() => handleView(row)}
             className="text-blue-600 hover:text-blue-800 cursor-pointer"
-            title="View Details"/>
+            title="View Details" />
         </div>
       )
     }
@@ -101,43 +91,43 @@ const UserTable = () => {
     if (!user) return null;
 
     return (
-      <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-md">
-          <h2 className="text-xl font-bold mb-4">User Details</h2>
-          <div className="space-y-3">
-            <div>
-              <label className="font-semibold">Name:</label>
-              <p>{user.name}</p>
-            </div>
-            <div>
-              <label className="font-semibold">Mobile Number:</label>
-              <p>{user.mobile}</p>
-            </div>
-            <div>
-              <label className="font-semibold">Email:</label>
-              <p>{user.email}</p>
-            </div>
-            <div>
-              <label className="font-semibold">Password:</label>
-              <p>{user.password}</p>
-            </div>
+      <CustomModal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setFormData({ name: '', image: null });
+          setImagePreview(null);
+          setErrors({});
+        }}
+        title={"User Details"}
+      >
+        <div className="space-y-3">
+          <div>
+            <label className="font-semibold">Name:</label>
+            <p>{user.name}</p>
           </div>
-          <div className="mt-6 flex justify-between">
-            <button
-              onClick={() => handleDelete(user)}
-              className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Delete User
-            </button>
-            <button
-              onClick={onClose}
-              className="bg-gray-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-gray-600"
-            >
-              Close
-            </button>
+          <div>
+            <label className="font-semibold">Mobile Number:</label>
+            <p>{user.phone}</p>
           </div>
+          <div>
+            <label className="font-semibold">Email:</label>
+            <p>{user.email}</p>
+          </div>
+          {/* <div>
+            <label className="font-semibold">Password:</label>
+            <p>{user.password}</p>
+          </div> */}
         </div>
-      </div>
+        <div className="mt-6 flex  justify-end">
+          <button
+            onClick={() => handleDelete(user)}
+            className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Delete User
+          </button>
+        </div>
+      </CustomModal>
     );
   };
 
@@ -164,7 +154,7 @@ const UserTable = () => {
           }}
         />
       )}
-      
+
       <ConfirmationModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}

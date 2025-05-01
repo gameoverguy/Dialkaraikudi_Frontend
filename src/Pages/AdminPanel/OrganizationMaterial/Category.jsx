@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import {API} from '../../../../config/config'
+import FloatingInput from '../../../Components/FloatingInput';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -169,59 +171,58 @@ const CategoryManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const formDataToSend = new FormData();
         // Convert display name to category name format (lowercase with underscores)
         const categoryName = formData.name
           .toLowerCase()
           .trim()
           .replace(/\s+/g, '_');
-        
-        // Append all required fields to FormData
-        formDataToSend.append('categoryName', categoryName);
-        formDataToSend.append('displayName', formData.name.trim());
-        formDataToSend.append('isActive', true);
-        
+  
+        // Build plain object for JSON
+        const payload = {
+          categoryName: categoryName,
+          displayName: formData.name.trim(),
+          isActive: true,
+          // iconUrl: formData.image (not supported unless base64)
+        };
+  
+        // If sending an image, you must base64 encode it manually (optional):
         if (formData.image) {
-          formDataToSend.append('iconUrl', formData.image);
+          const base64 = await toBase64(formData.image);
+          payload.iconBase64 = base64; // send this instead
         }
   
         if (selectedCategory) {
           // Update existing category
           await axios.put(
             `${API}/categories/${selectedCategory.id}`,
-            formDataToSend,
+            payload,
             {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/json',
               },
             }
           );
           toast.success('Category updated successfully');
-          await fetchCategories(); // Refresh the list
-          setShowModal(false);
-          setSelectedCategory(null);
-          setFormData({ name: '', image: null });
-          setImagePreview(null);
         } else {
           // Create new category
           const response = await axios.post(
             `${API}/categories`,
-            formDataToSend,
+            payload,
             {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/json',
               },
             }
           );
-          
+  
           if (response.data) {
             toast.success('Category added successfully');
           }
         }
-        
+  
         // Refresh categories list
         await fetchCategories();
-        
+  
         // Reset form
         setShowModal(false);
         setImagePreview(null);
@@ -234,6 +235,16 @@ const CategoryManagement = () => {
       }
     }
   };
+  
+  // Helper: convert image file to base64 string
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  
 
   const confirmDelete = async () => {
     try {
@@ -267,20 +278,55 @@ const CategoryManagement = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Category Management</h1>
-      <CustomTable
-        columns={columns}
-        data={categories}
-        itemsPerPage={5}
-        addButton="Add Category"
-        onAddClick={() => {
-          setSelectedCategory(null);
-          setShowModal(true);
-        }}
-        searchPlaceholder="Search by category name..."
-      />
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Category Management</h1>
+        <button
+          onClick={() => {
+            setSelectedCategory(null);
+            setShowModal(true);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
+        >
+          Add
+        </button>
+      </div>
 
-      {/* Edit/Add Modal */}
+      <div className="flex flex-wrap gap-4">
+        {categories.map((category) => (
+          <div
+            key={category.id}
+            className="relative flex items-center bg-gray-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-2 min-w-[120px]"
+          >
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-gray-900 px-4">
+                {category.name}
+              </h3>
+            </div>
+            <button
+              onClick={() => handleDelete(category)}
+              className="p-1.5 cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
+              title="Delete"
+            >
+              <FaTrashAlt className="text-sm" />
+            </button>
+          </div>
+        ))}
+        
+        <div
+          onClick={() => {
+            setSelectedCategory(null);
+            setShowModal(true);
+          }}
+          className="relative flex items-center bg-green-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-2 min-w-[120px] cursor-pointer"
+        >
+          <div className="flex-1 text-center">
+            <span className="text-sm font-medium">+ Add</span>
+          </div>
+          
+        </div>
+      </div>
+
+      {/* Add/Edit Modal */}
       <CustomModal
         isOpen={showModal}
         onClose={() => {
@@ -292,12 +338,9 @@ const CategoryManagement = () => {
         }}
         title={selectedCategory ? "Edit Category" : "Add Category"}
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category Name
-            </label>
-            <input
+            <FloatingInput
               type="text"
               name="name"
               value={formData.name}
@@ -305,13 +348,12 @@ const CategoryManagement = () => {
               className={`w-full px-4 py-3 rounded-lg border ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter category name"
+              placeholder="Category Name"
               maxLength={25}
+              error={errors.name}
             />
-            {errors.name && (
-              <p className="mt-2 text-sm text-red-500">{errors.name}</p>
-            )}
-          </div>
+
+         </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -359,9 +401,11 @@ const CategoryManagement = () => {
                 </span>
               </div>
             )}
+            <div className='h-6'>
             {errors.image && (
-              <p className="mt-2 text-sm text-red-500">{errors.image}</p>
+              <p className="mt-2 text-xs text-red-500 text-right">{errors.image}</p>
             )}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
@@ -382,14 +426,14 @@ const CategoryManagement = () => {
               type="submit"
               className="px-6 py-2.5 rounded-lg cursor-pointer text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
             >
-              {selectedCategory ? "Update Category" : "Add Category"}
+              {selectedCategory ? "Update Category" : "Add"}
             </button>
           </div>
         </form>
       </CustomModal>
 
       {/* View Modal */}
-      <CustomModal
+      {/* <CustomModal
         isOpen={viewModalOpen}
         onClose={() => {
           setViewModalOpen(false);
@@ -424,7 +468,7 @@ const CategoryManagement = () => {
             </div>
           </div>
         )}
-      </CustomModal>
+      </CustomModal> */}
 
       <CustomModal
         isOpen={showDeleteModal}
