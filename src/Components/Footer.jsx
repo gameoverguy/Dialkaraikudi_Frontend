@@ -17,101 +17,110 @@ const Footer = () => {
   const footText1 = [
     { title: "About us", path: "#" },
     { title: "Contact us", path: "#" },
-    { title: "Ads / commercials", path: "#" },
     { title: "Terms & conditions", path: "#" },
-    { title: "Copyright policy", path: "#" },
-    { title: "Careers", path: "#" },
-    { title: "Media coverage", path: "#" },
     { title: "Advertise on Dialkaraikudi", path: "#" },
-    { title: "Privacy policy", path: "#" },
   ];
 
   const footText3 = [
-    { title: "Study Abroad", path: "#" },
-    { title: "Property", path: "#" },
-    { title: "Real Estate", path: "#" },
-    { title: "Rentals", path: "#" },
-    { title: "PG", path: "#" },
-    { title: "Roommates", path: "#" },
-    { title: "Capshine", path: "#" },
+    { title: "Digitaly.Live", path: "#" },
+    { title: "Dial puthukotai", path: "#" },
+    { title: "Gteceducation", path: "#" },
   ];
 
   return (
     <>
-    <div className="flex flex-col xl:flex-row justify-center items-center w-full bg-[#F3F4F6] py-5">
-      {/* Left Section */}
-      <div className="flex flex-col w-full xl:w-6/12 px-5 xl:px-40 gap-5 py-10">
-        <p className="text-[15px] xl:text-xl font-bold">
-          One-Stop for All Local Services Across India
-        </p>
-        <div className="w-[125px] h-[50px] flex justify-center items-center">
-          <img src={Logo} alt="Dialkaraikudi Logo" />
+      <div className="flex flex-col xl:flex-row flex-wrap justify-evenly items-start w-full bg-[#F3F4F6] py-10 px-7 md:px-10 xl:px-20 gap-10">
+        {/* Left Section */}
+        <div className="w-full sm:w-10/12 md:w-6/12 xl:w-3/12 flex flex-col gap-5 text-left">
+          <p className="text-[15px] xl:text-[18px] font-bold">
+            One-Stop for All Local Services
+          </p>
+          <div className="w-[125px] h-[50px]">
+            <img src={Logo} alt="Dialkaraikudi Logo" className="object-contain" />
+          </div>
+          <p className="text-sm text-[#4B5563] text-justify">
+            Dialkaraikudi is a premier digital platform in India that connects
+            users with verified local service professionals. Focused on
+            personalized services across Home, Life, and Self, it leverages
+            technology and domain expertise to understand user needs and deliver
+            tailored solutions.
+          </p>
         </div>
-        <p className="text-sm text-[#4B5563] text-justify">
-          Dialkaraikudi is a premier digital platform in India that connects
-          users with verified local service professionals. Focused on
-          personalized services across Home, Life, and Self, it leverages
-          technology and domain expertise to understand user needs and deliver
-          tailored solutions.
-        </p>
-        <p className="text-sm text-[#4B5563] font-bold">Connect with us</p>
-        <div className="flex gap-2 items-center">
-          {social.map((item, i) => (
-            <div
-              key={i}
-              className="group rounded-full p-1 cursor-pointer transition-colors"
-              style={{ transition: "background-color 0.3s" }}
-            >
-              <div
-                className="rounded-full p-1 transition-colors"
-                style={{ backgroundColor: "transparent" }}
+
+        {/* Center Section - Quick & Our Links */}
+        <div className="w-full sm:w-10/12 md:w-6/12 xl:w-3/12 flex flex-col sm:flex-row justify-center sm:justify-start gap-10 xl:gap-25 text-left">
+          <div className="flex flex-col gap-3">
+            <p className="text-xl font-bold pb-3">Quick Links</p>
+            {footText1.map((item, i) => (
+              <a
+                key={i}
+                href={item.path}
+                className="text-sm text-[#4B5563] hover:underline cursor-pointer"
               >
+                {item.title}
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            <p className="text-xl font-bold pb-3">Our Links</p>
+            {footText3.map((item, i) => (
+              <a
+                key={i}
+                href={item.path}
+                className="text-sm text-[#4B5563] hover:underline cursor-pointer"
+              >
+                {item.title}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Section - Offices + Social */}
+        <div className="w-full sm:w-10/12 xl:w-3/12 flex flex-col gap-6 text-left">
+          <div className="flex flex-col gap-4">
+            <p className="text-xl font-bold pb-3">Our Offices</p>
+            <div>
+              <h2 className="font-semibold">CHENNAI OFFICE</h2>
+              <p className="text-sm text-[#4B5563]">
+                153, 13th St, Maxworth Nagar, Kovilambakkam, Chennai, Tamil Nadu - 600117
+              </p>
+            </div>
+            <div>
+              <h2 className="font-semibold">DEVELOPMENT OFFICE</h2>
+              <p className="text-sm text-[#4B5563]">
+                8, Muthoorani East, Muthupatinam, Karaikudi - 630001
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="text-sm text-[#4B5563] font-bold">Connect with us</p>
+            <div className="flex gap-2">
+              {social.map((item, i) => (
                 <div
-                  className="group-hover:text-white rounded-full p-1"
-                  style={{ transition: "color 0.3s", color: item.color }}
+                  key={i}
+                  className="group rounded-full p-1 cursor-pointer transition-colors"
                 >
-                  {item.icon}
+                  <div className="rounded-full p-1 transition-colors">
+                    <div
+                      className="group-hover:text-white rounded-full p-1"
+                      style={{ color: item.color }}
+                    >
+                      {item.icon}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
-      {/* Right Section */}
-      <div className="w-full xl:w-6/12 flex flex-col xl:flex-row px-5 xl:px-20 xl:py-10 gap-y-10 xl:gap-x-40">
-        <div className="flex flex-col gap-3">
-          <p className="text-xl font-bold pb-5">Quick Links</p>
-          {footText1.map((item, i) => (
-            <a
-              key={i}
-              href={item.path}
-              className="text-sm text-[#4B5563] hover:underline cursor-pointer"
-            >
-              {item.title}
-            </a>
-          ))}
-        </div>
-        <div className="flex flex-col gap-3">
-          <p className="text-xl font-bold pb-5">Dialkaraikudi Domains</p>
-          {footText3.map((item, i) => (
-            <a
-              key={i}
-              href={item.path}
-              className="text-sm text-[#4B5563] hover:underline cursor-pointer"
-            >
-              {item.title}
-            </a>
-          ))}
-        </div>
+      {/* Bottom Bar */}
+      <div className="text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6]">
+        Copyrights 2025-26. All Rights Reserved. Digitaly Pvt ltd.
       </div>
-    </div>
-    <div className='text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6]'>
-                Copyrights 2025-26.  All Rights Reserved. Digitaly Pvt ltd.
-            </div>
-
     </>
-    
   );
 };
 
