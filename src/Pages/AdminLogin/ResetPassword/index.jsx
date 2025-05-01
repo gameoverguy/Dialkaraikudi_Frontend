@@ -94,10 +94,10 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal }) => {
             classname="w-full max-w-md"
         >
             <div className="p-2">
-                <h1 className="text-3xl font-bold text-gray-800 mb-4">Reset Password</h1>
-                <p className="text-gray-600 mb-6">Please enter your new password.</p>
+            <h1 className="text-lg font-bold text-gray-800 mb-4">Reset Password</h1>
+                <p className="text-gray-600 text-xs mb-6">Please enter your new password.</p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit}>
                     <div className="relative">
                         <FloatingInput
                             type={showPassword ? "text" : "password"}
@@ -105,9 +105,9 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal }) => {
                             name="newPassword"
                             value={newPassword}
                             onChange={handlePasswordChange}
-                            required
-                            icon={<RiLockPasswordLine className="w-5 h-5" />}
-                            iconPosition="left"
+                            // required
+                            // icon={<RiLockPasswordLine className="w-5 h-5" />}
+                            // iconPosition="left"
                             error={newPasswordError || (error && newPassword.length === 0 ? "New password is required" : "")}
                             maxLength={20}
                         />
@@ -129,9 +129,9 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal }) => {
                             name="confirmPassword"
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
-                            required
-                            icon={<RiLockPasswordLine className="w-5 h-5" />}
-                            iconPosition="left"
+                            // required
+                            // icon={<RiLockPasswordLine className="w-5 h-5" />}
+                            // iconPosition="left"
                             error={confirmPasswordError || (error && confirmPassword.length === 0 ? "Confirm password is required" : "")}
                             maxLength={20}
                             disabled={!newPassword}
@@ -148,13 +148,13 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal }) => {
                     </div>
                     <div className="h-2">
                         {error && (
-                            <p className="text-red-500 text-sm text-center">{error}</p>
+                            <p className="text-red-500 text-xs text-center">{error}</p>
                         )}
                     </div>
 
                     <button
                         type="submit"
-                        className={`w-full py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${isFormValid()
+                        className={`w-full text-xs py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${isFormValid()
                             ? "bg-purple-600 hover:bg-purple-700 text-white"
                             : "bg-gray-300 cursor-not-allowed text-gray-500"
                             }`}
