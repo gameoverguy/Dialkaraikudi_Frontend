@@ -8,6 +8,8 @@ import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import ConfirmationModal from '../../../Components/ConfirmationModal';
 import axios from 'axios';
 import { API } from '../../../../config/config'
+import FloatingInput from '../../../Components/FloatingInput';
+import FloatingSelect from '../../../Components/FloatingInput/DropDown';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -130,21 +132,21 @@ const BusinessManagement = () => {
             className="p-2 text-blue-500 transition-colors"
             title="View"
           >
-            <FaEye className="text-sm" />
+            <FaEye className="text-sm cursor-pointer" />
           </button>
           <button
             onClick={() => handleEdit(row)}
             className="p-2 text-green-500 transition-colors"
             title="Edit"
           >
-            <FaEdit className="text-sm" />
+            <FaEdit className="text-sm cursor-pointer" />
           </button>
           <button
             onClick={() => handleDelete(row)}
             className="p-2 text-red-500 transition-colors"
             title="Delete"
           >
-            <FaTrashAlt className="text-sm" />
+            <FaTrashAlt className="text-sm cursor-pointer" />
           </button>
         </div>
       )
@@ -376,7 +378,7 @@ const BusinessManagement = () => {
         columns={columns}
         data={businesses}
         itemsPerPage={10}
-        addButton="Add Business"
+        addButton="Add"
         onAddClick={() => {
           setSelectedBusiness(null);
           setShowModal(true);
@@ -396,121 +398,85 @@ const BusinessManagement = () => {
         }}
         title={selectedBusiness ? "Edit Business" : "Add Business"}
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Business Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter business name"
-              maxLength={30}
-            />
-            {errors.name && (
-              <p className="mt-2 text-sm text-red-500">{errors.name}</p>
-            )}
+        <form onSubmit={handleSubmit} className="">
+
+          <div className="flex gap-2">
+            <div>
+              <FloatingInput
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Business Name"
+                maxLength={30}
+                error={errors.name}
+              />
+            </div>
+
+            <div>
+              <FloatingSelect
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                placeholder="Select Category"
+                error={errors.category}
+                options={categories.map(category => ({
+                  value: category._id,
+                  label: category.displayName
+                }))}
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <div>
+              <FloatingInput
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Phone Number"
+                maxLength={10}
+                error={errors.phone}
+              />
+
+            </div>
+
+            <div>
+              <FloatingInput
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email Address"
+                error={errors.email}
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
+            <FloatingInput
+              type="textarea"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter business description"
+              placeholder="Business Description"
+              error={errors.description}
               rows={4}
             />
-            {errors.description && (
-              <p className="mt-2 text-sm text-red-500">{errors.description}</p>
-            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
-            </label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className={`w-full h-10 px-4 py-2 rounded-lg border ${errors.category ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              style={{ padding: '8px' }}
-            >
-              <option value="">Select a category</option>
-              {categories.map(category => (
-                <option key={category._id} value={category._id}>
-                  {category.displayName}
-                </option>
-              ))}
-            </select>
-            {errors.category && (
-              <p className="mt-2 text-sm text-red-500">{errors.category}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter phone number"
-              maxLength={10}
-            />
-            {errors.phone && (
-              <p className="mt-2 text-sm text-red-500">{errors.phone}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter email address"
-            />
-            {errors.email && (
-              <p className="mt-2 text-sm text-red-500">{errors.email}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Address
-            </label>
-            <textarea
+            <FloatingInput
+              type="textarea"
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.address ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
-              placeholder="Enter business address"
+              placeholder="Business Address"
+              error={errors.address}
               rows={3}
             />
-            {errors.address && (
-              <p className="mt-2 text-sm text-red-500">{errors.address}</p>
-            )}
           </div>
 
           <div>
@@ -557,9 +523,11 @@ const BusinessManagement = () => {
                 ))}
               </div>
             )}
-            {errors.photos && (
-              <p className="mt-2 text-sm text-red-500">{errors.photos}</p>
-            )}
+            <div className='mt-1 h-4'>
+              {errors.photos && (
+                <p className="text-xs text-red-500 text-right">{errors.photos}</p>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
@@ -584,6 +552,7 @@ const BusinessManagement = () => {
             </button>
           </div>
         </form>
+
       </CustomModal>
 
       {/* View Modal */}
