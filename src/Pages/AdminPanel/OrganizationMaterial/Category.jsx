@@ -9,6 +9,7 @@ import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import {API} from '../../../../config/config'
 import FloatingInput from '../../../Components/FloatingInput';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { MdCancel } from 'react-icons/md';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -304,10 +305,10 @@ const CategoryManagement = () => {
             </div>
             <button
               onClick={() => handleDelete(category)}
-              className="p-1.5 cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
+              className="cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
               title="Delete"
             >
-              <FaTrashAlt className="text-sm" />
+              <MdCancel className="text-base" />
             </button>
           </div>
         ))}
