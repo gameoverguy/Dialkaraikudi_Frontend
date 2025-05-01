@@ -191,7 +191,7 @@ const AdminPanel = () => {
           className="transition-all duration-200 "
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? <MdChevronRight size={20} className='bg-[#0A8A3D] rounded-2xl text-2xl cursor-pointer'/> : <MdChevronLeft size={20} className='bg-[#F7941D] rounded-2xl text-2xl cursor-pointer'/>}
+          {collapsed ? <MdChevronRight size={20} className='bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer'/> : <MdChevronLeft size={20} className='bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer'/>}
         </div>
         </div>
       
@@ -215,7 +215,7 @@ const AdminPanel = () => {
 
         {/* Scrollable main content */}
         <main className="flex-1 p-6 mt-16 relative h-[calc(100vh-4rem)]">
-          <div className="bg-white rounded-lg shadow-sm p-6 ">
+          <div className="">
             {getCurrentComponent()}
           </div>
         </main>
