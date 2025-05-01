@@ -22,7 +22,7 @@ const SwiperModal = ({ data }) => {
                             <img
                                 src={imgUrl}
                                 alt={`Slide ${index + 1}`}
-                                className="h-40 w-full object-cover rounded-lg"
+                                className="h-40 w-full object-cover"
                             />
                         </SwiperSlide>
                     ))}

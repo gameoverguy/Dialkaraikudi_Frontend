@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Logo from '../assets/logo_01.png'
 import { CiLocationOn } from 'react-icons/ci'
 import { IoSearchOutline } from 'react-icons/io5'
@@ -10,15 +10,30 @@ import ForgotPassword from '../Pages/AdminLogin/ForgotPassword'
 import OTP from '../Pages/AdminLogin/OTP'
 import ResetPassword from '../Pages/AdminLogin/ResetPassword'
 import { useLoginModal } from '../context/LoginContext'
+import Cookies from 'js-cookie';
 
 const Header = () => {
     const { showLoginModal, setShowLoginModal } = useLoginModal();
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+    const [userData, setUserData] = useState(null);
     // const navigate = useNavigate()
     const [showOTPModal, setShowOTPModal] = useState(false); // New state for OTP modal
     const [otpEmail, setOtpEmail] = useState('');
     const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+
+    useEffect(() => {
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+            setUserData(JSON.parse(storedUserData));
+        }
+    }, [showLoginModal]); // Re-check when login modal closes
+
+    const handleLogout = () => {
+        localStorage.removeItem('userData');
+        Cookies.remove('userToken');
+        setUserData(null);
+    };
 
     return (
         <>
@@ -66,7 +81,7 @@ const Header = () => {
                         {/* Login Button */}
                         <button
                             onClick={() => setShowLoginModal(true)}
-                            className='hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200'
+                            className='hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer'
                         >
                             <LuCircleUserRound className="text-xl" />
                             <span>Login</span>

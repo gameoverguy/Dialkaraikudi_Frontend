@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import FloatingInput from "../../Components/FloatingInput";
-import { RiCloseLine, RiLockPasswordLine } from "react-icons/ri";
-import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import CustomModal from "../../Components/modal";
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIsForgotPasswordOpen }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -19,11 +18,13 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
         email: "",
         password: "",
     });
+    const [errorOverall, setErrorOverall] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     useEffect(() => {
         if (!isOpen) {
             setFormData({ email: "", password: "" });
             setErrors({ email: "", password: "" });
+            setErrorOverall("");
             setShowPassword(false);
             // setIsSignupOpen(false);
         }
@@ -39,20 +40,16 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
             setFormData(prev => ({ ...prev, [name]: emailValue }));
 
             if (value !== emailValue) {
-                errorMessage = "Special characters and spaces are not allowed";
             } else if (emailValue.length > 50) {
-                errorMessage = "Email must not exceed 50 characters";
             } else if (emailValue.includes('@')) {
-                errorMessage = emailRegex.test(emailValue) ? "" : "Please enter a valid email";
+                errorMessage = emailRegex.test(emailValue) ? "" : "";
             }
             setErrors(prev => ({ ...prev, email: errorMessage }));
         } else if (name === 'password') {
             const passwordValue = value.replace(/\s/g, '');
             setFormData(prev => ({ ...prev, [name]: passwordValue }));
             if (passwordValue.length > 20) {
-                errorMessage = "Password must not exceed 20 characters";
             } else if (value !== passwordValue) {
-                errorMessage = "Spaces are not allowed in password";
             }
 
             setErrors(prev => ({ ...prev, password: errorMessage }));
@@ -72,128 +69,152 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
                     formData.password.length > 20 ? "Password must not exceed 20 characters" : ""
         };
         setErrors(newErrors);
-        // try {
+        setErrorOverall("");
+
         if (!newErrors.email && !newErrors.password) {
-            console.log(formData);
-            setTimeout(() => {
-                onClose();
-                navigate('/home');
-            }, 2000);
+            try {
+                const response = await axios.post('http://192.168.1.33:5000/user/login', {
+                    email: formData.email,
+                    password: formData.password
+                });
+
+                if (response.data) {
+                    console.log('Login successful:', response.data);
+                    if (response.data.token) {
+                        Cookies.set('userToken', response.data.token, {
+                            expires: 21,
+                            secure: true,
+                            sameSite: 'Strict'
+                        });
+                    }
+                    localStorage.setItem('userData', JSON.stringify({
+                        name: response.data.name,
+                        email: response.data.email
+                    }));
+                } toast.success('Login successful!');
+                setTimeout(() => {
+                    setShowLoginModal(false);
+                }, 1500);
+            }catch (error) {
+            console.error('Login failed:', error);
+            toast.error('Login failed!');
+            setErrorOverall(error.response?.data?.message || 'Invalid email or password');
         }
-        //     const res = await axios.post("http://192.168.1.33:5000/auth/login", formData);
-        //     console.log(res.data, "res");
-        //     const decoded = jwtDecode(res.data.token);
-        //     console.log(decoded);
+    }
+};
+if (!isOpen) return null;
+const handleSignupClick = () => {
+    onClose();
+    if (setIsSignupOpen) {
+        setIsSignupOpen(true);
+    }
+};
+const handleForgotPasswordClick = (e) => {
+    e.preventDefault();
+    onClose();
+    if (setIsForgotPasswordOpen) {
+        setIsForgotPasswordOpen(true); // Only open the ForgotPassword modal
+    }
+};
+return (
+    <>
+        <CustomModal
+            isOpen={isOpen}
+            onClose={onClose}
+            title=""
+            classname="w-full max-w-md"
+        >
+            <div className="p-2">
+                <h1 className="text-lg font-bold text-gray-800 mb-4">Member Login</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="space-y-4">
+                        <FloatingInput
+                            type="email"
+                            placeholder="Email Address"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            // required
+                            // icon={<MdOutlineEmail className="w-5 h-5" />}
+                            // iconPosition="left"
+                            error={errors.email}
+                            maxLength={50}
+                        />
 
-        //     if (decoded.role) {
-        //         // Admin
-        //     } else if (decoded.userType) {
-        //         // User
-        //     }
-
-        // } catch (error) {
-        //     console.log(error);
-
-        // }
-
-    };
-    if (!isOpen) return null;
-    const handleSignupClick = () => {
-        onClose();
-        if (setIsSignupOpen) {
-            setIsSignupOpen(true);
-        }
-    };
-    const handleForgotPasswordClick = (e) => {
-        e.preventDefault();
-        onClose();
-        if (setIsForgotPasswordOpen) {
-            setIsForgotPasswordOpen(true); // Only open the ForgotPassword modal
-        }
-    };
-    return (
-        <>
-            <CustomModal
-                isOpen={isOpen}
-                onClose={onClose}
-                // title="Welcome Back!"
-                classname="w-full max-w-md"
-            >
-                <div className="p-2">
-                <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome Back!</h1>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="space-y-4">
+                        <div className="relative">
                             <FloatingInput
-                                type="email"
-                                placeholder="Email Address"
-                                name="email"
-                                value={formData.email}
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                name="password"
+                                value={formData.password}
                                 onChange={handleChange}
-                                required
-                                icon={<MdOutlineEmail className="w-5 h-5" />}
-                                iconPosition="left"
-                                error={errors.email}
-                                maxLength={50}
+                                // required
+                                // icon={<RiLockPasswordLine className="w-5 h-5" />}
+                                // iconPosition="left"
+                                error={errors.password}
+                                maxLength={20}
                             />
-
-                            <div className="relative">
-                                <FloatingInput
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                    icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                    iconPosition="left"
-                                    error={errors.password}
-                                    maxLength={20}
-                                />
-                                {formData.password && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                    >
-                                        {showPassword ? (
-                                            <AiOutlineEye className="w-5 h-5" />
-                                        ) : (
-                                            <AiOutlineEyeInvisible className="w-5 h-5" />
-                                        )}
-                                    </button>
-                                )}
-                            </div>
+                            {formData.password && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                >
+                                    {showPassword ? (
+                                        <AiOutlineEye className="w-5 h-5" />
+                                    ) : (
+                                        <AiOutlineEyeInvisible className="w-5 h-5" />
+                                    )}
+                                </button>
+                            )}
                         </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
-                        >
-                            LOGIN
-                        </button>
-                    </form>
-
-                    <div className="flex justify-between items-center mt-4 text-sm">
-                        <div>
-                            <span className="text-gray-600">Don't have an account? </span>
-                            <button
-                                onClick={handleSignupClick}
-                                className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
-                            >
-                                Sign up
-                            </button>
-                        </div>
-                        <a
-                            onClick={handleForgotPasswordClick}
-                            className="text-purple-600 hover:text-purple-800 cursor-pointer"
-                        >
-                            Forgot Password?
-                        </a>
                     </div>
+                    <div className="h-2 mb-2">
+                        {errorOverall && (
+                            <p className="text-red-500 text-xs text-center">{errorOverall}</p>
+                        )}
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02] cursor-pointer"
+                    >
+                        LOGIN
+                    </button>
+                </form>
+
+                <div className="flex justify-between items-center mt-4 text-xs">
+                    <div>
+                        <span className="text-gray-600">Don't have an account? </span>
+                        <button
+                            onClick={handleSignupClick}
+                            className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
+                        >
+                            Register
+                        </button>
+                    </div>
+                    <a
+                        onClick={handleForgotPasswordClick}
+                        className="text-purple-600 hover:text-purple-800 cursor-pointer"
+                    >
+                        Forgot Password?
+                    </a>
                 </div>
-            </CustomModal>
-        </>
-    );
+            </div>
+        </CustomModal>
+        <ToastContainer
+            position="top-right"
+            autoClose={1500}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+        />
+    </>
+);
 };
 
 export default AdminLogin;

@@ -1,217 +1,235 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { CiLocationOn } from "react-icons/ci";
 import AmentiesModal from "./amentiesModal";
 import SwiperModal from "./Swiper";
-import { FaPhoneAlt, FaWhatsappSquare } from "react-icons/fa";
+import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import FilterModal from "./filter";
 import adds from "../../assets/adds.jpg";
+import { IoIosStar } from "react-icons/io";
+import axios from "axios";
 
 const Bussiness_List = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
   const [visiblePhoneId, setVisiblePhoneId] = useState(null);
-  const HotelDeatils = [
-    {
-      id: 1,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-    {
-      id: 2,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-    {
-      id: 3,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-    {
-      id: 4,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-    {
-      id: 5,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-    {
-      id: 6,
-      businessName: "GreenLeaf Cafe",
-      starRating: 4.5,
-      overallRating: 92,
-      address: "123 Lakeview Road, Karaikudi",
-      distanceKm: 2.3,
-      amenities: [
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-        "Free WiFi",
-        "Outdoor Seating",
-        "Pet Friendly",
-        "Live Music",
-        "Parking Available",
-      ],
-      phoneNumber: "+91 98765 43210",
-      whatsappNumber: "+91 98765 43210",
-      images: [
-        "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
-      ],
-    },
-  ];
+  
+  useEffect(() => {
+    const fetch = async () =>{
 
+      const res = await axios.get('http://192.168.1.33:5000/business')
+      console.log("saki", res.data.data)
+      setData(res.data.data);
+
+    }
+    fetch();
+  },[])
+
+  // const HotelDeatils = [
+  //   {
+  //     id: 1,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  //   {
+  //     id: 4,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  //   {
+  //     id: 5,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  //   {
+  //     id: 6,
+  //     businessName: "GreenLeaf Cafe",
+  //     starRating: 4.5,
+  //     overallRating: 92,
+  //     address: "123 Lakeview Road, Karaikudi",
+  //     distanceKm: 2.3,
+  //     amenities: [
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //       "Free WiFi",
+  //       "Outdoor Seating",
+  //       "Pet Friendly",
+  //       "Live Music",
+  //       "Parking Available",
+  //     ],
+  //     phoneNumber: "+91 98765 43210",
+  //     whatsappNumber: "+91 98765 43210",
+  //     images: [
+  //       "https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL1QxX0FQOThkUXFLblFCVUM5QlJHTGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjY0MCwiaGVpZ2h0Ijo2NDAsImZpdCI6Imluc2lkZSJ9LCJyb3RhdGUiOm51bGwsInRvRm9ybWF0IjogIndlYnAifX0=",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEtG1WpVqOwgFmCaZjAAuJp6NGICLH9NvoGw&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4G9tXT4UFFv3fhlPNyCPfTh7RPVQF8SjXXQ&s",
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_uomCDxZosAdJTVtxDuFVqLbNPcKsp_oK4Q&s",
+  //     ],
+  //   },
+  // ];
+
+  
   const [expandedBusinessId, setExpandedBusinessId] = useState(null);
 
   const toggleAmenities = (id) => {
@@ -219,13 +237,13 @@ const Bussiness_List = () => {
   };
 
   const [filterOpen, setFilterOpen] = useState(false);
+  console.log(data);
+  
 
   return (
     <>
-      <div className="flex">
-        <div className="xl:w-1/12"></div>
-
-        <div className="w-full xl:w-8/12">
+      <div className="flex cursor-pointer">
+        <div className="w-full xl:w-9/12">
           <div className="flex justify-center w-full flex-col">
             <div className="md:p-4 w-full xl:w-10/12">
               <div>
@@ -256,31 +274,36 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-2 xl:w-[83%] gap-5 flex flex-col md:p-4">
-              {HotelDeatils.map((data, i) => (
+            <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
+              {data.map((data, i) => (
                 <div
                   key={i}
-                  className="inline md:flex xl:w-[100%] md:gap-3 border border-[#edf0ed] shadow-xl p-3"
+                  className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300  p-3 rounded-lg"
                 >
                   {/* Swiper Image Slider */}
-                  <div className="w-full md:w-[25%]">
-                    <SwiperModal data={data} />
-                  </div>
+                  {/* <div className="w-full md:w-[25%]">
+                    <SwiperModal data={data.photos} />
+                  </div> */}
 
                   {/* Business Info */}
                   <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
                     <h2 className="text-xl font-semibold">
                       {data.businessName}
                     </h2>
-                    <h3>
-                      <span className="bg-green-600 text-sm p-1 text-center rounded text-white">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
                         {" "}
-                        {data.starRating}⭐
-                      </span>{" "}
-                      {data.overallRating} Ratings
-                    </h3>
+                        {data.ratings}
+                        <IoIosStar
+                          size={18}
+                          color="#FFD700"
+                          className="inline"
+                        />
+                      </div>{" "}
+                      {data.reviewCount} Ratings
+                    </div>
                     <p className="flex items-center">
-                      <CiLocationOn /> {data.address} - {data.distanceKm} km
+                      <CiLocationOn /> {data.address.formattedAddress}
                     </p>
                     {/* <div>
                                 <AmentiesModal
@@ -289,24 +312,24 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                    <div className="text-sm flex gap-2">
+                    <div className="text-sm flex gap-1">
                       <button
-                        onClick={() => setVisiblePhoneId(data.id)}
-                        className="bg-green-600 hover:bg-green-400 group group-hover:text-black flex rounded px-2 py-1 items-center text-white"
+                        onClick={() => setVisiblePhoneId(data._id)}
+                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-3 py-1 items-center text-white cursor-pointer"
                       >
                         <span className="text-md text-white px-1">
                           <FaPhoneAlt className="p-1 text-xl" />
                         </span>
-                        {visiblePhoneId === data.id
-                          ? data.phoneNumber
+                        {visiblePhoneId === data._id
+                          ? data.contactDetails.phone
                           : "Show Number"}
                       </button>
-                      {/* <button className="flex items-center border  border-gray-600 px-2 py-1 rounded font-medium group hover:bg-green-600">
-                      <span className="text-xl px-1 text-green-600 group-hover:text-white">
-                        <FaWhatsappSquare />
-                      </span>{" "}
-                      WhatsApp
-                    </button> */}
+                      <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                        <span className="text-xl px-1 text-white">
+                          <FaWhatsapp size={16} className="text-white" />
+                        </span>{" "}
+                        WhatsApp
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -315,12 +338,8 @@ const Bussiness_List = () => {
           </div>
         </div>
         <div className="hidden xl:block xl:w-3/12">
-          <div className="sticky top-40">
-            <img
-              src={adds}
-              alt="Advertisement"
-              className="max-h-[calc(100vh-200px)] object-contain"
-            />
+          <div className="sticky top-30">
+            <img src={adds} alt="Advertisement" className="h-[75%]" />
           </div>
         </div>
       </div>
