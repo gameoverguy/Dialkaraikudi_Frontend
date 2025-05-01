@@ -88,9 +88,10 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
                         });
                     }
                     localStorage.setItem('userData', JSON.stringify({
-                        name: response.data.name,
-                        email: response.data.email
+                        name: response.data.user.name,
+                        email: response.data.user.email
                     }));
+                    
                 } toast.success('Login successful!');
                 setTimeout(() => {
                     setShowLoginModal(false);
