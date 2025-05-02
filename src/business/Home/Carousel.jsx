@@ -38,7 +38,7 @@ const Carousel = () => {
     <div className="w-full overflow-hidden">
       <Slider {...settings}>
         {coursal.map((item) => (
-          <div key={item.id} className="p-2">
+          <div key={item.id} className="">
             <img
               src={item.image}
               alt="Slide"
