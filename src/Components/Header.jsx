@@ -38,8 +38,12 @@ const Header = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
-        Cookies.remove('userToken');
+        Cookies.remove('userToken', {
+            secure: true,
+            sameSite: 'Strict'
+        });
         setUserData(null);
+        window.location.reload(); // Add this to force a refresh
     };
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -119,13 +123,17 @@ const Header = () => {
                                         <span className="text-gray-700 font-medium text-sm">
                                             {userData.name}
                                         </span>
+                                        <span  onClick={handleLogout}> Close</span>
                                         
                                         {/* Dropdown Menu */}
                                         {isDropdownOpen && (
-                                            <div className="absolute text-right top-full right-0 mt-2 w-30 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
+                                            <div className="absolute z-20 text-right top-full right-0 mt-2 w-30 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
                                                 <button
-                                                    onClick={handleLogout}
-                                                    className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent event bubbling
+                                                        handleLogout();
+                                                    }}
+                                                    className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-blue-500 transition-colors duration-200"
                                                 >
                                                     <CiLogout className="text-xl text-red-500" />
                                                     <span>Logout</span>
