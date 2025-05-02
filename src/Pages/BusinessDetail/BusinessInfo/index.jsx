@@ -38,7 +38,7 @@ const BusinessInfo = ({ formData, businessId }) => {
               <img
                 src={formData?.business.photos[0]}
                 alt="Main"
-                className="w-full h-64 object-cover rounded-t-lg"
+                className="w-full h-80 object-cover rounded-t-lg"
               />
             </div>
           ) : (
@@ -47,14 +47,14 @@ const BusinessInfo = ({ formData, businessId }) => {
             </div>
           )}
         </div>
-        <div className="hidden md:block mb-6 max-h-100 overflow-hidden">
+        <div className="hidden md:block mb-6 min-h-90 overflow-hidden">
           <div className="grid grid-cols-4 gap-2">
             {formData?.business.photos?.length > 0 ? (
               <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer" onClick={() => handleImageClick(0)}>
                 <img
                   src={formData.business.photos[0]}
                   alt="Main"
-                  className="w-full h-full object-cover rounded-tl-lg"
+                  className="w-full h-80 object-cover rounded-tl-lg"
                 />
               </div>
             ) : (
@@ -71,11 +71,11 @@ const BusinessInfo = ({ formData, businessId }) => {
                   } relative cursor-pointer`}
                 onClick={() => formData?.business.photos?.[index] && handleImageClick(index)}
               >
-                {formData?.photos?.[index] ? (
+                {formData?.business.photos?.[index] ? (
                   <img
                     src={formData.business.photos[index]}
                     alt={`Image ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-60 object-cover"
                   />
                 ) : (
                   <div className="bg-gray-100 h-full flex items-center justify-center">
@@ -84,7 +84,7 @@ const BusinessInfo = ({ formData, businessId }) => {
                     </span>
                   </div>
                 )}
-                {index === 4 && formData?.photos?.length > 5 && (
+                {index === 4 && formData?.business.photos?.length > 5 && (
                   <div className="absolute inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center">
                     <span className="text-white text-lg font-semibold">
                       +{formData.business.photos.length - 5} more

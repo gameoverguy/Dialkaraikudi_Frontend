@@ -13,8 +13,12 @@ const ReviewPage = () => {
     // const { id } = useParams();
     const userData = JSON.parse(sessionStorage.getItem("userData"));
     const userId = userData?.user_id;
-// console.log(businessId);
+    // console.log(businessId);
+    const [selectedRating, setSelectedRating] = useState(rating);
 
+    const handleRatingClick = (newRating) => {
+        setSelectedRating(newRating);
+    };
     const handleSubmit = async () => {
         if (!comment.trim()) {
             setError('Please write your review');
@@ -53,43 +57,70 @@ const ReviewPage = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-4 mt-8">
-            <h1 className="text-2xl font-bold mb-6">Write a Review</h1>
+        <div className="min-h-screen bg-gray-50 py-12">
+            <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">
+                    Write a Review
+                </h1>
 
-            <div className="mb-6">
-                <p className="text-gray-600 mb-2">Your Rating</p>
-                <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, index) => (
-                        <FaStar
-                            key={index}
-                            className={`text-2xl ${index + 1 <= rating ? 'text-yellow-400' : 'text-gray-300'
+                <div className="mb-8 bg-gray-50 p-6 pl-0 rounded-lg">
+                    <p className="text-gray-700 mb-3 font-medium">Your Rating</p>
+                    <div className="flex items-center space-x-2 justify-center">
+                        {[...Array(5)].map((_, index) => (
+                            <FaStar
+                                key={index}
+                                className={`text-3xl transition-colors duration-200 cursor-pointer hover:text-yellow-400 ${index + 1 <= selectedRating ? 'text-yellow-400' : 'text-gray-300'
+                                    }`}
+                                onClick={() => handleRatingClick(index + 1)}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                <div className="space-y-6">
+                    <div>
+                        <label className="block text-gray-700 mb-3 font-medium">
+                            Your Review
+                        </label>
+                        <textarea
+                            className={`w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 min-h-[150px] ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'
                                 }`}
-                        />
-                    ))}
-                </div>
-            </div>
+                            placeholder="Share your experience with others..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        ></textarea>
+                        {error && (
+                            <p className="text-red-500 text-sm mt-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                {error}
+                            </p>
+                        )}
+                    </div>
 
-            <div className="space-y-4">
-                <div>
-                    <label className="block text-gray-700 mb-2">Your Review</label>
-                    <textarea
-                        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${error ? 'border-red-500' : 'border-gray-300'
+                    <button
+                        className={`w-full py-4 rounded-lg text-white font-medium transition-all duration-200 
+                            ${isSubmitting
+                                ? 'bg-purple-400 cursor-not-allowed'
+                                : 'bg-purple-600 hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5'
                             }`}
-                        rows="4"
-                        placeholder="Share your experience..."
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                    ></textarea>
-                    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                                Submitting...
+                            </div>
+                        ) : (
+                            'Submit Review'
+                        )}
+                    </button>
                 </div>
-
-                <button
-                    className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 disabled:bg-purple-300"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Submitting...' : 'Submit Review'}
-                </button>
             </div>
         </div>
     );
