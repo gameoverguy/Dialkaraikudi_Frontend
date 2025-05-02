@@ -21,7 +21,7 @@ const Photos = ({formData}) => {
       
       <div className="overflow-x-auto mt-4">
         <div className="flex gap-4">
-          {formData.imageUrls.map((image, index) => (
+          {formData?.imageUrls?.map((image, index) => (
             <div 
               key={index} 
               className="min-w-[10rem] cursor-pointer" 
@@ -50,7 +50,7 @@ const Photos = ({formData}) => {
           initialSlide={initialSlide}
           className="h-[70vh]"
         >
-          {formData.imageUrls.map((image, index) => (
+          {formData?.imageUrls?.map((image, index) => (
             <SwiperSlide key={index}>
               <div className="w-full h-full flex items-center justify-center">
                 <img
