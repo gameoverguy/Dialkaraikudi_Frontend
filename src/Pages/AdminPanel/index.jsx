@@ -16,6 +16,7 @@ import BusinessManagement from './BussinessManagement';
 import DashBoard from './DashBoard';
 import logo from '../../assets/bulb.png'
 import logo1 from '../../assets/logo_01.png'
+import HomePage from './Advertisment/HomePage';
 
 // Placeholder components - Replace these with your actual components
 const PlatformInfo = () => <div>Platform Info Content</div>;
@@ -181,7 +182,7 @@ const AdminPanel = () => {
     'platform': <PlatformInfo />,
     'gateway': <GatewayConfig />,
     'categories': <CategoryManagement />,
-    'home': <CategoryManagement />,
+    'home': <HomePage />,
     'business': <CategoryManagement />
   };
 

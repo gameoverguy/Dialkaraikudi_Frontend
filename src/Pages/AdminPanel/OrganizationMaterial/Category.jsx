@@ -8,7 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { API } from '../../../../config/config';
 import FloatingInput from '../../../Components/FloatingInput';
-import { MdCancel } from 'react-icons/md';
+import { MdCancel, MdEdit } from 'react-icons/md';
 import { uploadToCloudinary } from '../../../utils/cloudinaryUpload';
 
 const CategoryManagement = () => {
@@ -190,9 +190,11 @@ const CategoryManagement = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Category Management</h1>
-        <button
+       <div className='shadow bg-white p-6 rounded-lg'>
+       <h1 className="text-2xl font-bold mb-6">Category Management</h1>
+      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+
+        {/* <button
           onClick={() => {
             setSelectedCategory(null);
             setShowModal(true);
@@ -200,10 +202,10 @@ const CategoryManagement = () => {
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
         >
           Add
-        </button>
+        </button> */}
       </div>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap mt-4 bg-white p-4 shadow rounded gap-4">
         {categories.map((category) => (
           <div
             key={category.id}
@@ -215,19 +217,20 @@ const CategoryManagement = () => {
               </h3>
             </div>
             <button
+              onClick={() => handleEdit(category)}
+              className="cursor-pointer mr-2 text-green-500  hover:text-green-800 transition-all duration-200"
+              title="Edit"
+            >
+              <FaEdit className="text-base" />
+            </button>
+            <button
               onClick={() => handleDelete(category)}
               className="cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
               title="Delete"
             >
               <MdCancel className="text-base" />
             </button>
-            <button
-              onClick={() => handleEdit(category)}
-              className="cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
-              title="Delete"
-            >
-              <MdCancel className="text-base" />
-            </button>
+            
           </div>
         ))}
         
@@ -404,13 +407,13 @@ const CategoryManagement = () => {
                 setShowDeleteModal(false);
                 setCategoryToDelete(null);
               }}
-              className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
+              className="px-6 py-2.5 cursor-pointer rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
             >
               Cancel
             </button>
             <button
               onClick={confirmDelete}
-              className="px-6 py-2.5 rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-200"
+              className="px-6 py-2.5 cursor-pointer rounded-lg text-white bg-red-600 hover:bg-red-700 transition duration-200"
             >
               Yes
             </button>

@@ -11,6 +11,7 @@ import { API } from '../../../../config/config'
 import FloatingInput from '../../../Components/FloatingInput';
 import FloatingSelect from '../../../Components/FloatingInput/DropDown';
 import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
+import { MdCancel } from 'react-icons/md';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -178,7 +179,7 @@ const BusinessManagement = () => {
     if (!formData.phone) {
       newErrors.phone = 'Phone number is required';
     } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
-      newErrors.phone = 'Invalid phone number. Must start with 6-9 and be 10 digits';
+      newErrors.phone = 'Invalid phone number';
     }
 
     if (!formData.email) {
@@ -375,7 +376,7 @@ const BusinessManagement = () => {
   return (
     <div className="p-6">
        <div className='shadow bg-white p-6 rounded-lg'>
-      <h1 className="text-2xl font-bold mb-6">Bussiness Management</h1>
+      <h1 className="text-2xl font-bold mb-6">Business Management</h1>
       <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
       </div>
       <CustomTable
@@ -459,7 +460,7 @@ const BusinessManagement = () => {
             </div>
           </div>
 
-          <div>
+          <div className='mt-4'>
             <FloatingInput
               type="textarea"
               name="description"
@@ -471,7 +472,7 @@ const BusinessManagement = () => {
             />
           </div>
 
-          <div>
+          <div className='mt-4'>
             <FloatingInput
               type="textarea"
               name="address"
@@ -512,16 +513,14 @@ const BusinessManagement = () => {
                     <img
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="h-32 w-32 object-cover rounded-lg"
+                      className="h-20 w-20 object-cover rounded-lg"
                     />
                     <button
                       type="button"
                       onClick={() => removePhoto(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-200"
+                      className="absolute cursor-pointer -top-2 right-5 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
+                     <MdCancel/>
                     </button>
                   </div>
                 ))}
@@ -604,7 +603,7 @@ const BusinessManagement = () => {
                     <img
                       src={photo}
                       alt={`${selectedBusiness.name} photo ${index + 1}`}
-                      className="h-32 w-full object-cover rounded-lg transition-transform duration-200 hover:scale-105"
+                      className="h-32 w-32  object-cover rounded-lg transition-transform duration-200 hover:scale-105"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs py-1 px-2 rounded-b-lg">
                       Photo {index + 1}
