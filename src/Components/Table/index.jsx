@@ -60,7 +60,7 @@ const CustomTable = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full p-6 bg-white mt-4 shadow rounded-lg">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <div className="relative">
@@ -92,7 +92,7 @@ const CustomTable = ({
                 <th
                   key={column.key}
                   onClick={() => requestSort(column.key)}
-                  className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-orange-100 border-b"
+                  className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-orange-100 border-b border-gray-500"
                 >
                   <div className="flex items-center justify-center space-x-1">
                     <span>{column.label}</span>
@@ -106,7 +106,7 @@ const CustomTable = ({
             {paginatedData?.map((item, index) => (
               <tr 
                 key={index} 
-                className="hover:bg-green-100 transition-colors duration-150 ease-in-out border-b last:border-b-0"
+                className="hover:bg-green-100 transition-colors duration-150 ease-in-out border-gray-400 border-b last:border-b-0"
               >
                 {columns.map((column) => (
                   <td 

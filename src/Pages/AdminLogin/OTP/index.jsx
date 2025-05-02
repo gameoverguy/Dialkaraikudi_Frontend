@@ -143,7 +143,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                         We have sent a verification code to <span className="font-medium">{email}</span>
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-2">
+                    <form onSubmit={handleSubmit}>
                         <div className="flex justify-center gap-4">
                             {otp.map((data, index) => (
                                 <input
@@ -160,12 +160,12 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                             ))}
                         </div>
 
-                        <div className='h-3'>
+                        {/* <div className='h-3'>
                             {error && (
                                 <p className="text-red-500 text-xs text-center">{error}</p>
                             )}
-                        </div>
-                        <div className='h-3'>
+                        </div> */}
+                        <div className='h-5'>
                             {(error || errorOverall) && (
                                 <p className="text-red-500 text-xs text-center">
                                     {error || errorOverall}

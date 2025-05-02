@@ -21,14 +21,14 @@ const Photos = ({formData}) => {
       
       <div className="overflow-x-auto mt-4">
         <div className="flex gap-4">
-          {formData.imageUrls.map((image, index) => (
+          {formData?.business.photos?.map((image, index) => (
             <div 
               key={index} 
               className="min-w-[10rem] cursor-pointer" 
               onClick={() => handleImageClick(index)}
             >
               <img
-                src={image.url}
+                src={image}
                 alt={`Photo ${index + 1}`}
                 className="w-full h-32 object-cover rounded-md shadow-md hover:opacity-90 transition-opacity"
               />
@@ -50,11 +50,11 @@ const Photos = ({formData}) => {
           initialSlide={initialSlide}
           className="h-[70vh]"
         >
-          {formData.imageUrls.map((image, index) => (
+          {formData?.business.photos?.map((image, index) => (
             <SwiperSlide key={index}>
               <div className="w-full h-full flex items-center justify-center">
                 <img
-                  src={image.url}
+                  src={image}
                   alt={`Gallery ${index + 1}`}
                   className="min-h-full min-w-full object-contain"
                 />

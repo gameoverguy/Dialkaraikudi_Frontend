@@ -10,6 +10,7 @@ import axios from 'axios';
 import { API } from '../../../../config/config'
 import FloatingInput from '../../../Components/FloatingInput';
 import FloatingSelect from '../../../Components/FloatingInput/DropDown';
+import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -307,10 +308,12 @@ const BusinessManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        const uploadedUrls = await uploadMultipleToCloudinary(formData.photos);
+
         const requestBody = {
           businessName: formData.name,
           description: formData.description,
-          category: formData.category, // This will now be the category ID
+          category: formData.category,
           contactDetails: {
             phone: formData.phone,
             email: formData.email
@@ -318,9 +321,7 @@ const BusinessManagement = () => {
           address: {
             addressArea: formData.address
           },
-          photos: formData.photos.map(photo =>
-            typeof photo === 'string' ? photo : URL.createObjectURL(photo)
-          )
+          photos: uploadedUrls
         };
 
         if (selectedBusiness) {
@@ -337,7 +338,7 @@ const BusinessManagement = () => {
         setSelectedBusiness(null);
       } catch (error) {
         console.error('Error handling business:', error);
-        toast.error('Failed to process business');
+        toast.error(error.response?.data?.message || 'Failed to process business');
       }
     }
   };
@@ -373,7 +374,10 @@ const BusinessManagement = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Business Management</h1>
+       <div className='shadow bg-white p-6 rounded-lg'>
+      <h1 className="text-2xl font-bold mb-6">Bussiness Management</h1>
+      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+      </div>
       <CustomTable
         columns={columns}
         data={businesses}
