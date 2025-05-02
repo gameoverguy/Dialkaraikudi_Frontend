@@ -37,7 +37,7 @@ const Header = () => {
     }, [showLoginModal]);
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
+        sessionStorage.removeItem('userData');
         Cookies.remove('userToken', {
             secure: true,
             sameSite: 'Strict'
