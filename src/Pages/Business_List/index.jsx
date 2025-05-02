@@ -23,7 +23,7 @@ const Bussiness_List = () => {
     const fetch = async () => {
 
       const res = await axios.get('http://192.168.1.33:5000/business')
-      console.log("saki", res.data.data)
+      // console.log("saki", res.data.data)
       setData(res.data.data);
 
     }
@@ -37,12 +37,9 @@ const Bussiness_List = () => {
   };
 
   const [filterOpen, setFilterOpen] = useState(false);
-  console.log(data);
+  // console.log(data);
   const handleBusinessClick = (businessId) => {
-    const selectedBusiness = data.find(business => business._id === businessId);
-    navigate(`/business/${businessId}`, { 
-      state: selectedBusiness
-    });
+    navigate(`/business/${businessId}`, { state: { businessId } });
   };
 
   return (

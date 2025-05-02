@@ -8,7 +8,7 @@ const Description = ({ formData }) => {
                     Description
                 </h1>
                 <p className="text-sm text-gray-700 mb-3">
-                    {formData?.description}                </p>
+                    {formData?.business.description}                </p>
             </div>
         </React.Fragment>
     )
