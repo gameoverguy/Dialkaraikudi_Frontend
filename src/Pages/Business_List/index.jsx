@@ -11,6 +11,7 @@ import adds from "../../assets/adds.jpg";
 import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import banner from "../../assets/banner.jpg";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Bussiness_List = () => {
     }
     fetch();
   }, [])
-
+  
   const [expandedBusinessId, setExpandedBusinessId] = useState(null);
 
   const toggleAmenities = (id) => {
@@ -47,7 +48,21 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex cursor-pointer">
+    <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
+      {/* Image Section */}
+      <div className="w-full">
+        <img
+          src={banner} // Replace with your actual image URL
+          alt="Luxury Home"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      
+    </div>
+
+
+      <div className="flex cursor-pointer py-5">
         <div className="w-full xl:w-9/12">
           <div className="flex justify-center w-full flex-col">
             <div className="md:p-4 w-full xl:w-10/12">
@@ -120,7 +135,7 @@ const Bussiness_List = () => {
                     <div className="text-sm flex gap-1">
                       <button
                         onClick={() => setVisiblePhoneId(data._id)}
-                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-3 py-1 items-center text-white cursor-pointer"
+                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
                       >
                         <span className="text-md text-white px-1">
                           <FaPhoneAlt className="p-1 text-xl" />
