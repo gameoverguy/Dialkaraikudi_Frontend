@@ -51,7 +51,9 @@ const HomePage = () => {
 
   return (
     <>
+    <div className="">
     <Carousel />
+    </div>
       
   
 
