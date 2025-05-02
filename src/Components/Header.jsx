@@ -35,7 +35,6 @@ const Header = () => {
             setUserData(parsedData);
         }
     }, [showLoginModal]);
-console.log(userData);
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
@@ -225,6 +224,7 @@ console.log(userData);
                 isOpen={showResetPasswordModal}
                 onClose={() => setShowResetPasswordModal(false)}
                 setShowLoginModal={setShowLoginModal}
+                email={otpEmail}
             />
         </>
     )

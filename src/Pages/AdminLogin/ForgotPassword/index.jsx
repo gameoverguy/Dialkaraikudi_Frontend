@@ -54,6 +54,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
                         setShowOTPModal(true);
                     }
                     toast.success('Reset password link sent successfully!');
+
                     setEmail("");
                     setError("");
                     onClose();
