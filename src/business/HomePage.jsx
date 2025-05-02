@@ -6,6 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Home/Carousel";
+import Banner from "./Home/Banner";
 
 const serviceCategories = {
   essentialServices: [
@@ -76,7 +77,7 @@ const HomePage = () => {
                 {service.icon}
               </span>
             </div>
-            <span className="text-xs text-center text-gray-600 font-medium group-hover:text-gray-900 transition-colors duration-300">
+            <span className="text-xs text-center text-gray-400 font-medium group-hover:text-gray-900 transition-colors duration-300">
               {service.name}
             </span>
           </a>
@@ -95,133 +96,63 @@ const HomePage = () => {
 
 
       {/* 22KT Jewelry Showcase */}
-      <div className="bg-blue-950 py-12 mt-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left Content */}
-            <div className="flex flex-col justify-center text-white">
-              <h2 className="text-5xl font-serif mb-2">Dial Karaikudi</h2>
-              <div className="mb-6">
-                <p className="text-lg mb-1">Grab for Advertising with us</p>
-                <p className="text-2xl font-light mb-4">
-                  starting your own Business Now
-                </p>
-                <button className="bg-white text-blue-950 px-6 py-2 rounded-md hover:bg-gray-100 transition-colors duration-300 uppercase text-sm font-semibold">
-                  Signup now
-                </button>
-              </div>
-            </div>
-
-            {/* Right Swiper */}
-            <div>
-              <Swiper
-                spaceBetween={15}
-                slidesPerView={4}
-                navigation={true}
-                modules={[Navigation]}
-                className="jewelry-swiper"
-                breakpoints={{
-                  320: {
-                    slidesPerView: 1,
-                    spaceBetween: 10,
-                  },
-                  640: {
-                    slidesPerView: 2,
-                    spaceBetween: 10,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                    spaceBetween: 12,
-                  },
-                  1024: {
-                    slidesPerView: 4,
-                    spaceBetween: 15,
-                  },
-                  1280: {
-                    slidesPerView: 5,
-                    spaceBetween: 15,
-                  },
-                }}
-              >
-                <SwiperSlide>
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <div className="aspect-[3/4] overflow-hidden">
-                      <img
-                        src="https://4.imimg.com/data4/DA/MJ/MY-2539624/plumber-services.png"
-                        alt="Plumbing"
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <div className="aspect-[3/4] overflow-hidden">
-                      <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS51yo6fFV1-sQ-9-CqK_TotKCEmtwpnvaFjQ&s"
-                        alt="Jewelry"
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <div className="aspect-[3/4] overflow-hidden">
-                      <img
-                        src="https://acservicegurgaon.com/ac-repair-sushant-lok.jpg"
-                        alt="Jewelry"
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <div className="aspect-[3/4] overflow-hidden">
-                      <img
-                        src="https://img.freepik.com/free-vector/hand-drawn-painter-cartoon-illustration_23-2151046691.jpg?semt=ais_hybrid&w=740"
-                        alt="Jewelry"
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <div className="aspect-[3/4] overflow-hidden">
-                      <img
-                        src="https://www.safetyandhealthmagazine.com/ext/resources/images/safety-tips/welder.jpg?t=1483464014&width=768"
-                        alt="Jewelry"
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-                </SwiperSlide>
-              </Swiper>
-              {/* <div className="flex justify-end mt-4">
-                <button className="bg-white text-blue-950 px-6 py-2 rounded-md hover:bg-gray-100 transition-colors duration-300 text-sm font-semibold">
-                  View Full Collection
-                </button>
-              </div> */}
-            </div>
-          </div>
+      <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
+      {/* Left Content */}
+      <div className="text-white">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif mb-3">Dial Karaikudi</h2>
+        <div className="mb-6">
+          <p className="text-base sm:text-lg mb-1">Grab for Advertising with us</p>
+          <p className="text-lg sm:text-xl md:text-2xl font-light mb-4">
+            Starting your own Business Now
+          </p>
+          <button className="bg-white text-blue-950 px-6 py-2 rounded-md hover:bg-gray-100 transition duration-300 uppercase text-sm font-semibold">
+            Signup now
+          </button>
         </div>
-
-        <style jsx>{`
-          .jewelry-swiper .swiper-button-next,
-          .jewelry-swiper .swiper-button-prev {
-            color: white;
-            width: 40px;
-            height: 40px;
-          }
-
-          .jewelry-swiper .swiper-button-next:after,
-          .jewelry-swiper .swiper-button-prev:after {
-            font-size: 20px;
-          }
-        `}</style>
       </div>
+
+      {/* Right Swiper */}
+      <div>
+        <Swiper
+          spaceBetween={15}
+          navigation={true}
+          modules={[Navigation]}
+          breakpoints={{
+            320: { slidesPerView: 1, spaceBetween: 10 },
+            640: { slidesPerView: 2, spaceBetween: 12 },
+            768: { slidesPerView: 3, spaceBetween: 14 },
+            1024: { slidesPerView: 4, spaceBetween: 15 },
+            1280: { slidesPerView: 5, spaceBetween: 18 },
+          }}
+          className="jewelry-swiper"
+        >
+          {[
+            "https://4.imimg.com/data4/DA/MJ/MY-2539624/plumber-services.png",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS51yo6fFV1-sQ-9-CqK_TotKCEmtwpnvaFjQ&s",
+            "https://acservicegurgaon.com/ac-repair-sushant-lok.jpg",
+            "https://img.freepik.com/free-vector/hand-drawn-painter-cartoon-illustration_23-2151046691.jpg?semt=ais_hybrid&w=740",
+            "https://www.safetyandhealthmagazine.com/ext/resources/images/safety-tips/welder.jpg?t=1483464014&width=768",
+          ].map((src, i) => (
+            <SwiperSlide key={i}>
+              <div className="rounded-lg overflow-hidden">
+                <div className="lg:aspect-[3/4] overflow-hidden flex justify-center items-center">
+                  <img
+                    src={src}
+                    alt={`Service ${i + 1}`}
+                    className="w-[50%] h-[25vh] lg:w-full lg:h-[25vh] object-cover transition-transform duration-300 hover:scale-105 rounded-lg"
+                  />
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </div>
+  </div>
+</div>
+
 
       <div className="grid grid-cols-1 gap-5 w-full px-4 lg:px-40 py-10">
   <div className="border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 bg-white text-center">
@@ -343,7 +274,7 @@ const HomePage = () => {
         "https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_hotels_2024.webp",
       ].map((src, i) => (
         <SwiperSlide key={i} className="flex items-center justify-center bg-gray-100">
-          <img src={src} alt={`Slide ${i + 1}`} className="w-full h-full object-cover rounded" />
+          <img src={src} alt={`Slide ${i + 1}`} className="w-full h-full object-fit-cover rounded" />
         </SwiperSlide>
       ))}
     </Swiper>
@@ -369,7 +300,7 @@ const HomePage = () => {
         "https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/ipl2025web.png",
       ].map((src, i) => (
         <SwiperSlide key={i} className="flex items-center justify-center bg-gray-100">
-          <img src={src} alt={`Slide ${i + 4}`} className="w-full h-full object-cover rounded" />
+          <img src={src} alt={`Slide ${i + 4}`} className="w-full h-full object-fit-cover rounded" />
         </SwiperSlide>
       ))}
     </Swiper>
@@ -480,10 +411,8 @@ const HomePage = () => {
 </div>
 
 
-
-
-
-      
+<Banner />
+  
     
     </>
   );
