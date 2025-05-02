@@ -51,6 +51,11 @@ const AdminPanel = () => {
   const organizationItems = [
     { key: 'categories', label: 'Categories' },
   ];
+  
+  const advertisementItems = [
+    { key: 'home', label: 'Home Page' },
+    { key: 'business', label: 'Business Listing Page' },
+  ];
 
   const menuItems = [
     {
@@ -79,6 +84,12 @@ const AdminPanel = () => {
       icon: <MdSettings size={20} />,
       label: 'Settings',
       children: settingsItems,
+    },
+    {
+      key: '6',
+      icon: <MdSettings size={20} />,
+      label: 'Advertisement',
+      children: advertisementItems,
     },
 
   ];
@@ -169,7 +180,9 @@ const AdminPanel = () => {
     '3': <BusinessManagement />,
     'platform': <PlatformInfo />,
     'gateway': <GatewayConfig />,
-    'categories': <CategoryManagement />
+    'categories': <CategoryManagement />,
+    'home': <CategoryManagement />,
+    'business': <CategoryManagement />
   };
 
   // Get the current component based on selected key

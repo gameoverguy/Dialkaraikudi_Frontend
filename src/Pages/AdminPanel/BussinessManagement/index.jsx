@@ -10,6 +10,7 @@ import axios from 'axios';
 import { API } from '../../../../config/config'
 import FloatingInput from '../../../Components/FloatingInput';
 import FloatingSelect from '../../../Components/FloatingInput/DropDown';
+import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -307,29 +308,7 @@ const BusinessManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Upload all photos to Cloudinary first
-        const uploadedUrls = await Promise.all(
-          formData.photos.map(async (photo) => {
-            // Skip if it's already a URL
-            if (typeof photo === 'string') return photo;
-
-            const cloudinaryData = new FormData();
-            cloudinaryData.append('file', photo);
-            cloudinaryData.append('upload_preset', 'image_url');
-            cloudinaryData.append('cloud_name', 'dkbteljtz');
-
-            const cloudinaryResponse = await fetch(
-              `https://api.cloudinary.com/v1_1/dkbteljtz/image/upload`,
-              {
-                method: 'POST',
-                body: cloudinaryData,
-              }
-            );
-
-            const cloudinaryResult = await cloudinaryResponse.json();
-            return cloudinaryResult.secure_url;
-          })
-        );
+        const uploadedUrls = await uploadMultipleToCloudinary(formData.photos);
 
         const requestBody = {
           businessName: formData.name,
@@ -342,7 +321,7 @@ const BusinessManagement = () => {
           address: {
             addressArea: formData.address
           },
-          photos: uploadedUrls // Use the Cloudinary URLs
+          photos: uploadedUrls
         };
 
         if (selectedBusiness) {
