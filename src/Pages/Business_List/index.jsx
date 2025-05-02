@@ -10,24 +10,26 @@ import FilterModal from "./filter";
 import adds from "../../assets/adds.jpg";
 import { IoIosStar } from "react-icons/io";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
 
 const Bussiness_List = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [visiblePhoneId, setVisiblePhoneId] = useState(null);
-  
+
   useEffect(() => {
-    const fetch = async () =>{
+    const fetch = async () => {
 
       const res = await axios.get('http://192.168.1.33:5000/business')
-      console.log("saki", res.data.data)
+      // console.log("saki", res.data.data)
       setData(res.data.data);
 
     }
     fetch();
-  },[])
+  }, [])
   
   const [expandedBusinessId, setExpandedBusinessId] = useState(null);
 
@@ -36,8 +38,10 @@ const Bussiness_List = () => {
   };
 
   const [filterOpen, setFilterOpen] = useState(false);
-  console.log(data);
-  
+  // console.log(data);
+  const handleBusinessClick = (businessId) => {
+    navigate(`/business/${businessId}`, { state: { businessId } });
+  };
 
   return (
     <>
@@ -91,7 +95,7 @@ const Bussiness_List = () => {
               {data.map((data, i) => (
                 <div
                   key={i}
-                  className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300  p-3 rounded-lg"
+                  className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
                 >
                   {/* Swiper Image Slider */}
                   {/* <div className="w-full md:w-[25%]">
@@ -100,7 +104,7 @@ const Bussiness_List = () => {
 
                   {/* Business Info */}
                   <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
-                    <h2 className="text-xl font-semibold">
+                    <h2 className="text-xl font-semibold" onClick={() => handleBusinessClick(data._id)}>
                       {data.businessName}
                     </h2>
                     <div className="flex items-center gap-2">

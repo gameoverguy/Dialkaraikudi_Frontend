@@ -1,5 +1,5 @@
 import React from 'react';
-import homebanner from "../../assets/home-banner.webp";
+import homebanner from "../../assets/home-banner.jpg";
 
 function Banner() {
   return (
@@ -7,7 +7,7 @@ function Banner() {
       <img
         src={homebanner}
         alt="Home Banner"
-        className="w-full h-[30vh] sm:h-[35vh] md:h-[40vh] lg:h-[25vh] object-fit-cover rounded-md"
+        className="w-full h-[30vh] md:h-[40vh] lg:h-[30vh] object-fit-cover rounded-md"
       />
     </div>
   );

@@ -5,24 +5,22 @@ import CustomModal from '../../../Components/modal';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
-import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import {API} from '../../../../config/config'
+import { FaCloudUploadAlt, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { API } from '../../../../config/config';
 import FloatingInput from '../../../Components/FloatingInput';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { MdCancel } from 'react-icons/md';
+import { uploadToCloudinary } from '../../../utils/cloudinaryUpload';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    image: null
-  });
+  const [formData, setFormData] = useState({ name: '', image: null });
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [viewModalOpen, setViewModalOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(null);
 
   const columns = [
     {
@@ -38,11 +36,7 @@ const CategoryManagement = () => {
       key: 'image',
       label: 'Image',
       render: (row) => (
-        <img 
-          src={row.imageUrl} 
-          alt={row.name} 
-          className="w-16 h-16 object-cover rounded"
-        />
+        <img src={row.imageUrl} alt={row.name} className="w-16 h-16 object-cover rounded" />
       )
     },
     {
@@ -50,19 +44,10 @@ const CategoryManagement = () => {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2 justify-center">
-        
-          <button
-            onClick={() => handleEdit(row)}
-            className="p-2 text-green-500 transition-colors"
-            title="Edit"
-          >
+          <button onClick={() => handleEdit(row)} className="p-2 text-green-500 transition-colors" title="Edit">
             <FaEdit className="text-sm cursor-pointer" />
           </button>
-          <button
-            onClick={() => handleDelete(row)}
-            className="p-2 text-red-500 transition-colors"
-            title="Delete"
-          >
+          <button onClick={() => handleDelete(row)} className="p-2 text-red-500 transition-colors" title="Delete">
             <FaTrashAlt className="text-sm cursor-pointer" />
           </button>
         </div>
@@ -72,7 +57,6 @@ const CategoryManagement = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
     if (!formData.name) {
       newErrors.name = 'Category name is required';
     } else if (formData.name.length > 25) {
@@ -81,7 +65,6 @@ const CategoryManagement = () => {
       newErrors.name = 'Only letters and spaces are allowed';
     }
 
-    // Only validate image if it's a new category or if user is changing the image
     if (!selectedCategory && !formData.image) {
       newErrors.image = 'Image is required';
     } else if (formData.image && formData.image.size > 2 * 1024 * 1024) {
@@ -90,30 +73,14 @@ const CategoryManagement = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-};
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
     if (name === 'name') {
-      // Only allow letters and spaces
       const onlyLetters = value.replace(/[^a-zA-Z\s]/g, '');
-      setFormData(prev => ({
-        ...prev,
-        [name]: onlyLetters
-      }));
-      
-      if (value !== onlyLetters) {
-        setErrors(prev => ({
-          ...prev,
-          name: 'Only letters and spaces are allowed'
-        }));
-      } else {
-        setErrors(prev => ({
-          ...prev,
-          name: ''
-        }));
-      }
+      setFormData(prev => ({ ...prev, [name]: onlyLetters }));
+      setErrors(prev => ({ ...prev, name: value !== onlyLetters ? 'Only letters and spaces are allowed' : '' }));
     }
   };
 
@@ -121,30 +88,18 @@ const CategoryManagement = () => {
     const file = acceptedFiles[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        setErrors(prev => ({
-          ...prev,
-          image: 'Image size must be less than 2MB'
-        }));
+        setErrors(prev => ({ ...prev, image: 'Image size must be less than 2MB' }));
         return;
       }
-
-      setFormData(prev => ({
-        ...prev,
-        image: file
-      }));
+      setFormData(prev => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
-      setErrors(prev => ({
-        ...prev,
-        image: ''
-      }));
+      setErrors(prev => ({ ...prev, image: '' }));
     }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
-    },
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
     maxFiles: 1
   });
 
@@ -171,80 +126,42 @@ const CategoryManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Convert display name to category name format (lowercase with underscores)
-        const categoryName = formData.name
-          .toLowerCase()
-          .trim()
-          .replace(/\s+/g, '_');
-  
-        // Build plain object for JSON
+        let imageUrl = null;
+        if (formData.image) {
+          imageUrl = await uploadToCloudinary(formData.image);
+        }
+
         const payload = {
-          categoryName: categoryName,
+          categoryName: formData.name.toLowerCase().trim().replace(/\s+/g, '_'),
           displayName: formData.name.trim(),
           isActive: true,
-          // iconUrl: formData.image (not supported unless base64)
+          iconUrl: imageUrl
         };
-  
-        // If sending an image, you must base64 encode it manually (optional):
-        if (formData.image) {
-          const base64 = await toBase64(formData.image);
-          payload.iconBase64 = base64; // send this instead
-        }
-  
+
         if (selectedCategory) {
-          // Update existing category
-          await axios.put(
-            `${API}/categories/${selectedCategory.id}`,
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          await axios.put(`${API}/categories/${selectedCategory.id}`, payload);
           toast.success('Category updated successfully');
         } else {
-          // Create new category
-          const response = await axios.post(
-            `${API}/categories`,
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
-  
-          if (response.data) {
-            toast.success('Category added successfully');
-          }
+          await axios.post(`${API}/categories`, payload);
+          toast.success('Category added successfully');
         }
-  
-        // Refresh categories list
+
         await fetchCategories();
-  
-        // Reset form
         setShowModal(false);
-        setImagePreview(null);
-        setErrors({});
-        setFormData({ name: '', image: null });
-        setSelectedCategory(null);
+        resetForm();
       } catch (error) {
         console.error('Error handling category:', error);
         toast.error(error.response?.data?.message || 'Failed to process category');
       }
     }
   };
-  
-  // Helper: convert image file to base64 string
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  
+
+  const resetForm = () => {
+    setImagePreview(null);
+    setErrors({});
+    setFormData({ name: '', image: null });
+    setSelectedCategory(null);
+  };
 
   const confirmDelete = async () => {
     try {
@@ -261,10 +178,7 @@ const CategoryManagement = () => {
 
   const handleEdit = (category) => {
     setSelectedCategory(category);
-    setFormData({
-      name: category.name,
-      image: null
-    });
+    setFormData({ name: category.name, image: null });
     setImagePreview(category.imageUrl);
     setShowModal(true);
   };
@@ -273,8 +187,6 @@ const CategoryManagement = () => {
     setCategoryToDelete(category);
     setShowDeleteModal(true);
   };
-
-
 
   return (
     <div className="p-6">
@@ -304,10 +216,17 @@ const CategoryManagement = () => {
             </div>
             <button
               onClick={() => handleDelete(category)}
-              className="p-1.5 cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
+              className="cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
               title="Delete"
             >
-              <FaTrashAlt className="text-sm" />
+              <MdCancel className="text-base" />
+            </button>
+            <button
+              onClick={() => handleEdit(category)}
+              className="cursor-pointer bg-white rounded-full text-red-500 shadow-md hover:bg-red-500 hover:text-white transition-all duration-200"
+              title="Delete"
+            >
+              <MdCancel className="text-base" />
             </button>
           </div>
         ))}
@@ -331,10 +250,7 @@ const CategoryManagement = () => {
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
-          setFormData({ name: '', image: null });
-          setImagePreview(null);
-          setErrors({});
-          setSelectedCategory(null);
+          resetForm();
         }}
         title={selectedCategory ? "Edit Category" : "Add Category"}
       >
@@ -393,7 +309,7 @@ const CategoryManagement = () => {
                   }}
                   className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-200 cursor-pointer"
                 >
-                 
+               
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -433,7 +349,7 @@ const CategoryManagement = () => {
       </CustomModal>
 
       {/* View Modal */}
-      {/* <CustomModal
+      <CustomModal
         isOpen={viewModalOpen}
         onClose={() => {
           setViewModalOpen(false);
@@ -468,7 +384,7 @@ const CategoryManagement = () => {
             </div>
           </div>
         )}
-      </CustomModal> */}
+      </CustomModal>
 
       <CustomModal
         isOpen={showDeleteModal}

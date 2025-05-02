@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FloatingInput from "../../Components/FloatingInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomModal from "../../Components/modal";
 import { toast, ToastContainer } from 'react-toastify';
@@ -87,10 +86,13 @@ const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIs
                             sameSite: 'Strict'
                         });
                     }
-                    localStorage.setItem('userData', JSON.stringify({
-                        name: response.data.name,
-                        email: response.data.email
+                    sessionStorage.setItem('userData', JSON.stringify({
+
+                        user_id: response.data.user.id,
+                        name: response.data.user.name,
+                        email: response.data.user.email
                     }));
+                    
                 } toast.success('Login successful!');
                 setTimeout(() => {
                     setShowLoginModal(false);
