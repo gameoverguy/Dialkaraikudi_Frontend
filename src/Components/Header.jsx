@@ -11,28 +11,57 @@ import OTP from '../Pages/AdminLogin/OTP'
 import ResetPassword from '../Pages/AdminLogin/ResetPassword'
 import { useLoginModal } from '../context/LoginContext'
 import Cookies from 'js-cookie';
+import {  useRef } from 'react'
+import { CiLogout } from 'react-icons/ci'
+import { Link } from 'react-router-dom'
+import LocationTracker from './LocationTracker';
 
 const Header = () => {
     const { showLoginModal, setShowLoginModal } = useLoginModal();
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
     const [userData, setUserData] = useState(null);
-    // const navigate = useNavigate()
-    const [showOTPModal, setShowOTPModal] = useState(false); // New state for OTP modal
+    const [showOTPModal, setShowOTPModal] = useState(false);
     const [otpEmail, setOtpEmail] = useState('');
     const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
+        console.log('Stored user data:', storedUserData);
+        
         if (storedUserData) {
-            setUserData(JSON.parse(storedUserData));
+            const parsedData = JSON.parse(storedUserData);
+            console.log('Parsed user data:', parsedData);
+            setUserData(parsedData);
         }
-    }, [showLoginModal]); // Re-check when login modal closes
+    }, [showLoginModal]);
+console.log(userData);
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
         Cookies.remove('userToken');
         setUserData(null);
+    };
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleLocationSelect = (location) => {
+        // You can handle the location selection here
+        console.log('Selected location:', location);
     };
 
     return (
@@ -41,14 +70,12 @@ const Header = () => {
                 <div className='md:w-11/12 mx-auto flex'>
                     <div className='w-full xl:w-7/12 flex space-x-6 items-center'>
                         {/* Logo */}
-                        <img src={Logo} alt="Logo" className='h-10 md:h-12 object-contain' />
-
-                        {/* Location Selector */}
-                        <div className='hidden md:flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 transition-colors duration-200 rounded-lg cursor-pointer border border-gray-200 group'>
-                            <CiLocationOn className='text-xl text-emerald-500 group-hover:text-emerald-600' />
-                            <div className='flex flex-col'>
-                                <span className='text-sm font-medium text-gray-700'>Karaikudi</span>
-                            </div>
+                        <Link to='/'>
+                        <img src={Logo} alt="Logo" className='h-10 md:h-16 object-contain' />
+                        </Link>
+                        {/* Replace the Location Selector with LocationTracker */}
+                        <div className='hidden md:block'>
+                            <LocationTracker onLocationSelect={handleLocationSelect} />
                         </div>
 
                         {/* Search Bar */}
@@ -78,19 +105,76 @@ const Header = () => {
                             <span className='absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full'></span>
                         </button>
 
-                        {/* Login Button */}
-                        <button
-                            onClick={() => setShowLoginModal(true)}
-                            className='hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer'
-                        >
-                            <LuCircleUserRound className="text-xl" />
-                            <span>Login</span>
-                        </button>
-
-                        {/* Mobile User Icon */}
-                        <button onClick={() => setShowLoginModal(true)} className='block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors'>
-                            <LuCircleUserRound />
-                        </button>
+                        {/* Auth Section */}
+                        {userData ? (
+                            <>
+                                <div className="hidden md:flex items-center gap-4 relative">
+                                    <div 
+                                        ref={dropdownRef}
+                                        className="flex  items-center gap-2 cursor-pointer"
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    >
+                                        <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold">
+                                            {userData.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <span className="text-gray-700 font-medium text-sm">
+                                            {userData.name}
+                                        </span>
+                                        
+                                        {/* Dropdown Menu */}
+                                        {isDropdownOpen && (
+                                            <div className="absolute text-right top-full right-0 mt-2 w-30 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                                >
+                                                    <CiLogout className="text-xl text-red-500" />
+                                                    <span>Logout</span>
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                {/* Mobile Profile */}
+                                <div className="md:hidden flex items-center gap-2 relative" ref={dropdownRef}>
+                                    <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    >
+                                        {userData.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    {isDropdownOpen && (
+                                        <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                            >
+                                                <CiLogout className="text-xl text-red-500" />
+                                                <span>Logout</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* Desktop Login */}
+                                <button
+                                    onClick={() => setShowLoginModal(true)}
+                                    className='hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer'
+                                >
+                                    <LuCircleUserRound className="text-xl" />
+                                    <span>Login</span>
+                                </button>
+                                {/* Mobile Login */}
+                                <button
+                                    onClick={() => setShowLoginModal(true)}
+                                    className='block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors'
+                                >
+                                    <LuCircleUserRound />
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -107,6 +191,8 @@ const Header = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Modals */}
             <AdminLogin
                 isOpen={showLoginModal}
                 onClose={() => setShowLoginModal(false)}

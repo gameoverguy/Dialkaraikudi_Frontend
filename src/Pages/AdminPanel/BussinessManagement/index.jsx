@@ -307,10 +307,34 @@ const BusinessManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        // Upload all photos to Cloudinary first
+        const uploadedUrls = await Promise.all(
+          formData.photos.map(async (photo) => {
+            // Skip if it's already a URL
+            if (typeof photo === 'string') return photo;
+
+            const cloudinaryData = new FormData();
+            cloudinaryData.append('file', photo);
+            cloudinaryData.append('upload_preset', 'image_url');
+            cloudinaryData.append('cloud_name', 'dkbteljtz');
+
+            const cloudinaryResponse = await fetch(
+              `https://api.cloudinary.com/v1_1/dkbteljtz/image/upload`,
+              {
+                method: 'POST',
+                body: cloudinaryData,
+              }
+            );
+
+            const cloudinaryResult = await cloudinaryResponse.json();
+            return cloudinaryResult.secure_url;
+          })
+        );
+
         const requestBody = {
           businessName: formData.name,
           description: formData.description,
-          category: formData.category, // This will now be the category ID
+          category: formData.category,
           contactDetails: {
             phone: formData.phone,
             email: formData.email
@@ -318,9 +342,7 @@ const BusinessManagement = () => {
           address: {
             addressArea: formData.address
           },
-          photos: formData.photos.map(photo =>
-            typeof photo === 'string' ? photo : URL.createObjectURL(photo)
-          )
+          photos: uploadedUrls // Use the Cloudinary URLs
         };
 
         if (selectedBusiness) {
@@ -337,7 +359,7 @@ const BusinessManagement = () => {
         setSelectedBusiness(null);
       } catch (error) {
         console.error('Error handling business:', error);
-        toast.error('Failed to process business');
+        toast.error(error.response?.data?.message || 'Failed to process business');
       }
     }
   };

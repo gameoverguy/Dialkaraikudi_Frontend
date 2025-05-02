@@ -168,30 +168,47 @@ const CategoryManagement = () => {
     fetchCategories();
   }, []);
 
+  const cloudName = "dkbteljtz";
+  const uploadPreset = "image_url";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Convert display name to category name format (lowercase with underscores)
+        // First upload image to Cloudinary if exists
+        let imageUrl = null;
+        if (formData.image) {
+          const cloudinaryData = new FormData();
+          cloudinaryData.append('file', formData.image);
+          cloudinaryData.append('upload_preset', uploadPreset);
+          cloudinaryData.append('cloud_name', cloudName);
+
+          const cloudinaryResponse = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            {
+              method: 'POST',
+              body: cloudinaryData,
+            }
+          );
+
+          const cloudinaryResult = await cloudinaryResponse.json();
+          imageUrl = cloudinaryResult.secure_url;
+        }
+
+        // Convert display name to category name format
         const categoryName = formData.name
           .toLowerCase()
           .trim()
           .replace(/\s+/g, '_');
-  
-        // Build plain object for JSON
+
+        // Build payload for backend
         const payload = {
           categoryName: categoryName,
           displayName: formData.name.trim(),
           isActive: true,
-          // iconUrl: formData.image (not supported unless base64)
+          iconUrl: imageUrl // Use the Cloudinary URL
         };
-  
-        // If sending an image, you must base64 encode it manually (optional):
-        if (formData.image) {
-          const base64 = await toBase64(formData.image);
-          payload.iconBase64 = base64; // send this instead
-        }
-  
+
         if (selectedCategory) {
           // Update existing category
           await axios.put(
@@ -215,15 +232,15 @@ const CategoryManagement = () => {
               },
             }
           );
-  
+
           if (response.data) {
             toast.success('Category added successfully');
           }
         }
-  
+
         // Refresh categories list
         await fetchCategories();
-  
+
         // Reset form
         setShowModal(false);
         setImagePreview(null);
