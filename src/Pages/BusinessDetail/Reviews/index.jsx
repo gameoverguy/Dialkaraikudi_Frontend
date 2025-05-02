@@ -4,37 +4,7 @@ import StarRating from "../ReviewStar";
 import { FaRegThumbsUp } from "react-icons/fa";
 
 const Reviews = ({ formData }) => {
-  const reviews = [
-    {
-      id: 1,
-      name: "Sathish Raju",
-      image: "https://dummyimage.com/250x150/000/fff",
-      date: "29 Aug 2024",
-      rating: 5,
-      tags: ["Relaxing stay", "Budget friendly"],
-      review:
-        "I had a relaxing stay at Hotel Pl Grand. The rooms were cozy and the atmosphere was very calming. It’s budget friendly too, which is a big plus! I definitely recommend it for anyone looking for a peaceful and affordable leisure stay.",
-    },
-    {
-      id: 2,
-      name: "Virat Vijay",
-      image: "https://dummyimage.com/250x150/000/fff",
-      date: "29 Aug 2024",
-      rating: 5,
-      tags: ["Amazing experience", "Clean rooms", "Comfortable place"],
-      review:
-        "A reliable hotel in Karaikudi with classy and sophisticated rooms, suitable for foreign tourists and elite guests who want to explore in and around the city.",
-    },
-    {
-      id: 3,
-      name: "Venkatesh",
-      image: "https://dummyimage.com/250x150/000/fff",
-      date: "29 Aug 2024",
-      rating: 5,
-      tags: [],
-      review: "Great service and nice environment. Will visit again!",
-    },
-  ];
+  const reviews = [];
 
   return (
     <div className="rounded-md border border-gray-200 p-4" id="quickinfo">

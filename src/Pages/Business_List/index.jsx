@@ -39,7 +39,10 @@ const Bussiness_List = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   console.log(data);
   const handleBusinessClick = (businessId) => {
-    navigate(`/business/${businessId}`);
+    const selectedBusiness = data.find(business => business._id === businessId);
+    navigate(`/business/${businessId}`, { 
+      state: selectedBusiness
+    });
   };
 
   return (

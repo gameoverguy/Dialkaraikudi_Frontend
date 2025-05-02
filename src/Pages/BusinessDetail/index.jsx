@@ -4,13 +4,21 @@ import Photos from "./Photos";
 import Reviews from "./Reviews";
 import Description from "./Description";
 import { IoIosArrowForward } from "react-icons/io";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useLocation, useParams } from "react-router-dom";
+
 const BusinessDetails = () => {
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
   const { id } = useParams();
+  const location = useLocation();
+  const businessData = location.state;
+  console.log(businessData);
 
+  useEffect(() => {
+    if (businessData) {
+      setFormData(businessData);
+    }
+  }, [location.state]);
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
     const section = document.getElementById(sectionId);
@@ -49,8 +57,8 @@ const BusinessDetails = () => {
                 <div
                   key={tab.key}
                   className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${activeTab === tab.key
-                      ? "border-b-4 border-blue-500 text-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
+                    ? "border-b-4 border-blue-500 text-blue-500"
+                    : "text-gray-500 hover:text-gray-700"
                     }`}
                   onClick={() => handleTabClick(tab.key, tab.id)}
                 >

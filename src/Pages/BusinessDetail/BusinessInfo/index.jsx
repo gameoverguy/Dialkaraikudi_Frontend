@@ -137,7 +137,7 @@ const BusinessInfo = ({ formData, businessId }) => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">
             <p className="flex items-center font-semibold text-gray-700">
               <SlLocationPin className="mr-1 text-base" />
-              {formData?.address?.addressArea}, {formData?.address?.city}, {formData?.address?.state} - {formData?.address?.pincode}
+              {formData?.address?.addressArea} {formData?.address?.city} {formData?.address?.state} {formData?.address?.pincode}
             </p>
           </div>
           <div className="flex justify-between">
