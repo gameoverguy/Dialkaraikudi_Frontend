@@ -3,7 +3,7 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { API } from "../../config/config";
+import { API } from "../../../config/config";
 
 const Carousel = () => {
   const [ads, setAds] = useState([]);
@@ -36,12 +36,12 @@ const Carousel = () => {
     const fetchAds = async () => {
       try {
         const response = await axios.get(`${API}/advertisement/slots/home`);
-        const activeAds = response.data.filter(ad => ad.isActive);
+        const activeAds = response.data.filter((ad) => ad.isActive);
         setAds(activeAds);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching ads:', err);
-        setError('Failed to load advertisements');
+        console.error("Error fetching ads:", err);
+        setError("Failed to load advertisements");
         setLoading(false);
       }
     };
@@ -78,11 +78,15 @@ const Carousel = () => {
       <Slider {...settings}>
         {ads.map((ad) => (
           <div key={ad._id}>
-            {ad.type === 'image' ? (
-              <a href={ad.link || '#'} target="_blank" rel="noopener noreferrer">
+            {ad.type === "image" ? (
+              <a
+                href={ad.link || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img
                   src={ad.mediaUrl}
-                  alt={ad.title || 'Advertisement'}
+                  alt={ad.title || "Advertisement"}
                   className="bg-cover shadow-lg w-full md:h-[50vh] rounded-lg"
                   loading="lazy"
                 />

@@ -1,17 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import FloatingInput from '../../../Components/FloatingInput';
 import { uploadToCloudinary } from '../../../utils/cloudinaryUpload';
+import axios from 'axios';
+import { API } from '../../../../config/config';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const HomePage = () => {
-  const [sections, setSections] = useState([
-    { id: 1, heading: '', images: [] }
-  ]);
+  const [sections, setSections] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleHeadingChange = (id, value) => {
+  useEffect(() => {
+    fetchAdvertisements();
+  }, []);
+
+  const fetchAdvertisements = async () => {
+    try {
+      const response = await axios.get(`${API}/advertisement/slots/home`);
+      const transformedData = response.data.data.map(ad => ({
+        id: ad._id,
+        heading: ad.heading,
+        images: ad.images
+      }));
+      setSections(transformedData.length > 0 ? transformedData : [{ id: Date.now(), heading: '', images: [] }]);
+    } catch (error) {
+      console.error('Error fetching advertisements:', error);
+      toast.error('Failed to fetch advertisements');
+      setSections([{ id: Date.now(), heading: '', images: [] }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleHeadingChange = async (id, value) => {
     setSections(prev => prev.map(section => 
       section.id === id ? { ...section, heading: value } : section
     ));
+
+    try {
+      const section = sections.find(s => s.id === id);
+      if (section._id) {
+        await axios.put(`${API}/advertisement/slots/${section._id}`, {
+          heading: value,
+          images: section.images
+        });
+      }
+    } catch (error) {
+      console.error('Error updating heading:', error);
+      toast.error('Failed to update heading');
+    }
   };
 
   const handleImageDrop = async (id, e) => {
@@ -23,17 +61,29 @@ const HomePage = () => {
         files.map(file => uploadToCloudinary(file))
       );
 
+      const section = sections.find(s => s.id === id);
+      const updatedImages = [...section.images, ...uploadedUrls];
+
       setSections(prev => prev.map(section => {
         if (section.id === id) {
           return {
             ...section,
-            images: [...section.images, ...uploadedUrls]
+            images: updatedImages
           };
         }
         return section;
       }));
+
+      if (section._id) {
+        await axios.put(`${API}/advertisement/slots/${section._id}`, {
+          heading: section.heading,
+          images: updatedImages
+        });
+        toast.success('Images uploaded successfully');
+      }
     } catch (error) {
       console.error('Error uploading images:', error);
+      toast.error('Failed to upload images');
     }
   };
 
@@ -49,42 +99,103 @@ const HomePage = () => {
         files.map(file => uploadToCloudinary(file))
       );
 
+      const section = sections.find(s => s.id === id);
+      const updatedImages = [...section.images, ...uploadedUrls];
+
       setSections(prev => prev.map(section => {
         if (section.id === id) {
           return {
             ...section,
-            images: [...section.images, ...uploadedUrls]
+            images: updatedImages
           };
         }
         return section;
       }));
+
+      if (section._id) {
+        await axios.put(`${API}/advertisement/slots/${section._id}`, {
+          heading: section.heading,
+          images: updatedImages
+        });
+        toast.success('Images uploaded successfully');
+      }
     } catch (error) {
       console.error('Error uploading images:', error);
+      toast.error('Failed to upload images');
     }
   };
 
-  const removeImage = (sectionId, imageIndex) => {
-    setSections(prev => prev.map(section => {
-      if (section.id === sectionId) {
-        const newImages = [...section.images];
-        newImages.splice(imageIndex, 1);
-        return { ...section, images: newImages };
+  const removeImage = async (sectionId, imageIndex) => {
+    try {
+      const section = sections.find(s => s.id === sectionId);
+      const newImages = [...section.images];
+      newImages.splice(imageIndex, 1);
+
+      setSections(prev => prev.map(section => {
+        if (section.id === sectionId) {
+          return { ...section, images: newImages };
+        }
+        return section;
+      }));
+
+      if (section._id) {
+        await axios.put(`${API}/advertisement/slots/${section._id}`, {
+          heading: section.heading,
+          images: newImages
+        });
+        toast.success('Image removed successfully');
       }
-      return section;
-    }));
+    } catch (error) {
+      console.error('Error removing image:', error);
+      toast.error('Failed to remove image');
+    }
   };
 
-  const addNewSection = () => {
-    setSections(prev => [...prev, {
-      id: Date.now(),
-      heading: '',
-      images: []
-    }]);
+  const addNewSection = async () => {
+    try {
+      const newSection = {
+        heading: '',
+        images: []
+      };
+
+      const response = await axios.post(`${API}/advertisement/slots`, newSection);
+      const createdSection = response.data.data;
+
+      setSections(prev => [...prev, {
+        id: Date.now(),
+        _id: createdSection._id,
+        heading: createdSection.heading,
+        images: createdSection.images
+      }]);
+
+      toast.success('New section added successfully');
+    } catch (error) {
+      console.error('Error adding new section:', error);
+      toast.error('Failed to add new section');
+    }
   };
 
-  const removeSection = (id) => {
-    setSections(prev => prev.filter(section => section.id !== id));
+  const removeSection = async (id) => {
+    try {
+      const section = sections.find(s => s.id === id);
+      if (section._id) {
+        await axios.delete(`${API}/advertisement/slots/${section._id}`);
+      }
+      setSections(prev => prev.filter(section => section.id !== id));
+      toast.success('Section removed successfully');
+    } catch (error) {
+      console.error('Error removing section:', error);
+      toast.error('Failed to remove section');
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="p-6 bg-white rounded-lg shadow flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-white rounded-lg shadow">
