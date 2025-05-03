@@ -14,7 +14,6 @@ import AdminLogin from "./Pages/AdminLogin/index.jsx";
 // import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
 // import ContactDetails from "./business/contact.jsx";
 
-
 function App() {
   return (
     <>
@@ -35,8 +34,7 @@ function App() {
             <Route path="/adminpanel" element={<AdminPanel />} />
             <Route path="/adminlogin" element={<AdminLogin />} />
           </Routes>
-
-        </BrowserRouter >
+        </BrowserRouter>
       </LoginModalProvider>
     </>
   );
