@@ -3,12 +3,14 @@ import CustomModal from '../../../Components/modal';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API } from '../../../../config/config';
 
 const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [error, setError] = useState('');
     const [timer, setTimer] = useState(60);
     const [errorOverall, setErrorOverall] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     // const navigate = useNavigate();
 
     const otpRefs = [
@@ -64,16 +66,18 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const otpValue = otp.join('');
         const isComplete = otp.every(digit => digit !== '');
 
         if (!isComplete) {
             setError('Please enter all fields');
+            setIsSubmitting(false);
             return;
         }
 
         try {
-            const response = await axios.post('http://192.168.1.33:5000/user/verifyotp', {
+            const response = await axios.post(`${API}/user/verifyotp`, {
                 email: email,
                 otp: otpValue
             });
@@ -91,12 +95,14 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
             console.error('OTP verification failed:', error);
             toast.error('OTP verification failed');
             setErrorOverall(error.response?.data?.message || 'Invalid OTP. Please try again.');
+        } finally {
+            setIsSubmitting(false); // Re-enable button
         }
     };
 
     const handleResendOTP = async () => {
         try {
-            const response = await axios.post('http://192.168.1.33:5000/user/forgotpassword', {
+            const response = await axios.post(`${API}/user/forgotpassword`, {
                 email: email
             });
 
@@ -120,11 +126,24 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
     };
 
     const handlePaste = (event) => {
-        const pastedValue = event.clipboardData.getData('Text');
-        if (/^\d{4}$/.test(pastedValue)) {
+        event.preventDefault();
+        const pastedValue = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
+
+        if (pastedValue) {
             const pastedOtp = pastedValue.split('');
-            setOtp(pastedOtp);
-            otpRefs[3].current.focus();
+            const newOtp = [...otp];
+            for (let i = 0; i < 4; i++) {
+                if (pastedOtp[i]) {
+                    newOtp[i] = pastedOtp[i];
+                }
+            }
+            setOtp(newOtp);
+            const nextEmptyIndex = newOtp.findIndex(digit => digit === '');
+            if (nextEmptyIndex !== -1) {
+                otpRefs[nextEmptyIndex].current.focus();
+            } else {
+                otpRefs[3].current.focus();
+            }
         }
     };
     if (!isOpen) return null;
@@ -153,7 +172,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                                     value={data}
                                     onChange={e => handleChange(index, e.target.value)}
                                     onKeyDown={e => handleKeyDown(index, e)}
-                                    onPaste={index === 0 ? handlePaste : undefined}
+                                    onPaste={handlePaste}
                                     ref={otpRefs[index]}
                                     className="w-8 h-8 text-center text-md border-2 border-gray-500 rounded-lg focus:border-purple-500 focus:outline-none"
                                 />
@@ -176,11 +195,12 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                         <div className="flex flex-col gap-4">
                             <button
                                 type="submit"
-                                className="w-full cursor-pointer bg-purple-600 text-xs text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                                disabled={isSubmitting}
+                                className={`w-full cursor-pointer bg-purple-600 text-xs text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'
+                                    }`}
                             >
-                                Verify Code
+                                {isSubmitting ? 'VERIFYING...' : 'VERIFY CODE'}
                             </button>
-
                             <div className="text-center">
                                 {timer > 0 ? (
                                     <p className="text-xs text-gray-600">
@@ -189,8 +209,10 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                                 ) : (
                                     <button
                                         type="button"
+                                        disabled={isSubmitting}
                                         onClick={handleResendOTP}
-                                        className="text-xs text-purple-600 hover:text-purple-800"
+                                        className={`text-xs text-purple-600 hover:text-purple-800 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                                            }`}
                                     >
                                         Resend Code
                                     </button>

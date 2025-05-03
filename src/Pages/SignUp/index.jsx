@@ -5,6 +5,7 @@ import CustomModal from "../../Components/modal";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API } from "../../../config/config";
 
 const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
     const [formData, setFormData] = useState({
@@ -117,7 +118,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         setErrorOverall("");
         if (!Object.values(newErrors).some(error => error !== "")) {
             try {
-                const response = await axios.post('http://192.168.1.33:5000/user/signup', {
+                const response = await axios.post(`${API}/user/signup`, {
                     name: formData.name,
                     email: formData.email,
                     phone: formData.phone,

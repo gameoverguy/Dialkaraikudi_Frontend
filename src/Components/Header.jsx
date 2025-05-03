@@ -4,17 +4,6 @@ import { CiLocationOn } from "react-icons/ci";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdNotificationsActive } from "react-icons/md";
 import { LuCircleUserRound } from "react-icons/lu";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import AdminLogin from "../Pages/UserLogin";
-import SignupModal from "../Pages/SignUp";
-import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
-import OTP from "../Pages/UserLogin/OTP";
-import ResetPassword from "../Pages/UserLogin/ResetPassword";
->>>>>>> 5a91c9f34c00e1a429b75956b097ac3bd5443363
-=======
->>>>>>> e9b2a2a2143cfbe6fe3a68232d6407eaaa0170a6
 import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
 import { useRef } from "react";
@@ -22,19 +11,10 @@ import { CiLogout } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
 import UserLogin from "../Pages/UserLogin";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e9b2a2a2143cfbe6fe3a68232d6407eaaa0170a6
 import SignupModal from "../Pages/SignUp";
 import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
 import OTP from "../Pages/UserLogin/OTP";
 import ResetPassword from "../Pages/UserLogin/ResetPassword";
-<<<<<<< HEAD
-=======
->>>>>>> 5a91c9f34c00e1a429b75956b097ac3bd5443363
-=======
->>>>>>> e9b2a2a2143cfbe6fe3a68232d6407eaaa0170a6
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal } = useLoginModal();
@@ -76,15 +56,15 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        (desktopDropdownRef.current &&
-          desktopDropdownRef.current.contains(event.target)) ||
-        (mobileDropdownRef.current &&
-          mobileDropdownRef.current.contains(event.target))
-      ) {
-        return;
-      }
-      setIsDropdownOpen(false);
+     if (
+  (desktopDropdownRef.current &&
+    desktopDropdownRef.current.contains(event.target)) ||
+  (mobileDropdownRef.current &&
+    mobileDropdownRef.current.contains(event.target))
+) {
+  return;
+}
+
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -160,9 +140,8 @@ const Header = () => {
                         {userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
-                          isDropdownOpen ? "rotate-180" : ""
-                        }`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"

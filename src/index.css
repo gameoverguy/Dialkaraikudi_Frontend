@@ -10,3 +10,8 @@
     scrollbar-width: none;  /* Firefox */
 }
 
+/* In your global CSS or Tailwind config override */
+.Toastify__toast-container {
+    z-index: 99999 !important;
+  }
+  

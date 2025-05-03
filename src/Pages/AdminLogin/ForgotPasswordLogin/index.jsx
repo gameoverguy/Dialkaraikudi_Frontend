@@ -3,6 +3,7 @@ import FloatingInput from "../../../Components/FloatingInput";
 import CustomModal from "../../../Components/modal";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { API } from "../../../../config/config";
 
 const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
     const [email, setEmail] = useState("");
@@ -49,7 +50,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
             setIsSubmitting(false);
         } else {
             try {
-                const response = await axios.post('http://192.168.1.33:5000/admin/forgotpassword', {
+                const response = await axios.post(`${API}/admin/forgotpassword`, {
                     email: email
                 });
 
