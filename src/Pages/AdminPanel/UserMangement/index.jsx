@@ -145,7 +145,7 @@ const UserTable = () => {
       <CustomTable
         columns={columns}
         data={users}
-        itemsPerPage={5}
+        itemsPerPage={10}
         searchPlaceholder="Search..."
       />
       {showModal && (

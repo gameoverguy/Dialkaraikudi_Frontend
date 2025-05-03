@@ -47,14 +47,14 @@ const BusinessInfo = ({ formData, businessId }) => {
             </div>
           )}
         </div>
-        <div className="hidden md:block mb-6 min-h-90 overflow-hidden">
-          <div className="grid grid-cols-4 gap-2">
+        <div className="hidden md:block mb-6 overflow-hidden">
+          <div className="grid grid-cols-4 gap-2 h-[500px]">
             {formData?.business.photos?.length > 0 ? (
-              <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer" onClick={() => handleImageClick(0)}>
+              <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative" onClick={() => handleImageClick(0)}>
                 <img
                   src={formData.business.photos[0]}
                   alt="Main"
-                  className="w-full h-80 object-cover rounded-tl-lg"
+                  className="w-full h-full object-cover absolute inset-0 rounded-tl-lg"
                 />
               </div>
             ) : (
@@ -67,25 +67,25 @@ const BusinessInfo = ({ formData, businessId }) => {
               <div
                 key={index}
                 className={`${index === 2 ? 'rounded-tr-lg' :
-                  index === 4 ? 'rounded-br-lg' : ''
-                  } relative cursor-pointer`}
+                  index === 4 ? 'rounded-br-lg' : ''} 
+                  relative cursor-pointer h-[250px] overflow-hidden`}
                 onClick={() => formData?.business.photos?.[index] && handleImageClick(index)}
               >
                 {formData?.business.photos?.[index] ? (
                   <img
                     src={formData.business.photos[index]}
                     alt={`Image ${index + 1}`}
-                    className="w-full h-60 object-cover"
+                    className="w-full h-full object-cover absolute inset-0"
                   />
                 ) : (
-                  <div className="bg-gray-100 h-full flex items-center justify-center">
+                  <div className="bg-gray-100 h-full w-full flex items-center justify-center absolute inset-0">
                     <span className="text-gray-400 text-sm">
                       {formData?.business.photos?.length === 0 ? 'No Images' : 'No More Images'}
                     </span>
                   </div>
                 )}
                 {index === 4 && formData?.business.photos?.length > 5 && (
-                  <div className="absolute inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                     <span className="text-white text-lg font-semibold">
                       +{formData.business.photos.length - 5} more
                     </span>
@@ -96,6 +96,22 @@ const BusinessInfo = ({ formData, businessId }) => {
           </div>
         </div>
 
+        {/* Mobile view */}
+        <div className="md:hidden mb-6 overflow-hidden h-[300px] relative">
+          {formData?.business.photos?.length > 0 ? (
+            <div className="cursor-pointer h-full" onClick={() => handleImageClick(0)}>
+              <img
+                src={formData?.business.photos[0]}
+                alt="Main"
+                className="w-full h-full object-cover absolute inset-0 rounded-t-lg"
+              />
+            </div>
+          ) : (
+            <div className="h-full bg-gray-100 flex items-center justify-center rounded-t-lg">
+              <span className="text-gray-400">No Images Available</span>
+            </div>
+          )}
+        </div>
         <CustomModal
           isOpen={showImageModal}
           onClose={() => setShowImageModal(false)}

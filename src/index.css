@@ -15,3 +15,16 @@
     z-index: 99999 !important;
   }
   
+
+@keyframes shimmer {
+    100% {
+      transform: translateX(200%);
+    }
+  }
+
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(200%);
+    }
+  }

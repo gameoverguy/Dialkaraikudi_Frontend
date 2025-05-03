@@ -7,6 +7,9 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // import BusinessLogin from "./business/login.jsx";
 // import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
@@ -15,6 +18,13 @@ import AdminLogin from "./Pages/AdminLogin/index.jsx";
 // import ContactDetails from "./business/contact.jsx";
 
 function App() {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,    // animation only once on scroll
+    });
+  }, []);
   return (
     <>
       <LoginModalProvider>
@@ -22,6 +32,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
+              <Route path="/businesslist/:id" element={<Bussiness_List />} />
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
               <Route path="/review" element={<ReviewPage />} />
