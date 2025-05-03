@@ -127,7 +127,7 @@ const Header = () => {
             {/* Auth Section */}
             {userData ? (
               <>
-                <div className="hidden md:flex items-center gap-4 relative bg-amber-300 rounded-2xl px-3 py-2">
+                <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
                   <div ref={desktopDropdownRef} className="relative">
                     <div
                       className="flex items-center gap-2 cursor-pointer group"
