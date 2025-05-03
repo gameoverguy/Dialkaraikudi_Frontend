@@ -75,7 +75,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
             >
                 <div className="p-2">
                     <h1 className="text-lg font-bold text-gray-800 mb-4">Forgot Password</h1>
-                    <p className="text-gray-600 text-xs mb-4">Enter your email address to reset your password.</p>
+                    <p className="text-gray-600 text-xs mb-4">Enter your email address to receive OTP.</p>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <FloatingInput
                             type="email"
@@ -96,7 +96,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
                             type="submit"
                             className="w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
                         >
-                            RESET PASSWORD
+                            SEND OTP
                         </button>
                     </form>
                 </div>
