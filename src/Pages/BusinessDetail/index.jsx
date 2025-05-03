@@ -4,7 +4,7 @@ import Photos from "./Photos";
 import Reviews from "./Reviews";
 import Description from "./Description";
 import { IoIosArrowForward } from "react-icons/io";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const BusinessDetails = () => {
@@ -66,7 +66,7 @@ const BusinessDetails = () => {
     <React.Fragment>
       <div className="bg-white shadow-xl pt-2">
         <div className="flex p-4">
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer">Karaikudi <span><IoIosArrowForward /></span></p>
+          <Link to='/' className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer">Karaikudi <span><IoIosArrowForward /></span></Link>
           <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">Hotels in Karaikudi <span><IoIosArrowForward /></span></p>
           <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.businessName}</p>
         </div>
