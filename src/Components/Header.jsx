@@ -52,13 +52,20 @@ const Header = () => {
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const desktopDropdownRef = useRef(null);
+  const mobileDropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+      if (
+        (desktopDropdownRef.current &&
+          desktopDropdownRef.current.contains(event.target)) ||
+        (mobileDropdownRef.current &&
+          mobileDropdownRef.current.contains(event.target))
+      ) {
+        return;
       }
+      setIsDropdownOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -74,7 +81,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-white z-40 w-full px-2 py-2 md:px-8 md:py-4 items-center shadow-md border-b border-gray-200">
+      <div className="sticky top-0 bg-white z-40 w-full px-2 md:px-2 items-center shadow-md border-b border-gray-200">
         <div className="md:w-11/12 mx-auto flex">
           <div className="w-full xl:w-7/12 flex space-x-6 items-center">
             {/* Logo */}
@@ -82,7 +89,7 @@ const Header = () => {
               <img
                 src={Logo}
                 alt="Logo"
-                className="h-10 md:h-16 object-contain"
+                className="h-10 md:h-24 my-0 object-contain"
               />
             </Link>
             {/* Replace the Location Selector with LocationTracker */}
@@ -112,36 +119,52 @@ const Header = () => {
             </button>
 
             {/* Notifications */}
-            <button className="relative text-2xl text-gray-700 hover:text-emerald-500 transition-colors">
-              <MdNotificationsActive />
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <div className="relative">
+              <button className="w-12 h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
+                <MdNotificationsActive className="text-2xl text-gray-700 hover:text-emerald-600" />
+              </button>
+            </div>
 
             {/* Auth Section */}
             {userData ? (
               <>
-                <div className="hidden md:flex items-center gap-4 relative">
-                  <div ref={dropdownRef} className="relative">
+                <div className="hidden md:flex items-center gap-4 relative bg-amber-300 rounded-2xl px-3 py-2">
+                  <div ref={desktopDropdownRef} className="relative">
                     <div
-                      className="flex items-center gap-2 cursor-pointer"
+                      className="flex items-center gap-2 cursor-pointer group"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
-                      <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold">
+                      <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
                         {userData.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-gray-700 font-medium text-sm">
+                      <span className="text-gray-800 font-semibold text-sm group-hover:text-emerald-600 transition">
                         {userData.name}
                       </span>
+                      <svg
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
+                          isDropdownOpen ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
                     </div>
 
                     {isDropdownOpen && (
-                      <div className="absolute right-0 top-full mt-2 w-32 bg-blue-200 rounded-lg shadow-lg border border-gray-100 z-60">
+                      <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
                         <button
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-blue-300 transition-colors duration-200"
+                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                         >
-                          <CiLogout className="text-xl text-red-500" />
-                          <span>Logout</span>
+                          <CiLogout className="text-lg text-red-500" />
+                          <span className="text-sm font-medium">Logout</span>
                         </button>
                       </div>
                     )}
@@ -151,7 +174,7 @@ const Header = () => {
                 {/* Mobile Profile */}
                 <div
                   className="md:hidden flex items-center gap-2 relative"
-                  ref={dropdownRef}
+                  ref={mobileDropdownRef}
                 >
                   <div
                     className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
