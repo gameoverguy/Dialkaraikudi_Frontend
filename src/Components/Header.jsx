@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import Logo from "../assets/logo_01.png";
 import { CiLocationOn } from "react-icons/ci";
@@ -15,6 +16,25 @@ import { useRef } from "react";
 import { CiLogout } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
+=======
+import React, { useState, useEffect } from 'react'
+import Logo from '../assets/logo_01.png'
+import { CiLocationOn } from 'react-icons/ci'
+import { IoSearchOutline } from 'react-icons/io5'
+import { MdNotificationsActive } from 'react-icons/md'
+import { LuCircleUserRound } from 'react-icons/lu'
+import { useLoginModal } from '../context/LoginContext'
+import Cookies from 'js-cookie';
+import {  useRef } from 'react'
+import { CiLogout } from 'react-icons/ci'
+import { Link } from 'react-router-dom'
+import LocationTracker from './LocationTracker';
+import UserLogin from '../Pages/UserLogin'
+import SignupModal from '../Pages/SignUp'
+import ForgotPassword from '../Pages/UserLogin/ForgotPassword'
+import OTP from '../Pages/UserLogin/OTP'
+import ResetPassword from '../Pages/UserLogin/ResetPassword'
+>>>>>>> 9eae4ae7bb07d974a5223991a9ec6e1feaa63840
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal } = useLoginModal();
@@ -89,6 +109,7 @@ const Header = () => {
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </div>
 
+<<<<<<< HEAD
             {/* Search Bar */}
             <div className="hidden lg:block relative w-full">
               <input
@@ -245,5 +266,45 @@ const Header = () => {
     </>
   );
 };
+=======
+            {/* Modals */}
+            <UserLogin
+                isOpen={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+                setShowLoginModal={setShowLoginModal}
+                setIsSignupOpen={setIsSignupOpen}
+                setIsForgotPasswordOpen={setIsForgotPasswordOpen}
+            />
+            <SignupModal
+                isOpen={isSignupOpen}
+                onClose={() => setIsSignupOpen(false)}
+                onLoginClick={() => {
+                    setIsSignupOpen(false);
+                    setShowLoginModal(true);
+                }}
+                setShowLoginModal={setShowLoginModal}
+            />
+            <ForgotPassword
+                isOpen={isForgotPasswordOpen}
+                onClose={() => setIsForgotPasswordOpen(false)}
+                setShowOTPModal={setShowOTPModal}
+                setOtpEmail={setOtpEmail}
+            />
+            <OTP
+                isOpen={showOTPModal}
+                onClose={() => setShowOTPModal(false)}
+                email={otpEmail}
+                setShowResetPasswordModal={setShowResetPasswordModal}
+            />
+            <ResetPassword
+                isOpen={showResetPasswordModal}
+                onClose={() => setShowResetPasswordModal(false)}
+                setShowLoginModal={setShowLoginModal}
+                email={otpEmail}
+            />
+        </>
+    )
+}
+>>>>>>> 9eae4ae7bb07d974a5223991a9ec6e1feaa63840
 
 export default Header;
