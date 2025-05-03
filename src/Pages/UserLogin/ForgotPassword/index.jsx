@@ -131,7 +131,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
       </CustomModal>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={7000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -140,12 +140,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
         draggable
         pauseOnHover
         theme="light"
-        style={{
-          zIndex: 9999,
-          position: "fixed",
-          top: "1rem",
-          right: "1rem",
-        }}
+        style={{ zIndex: 9999 }}
       />
     </>
   );
