@@ -24,7 +24,10 @@ const GatewayConfig = () => <div>Gateway Configuration Content</div>;
 
 const AdminPanel = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedKey, setSelectedKey] = useState('1');
+  const [selectedKey, setSelectedKey] = useState(() => {
+    // Get the saved menu item from localStorage or default to '1' (Dashboard)
+    return localStorage.getItem('selectedMenuItem') || '1';
+  });
   const [expandedMenu, setExpandedMenu] = useState(null);
 
   // Add window resize handler
@@ -97,12 +100,23 @@ const AdminPanel = () => {
 
   const handleMenuClick = (key) => {
     setSelectedKey(key);
+    // Save the selected menu item to localStorage
+    localStorage.setItem('selectedMenuItem', key);
+    
     // Close any open submenu if clicking a non-submenu item
     if (!menuItems.find(item => item.children?.some(child => child.key === key))) {
       setExpandedMenu(null);
     }
   };
 
+  // Update the handleMenuSelect function
+  const handleMenuSelect = (key) => {
+    setSelectedKey(key);
+    localStorage.setItem('selectedMenuItem', key);
+    if (key === 'categories') {
+      setExpandedMenu('5'); // Open the Organizational Units submenu
+    }
+  };
   const toggleSubmenu = (key) => {
     // Close other submenus when opening a new one
     if (key !== expandedMenu) {
@@ -120,7 +134,7 @@ const AdminPanel = () => {
     return (
       <div key={item.key}>
         <div
-          className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-200 
+          className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-500 ease-in-out 
             ${isSelected ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : hasSelectedChild ? '' : 'hover:bg-gray-100'}`}
           onClick={() => item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)}
         >
@@ -131,20 +145,28 @@ const AdminPanel = () => {
             <>
               <span className="ml-3 flex-1">{item.label}</span>
               {item.children && (
-                <span className="flex items-center">
-                  {isExpanded ? <MdExpandLess size={20} /> : <MdExpandMore size={20} />}
+                <span className={`flex items-center transition-transform duration-1000 ease-in-out transform ${isExpanded ? 'rotate-180' : ''}`}>
+                  <MdExpandMore size={20} />
                 </span>
               )}
             </>
           )}
         </div>
         {!collapsed && item.children && (isExpanded || hasSelectedChild) && (
-          <div className="mt-1">
+          <div 
+            className="mt-1 overflow-hidden transition-all duration-1000 ease-in-out transform origin-top"
+            style={{
+              maxHeight: isExpanded ? '500px' : '0',
+              opacity: isExpanded ? 1 : 0,
+              transform: `scaleY(${isExpanded ? 1 : 0})`
+            }}
+          >
             {item.children.map(subItem => (
               <div
                 key={subItem.key}
-                className={`py-2 px-12 rounded-md cursor-pointer text-sm transition-all duration-200
-                  ${selectedKey === subItem.key ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : 'hover:bg-gray-100'}`}
+                className={`py-2 px-12 rounded-md cursor-pointer text-sm transition-all duration-1000 ease-in-out
+                  ${selectedKey === subItem.key ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : 'hover:bg-gray-100'}
+                  transform hover:translate-x-2`}
                 onClick={() => handleMenuClick(subItem.key)}
               >
                 {subItem.label}
@@ -167,13 +189,13 @@ const AdminPanel = () => {
     }
   </div>
 
-  // Component mapping object
-  const handleMenuSelect = (key) => {
-    setSelectedKey(key);
-    if (key === 'categories') {
-      setExpandedMenu('5'); // Open the Organizational Units submenu
-    }
-  };
+  // // Component mapping object
+  // const handleMenuSelect = (key) => {
+  //   setSelectedKey(key);
+  //   if (key === 'categories') {
+  //     setExpandedMenu('5'); // Open the Organizational Units submenu
+  //   }
+  // };
   // Update the component mapping to pass the handler
   const componentMap = {
     '1': <DashBoard onMenuSelect={handleMenuSelect} />,
