@@ -85,18 +85,18 @@ const HomePage = () => {
 
       {/* 22KT Jewelry Showcase */}
       <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* Left Content */}
-            <div className="text-white">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif mb-3">
+            <div className="text-white lg:px-20 px-5 w-full">
+              <h2 className="text-3xl lg:text-5xl font-serif mb-3 w-full">
                 Dial Karaikudi
               </h2>
-              <div className="mb-6">
-                <p className="text-base sm:text-lg mb-1">
+              <div className="mb-6 w-full">
+                <p className="text-xl mb-1">
                   Grab for Advertising with us
                 </p>
-                <p className="text-lg sm:text-xl md:text-2xl font-light mb-4">
+                <p className="text-xl mb-5">
                   Starting your own Business Now
                 </p>
                 <button className="bg-white text-blue-950 px-6 py-2 rounded-md hover:bg-gray-100 transition duration-300 uppercase text-sm font-semibold">
