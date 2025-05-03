@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -7,47 +7,55 @@ import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Home/Carousel";
 import Banner from "./Home/Banner";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import {API} from '../../config/config'
+import { MdCategory } from "react-icons/md";
 
-const serviceCategories = {
-  essentialServices: [
-    { name: "Restaurants", icon: "🍽️", path: "/restaurants" },
-    { name: "Hotels", icon: "🏨", path: "/hotels" },
-    { name: "Hospitals", icon: "🏥", path: "/hospitals" },
-    { name: "Education", icon: "🎓", path: "/education" },
-    { name: "Beauty Spa", icon: "💆‍♀️", path: "/beauty-spa" },
-    { name: "Home Decor", icon: "🏠", path: "/home-decor" },
-    { name: "Wedding", icon: "👰", path: "/wedding" },
-    { name: "Rent & Hire", icon: "🔑", path: "/rent" },
-    { name: "Contractors", icon: "👷", path: "/contractors" },
-    { name: "Pet Shops", icon: "🐾", path: "/pet-shops" },
-    { name: "PG/Hostels", icon: "🛏️", path: "/hostels" },
-    { name: "Estate ", icon: "🏘️", path: "/estate" },
-    { name: "Dentists", icon: "🦷", path: "/dentists" },
-    { name: "Gym", icon: "💪", path: "/gym" },
-    { name: "Loans", icon: "💰", path: "/loans" },
-    { name: "Event ", icon: "🎉", path: "/events" },
-    { name: "Driving ", icon: "🚗", path: "/driving" },
-    { name: "Packers", icon: "📦", path: "/packers" },
-    { name: "Courier ", icon: "📬", path: "/courier" },
-    { name: "Popular Categories", icon: "📋", path: "/categories" },
-  ],
-};
+// const serviceCategories = {
+//   essentialServices: [
+//     { name: "Restaurants", icon: "🍽️", path: "/restaurants" },
+//     { name: "Hotels", icon: "🏨", path: "/hotels" },
+//     { name: "Hospitals", icon: "🏥", path: "/hospitals" },
+//     { name: "Education", icon: "🎓", path: "/education" },
+//     { name: "Beauty Spa", icon: "💆‍♀️", path: "/beauty-spa" },
+//     { name: "Home Decor", icon: "🏠", path: "/home-decor" },
+//     { name: "Wedding", icon: "👰", path: "/wedding" },
+//     { name: "Rent & Hire", icon: "🔑", path: "/rent" },
+//     { name: "Contractors", icon: "👷", path: "/contractors" },
+//     { name: "Pet Shops", icon: "🐾", path: "/pet-shops" },
+//     { name: "PG/Hostels", icon: "🛏️", path: "/hostels" },
+//     { name: "Estate ", icon: "🏘️", path: "/estate" },
+//     { name: "Dentists", icon: "🦷", path: "/dentists" },
+//     { name: "Gym", icon: "💪", path: "/gym" },
+//     { name: "Loans", icon: "💰", path: "/loans" },
+//     { name: "Event ", icon: "🎉", path: "/events" },
+//     { name: "Driving ", icon: "🚗", path: "/driving" },
+//     { name: "Packers", icon: "📦", path: "/packers" },
+//     { name: "Courier ", icon: "📬", path: "/courier" },
+//     { name: "Popular Categories", icon: "📋", path: "/categories" },
+//   ],
+// };
+
 const HomePage = () => {
-  React.useEffect(() => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      .swiper-button-next, .swiper-button-prev {
-        color: grey !important;
-        font-size: 1.2rem !important;
-        width: 50px !important;
-        height: 50px !important;
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API}/categories`);
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
       }
-      .swiper-button-next::after, .swiper-button-prev::after {
-        font-size: 1.2rem !important;
-      }
-    `;
-    document.head.appendChild(style);
+    };
+    fetchCategories();
   }, []);
+
+  const handleCategoryClick = (category) => {
+    navigate(`/businesslist/${category}`, );
+  };
 
   return (
     <>
@@ -62,21 +70,22 @@ const HomePage = () => {
               Products & Services
             </h2>
             <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4">
-              {serviceCategories.essentialServices.map((service, index) => (
-                <a
-                  key={index}
-                  href={service.path}
-                  className="group flex flex-col items-center justify-center p-2 hover:-translate-y-1 transition-all duration-300"
+              {categories.map((category) => (
+                <div
+                  key={category._id}
+                  onClick={() => handleCategoryClick(category._id)}
+                  className="group flex flex-col items-center justify-center p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 >
                   <div className="w-[60px] h-[60px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 border border-gray-500">
                     <span className="text-2xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      {service.icon}
+                      {/* You can add icons based on category if available */}
+                      <img src={category.iconUrl} alt={category.displayName} className="w-full h-full text-[8px] rounded-xl" />
                     </span>
                   </div>
                   <span className="text-xs text-center text-gray-400 font-medium group-hover:text-gray-900 transition-colors duration-300">
-                    {service.name}
+                    {category.displayName}
                   </span>
-                </a>
+                </div>
               ))}
             </div>
           </div>

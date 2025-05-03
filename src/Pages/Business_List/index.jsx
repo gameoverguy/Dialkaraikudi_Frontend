@@ -10,67 +10,86 @@ import FilterModal from "./filter";
 import adds from "../../assets/adds.jpg";
 import { IoIosStar } from "react-icons/io";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [visiblePhoneId, setVisiblePhoneId] = useState(null);
+  const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchBusinesses = async () => {
+      try {
+        setLoading(true);
+        // Get category ID from location state
+        const categoryId = location.state?.category;
+        console.log('Category ID from state:', categoryId);
 
-      const res = await axios.get('http://192.168.1.33:5000/business')
-      // console.log("saki", res.data.data)
-      setData(res.data.data);
+        // Only fetch category businesses if we have an ID
+        if (id) {
+          // const url = `http://192.168.1.33:5000/business/category/${id}`;
+          // console.log('Fetching from URL:', url);
+          const res = await axios.get(`http://192.168.1.33:5000/business/category/${id}`);
+          setData(res.data.data);
+                   
+        } else {
+          // Fetch all businesses if no category ID
+          const res = await axios.get('http://192.168.1.33:5000/business');
+          setData(res.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching businesses:', error);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBusinesses();
+  }, [location.state]);
 
-    }
-    fetch();
-  }, [])
-  
-  const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+  console.log(data);
 
   const toggleAmenities = (id) => {
     setExpandedBusinessId(expandedBusinessId === id ? null : id);
   };
 
-  const [filterOpen, setFilterOpen] = useState(false);
-  // console.log(data);
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
   };
 
+  if (loading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
   return (
     <>
-    <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
-      {/* Image Section */}
-      <div className="w-full">
-        <img
-          src={banner} // Replace with your actual image URL
-          alt="Luxury Home"
-          className="w-full h-full object-cover"
-        />
+      <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
+        <div className="w-full">
+          <img src={banner} alt="Banner" className="w-full h-full object-cover" />
+        </div>
       </div>
-
-      
-    </div>
-
 
       <div className="flex cursor-pointer py-5">
         <div className="w-full xl:w-9/12">
           <div className="flex justify-center w-full flex-col">
             <div className="md:p-4 w-full xl:w-10/12">
-              <div>
-                <p className="text-sm text-gray-500">
-                  Karaikudi &gt; Hotel &gt; kimikimi , kraikudi
-                </p>
+              <div className="flex">
+                <Link className="text-sm text-gray-500 hover:text-blue-500">
+                  Karaikudi &gt; 
+                </Link>
+                <Link className="text-sm text-gray-500 hover:text-blue-500">
+                  {data?.category?.displayName}
+                </Link>
               </div>
               <div className="mt-2">
                 <h1 className="text-lg font-bold">
-                  Best Deals - Top Hotels in Krishna Garden, Karaikudi
+                  Best Businesses in Karaikudi
                 </h1>
               </div>
               <div className="relative bg-white">
@@ -92,7 +111,12 @@ const Bussiness_List = () => {
               />
             </div>
             <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
-              {data.map((data, i) => (
+              {data.length === 0 ? (
+                <div className="text-center py-10">
+                  <p className="text-gray-500">No businesses found in this category.</p>
+                </div>
+              ) : (
+                data.map((data, i) => (
                 <div
                   key={i}
                   className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
@@ -150,7 +174,7 @@ const Bussiness_List = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
         </div>
