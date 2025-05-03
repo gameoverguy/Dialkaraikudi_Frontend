@@ -1,220 +1,149 @@
-import React, { useEffect, useState } from "react";
-import FloatingInput from "../../Components/FloatingInput";
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import axios from "axios";
-import CustomModal from "../../Components/modal";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import FloatingInput from '../../Components/FloatingInput';
+import img from '../../assets/img.png';
+import ForgotPassword from '../UserLogin/ForgotPassword';
+import OTPVerification from './OTPVerification';
 
-const AdminLogin = ({ isOpen, onClose, setShowLoginModal, setIsSignupOpen, setIsForgotPasswordOpen }) => {
-    // const navigate = useNavigate();
+
+const AdminLogin = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        email: "",
-        password: "",
+        email: '',
+        password: ''
     });
-    const [errors, setErrors] = useState({
-        email: "",
-        password: "",
-    });
-    const [errorOverall, setErrorOverall] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    useEffect(() => {
-        if (!isOpen) {
-            setFormData({ email: "", password: "" });
-            setErrors({ email: "", password: "" });
-            setErrorOverall("");
-            setShowPassword(false);
-            // setIsSignupOpen(false);
-        }
-    }, [isOpen]);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const [errors, setErrors] = useState({});
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [showOTPModal, setShowOTPModal] = useState(false);
+    const [otpEmail, setOtpEmail] = useState("");
+    const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-        let errorMessage = "";
-
-        if (name === 'email') {
-            const emailValue = value.replace(/[^a-zA-Z0-9@.]/g, '').toLowerCase();
-            setFormData(prev => ({ ...prev, [name]: emailValue }));
-
-            if (value !== emailValue) {
-            } else if (emailValue.length > 50) {
-            } else if (emailValue.includes('@')) {
-                errorMessage = emailRegex.test(emailValue) ? "" : "";
-            }
-            setErrors(prev => ({ ...prev, email: errorMessage }));
-        } else if (name === 'password') {
-            const passwordValue = value.replace(/\s/g, '');
-            setFormData(prev => ({ ...prev, [name]: passwordValue }));
-            if (passwordValue.length > 20) {
-            } else if (value !== passwordValue) {
-            }
-
-            setErrors(prev => ({ ...prev, password: errorMessage }));
-        }
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        setErrors(prev => ({
+            ...prev,
+            [name]: ''
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const newErrors = {};
 
-        const newErrors = {
-            email: !formData.email ? "Email is required" :
-                formData.email.length < 10 ? "Email must be at least 10 characters" :
-                    formData.email.length > 50 ? "Email must not exceed 50 characters" :
-                        !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
-            password: !formData.password ? "Password is required" :
-                formData.password.length < 6 ? "Password must be at least 8 characters" :
-                    formData.password.length > 20 ? "Password must not exceed 20 characters" : ""
-        };
-        setErrors(newErrors);
-        setErrorOverall("");
+        if (!formData.email) newErrors.email = 'Email is required';
+        if (!formData.password) newErrors.password = 'Password is required';
 
-        if (!newErrors.email && !newErrors.password) {
-            try {
-                const response = await axios.post('http://192.168.1.33:5000/user/login', {
-                    email: formData.email,
-                    password: formData.password
-                });
-
-                if (response.data) {
-                    console.log('Login successful:', response.data);
-                    if (response.data.token) {
-                        Cookies.set('userToken', response.data.token, {
-                            expires: 21,
-                            secure: true,
-                            sameSite: 'Strict'
-                        });
-                    }
-                    localStorage.setItem('userData', JSON.stringify({
-                        name: response.data.user.name,
-                        email: response.data.user.email
-                    }));
-                    
-                } toast.success('Login successful!');
-                setTimeout(() => {
-                    setShowLoginModal(false);
-                }, 1500);
-            }catch (error) {
-            console.error('Login failed:', error);
-            toast.error('Login failed!');
-            setErrorOverall(error.response?.data?.message || 'Invalid email or password');
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
         }
-    }
-};
-if (!isOpen) return null;
-const handleSignupClick = () => {
-    onClose();
-    if (setIsSignupOpen) {
-        setIsSignupOpen(true);
-    }
-};
-const handleForgotPasswordClick = (e) => {
-    e.preventDefault();
-    onClose();
-    if (setIsForgotPasswordOpen) {
-        setIsForgotPasswordOpen(true); // Only open the ForgotPassword modal
-    }
-};
-return (
-    <>
-        <CustomModal
-            isOpen={isOpen}
-            onClose={onClose}
-            title=""
-            classname="w-full max-w-md"
-        >
-            <div className="p-2">
-                <h1 className="text-lg font-bold text-gray-800 mb-4">Member Login</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <FloatingInput
-                            type="email"
-                            placeholder="Email Address"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            // required
-                            // icon={<MdOutlineEmail className="w-5 h-5" />}
-                            // iconPosition="left"
-                            error={errors.email}
-                            maxLength={50}
-                        />
 
-                        <div className="relative">
+        try {
+            const response = await axios.post('http://192.168.1.33:5000/admin/login', formData);
+            if (response.data) {
+                localStorage.setItem('adminToken', response.data.token);
+                navigate('/admin/dashboard');
+            }
+        } catch (error) {
+            setErrors({
+                overall: error.response?.data?.message || 'Login failed. Please try again.'
+            });
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex">
+            {/* Left side - Image */}
+            <div className="hidden lg:flex lg:w-1/2">
+                <img 
+                    src={img} 
+                    alt="Login" 
+                    className="w-full h-full object-cover"
+                />
+            </div>
+
+            {/* Right side - Login Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+                <div className="w-full max-w-md space-y-8">
+                    <div className="text-center">
+                        <h2 className="text-3xl font-bold text-gray-900">
+                            Admin Login
+                        </h2>
+                        <p className="mt-2 text-sm text-gray-600">
+                            Please sign in to your account
+                        </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                        <div className="space-y-4">
                             <FloatingInput
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                value={formData.email}
+                                onChange={handleChange}
+                                error={errors.email}
+                            />
+
+                            <FloatingInput
+                                type="password"
                                 name="password"
+                                placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                // required
-                                // icon={<RiLockPasswordLine className="w-5 h-5" />}
-                                // iconPosition="left"
                                 error={errors.password}
-                                maxLength={20}
                             />
-                            {formData.password && (
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                                >
-                                    {showPassword ? (
-                                        <AiOutlineEye className="w-5 h-5" />
-                                    ) : (
-                                        <AiOutlineEyeInvisible className="w-5 h-5" />
-                                    )}
-                                </button>
-                            )}
                         </div>
-                    </div>
-                    <div className="h-2 mb-2">
-                        {errorOverall && (
-                            <p className="text-red-500 text-xs text-center">{errorOverall}</p>
-                        )}
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02] cursor-pointer"
-                    >
-                        LOGIN
-                    </button>
-                </form>
 
-                <div className="flex justify-between items-center mt-4 text-xs">
-                    <div>
-                        <span className="text-gray-600">Don't have an account? </span>
+                        {errors.overall && (
+                            <p className="text-red-500 text-sm text-center">
+                                {errors.overall}
+                            </p>
+                        )}
+
+                        <div className="flex items-center justify-end">
+                            <button
+                                type="button"
+                                onClick={() => setShowForgotPassword(true)}
+                                className="text-sm text-purple-600 hover:text-purple-500"
+                            >
+                                Forgot your password?
+                            </button>
+                        </div>
+
                         <button
-                            onClick={handleSignupClick}
-                            className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
+                            type="submit"
+                            className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200"
                         >
-                            Register
+                            Sign In
                         </button>
-                    </div>
-                    <a
-                        onClick={handleForgotPasswordClick}
-                        className="text-purple-600 hover:text-purple-800 cursor-pointer"
-                    >
-                        Forgot Password?
-                    </a>
+                    </form>
                 </div>
             </div>
-        </CustomModal>
-        <ToastContainer
-            position="top-right"
-            autoClose={1500}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-        />
-    </>
-);
+
+            <ForgotPassword
+                isOpen={showForgotPassword}
+                onClose={() => setShowForgotPassword(false)}
+                setShowOTPModal={setShowOTPModal}
+                setOtpEmail={setOtpEmail}
+            />
+            
+            <OTPVerification
+                isOpen={showOTPModal}
+                onClose={() => setShowOTPModal(false)}
+                email={otpEmail}
+                onVerificationSuccess={() => {
+                    setShowOTPModal(false);
+                    setOtpEmail("");
+                }}
+            />
+        </div>
+    );
 };
 
 export default AdminLogin;

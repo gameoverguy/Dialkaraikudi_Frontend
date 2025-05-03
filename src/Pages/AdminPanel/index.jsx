@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   MdDashboard,
   MdPeople,
@@ -8,15 +8,15 @@ import {
   MdExpandLess,
   MdExpandMore,
   MdChevronLeft,
-  MdChevronRight
-} from 'react-icons/md';
-import UserManagement from './UserMangement';
-import CategoryManagement from './OrganizationMaterial/Category';
-import BusinessManagement from './BussinessManagement';
-import DashBoard from './DashBoard';
-import logo from '../../assets/bulb.png'
-import logo1 from '../../assets/logo_01.png'
-import HomePage from './Advertisment/HomePage';
+  MdChevronRight,
+} from "react-icons/md";
+import UserManagement from "./UserMangement";
+import CategoryManagement from "./OrganizationMaterial/Category";
+import BusinessManagement from "./BussinessManagement";
+import DashBoard from "./DashBoard";
+import logo from "../../assets/bulb.png";
+import logo1 from "../../assets/logo_01.png";
+import HomePage from "./Advertisment/HomePage";
 
 // Placeholder components - Replace these with your actual components
 const PlatformInfo = () => <div>Platform Info Content</div>;
@@ -41,61 +41,58 @@ const AdminPanel = () => {
     // Initial check
     handleResize();
     // Add event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const settingsItems = [
-    { key: 'platform', label: 'Platform Info' },
-    { key: 'gateway', label: 'Gateway Configuration' },
+    { key: "platform", label: "Platform Info" },
+    { key: "gateway", label: "Gateway Configuration" },
   ];
 
-  const organizationItems = [
-    { key: 'categories', label: 'Categories' },
-  ];
-  
+  const organizationItems = [{ key: "categories", label: "Categories" }];
+
   const advertisementItems = [
-    { key: 'home', label: 'Home Page' },
-    { key: 'business', label: 'Business Listing Page' },
+    { key: "home", label: "Home Page" },
+    { key: "business", label: "Business Listing Page" },
   ];
 
   const menuItems = [
     {
-      key: '1',
+      key: "1",
       icon: <MdDashboard size={20} />,
-      label: 'Dashboard',
+      label: "Dashboard",
     },
     {
-      key: '2',
+      key: "2",
       icon: <MdPeople size={20} />,
-      label: 'User Management',
+      label: "User Management",
     },
     {
-      key: '5',
+      key: "5",
       icon: <MdFolder size={20} />,
-      label: 'Organizational Units',
+      label: "Organizational Units",
       children: organizationItems,
     },
     {
-      key: '3',
+      key: "3",
       icon: <MdBusiness size={20} />,
-      label: 'Business Management',
+      label: "Business Management",
     },
     {
-      key: '4',
+      key: "4",
       icon: <MdSettings size={20} />,
-      label: 'Settings',
+      label: "Settings",
       children: settingsItems,
     },
     {
-      key: '6',
+      key: "6",
       icon: <MdSettings size={20} />,
-      label: 'Advertisement',
+      label: "Advertisement",
       children: advertisementItems,
     },
-
   ];
 
   const handleMenuClick = (key) => {
@@ -104,7 +101,11 @@ const AdminPanel = () => {
     localStorage.setItem('selectedMenuItem', key);
     
     // Close any open submenu if clicking a non-submenu item
-    if (!menuItems.find(item => item.children?.some(child => child.key === key))) {
+    if (
+      !menuItems.find((item) =>
+        item.children?.some((child) => child.key === key)
+      )
+    ) {
       setExpandedMenu(null);
     }
   };
@@ -129,8 +130,10 @@ const AdminPanel = () => {
   const renderMenuItem = (item) => {
     const isSelected = selectedKey === item.key;
     const isExpanded = expandedMenu === item.key;
-    const hasSelectedChild = item.children?.some(child => child.key === selectedKey);
-  
+    const hasSelectedChild = item.children?.some(
+      (child) => child.key === selectedKey
+    );
+
     return (
       <div key={item.key}>
         <div
@@ -138,7 +141,11 @@ const AdminPanel = () => {
             ${isSelected ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : hasSelectedChild ? '' : 'hover:bg-gray-100'}`}
           onClick={() => item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)}
         >
-          <span className={`flex items-center ${isSelected ? 'text-[#0A8A3D]' : 'text-[#F7941D]'}`}>
+          <span
+            className={`flex items-center ${
+              isSelected ? "text-[#0A8A3D]" : "text-[#F7941D]"
+            }`}
+          >
             {item.icon}
           </span>
           {!collapsed && (
@@ -183,11 +190,18 @@ const AdminPanel = () => {
     className="transition-all duration-200"
     onClick={() => setCollapsed(!collapsed)}
   >
-    {collapsed ? 
-      <MdChevronRight size={20} className='bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer p-1'/> : 
-      <MdChevronLeft size={20} className='bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer p-1'/>
-    }
-  </div>
+    {collapsed ? (
+      <MdChevronRight
+        size={20}
+        className="bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer p-1"
+      />
+    ) : (
+      <MdChevronLeft
+        size={20}
+        className="bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer p-1"
+      />
+    )}
+  </div>;
 
   // // Component mapping object
   // const handleMenuSelect = (key) => {
@@ -198,14 +212,14 @@ const AdminPanel = () => {
   // };
   // Update the component mapping to pass the handler
   const componentMap = {
-    '1': <DashBoard onMenuSelect={handleMenuSelect} />,
-    '2': <UserManagement />,
-    '3': <BusinessManagement />,
-    'platform': <PlatformInfo />,
-    'gateway': <GatewayConfig />,
-    'categories': <CategoryManagement />,
-    'home': <HomePage />,
-    'business': <CategoryManagement />
+    1: <DashBoard onMenuSelect={handleMenuSelect} />,
+    2: <UserManagement />,
+    3: <BusinessManagement />,
+    platform: <PlatformInfo />,
+    gateway: <GatewayConfig />,
+    categories: <CategoryManagement />,
+    home: <HomePage />,
+    business: <CategoryManagement />,
   };
 
   // Get the current component based on selected key
@@ -216,44 +230,63 @@ const AdminPanel = () => {
   return (
     <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
       {/* Sidebar - Fixed position */}
-      <div className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
-        ${collapsed ? 'w-20 hover:${!collapsed} absoulute' : 'w-64'} `}>
-          
-        <div className={`p-4 flex  ${collapsed ? 'flex-col gap-5 items-center':'justify-between items-center'}`}>
+      <div
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
+        ${collapsed ? "w-20 hover:${!collapsed} absoulute" : "w-64"} `}
+      >
+        <div
+          className={`p-4 flex  ${
+            collapsed
+              ? "flex-col gap-5 items-center"
+              : "justify-between items-center"
+          }`}
+        >
           <div>
-          {!collapsed ? <img src={logo1} className='h-14' /> : <img src={logo} className='h-14'/>}
+            {!collapsed ? (
+              <img src={logo1} className="h-14" />
+            ) : (
+              <img src={logo} className="h-14" />
+            )}
           </div>
           <div
-          className="transition-all duration-200 "
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? <MdChevronRight size={20} className='bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer'/> : <MdChevronLeft size={20} className='bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer'/>}
+            className="transition-all duration-200 "
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            {collapsed ? (
+              <MdChevronRight
+                size={20}
+                className="bg-[#0A8A3D] text-white rounded-2xl text-2xl cursor-pointer"
+              />
+            ) : (
+              <MdChevronLeft
+                size={20}
+                className="bg-[#F7941D] text-white rounded-2xl text-2xl cursor-pointer"
+              />
+            )}
+          </div>
         </div>
-        </div>
-      
+
         <div className="mt-4 space-y-1 px-2 h-[calc(100vh-140px)] overflow-y-auto">
           {menuItems.map(renderMenuItem)}
         </div>
-      
       </div>
 
       {/* Main content wrapper */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 min-h-screen
-        ${collapsed ? 'ml-20' : 'ml-64'}`}
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 min-h-screen
+        ${collapsed ? "ml-20" : "ml-64"}`}
       >
         {/* Fixed header */}
-        <header className="fixed top-0 right-0 h-16 bg-white shadow-sm z-10 transition-all duration-300"
+        <header
+          className="fixed top-0 right-0 h-16 bg-white shadow-sm z-10 transition-all duration-300"
           style={{
-            left: collapsed ? '80px' : '256px'
+            left: collapsed ? "80px" : "256px",
           }}
-        >
-        </header>
+        ></header>
 
         {/* Scrollable main content */}
         <main className="flex-1 p-6 mt-16 relative h-[calc(100vh-4rem)]">
-          <div className="">
-            {getCurrentComponent()}
-          </div>
+          <div className="">{getCurrentComponent()}</div>
         </main>
       </div>
     </div>

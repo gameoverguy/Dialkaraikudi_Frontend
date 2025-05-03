@@ -4,21 +4,42 @@ import Photos from "./Photos";
 import Reviews from "./Reviews";
 import Description from "./Description";
 import { IoIosArrowForward } from "react-icons/io";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const BusinessDetails = () => {
   const [formData, setFormData] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
   const { id } = useParams();
   const location = useLocation();
-  const businessData = location.state;
-  console.log(businessData);
+  const selectedBusiness = location.state;
+
+  const toggleAmenities = (id) => {
+    setExpandedBusinessId(expandedBusinessId === id ? null : id);
+  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (businessData) {
-      setFormData(businessData);
-    }
-  }, [location.state]);
+    const fetchBusinessDetails = async () => {
+      if (!id) {
+        navigate('/'); // Redirect to home if no ID
+        return;
+      }
+
+      try {
+        const response = await axios.get(`http://192.168.1.33:5000/business/${id}`);
+        setFormData(response.data.data);
+      } catch (error) {
+        console.error('Error fetching business details:', error);
+        // Optionally redirect on error
+        // navigate('/');
+      }
+    };
+
+    fetchBusinessDetails();
+  }, [id, navigate]);
+
+
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
     const section = document.getElementById(sectionId);
