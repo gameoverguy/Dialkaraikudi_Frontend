@@ -29,6 +29,11 @@ const BusinessDetails = () => {
       try {
         const response = await axios.get(`http://192.168.1.33:5000/business/${id}`);
         setFormData(response.data.data);
+        console.log(response.data.data);
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       } catch (error) {
         console.error('Error fetching business details:', error);
         // Optionally redirect on error
@@ -67,8 +72,8 @@ const BusinessDetails = () => {
       <div className="bg-white shadow-xl pt-2">
         <div className="flex p-4">
           <Link to='/' className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer">Karaikudi <span><IoIosArrowForward /></span></Link>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">Hotels in Karaikudi <span><IoIosArrowForward /></span></p>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.businessName}</p>
+          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.business.category.displayName} in Karaikudi <span><IoIosArrowForward /></span></p>
+          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.business.businessName}</p>
         </div>
         {formData && (
           <>

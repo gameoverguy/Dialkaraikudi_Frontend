@@ -118,11 +118,11 @@ const Header = () => {
             </button>
 
             {/* Notifications */}
-            <div className="relative">
+            {/* <div className="relative">
               <button className="w-8 md:w-12 h-8 md:h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
                 <MdNotificationsActive className="text-xl md:text-2xl text-gray-700 hover:text-emerald-600" />
               </button>
-            </div>
+            </div> */}
 
             {/* Auth Section */}
             {userData ? (
