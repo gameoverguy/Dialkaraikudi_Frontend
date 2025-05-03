@@ -81,7 +81,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-white z-40 w-full px-2 md:px-2 items-center shadow-md border-b border-gray-200">
+      <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-2 items-center shadow-md border-b border-gray-200">
         <div className="md:w-11/12 mx-auto flex">
           <div className="w-full xl:w-7/12 flex space-x-6 items-center">
             {/* Logo */}
@@ -120,8 +120,8 @@ const Header = () => {
 
             {/* Notifications */}
             <div className="relative">
-              <button className="w-12 h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
-                <MdNotificationsActive className="text-2xl text-gray-700 hover:text-emerald-600" />
+              <button className="w-8 md:w-12 h-8 md:h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
+                <MdNotificationsActive className="text-xl md:text-2xl text-gray-700 hover:text-emerald-600" />
               </button>
             </div>
 
