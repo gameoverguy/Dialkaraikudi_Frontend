@@ -4,11 +4,6 @@ import { CiLocationOn } from "react-icons/ci";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdNotificationsActive } from "react-icons/md";
 import { LuCircleUserRound } from "react-icons/lu";
-import AdminLogin from "../Pages/UserLogin";
-import SignupModal from "../Pages/SignUp";
-import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
-import OTP from "../Pages/UserLogin/OTP";
-import ResetPassword from "../Pages/UserLogin/ResetPassword";
 import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
 import { useRef } from "react";
@@ -16,6 +11,10 @@ import { CiLogout } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
 import UserLogin from "../Pages/UserLogin";
+import SignupModal from "../Pages/SignUp";
+import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
+import OTP from "../Pages/UserLogin/OTP";
+import ResetPassword from "../Pages/UserLogin/ResetPassword";
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal } = useLoginModal();
@@ -232,7 +231,7 @@ const Header = () => {
       </div>
 
       {/* Modals */}
-      <AdminLogin
+      <UserLogin
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         setShowLoginModal={setShowLoginModal}
