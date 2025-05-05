@@ -27,6 +27,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         confirmPassword: false
     });
     const [errorOverall, setErrorOverall] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (!isOpen) {
@@ -99,6 +100,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const newErrors = {
             name: !formData.name ? "Name is required" :
                 formData.name.length < 3 ? "Name must be at least 3 characters" : "",
@@ -106,7 +108,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                 formData.email.length < 10 ? "Email must be at least 10 characters" :
                     !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
             password: !formData.password ? "Password is required" :
-                formData.password.length < 6 ? "Password must be at least 6 characters" : "",
+                formData.password.length < 8 ? "Password must be at least 8 characters" : "",
             confirmPassword: !formData.confirmPassword ? "Please confirm your password" :
                 formData.password !== formData.confirmPassword ? "Passwords do not match" : "",
             phone: !formData.phone ? "Phone number is required" :
@@ -133,13 +135,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                         if (setShowLoginModal) {
                             setShowLoginModal(true);
                         }
-                    }, 1500);
+                    }, 0);
                 }
             } catch (error) {
                 console.error('Registration failed:', error);
                 toast.error('Registration failed. Please try again.');
                 setErrorOverall(error.response?.data?.message || 'Registration failed. Please try again.');
+            } finally {
+                setIsSubmitting(false);
             }
+        } else {
+            setIsSubmitting(false);
         }
     };
 
@@ -288,9 +294,13 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                         </div>
                         <button
                             type="submit"
-                            className="w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+                            disabled={isSubmitting}
+                            className={`w-full text-xs font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isSubmitting
+                                    ? 'bg-gray-400 cursor-not-allowed opacity-70'
+                                    : 'bg-purple-600 hover:bg-purple-700 text-white cursor-pointer'
+                                }`}
                         >
-                            REGISTER
+                            {isSubmitting ? 'REGISTERING...' : 'REGISTER'}
                         </button>
                     </form>
 

@@ -191,7 +191,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
                             className={`w-full text-xs font-semibold bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'
                                 }`}
                         >
-                            {isSubmitting ? 'VERIFYING...' : 'Verify OTP'}
+                            {isSubmitting ? 'VERIFYING...' : 'VERIFY OTP'}
                         </button>
                         <div className="text-center">
                             {timer > 0 ? (
@@ -256,7 +256,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
                             className={`w-full text-sm font-semibold bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'
                                 }`}
                         >
-                            {isSubmitting ? 'RESETTING...' : 'Reset Password'}
+                            {isSubmitting ? 'RESETTING...' : 'RESET PASSWORD'}
                         </button>
                     </form>
                 )}

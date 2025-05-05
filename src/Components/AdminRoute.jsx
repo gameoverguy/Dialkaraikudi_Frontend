@@ -3,9 +3,11 @@ import Cookies from 'js-cookie';
 
 const AdminRoute = ({ children }) => {
   const adminToken = Cookies.get('adminToken');
-  const isDirectAccess = !document.referrer.includes(window.location.host);
+  console.log(adminToken);
+  
+  // const isDirectAccess = !document.referrer.includes(window.location.host);
 
-  if (isDirectAccess || !adminToken) {
+  if ( !adminToken) {
     return <Navigate to="/adminlogin" replace />;
   }
 

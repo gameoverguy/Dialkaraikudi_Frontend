@@ -45,10 +45,10 @@ function App() {
               {/* <Route path="/Contact" element={<ContactDetails />} /> */}
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
-            <Route path="/adminpanel" element={
-              <AdminRoute>
+            <Route path="/adminpanel" element={     
+               <AdminRoute> 
                 <AdminPanel />
-              </AdminRoute>
+                </AdminRoute> 
             } />
             <Route path="*" element={<NotFound />} />
           </Routes>

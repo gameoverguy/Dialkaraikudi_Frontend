@@ -1,19 +1,27 @@
-// src/pages/AdManager.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { uploadMultipleToCloudinary } from "../../../utils/cloudinaryUpload";
 import { API } from "../../../../config/config";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import UploadForm from "./components/UploadForm";
+import ExistingAds from "./components/ExistingAds";
 
 const AdManager = () => {
   const [pages, setPages] = useState([]);
   const [selectedPage, setSelectedPage] = useState("");
   const [slots, setSlots] = useState([]);
+  const [activeTab, setActiveTab] = useState("upload");
   const [newSlot, setNewSlot] = useState({
     heading: "",
-    type: "single",
+    type: 1,
     interval: 5,
-    media: [],
+    mediaItems: [],
+    htmlContent: "",
   });
+  const [editingSlot, setEditingSlot] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [dragActive, setDragActive] = useState(false);
 
   useEffect(() => {
     fetchPages();
@@ -34,23 +42,74 @@ const AdManager = () => {
     setSlots(res.data.slots);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!newSlot.heading.trim()) newErrors.heading = "Heading is required";
+    if (!newSlot.type) newErrors.type = "Type is required";
+    if (
+      (newSlot.type === 2 || newSlot.type === 3) &&
+      (!newSlot.interval || newSlot.interval < 1)
+    ) {
+      newErrors.interval = "Valid interval is required for carousel/video";
+    }
+    if (
+      newSlot.type === 1 &&
+      !newSlot.htmlContent &&
+      newSlot.mediaItems.length === 0
+    ) {
+      newErrors.media = "Either HTML content or media is required";
+    }
+    if (
+      (newSlot.type === 2 || newSlot.type === 3) &&
+      newSlot.mediaItems.length === 0
+    ) {
+      newErrors.media = "Media is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleAddSlot = async () => {
-    const urls = await uploadMultipleToCloudinary(newSlot.media);
-    const payload = {
-      heading: newSlot.heading,
-      type: newSlot.type,
-      interval: newSlot.interval,
-      media: urls.map((url) => ({
-        url,
-        type: newSlot.type === "video" ? "video" : "image",
-        enabled: true,
-        priority: 1,
-        html: "",
-      })),
-    };
-    await axios.post(`${API}/ads/${selectedPage}/slot`, payload);
-    setNewSlot({ heading: "", type: "single", interval: 5, media: [] });
-    fetchSlots(selectedPage);
+    if (!validateForm()) return;
+
+    try {
+      const urls = await uploadMultipleToCloudinary(newSlot.mediaItems);
+      const payload = {
+        heading: newSlot.heading,
+        type: newSlot.type,
+        interval: newSlot.interval,
+        mediaItems: urls.map((url) => ({
+          url,
+          type: newSlot.type === 3 ? "video" : "image",
+          enabled: true,
+          priority: 1,
+          htmlContent: newSlot.type === 1 ? newSlot.htmlContent : "",
+        })),
+      };
+
+      if (editingSlot) {
+        await axios.put(
+          `${API}/ads/${selectedPage}/slot/${editingSlot._id}`,
+          payload
+        );
+        toast.success("Slot updated successfully");
+      } else {
+        await axios.post(`${API}/ads/${selectedPage}/slot`, payload);
+        toast.success("Slot added successfully");
+      }
+
+      setNewSlot({
+        heading: "",
+        type: 1,
+        interval: 5,
+        mediaItems: [],
+        htmlContent: "",
+      });
+      setEditingSlot(null);
+      fetchSlots(selectedPage);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to process slot");
+    }
   };
 
   const handleMediaToggle = async (slotId, mediaIndex, enabled) => {
@@ -68,128 +127,92 @@ const AdManager = () => {
     fetchSlots(selectedPage);
   };
 
-  const renderMedia = (media, index, slotId) => {
-    return (
-      <div key={index} className="relative w-24 h-24 border p-1">
-        {media.type === "video" ? (
-          <video
-            src={media.url}
-            className="w-full h-full object-cover"
-            controls
-          />
-        ) : (
-          <img
-            src={media.url}
-            alt="ad"
-            className="w-full h-full object-contain"
-          />
-        )}
-        <div className="flex justify-between mt-1 text-xs">
-          <label>
-            <input
-              type="checkbox"
-              checked={media.enabled}
-              onChange={() => handleMediaToggle(slotId, index, !media.enabled)}
-            />
-            Enable
-          </label>
-          <button
-            className="text-red-500"
-            onClick={() => handleDeleteMedia(slotId, index)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    );
+  const handleDeleteSlot = async (slotId) => {
+    if (window.confirm("Are you sure you want to delete this advertisement?")) {
+      try {
+        await axios.delete(`${API}/ads/${selectedPage}/slot/${slotId}`);
+        toast.success("Advertisement deleted successfully");
+        fetchSlots(selectedPage);
+      } catch (error) {
+        toast.error("Failed to delete advertisement");
+      }
+    }
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Advertisement Manager</h1>
+    <div className="p-6 max-w-6xl mx-auto bg-gray-50 min-h-screen">
+      <ToastContainer />
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h1 className="text-2xl font-bold mb-4">Advertisement Manager</h1>
+        <p className="text-gray-600 mb-4">
+          Manage your advertisements across different pages with our intuitive
+          interface.
+        </p>
 
-      <div className="mb-6">
-        <label className="mr-2 font-semibold">Select Page:</label>
-        <select
-          className="border p-2"
-          value={selectedPage}
-          onChange={(e) => setSelectedPage(e.target.value)}
-        >
-          {pages.map((page) => (
-            <option key={page} value={page}>
-              {page}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className="flex items-center space-x-4 mb-6">
+          <label className="text-gray-700 font-medium">Select Page:</label>
+          <select
+            className="border border-gray-300 rounded-md p-2 flex-grow max-w-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            value={selectedPage}
+            onChange={(e) => setSelectedPage(e.target.value)}
+          >
+            {pages.map((page) => (
+              <option key={page} value={page}>
+                {page}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="mb-6 border p-4 rounded-lg">
-        <h2 className="text-xl font-semibold mb-2">Add New Slot</h2>
-        <input
-          type="text"
-          placeholder="Heading"
-          value={newSlot.heading}
-          onChange={(e) => setNewSlot({ ...newSlot, heading: e.target.value })}
-          className="border p-2 mb-2 w-full"
-        />
-        <select
-          value={newSlot.type}
-          onChange={(e) => setNewSlot({ ...newSlot, type: e.target.value })}
-          className="border p-2 mb-2 w-full"
-        >
-          <option value="single">Single Image / HTML</option>
-          <option value="carousel">Carousel (Images Only)</option>
-          <option value="video">Video / GIF</option>
-        </select>
-
-        {(newSlot.type === "carousel" || newSlot.type === "video") && (
-          <input
-            type="number"
-            placeholder="Interval in seconds"
-            value={newSlot.interval}
-            onChange={(e) =>
-              setNewSlot({ ...newSlot, interval: parseInt(e.target.value) })
-            }
-            className="border p-2 mb-2 w-full"
-          />
-        )}
-
-        <input
-          type="file"
-          multiple
-          accept={newSlot.type === "video" ? "video/*" : "image/*"}
-          onChange={(e) =>
-            setNewSlot({ ...newSlot, media: Array.from(e.target.files) })
-          }
-          className="mb-2"
-        />
-        <button
-          onClick={handleAddSlot}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add Slot
-        </button>
-      </div>
-
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Existing Slots</h2>
-        <div className="space-y-4">
-          {slots.map((slot) => (
-            <div key={slot._id} className="border p-4 rounded-lg">
-              <h3 className="text-lg font-bold mb-1">{slot.heading}</h3>
-              <p className="text-sm italic">Type: {slot.type}</p>
-              {slot.type !== "single" && (
-                <p className="text-sm">Interval: {slot.interval} seconds</p>
-              )}
-              <div className="flex flex-wrap gap-2 mt-2">
-                {slot.mediaItems?.map((media, index) =>
-                  renderMedia(media, index, slot._id)
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="border-b border-gray-200 mb-6">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              className={`${
+                activeTab === "upload"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+              onClick={() => setActiveTab("upload")}
+            >
+              Upload New
+            </button>
+            <button
+              className={`${
+                activeTab === "existing"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+              onClick={() => setActiveTab("existing")}
+            >
+              Existing Ads
+            </button>
+          </nav>
         </div>
       </div>
+
+      {activeTab === "upload" && (
+        <UploadForm
+          newSlot={newSlot}
+          setNewSlot={setNewSlot}
+          handleAddSlot={handleAddSlot}
+          errors={errors}
+          dragActive={dragActive}
+          setDragActive={setDragActive}
+          editingSlot={editingSlot}
+        />
+      )}
+
+      {activeTab === "existing" && (
+        <ExistingAds
+          slots={slots}
+          handleMediaToggle={handleMediaToggle}
+          handleDeleteMedia={handleDeleteMedia}
+          setEditingSlot={setEditingSlot}
+          setActiveTab={setActiveTab}
+          setNewSlot={setNewSlot}
+          handleDeleteSlot={handleDeleteSlot}
+        />
+      )}
     </div>
   );
 };

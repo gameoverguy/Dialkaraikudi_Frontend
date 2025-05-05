@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import OTPVerification from './OTPVerification';
 import ForgotPassword from './ForgotPasswordLogin';
 import { API } from '../../../config/config';
+import Cookies from "js-cookie";
 
 const AdminLogin = () => {
     const navigate = useNavigate();
@@ -65,28 +66,34 @@ const AdminLogin = () => {
         };
         setErrors(newErrors);
         setErrorOverall("");
-
         if (!newErrors.email && !newErrors.password) {
             try {
                 const response = await axios.post(`${API}/admin/login`, formData);
-                console.log(response.data);
 
                 if (response.data) {
-                    // localStorage.setItem('adminToken', response.data.token);
+                    const { token, admin } = response.data;
+                    Cookies.set('adminToken', token, {
+                        expires: 7,
+                        secure: true,
+                        sameSite: 'Strict',
+                    });
+                    sessionStorage.setItem('adminData', JSON.stringify({
+                        admin_id: admin.id,
+                        email: admin.email
+                    }));
+
                     toast.success('Login successful!');
-                    setTimeout(() => {
-                        navigate('/adminpanel');
-                    }, 1500);
+                    navigate('/adminpanel');
                 }
             } catch (error) {
                 console.error('Login failed:', error);
                 toast.error('Login failed!');
                 setErrorOverall(error.response?.data?.message || 'Invalid email or password');
             } finally {
-                setIsSubmitting(false); // Re-enable button after completion
+                setIsSubmitting(false);
             }
         } else {
-            setIsSubmitting(false); // Re-enable button if validation fails
+            setIsSubmitting(false);
         }
     };
 
