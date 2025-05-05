@@ -73,7 +73,7 @@ const AdminLogin = () => {
                 if (response.data) {
                     const { token, admin } = response.data;
                     Cookies.set('adminToken', token, {
-                        expires: 7,
+                        expires: 21,
                         secure: true,
                         sameSite: 'Strict',
                     });
@@ -81,9 +81,11 @@ const AdminLogin = () => {
                         admin_id: admin.id,
                         email: admin.email
                     }));
-
+                    console.log('Response data:', response.data);
                     toast.success('Login successful!');
-                    navigate('/adminpanel');
+                    setTimeout(() => {
+                        navigate('/adminpanel');
+                    }, 1500);
                 }
             } catch (error) {
                 console.error('Login failed:', error);
@@ -209,6 +211,7 @@ const AdminLogin = () => {
                 draggable
                 pauseOnHover
                 theme="light"
+                toastClassName="z-[9999]"
             />
         </div>
     );
