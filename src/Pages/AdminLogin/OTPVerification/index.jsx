@@ -4,6 +4,7 @@ import FloatingInput from '../../../Components/FloatingInput';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { API } from '../../../../config/config';
 
 const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
     const [otp, setOtp] = useState(new Array(4).fill(''));
@@ -61,7 +62,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.1.33:5000/admin/verifyotp', {
+            const response = await axios.post(`${API}/admin/verifyotp`, {
                 email: email,
                 otp: otpValue
             });
@@ -96,7 +97,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
         }
 
         try {
-            const response = await axios.post('http://192.168.1.33:5000/admin/resetpassword', {
+            const response = await axios.post(`${API}/admin/resetpassword`, {
                 email: email,
                 newPassword: newPassword,
                 confirmPassword: confirmPassword
@@ -116,7 +117,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
     };
     const handleResendOTP = async () => {
         try {
-            const response = await axios.post('http://192.168.1.33:5000/admin/forgotpassword', {
+            const response = await axios.post(`${API}/admin/forgotpassword`, {
                 email: email
             });
             if (response.data) {

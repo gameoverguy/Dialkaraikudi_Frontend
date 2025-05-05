@@ -8,6 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import OTPVerification from './OTPVerification';
 import ForgotPassword from './ForgotPasswordLogin';
+import { API } from '../../../config/config';
 
 const AdminLogin = () => {
     const navigate = useNavigate();
@@ -67,7 +68,7 @@ const AdminLogin = () => {
 
         if (!newErrors.email && !newErrors.password) {
             try {
-                const response = await axios.post('http://192.168.1.33:5000/admin/login', formData);
+                const response = await axios.post(`${API}/admin/login`, formData);
                 console.log(response.data);
 
                 if (response.data) {

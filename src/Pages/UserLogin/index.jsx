@@ -6,6 +6,7 @@ import CustomModal from "../../Components/modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import { API } from "../../../config/config";
 
 const UserLogin = ({
   isOpen,
@@ -88,7 +89,7 @@ const UserLogin = ({
       try {
         setLoading(true);
         const response = await axios.post(
-          "http://192.168.1.33:5000/user/login",
+          `${API}/user/login`,
           {
             email: formData.email,
             password: formData.password,

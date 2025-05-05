@@ -6,6 +6,7 @@ import CustomModal from "../../../Components/modal";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API } from "../../../../config/config";
 
 const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
     const [newPassword, setNewPassword] = useState("");
@@ -16,6 +17,7 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [newPasswordError, setNewPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
         if (!isOpen) {
             setNewPassword("");
@@ -66,21 +68,25 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         if (!newPassword) {
             setNewPasswordError("New password is required");
+            setIsSubmitting(false);
             return;
         }
         if (!confirmPassword) {
             setConfirmPasswordError("Confirm password is required");
+            setIsSubmitting(false);
             return;
         }
         if (newPassword.length < 8) {
             setNewPasswordError("Password must be at least 8 characters");
+            setIsSubmitting(false);
             return;
         }
 
         try {
-            const response = await axios.post('http://192.168.1.33:5000/user/resetpassword', {
+            const response = await axios.post(`${API}/user/resetpassword`, {
                 email: email,
                 newPassword: newPassword,
                 confirmPassword: confirmPassword
@@ -107,6 +113,8 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
                 autoClose: 3000
             });
             setError(error.response?.data?.message || 'Password reset failed. Please try again.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
     if (!isOpen) return null;
@@ -179,15 +187,16 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
                         </div>
 
                         <button
-                            type="submit"
-                            className={`w-full text-xs py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${isFormValid()
-                                ? "bg-purple-600 hover:bg-purple-700 text-white"
-                                : "bg-gray-300 cursor-not-allowed text-gray-500"
-                                }`}
-                            disabled={!isFormValid()}
-                        >
-                            Reset Password
-                        </button>
+            type="submit"
+            disabled={!isFormValid() || isSubmitting}
+            className={`w-full text-xs py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
+                isFormValid() && !isSubmitting
+                    ? "bg-purple-600 hover:bg-purple-700 text-white"
+                    : "bg-gray-300 cursor-not-allowed text-gray-500"
+            }`}
+        >
+            {isSubmitting ? 'RESETTING PASSWORD...' : 'RESET PASSWORD'}
+        </button>
                     </form>
                 </div>
             </CustomModal>

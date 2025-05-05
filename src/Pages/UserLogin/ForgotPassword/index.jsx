@@ -4,12 +4,14 @@ import CustomModal from "../../../Components/modal";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API } from "../../../../config/config";
 
 const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [errorOverall, setErrorOverall] = useState("");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (!isOpen) {
       setEmail("");
@@ -39,24 +41,26 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const errorMessage = !email
       ? "Email is required"
       : email.length < 10
-      ? "Email must be at least 10 characters"
-      : email.length > 50
-      ? "Email must not exceed 50 characters"
-      : !emailRegex.test(email)
-      ? "Please enter a valid email"
-      : "";
+        ? "Email must be at least 10 characters"
+        : email.length > 50
+          ? "Email must not exceed 50 characters"
+          : !emailRegex.test(email)
+            ? "Please enter a valid email"
+            : "";
 
     setErrorOverall("");
 
     if (errorMessage) {
       setError(errorMessage);
+      setIsSubmitting(false);
     } else {
       try {
         const response = await axios.post(
-          "http://192.168.1.33:5000/user/forgotpassword",
+          `${API}/user/forgotpassword`,
           {
             email: email,
           }
@@ -82,8 +86,10 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
         toast.error("Failed to send reset link");
         setErrorOverall(
           error.response?.data?.message ||
-            "Failed to send reset link. Please try again."
+          "Failed to send reset link. Please try again."
         );
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -119,12 +125,13 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
                 </p>
               )}
             </div>
-
             <button
               type="submit"
-              className="w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 transform hover:scale-[1.02]"
+              disabled={isSubmitting}
+              className={`w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'
+                }`}
             >
-              RESET PASSWORD
+              {isSubmitting ? 'SENDING OTP...' : 'SEND OTP'}
             </button>
           </form>
         </div>

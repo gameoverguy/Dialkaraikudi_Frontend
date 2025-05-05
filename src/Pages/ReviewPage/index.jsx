@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
+import { API } from '../../../config/config';
 
 const ReviewPage = () => {
     const location = useLocation();
@@ -39,7 +40,7 @@ const ReviewPage = () => {
         setError('');
 
         try {
-            const res = await axios.post('http://192.168.1.33:5000/reviews/', {
+            const res = await axios.post(`${API}/reviews/`, {
                 user: userId,
                 business: businessId,
                 rating: rating || 0,

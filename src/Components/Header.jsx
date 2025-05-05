@@ -56,15 +56,15 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        (desktopDropdownRef.current &&
-          desktopDropdownRef.current.contains(event.target)) ||
-        (mobileDropdownRef.current &&
-          mobileDropdownRef.current.contains(event.target))
-      ) {
-        return;
-      }
-      setIsDropdownOpen(false);
+     if (
+  (desktopDropdownRef.current &&
+    desktopDropdownRef.current.contains(event.target)) ||
+  (mobileDropdownRef.current &&
+    mobileDropdownRef.current.contains(event.target))
+) {
+  return;
+}
+
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -118,16 +118,16 @@ const Header = () => {
             </button>
 
             {/* Notifications */}
-            <div className="relative">
+            {/* <div className="relative">
               <button className="w-8 md:w-12 h-8 md:h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
                 <MdNotificationsActive className="text-xl md:text-2xl text-gray-700 hover:text-emerald-600" />
               </button>
-            </div>
+            </div> */}
 
             {/* Auth Section */}
             {userData ? (
               <>
-                <div className="hidden md:flex items-center gap-4 relative bg-amber-300 rounded-2xl px-3 py-2">
+                <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
                   <div ref={desktopDropdownRef} className="relative">
                     <div
                       className="flex items-center gap-2 cursor-pointer group"
@@ -140,9 +140,8 @@ const Header = () => {
                         {userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
-                          isDropdownOpen ? "rotate-180" : ""
-                        }`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
