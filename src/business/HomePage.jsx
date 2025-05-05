@@ -59,7 +59,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="w-full flex justify-center border">
         <Carousel />
       </div>
 
@@ -496,7 +496,6 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-
 
       <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-3xl shadow-xl group">
         {/* Video Background */}

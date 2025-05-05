@@ -74,7 +74,7 @@ const Carousel = () => {
   }
 
   return (
-    <div className="overflow-hidden w-11/12">
+    <div className="overflow-hidden">
       <Slider {...settings}>
         {ads.map((ad) => (
           <div key={ad._id}>
