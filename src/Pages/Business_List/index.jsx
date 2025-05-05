@@ -23,10 +23,11 @@ const Bussiness_List = () => {
   
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visiblePhoneId, setVisiblePhoneId] = useState(null);
+  const [showContact, setShowContact] = useState(false);
   const [expandedBusinessId, setExpandedBusinessId] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const { id } = useParams();
+  const { handleOpenLoginModal } = useLoginModal();
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -38,8 +39,7 @@ const Bussiness_List = () => {
 
         // Only fetch category businesses if we have an ID
         if (id) {
-          // const url = `http://192.168.1.33:5000/business/category/${id}`;
-          // console.log('Fetching from URL:', url);
+      
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
                    
@@ -66,7 +66,19 @@ const Bussiness_List = () => {
     fetchBusinesses();
   }, [id, search.state]);
 
-  console.log(data);
+  const cookies = Cookies.get("userToken")
+
+  const handleShowContact = () => {
+    if (cookies) {
+      setShowContact(prev => !prev);
+    } else {
+      toast.warning("Please Login to show contact number");
+     setTimeout(()=>{
+      handleOpenLoginModal();
+     },100)
+      
+    }
+  };
 
   const toggleAmenities = (id) => {
     setExpandedBusinessId(expandedBusinessId === id ? null : id);
@@ -89,9 +101,9 @@ const Bussiness_List = () => {
       </div>
 
       <div className="flex cursor-pointer py-5">
-        <div className="w-full xl:w-9/12">
-          <div className="flex justify-center w-full flex-col">
-            <div className="md:p-4 w-full xl:w-10/12">
+        <div className="w-full xl:w-9/12 xl:mx-auto">
+          <div className="flex justify-center items-center w-full flex-col">
+            <div className="md:p-4 w-full  xl:w-10/12">
               <div className="flex">
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
                   Karaikudi &gt; 
@@ -123,7 +135,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
+            <div className="mt-7 xl:w-[83%]  gap-5 flex flex-col md:p-4">
               {data?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">No businesses found in this category.</p>
@@ -168,15 +180,14 @@ const Bussiness_List = () => {
                             </div> */}
                     <div className="text-sm flex gap-1">
                       <button
-                        onClick={() => setVisiblePhoneId(data._id)}
+                        onClick={handleShowContact}
                         className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
                       >
                         <span className="text-md text-white px-1">
                           <FaPhoneAlt className="p-1 text-xl" />
                         </span>
-                        {visiblePhoneId === data._id
-                          ? data.contactDetails.phone
-                          : "Show Number"}
+                        {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
+
                       </button>
                       <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
                         <span className="text-xl px-1 text-white">
@@ -191,11 +202,12 @@ const Bussiness_List = () => {
             </div>
           </div>
         </div>
-        <div className="hidden xl:block xl:w-3/12">
+        <div className="hidden xl:block xl:w-4/12">
           <div className="sticky top-30">
             <img src={adds} alt="Advertisement" className="h-[75%]" />
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );
