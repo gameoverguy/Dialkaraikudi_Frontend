@@ -9,6 +9,7 @@ import {
   MdExpandMore,
   MdChevronLeft,
   MdChevronRight,
+  MdLogout,
 } from "react-icons/md";
 import UserManagement from "./UserMangement";
 import CategoryManagement from "./OrganizationMaterial/Category";
@@ -17,6 +18,8 @@ import DashBoard from "./DashBoard";
 import logo from "../../assets/bulb.png";
 import logo1 from "../../assets/logo_01.png";
 import HomePage from "./Advertisment/HomePage";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 // Placeholder components - Replace these with your actual components
 const PlatformInfo = () => <div>Platform Info Content</div>;
@@ -81,12 +84,12 @@ const AdminPanel = () => {
       icon: <MdBusiness size={20} />,
       label: "Business Management",
     },
-    {
-      key: "4",
-      icon: <MdSettings size={20} />,
-      label: "Settings",
-      children: settingsItems,
-    },
+    // {
+    //   key: "4",
+    //   icon: <MdSettings size={20} />,
+    //   label: "Settings",
+    //   children: settingsItems,
+    // },
     {
       key: "6",
       icon: <MdSettings size={20} />,
@@ -227,6 +230,16 @@ const AdminPanel = () => {
     return componentMap[selectedKey] || <div>Select a menu item</div>;
   };
 
+const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear admin token
+    Cookies.remove('adminToken');
+    // Navigate to admin login
+    navigate('/adminlogin');
+    // toast.success('Logout successful');
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
       {/* Sidebar - Fixed position */}
@@ -266,8 +279,18 @@ const AdminPanel = () => {
           </div>
         </div>
 
-        <div className="mt-4 space-y-1 px-2 h-[calc(100vh-140px)] overflow-y-auto">
+        <div className=" space-y-1 px-2 h-[calc(100vh-170px)] overflow-y-auto">
           {menuItems.map(renderMenuItem)}
+        </div>
+
+        <div className={`border-t ${collapsed ? "mt-0" : "mt-6"} border-gray-200`}>
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 ${collapsed ? 'justify-center' : ''}`}
+          >
+            <MdLogout size={20} />
+            {!collapsed && <span className="ml-3">Logout</span>}
+          </button>
         </div>
       </div>
 
