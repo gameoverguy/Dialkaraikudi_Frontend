@@ -72,11 +72,9 @@ const AdminLogin = () => {
                 console.log(response.data);
 
                 if (response.data) {
-                    // localStorage.setItem('adminToken', response.data.token);
                     toast.success('Login successful!');
-                    setTimeout(() => {
-                        navigate('/adminpanel');
-                    }, 1500);
+                    navigate('/adminpanel');
+
                 }
             } catch (error) {
                 console.error('Login failed:', error);

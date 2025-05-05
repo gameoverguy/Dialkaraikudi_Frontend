@@ -119,7 +119,7 @@ const UserLogin = ({
           toast.success("Login successful!");
           setTimeout(() => {
             setShowLoginModal(false);
-          }, 1500);
+          }, 0);
         }
       } catch (error) {
         console.error("Login failed:", error);
@@ -210,7 +210,7 @@ const UserLogin = ({
                   : "hover:bg-purple-700 cursor-pointer"
               }`}
             >
-              {loading ? "Logging in..." : "LOGIN"}
+              {loading ? "LOGGING IN..." : "LOGIN"}
             </button>
           </form>
 
