@@ -8,7 +8,7 @@ import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
 import { useRef } from "react";
 import { CiLogout } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
 import UserLogin from "../Pages/UserLogin";
 import SignupModal from "../Pages/SignUp";
@@ -78,6 +78,20 @@ const Header = () => {
     console.log("Selected location:", location);
   };
 
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate('/businesslist', {
+        state: {
+          searchQuery
+        }
+      });
+    }
+  };
+
   return (
     <>
       <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-2 items-center shadow-md border-b border-gray-200">
@@ -98,15 +112,22 @@ const Header = () => {
 
             {/* Search Bar */}
             <div className="hidden lg:block relative w-full">
-              <input
-                type="search"
-                placeholder="Search for services, products, brands..."
-                className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
-              />
-              <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-              <button className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
-                <IoSearchOutline className="text-xl" />
-              </button>
+              <form onSubmit={handleSearch}>
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for services, products, brands..."
+                  className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+                />
+                <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+                <button
+                  type="submit"
+                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+                >
+                  <IoSearchOutline className="text-xl" />
+                </button>
+              </form>
             </div>
           </div>
 

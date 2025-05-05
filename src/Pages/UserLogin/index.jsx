@@ -7,6 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { API } from "../../../config/config";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 const UserLogin = ({
   isOpen,
@@ -43,8 +45,8 @@ const UserLogin = ({
         emailValue.length > 50
           ? "Email must not exceed 50 characters"
           : emailValue.includes("@") && !emailRegex.test(emailValue)
-          ? "Please enter a valid email"
-          : "";
+            ? "Please enter a valid email"
+            : "";
       setErrors((prev) => ({ ...prev, email: errorMessage }));
     }
 
@@ -67,19 +69,19 @@ const UserLogin = ({
       email: !formData.email
         ? "Email is required"
         : formData.email.length < 10
-        ? "Email must be at least 10 characters"
-        : formData.email.length > 50
-        ? "Email must not exceed 50 characters"
-        : !emailRegex.test(formData.email)
-        ? "Please enter a valid email"
-        : "",
+          ? "Email must be at least 10 characters"
+          : formData.email.length > 50
+            ? "Email must not exceed 50 characters"
+            : !emailRegex.test(formData.email)
+              ? "Please enter a valid email"
+              : "",
       password: !formData.password
         ? "Password is required"
         : formData.password.length < 8
-        ? "Password must be at least 8 characters"
-        : formData.password.length > 20
-        ? "Password must not exceed 20 characters"
-        : "",
+          ? "Password must be at least 8 characters"
+          : formData.password.length > 20
+            ? "Password must not exceed 20 characters"
+            : "",
     };
 
     setErrors(newErrors);
@@ -204,11 +206,10 @@ const UserLogin = ({
             <button
               type="submit"
               disabled={loading}
-              className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${
-                loading
+              className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${loading
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-purple-700 cursor-pointer"
-              }`}
+                }`}
             >
               {loading ? "LOGGING IN..." : "LOGIN"}
             </button>
@@ -230,6 +231,38 @@ const UserLogin = ({
             >
               Forgot Password?
             </a>
+          </div>
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-gray-400"></div>
+            <p className="text-md text-gray-500 px-3 bg-white">or</p>
+            <div className="flex-1 h-px bg-gray-400"></div>
+          </div>
+
+          <div className="mt-2">
+            <div className="relative group cursor-pointer overflow-hidden rounded-lg">
+              <div className="absolute inset-0 w-full h-full transition duration-300"></div>
+              {/* <div className="border border-gray-300 rounded-lg p-0.5 transition duration-300 group-hover:border-gray-400"> */}
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  const credentialResponsedecoded = jwtDecode(credentialResponse.credential);
+                  console.log(credentialResponsedecoded);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+                useOneTap
+                theme="outline"
+                size="large"
+                shape="rectangular"
+                width="100%"
+                text="signin_with"
+                locale="en"
+                containerProps={{
+                  className: "flex items-center justify-center w-full py-2.5 px-4"
+                }}
+              />
+              {/* </div> */}
+            </div>
           </div>
         </div>
       </CustomModal>

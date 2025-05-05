@@ -7,9 +7,11 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
+import AdminRoute from "./Components/AdminRoute.jsx";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import NotFound from "./Components/NotFound.jsx";
 
 // import BusinessLogin from "./business/login.jsx";
 // import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
@@ -21,9 +23,10 @@ function App() {
   useEffect(() => {
     AOS.init({
       duration: 1000,
-      once: false, // animation only once on scroll
+      once: false,
     });
   }, []);
+
   return (
     <>
       <LoginModalProvider>
@@ -41,8 +44,13 @@ function App() {
               {/* <Route path="/businesscategory" element={<BusinessCategory />} /> */}
               {/* <Route path="/Contact" element={<ContactDetails />} /> */}
             </Route>
-            <Route path="/adminpanel" element={<AdminPanel />} />
             <Route path="/adminlogin" element={<AdminLogin />} />
+            <Route path="/adminpanel" element={     
+               <AdminRoute> 
+                <AdminPanel />
+                </AdminRoute> 
+            } />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>

@@ -59,7 +59,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="w-full flex justify-center border">
+      <div className="w-full flex justify-center">
         <Carousel />
       </div>
 
@@ -96,11 +96,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 22KT Jewelry Showcase */}
-      <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
+      {/* <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-            {/* Left Content */}
             <div className="text-white lg:px-20 px-5 w-full">
               <h2 className="text-3xl lg:text-5xl font-serif mb-3 w-full">
                 Dial Karaikudi
@@ -113,8 +111,6 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-
-            {/* Right Swiper */}
             <div>
               <Swiper
                 spaceBetween={15}
@@ -152,7 +148,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div
         className="w-full px-10 lg:px-38 py-10"

@@ -17,6 +17,10 @@ import { API } from "../../../config/config";
 const Bussiness_List = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const search = useLocation();
+  const searchList = search.state;
+  console.log("searchList", searchList);
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visiblePhoneId, setVisiblePhoneId] = useState(null);
@@ -38,10 +42,17 @@ const Bussiness_List = () => {
           // console.log('Fetching from URL:', url);
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
+        } else if (search.state) {
+          const res = await axios.get(
+            `${API}/business/search/${search.state.searchQuery}`
+          );
+          setData(res.data.data);
+          console.log("elseifffffff");
         } else {
           // Fetch all businesses if no category ID
           const res = await axios.get(`${API}/business`);
           setData(res.data.data);
+          console.log("else");
         }
       } catch (error) {
         console.error("Error fetching businesses:", error);
@@ -51,7 +62,7 @@ const Bussiness_List = () => {
       }
     };
     fetchBusinesses();
-  }, [location.state]);
+  }, [id, search.state]);
 
   console.log(data);
 
@@ -119,7 +130,7 @@ const Bussiness_List = () => {
               />
             </div>
             <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
-              {data.length === 0 ? (
+              {data?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
                     No businesses found in this category.
