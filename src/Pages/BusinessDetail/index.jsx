@@ -6,6 +6,7 @@ import Description from "./Description";
 import { IoIosArrowForward } from "react-icons/io";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { API } from "../../../config/config";
 
 const BusinessDetails = () => {
   const [formData, setFormData] = useState(null);
@@ -22,20 +23,20 @@ const BusinessDetails = () => {
   useEffect(() => {
     const fetchBusinessDetails = async () => {
       if (!id) {
-        navigate('/'); // Redirect to home if no ID
+        navigate("/"); // Redirect to home if no ID
         return;
       }
 
       try {
-        const response = await axios.get(`http://192.168.1.33:5000/business/${id}`);
+        const response = await axios.get(`${API}/business/${id}`);
         setFormData(response.data.data);
         console.log(response.data.data);
         window.scrollTo({
           top: 0,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       } catch (error) {
-        console.error('Error fetching business details:', error);
+        console.error("Error fetching business details:", error);
         // Optionally redirect on error
         // navigate('/');
       }
@@ -43,7 +44,6 @@ const BusinessDetails = () => {
 
     fetchBusinessDetails();
   }, [id, navigate]);
-
 
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
@@ -54,7 +54,7 @@ const BusinessDetails = () => {
       const offsetTop = section.offsetTop - navbarHeight;
       window.scrollTo({
         top: offsetTop,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
@@ -66,14 +66,28 @@ const BusinessDetails = () => {
     { name: "Reviews", id: "reviews", key: "reviews" },
   ];
 
-
   return (
     <React.Fragment>
       <div className="bg-white shadow-xl pt-2">
         <div className="flex p-4">
-          <Link to='/' className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer">Karaikudi <span><IoIosArrowForward /></span></Link>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.business.category.displayName} in Karaikudi <span><IoIosArrowForward /></span></p>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">{formData?.business.businessName}</p>
+          <Link
+            to="/"
+            className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer"
+          >
+            Karaikudi{" "}
+            <span>
+              <IoIosArrowForward />
+            </span>
+          </Link>
+          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
+            {formData?.business.category.displayName} in Karaikudi{" "}
+            <span>
+              <IoIosArrowForward />
+            </span>
+          </p>
+          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
+            {formData?.business.businessName}
+          </p>
         </div>
         {formData && (
           <>
@@ -82,10 +96,11 @@ const BusinessDetails = () => {
               {tabs.map((tab) => (
                 <div
                   key={tab.key}
-                  className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${activeTab === tab.key
-                    ? "border-b-4 border-blue-500 text-blue-500"
-                    : "text-gray-500 hover:text-gray-700"
-                    }`}
+                  className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${
+                    activeTab === tab.key
+                      ? "border-b-4 border-blue-500 text-blue-500"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
                   onClick={() => handleTabClick(tab.key, tab.id)}
                 >
                   {tab.name}

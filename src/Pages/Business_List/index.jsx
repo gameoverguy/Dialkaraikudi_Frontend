@@ -12,6 +12,7 @@ import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
+import { API } from "../../../config/config";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
@@ -29,22 +30,21 @@ const Bussiness_List = () => {
         setLoading(true);
         // Get category ID from location state
         const categoryId = location.state?.category;
-        console.log('Category ID from state:', categoryId);
+        console.log("Category ID from state:", categoryId);
 
         // Only fetch category businesses if we have an ID
         if (id) {
           // const url = `http://192.168.1.33:5000/business/category/${id}`;
           // console.log('Fetching from URL:', url);
-          const res = await axios.get(`http://192.168.1.33:5000/business/category/${id}`);
+          const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
-                   
         } else {
           // Fetch all businesses if no category ID
-          const res = await axios.get('http://192.168.1.33:5000/business');
+          const res = await axios.get(`${API}/business`);
           setData(res.data.data);
         }
       } catch (error) {
-        console.error('Error fetching businesses:', error);
+        console.error("Error fetching businesses:", error);
         setData([]);
       } finally {
         setLoading(false);
@@ -64,14 +64,22 @@ const Bussiness_List = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
     <>
       <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
         <div className="w-full">
-          <img src={banner} alt="Banner" className="w-full h-full object-cover" />
+          <img
+            src={banner}
+            alt="Banner"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
 
@@ -81,7 +89,7 @@ const Bussiness_List = () => {
             <div className="md:p-4 w-full xl:w-10/12">
               <div className="flex">
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
-                  Karaikudi &gt; 
+                  Karaikudi &gt;
                 </Link>
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
                   {data?.category?.displayName}
@@ -113,68 +121,74 @@ const Bussiness_List = () => {
             <div className="mt-7 xl:w-[83%] gap-5 flex flex-col md:p-4">
               {data.length === 0 ? (
                 <div className="text-center py-10">
-                  <p className="text-gray-500">No businesses found in this category.</p>
+                  <p className="text-gray-500">
+                    No businesses found in this category.
+                  </p>
                 </div>
               ) : (
                 data.map((data, i) => (
-                <div
-                  key={i}
-                  className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
-                >
-                  {/* Swiper Image Slider */}
-                  {/* <div className="w-full md:w-[25%]">
+                  <div
+                    key={i}
+                    className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
+                  >
+                    {/* Swiper Image Slider */}
+                    {/* <div className="w-full md:w-[25%]">
                     <SwiperModal data={data.photos} />
                   </div> */}
 
-                  {/* Business Info */}
-                  <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
-                    <h2 className="text-xl font-semibold" onClick={() => handleBusinessClick(data._id)}>
-                      {data.businessName}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                      <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
-                        {" "}
-                        {data.ratings}
-                        <IoIosStar
-                          size={18}
-                          color="#FFD700"
-                          className="inline"
-                        />
-                      </div>{" "}
-                      {data.reviewCount} Ratings
-                    </div>
-                    <p className="flex items-center">
-                      <CiLocationOn /> {data.address.formattedAddress}
-                    </p>
-                    {/* <div>
+                    {/* Business Info */}
+                    <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
+                      <h2
+                        className="text-xl font-semibold"
+                        onClick={() => handleBusinessClick(data._id)}
+                      >
+                        {data.businessName}
+                      </h2>
+                      <div className="flex items-center gap-2">
+                        <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
+                          {" "}
+                          {data.ratings}
+                          <IoIosStar
+                            size={18}
+                            color="#FFD700"
+                            className="inline"
+                          />
+                        </div>{" "}
+                        {data.reviewCount} Ratings
+                      </div>
+                      <p className="flex items-center">
+                        <CiLocationOn /> {data.address.formattedAddress}
+                      </p>
+                      {/* <div>
                                 <AmentiesModal
                                     data={data}
                                     isExpanded={expandedBusinessId === data.id}
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                    <div className="text-sm flex gap-1">
-                      <button
-                        onClick={() => setVisiblePhoneId(data._id)}
-                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
-                      >
-                        <span className="text-md text-white px-1">
-                          <FaPhoneAlt className="p-1 text-xl" />
-                        </span>
-                        {visiblePhoneId === data._id
-                          ? data.contactDetails.phone
-                          : "Show Number"}
-                      </button>
-                      <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
-                        <span className="text-xl px-1 text-white">
-                          <FaWhatsapp size={16} className="text-white" />
-                        </span>{" "}
-                        WhatsApp
-                      </button>
+                      <div className="text-sm flex gap-1">
+                        <button
+                          onClick={() => setVisiblePhoneId(data._id)}
+                          className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                        >
+                          <span className="text-md text-white px-1">
+                            <FaPhoneAlt className="p-1 text-xl" />
+                          </span>
+                          {visiblePhoneId === data._id
+                            ? data.contactDetails.phone
+                            : "Show Number"}
+                        </button>
+                        <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                          <span className="text-xl px-1 text-white">
+                            <FaWhatsapp size={16} className="text-white" />
+                          </span>{" "}
+                          WhatsApp
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )))}
+                ))
+              )}
             </div>
           </div>
         </div>
