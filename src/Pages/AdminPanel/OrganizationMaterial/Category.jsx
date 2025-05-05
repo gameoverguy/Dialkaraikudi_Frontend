@@ -61,8 +61,8 @@ const CategoryManagement = () => {
       newErrors.name = 'Category name is required';
     } else if (formData.name.length > 25) {
       newErrors.name = 'Name must be less than 25 characters';
-    } else if (!/^[a-zA-Z\s]+$/.test(formData.name)) {
-      newErrors.name = 'Only letters and spaces are allowed';
+    } else if (!/^[a-zA-Z0-9\s&]+$/.test(formData.name)) {
+      newErrors.name = 'Only letters, numbers, spaces, and & are allowed';
     }
 
     if (!selectedCategory && !formData.image) {
