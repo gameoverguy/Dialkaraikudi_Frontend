@@ -1,303 +1,197 @@
-import React, { useState, useEffect } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import FloatingInput from "../../../Components/FloatingInput";
-import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
+// src/pages/AdManager.jsx
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { uploadMultipleToCloudinary } from "../../../utils/cloudinaryUpload";
 import { API } from "../../../../config/config";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-const HomePage = () => {
-  const [sections, setSections] = useState([]);
-  const [loading, setLoading] = useState(true);
+const AdManager = () => {
+  const [pages, setPages] = useState([]);
+  const [selectedPage, setSelectedPage] = useState("");
+  const [slots, setSlots] = useState([]);
+  const [newSlot, setNewSlot] = useState({
+    heading: "",
+    type: "single",
+    interval: 5,
+    media: [],
+  });
 
   useEffect(() => {
-    fetchAdvertisements();
+    fetchPages();
   }, []);
 
-  const fetchAdvertisements = async () => {
-    try {
-      const response = await axios.get(`${API}/ads/slots/home`);
-
-      const slots = response.data.slots || [];
-      const transformedData = slots.map((ad) => ({
-        id: ad._id,
-        _id: ad._id,
-        heading: ad.heading,
-        images: ad.images || [],
-      }));
-      console.log(transformedData);
-
-      setSections(
-        transformedData.length > 0
-          ? transformedData
-          : [{ id: Date.now(), heading: "", images: [] }]
-      );
-    } catch (error) {
-      console.error("Error fetching advertisements:", error);
-      toast.error("Failed to fetch advertisements");
-      setSections([{ id: Date.now(), heading: "", images: [] }]);
-    } finally {
-      setLoading(false);
-    }
+  const fetchPages = async () => {
+    const res = await axios.get(`${API}/ads/pages`);
+    setPages(res.data.pages);
+    setSelectedPage(res.data.pages[0] || "");
   };
 
-  const handleHeadingChange = async (id, value) => {
-    setSections((prev) =>
-      prev.map((section) =>
-        section.id === id ? { ...section, heading: value } : section
-      )
+  useEffect(() => {
+    if (selectedPage) fetchSlots(selectedPage);
+  }, [selectedPage]);
+
+  const fetchSlots = async (page) => {
+    const res = await axios.get(`${API}/ads/${page}`);
+    setSlots(res.data.slots);
+  };
+
+  const handleAddSlot = async () => {
+    const urls = await uploadMultipleToCloudinary(newSlot.media);
+    const payload = {
+      heading: newSlot.heading,
+      type: newSlot.type,
+      interval: newSlot.interval,
+      media: urls.map((url) => ({
+        url,
+        type: newSlot.type === "video" ? "video" : "image",
+        enabled: true,
+        priority: 1,
+        html: "",
+      })),
+    };
+    await axios.post(`${API}/ads/${selectedPage}/slot`, payload);
+    setNewSlot({ heading: "", type: "single", interval: 5, media: [] });
+    fetchSlots(selectedPage);
+  };
+
+  const handleMediaToggle = async (slotId, mediaIndex, enabled) => {
+    await axios.patch(
+      `${API}/ads/${selectedPage}/slot/${slotId}/media/${mediaIndex}`,
+      { enabled }
     );
-
-    try {
-      const section = sections.find((s) => s.id === id);
-      if (section._id) {
-        await axios.put(`${API}/ads/slots/${section._id}`, {
-          heading: value,
-          images: section.images,
-        });
-      }
-    } catch (error) {
-      console.error("Error updating heading:", error);
-      toast.error("Failed to update heading");
-    }
+    fetchSlots(selectedPage);
   };
 
-  const handleImageDrop = async (id, e) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-
-    try {
-      const uploadedUrls = await Promise.all(
-        files.map((file) => uploadToCloudinary(file))
-      );
-
-      const section = sections.find((s) => s.id === id);
-      const updatedImages = [...section.images, ...uploadedUrls];
-
-      setSections((prev) =>
-        prev.map((section) => {
-          if (section.id === id) {
-            return {
-              ...section,
-              images: updatedImages,
-            };
-          }
-          return section;
-        })
-      );
-
-      if (section._id) {
-        await axios.put(`${API}/ads/slots/${section._id}`, {
-          heading: section.heading,
-          images: updatedImages,
-        });
-        toast.success("Images uploaded successfully");
-      }
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      toast.error("Failed to upload images");
-    }
+  const handleDeleteMedia = async (slotId, mediaIndex) => {
+    await axios.delete(
+      `${API}/ads/${selectedPage}/slot/${slotId}/media/${mediaIndex}`
+    );
+    fetchSlots(selectedPage);
   };
 
-  const handleImageClick = (id) => {
-    document.getElementById(`fileInput-${id}`).click();
-  };
-
-  const handleFileChange = async (id, e) => {
-    const files = Array.from(e.target.files);
-
-    try {
-      const uploadedUrls = await Promise.all(
-        files.map((file) => uploadToCloudinary(file))
-      );
-
-      const section = sections.find((s) => s.id === id);
-      const updatedImages = [...section.images, ...uploadedUrls];
-
-      setSections((prev) =>
-        prev.map((section) => {
-          if (section.id === id) {
-            return {
-              ...section,
-              images: updatedImages,
-            };
-          }
-          return section;
-        })
-      );
-
-      if (section._id) {
-        await axios.put(`${API}/ads/slots/${section._id}`, {
-          heading: section.heading,
-          images: updatedImages,
-        });
-        toast.success("Images uploaded successfully");
-      }
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      toast.error("Failed to upload images");
-    }
-  };
-
-  const removeImage = async (sectionId, imageIndex) => {
-    try {
-      const section = sections.find((s) => s.id === sectionId);
-      const newImages = [...section.images];
-      newImages.splice(imageIndex, 1);
-
-      setSections((prev) =>
-        prev.map((section) => {
-          if (section.id === sectionId) {
-            return { ...section, images: newImages };
-          }
-          return section;
-        })
-      );
-
-      if (section._id) {
-        await axios.put(`${API}/ads/slots/${section._id}`, {
-          heading: section.heading,
-          images: newImages,
-        });
-        toast.success("Image removed successfully");
-      }
-    } catch (error) {
-      console.error("Error removing image:", error);
-      toast.error("Failed to remove image");
-    }
-  };
-
-  const addNewSection = async () => {
-    try {
-      const newSection = {
-        heading: "",
-        images: [],
-      };
-
-      const response = await axios.post(`${API}/ads/slots`, newSection);
-      const createdSection = response.data.data;
-
-      setSections((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          _id: createdSection._id,
-          heading: createdSection.heading,
-          images: createdSection.images,
-        },
-      ]);
-
-      toast.success("New section added successfully");
-    } catch (error) {
-      console.error("Error adding new section:", error);
-      toast.error("Failed to add new section");
-    }
-  };
-
-  const removeSection = async (id) => {
-    try {
-      const section = sections.find((s) => s.id === id);
-      if (section._id) {
-        await axios.delete(`${API}/ads/slots/${section._id}`);
-      }
-      setSections((prev) => prev.filter((section) => section.id !== id));
-      toast.success("Section removed successfully");
-    } catch (error) {
-      console.error("Error removing section:", error);
-      toast.error("Failed to remove section");
-    }
-  };
-
-  if (loading) {
+  const renderMedia = (media, index, slotId) => {
     return (
-      <div className="p-6 bg-white rounded-lg shadow flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+      <div key={index} className="relative w-24 h-24 border p-1">
+        {media.type === "video" ? (
+          <video
+            src={media.url}
+            className="w-full h-full object-cover"
+            controls
+          />
+        ) : (
+          <img
+            src={media.url}
+            alt="ad"
+            className="w-full h-full object-contain"
+          />
+        )}
+        <div className="flex justify-between mt-1 text-xs">
+          <label>
+            <input
+              type="checkbox"
+              checked={media.enabled}
+              onChange={() => handleMediaToggle(slotId, index, !media.enabled)}
+            />
+            Enable
+          </label>
+          <button
+            className="text-red-500"
+            onClick={() => handleDeleteMedia(slotId, index)}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     );
-  }
+  };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-6">Advertisement Management</h1>
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Advertisement Manager</h1>
 
-      {sections.map((section) => (
-        <div key={section.id} className="mb-8 p-6 border rounded-lg">
-          <div className="flex justify-between items-center mb-4">
-            <FloatingInput
-              placeholder="Enter Heading"
-              value={section.heading}
-              onChange={(e) => handleHeadingChange(section.id, e.target.value)}
-              className="w-full"
-            />
-            {sections.length > 1 && (
-              <button
-                onClick={() => removeSection(section.id)}
-                className="ml-4 text-red-500 hover:text-red-700"
-              >
-                <FaTrash />
-              </button>
-            )}
-          </div>
+      <div className="mb-6">
+        <label className="mr-2 font-semibold">Select Page:</label>
+        <select
+          className="border p-2"
+          value={selectedPage}
+          onChange={(e) => setSelectedPage(e.target.value)}
+        >
+          {pages.map((page) => (
+            <option key={page} value={page}>
+              {page}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          <div
-            onDrop={(e) => handleImageDrop(section.id, e)}
-            onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed p-4 rounded-lg min-h-[200px] relative"
-          >
-            <input
-              type="file"
-              id={`fileInput-${section.id}`}
-              multiple
-              onChange={(e) => handleFileChange(section.id, e)}
-              className="hidden"
-              accept="image/*"
-            />
+      <div className="mb-6 border p-4 rounded-lg">
+        <h2 className="text-xl font-semibold mb-2">Add New Slot</h2>
+        <input
+          type="text"
+          placeholder="Heading"
+          value={newSlot.heading}
+          onChange={(e) => setNewSlot({ ...newSlot, heading: e.target.value })}
+          className="border p-2 mb-2 w-full"
+        />
+        <select
+          value={newSlot.type}
+          onChange={(e) => setNewSlot({ ...newSlot, type: e.target.value })}
+          className="border p-2 mb-2 w-full"
+        >
+          <option value="single">Single Image / HTML</option>
+          <option value="carousel">Carousel (Images Only)</option>
+          <option value="video">Video / GIF</option>
+        </select>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {section.images.map((image, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={image}
-                    alt={`Upload ${index + 1}`}
-                    className="w-full h-40 object-cover rounded"
-                  />
-                  <button
-                    onClick={() => removeImage(section.id, index)}
-                    className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <FaTrash size={12} />
-                  </button>
-                </div>
-              ))}
+        {(newSlot.type === "carousel" || newSlot.type === "video") && (
+          <input
+            type="number"
+            placeholder="Interval in seconds"
+            value={newSlot.interval}
+            onChange={(e) =>
+              setNewSlot({ ...newSlot, interval: parseInt(e.target.value) })
+            }
+            className="border p-2 mb-2 w-full"
+          />
+        )}
 
-              <div
-                onClick={() => handleImageClick(section.id)}
-                className="border-2 border-dashed rounded flex items-center justify-center h-40 cursor-pointer hover:bg-gray-50 transition-colors"
-              >
-                <FaPlus className="text-gray-400 text-3xl" />
+        <input
+          type="file"
+          multiple
+          accept={newSlot.type === "video" ? "video/*" : "image/*"}
+          onChange={(e) =>
+            setNewSlot({ ...newSlot, media: Array.from(e.target.files) })
+          }
+          className="mb-2"
+        />
+        <button
+          onClick={handleAddSlot}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Add Slot
+        </button>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Existing Slots</h2>
+        <div className="space-y-4">
+          {slots.map((slot) => (
+            <div key={slot._id} className="border p-4 rounded-lg">
+              <h3 className="text-lg font-bold mb-1">{slot.heading}</h3>
+              <p className="text-sm italic">Type: {slot.type}</p>
+              {slot.type !== "single" && (
+                <p className="text-sm">Interval: {slot.interval} seconds</p>
+              )}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {slot.mediaItems?.map((media, index) =>
+                  renderMedia(media, index, slot._id)
+                )}
               </div>
             </div>
-
-            {section.images.length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
-                <p>
-                  Drag and drop images here or click the plus icon to upload
-                </p>
-              </div>
-            )}
-          </div>
+          ))}
         </div>
-      ))}
-
-      <button
-        onClick={addNewSection}
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-      >
-        Add New Section
-      </button>
+      </div>
     </div>
   );
 };
 
-export default HomePage;
+export default AdManager;
