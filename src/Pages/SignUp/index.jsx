@@ -108,7 +108,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                 formData.email.length < 10 ? "Email must be at least 10 characters" :
                     !emailRegex.test(formData.email) ? "Please enter a valid email" : "",
             password: !formData.password ? "Password is required" :
-                formData.password.length < 6 ? "Password must be at least 6 characters" : "",
+                formData.password.length < 8 ? "Password must be at least 8 characters" : "",
             confirmPassword: !formData.confirmPassword ? "Please confirm your password" :
                 formData.password !== formData.confirmPassword ? "Passwords do not match" : "",
             phone: !formData.phone ? "Phone number is required" :
