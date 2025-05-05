@@ -63,7 +63,7 @@ const HomePage = () => {
         <Carousel />
       </div>
 
-      <div className="py-10 text-center font-serif flex justify-center px-10 md:px-10 lg:px-28">
+      <div className="py-10 text-center font-serif flex justify-center px-10 md:px-10 lg:px-35">
         <div className="w-full max-w-8xl">
           <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">
@@ -155,7 +155,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="w-full px-10 lg:px-30 py-10"
+        className="w-full px-10 lg:px-38 py-10"
         data-aos="fade-up"
         data-aos-delay="700"
         data-aos-duration="1500"
@@ -225,7 +225,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-4 md:px-10 lg:px-30 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-4 md:px-10 lg:px-38 mb-4">
         {/* First Swiper */}
         <div className="swiper-container w-full">
           <Swiper
@@ -294,7 +294,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="w-full px-10 lg:px-32 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100"
+        className="w-full px-10 lg:px-38 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -415,7 +415,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="w-full px-10 lg:px-24 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
+        className="w-full px-10 lg:px-38 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -479,7 +479,7 @@ const HomePage = () => {
               </div>
 
               {/* Text Content */}
-              <div className="w-full md:w-1/2 flex items-center justify-center bg-white/80 backdrop-blur-md px-4 py-6 md:py-0">
+              <div className="w-full md:w-1/2 flex items-center justify-center bg-white/80 backdrop-blur-md px-4 py-6 md:py-0 shadow-blue-100 shadow-2xl">
                 <div className="text-center md:text-left space-y-2">
                   <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-all duration-500">
                     {item.title}
@@ -496,6 +496,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+
 
       <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-3xl shadow-xl group">
         {/* Video Background */}
