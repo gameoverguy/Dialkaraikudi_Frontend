@@ -211,6 +211,7 @@ const Bussiness_List = () => {
                       </button>
                     </div>
                   </div>
+                  </div>
                 ))
               )}
             </div>
