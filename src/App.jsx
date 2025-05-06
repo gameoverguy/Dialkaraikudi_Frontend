@@ -14,11 +14,13 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import NotFound from "./Components/NotFound.jsx";
 
-// import BusinessLogin from "./business/login.jsx";
-// import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
-// import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
-// import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
-// import ContactDetails from "./business/contact.jsx"; 
+import BusinessLogin from "./business/login.jsx";
+import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
+import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
+import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
+import ContactDetails from "./business/contact.jsx"; 
+import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
+import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 
 function App() {
   useEffect(() => {
@@ -40,11 +42,14 @@ function App() {
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
               <Route path="/review" element={<ReviewPage />} />
-              {/* <Route path="/detailform" element={<BusinessDetailForm />} /> */}
-              {/* <Route path="/login" element={<BusinessLogin />} /> */}
-              {/* <Route path="/businesstiming" element={<BusinessTiming />} /> */}
-              {/* <Route path="/businesscategory" element={<BusinessCategory />} /> */}
-              {/* <Route path="/Contact" element={<ContactDetails />} /> */}
+              <Route path="/1" element={<AddToBusiness/>} />
+              <Route path="/detailform" element={<BusinessDetailForm />} />
+              <Route path="/2/:id" element={<VendorDashboard />} />
+
+              {/* <Route path="/login" element={<BusinessLogin />} />
+              <Route path="/businesstiming" element={<BusinessTiming />} />
+              <Route path="/businesscategory" element={<BusinessCategory />} />
+              <Route path="/Contact" element={<ContactDetails />} /> */}
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route path="/adminpanel" element={     
@@ -53,6 +58,7 @@ function App() {
                 </AdminRoute> 
             } />
             <Route path="*" element={<NotFound />} />
+            
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>

@@ -10,6 +10,7 @@ import { API } from '../../../../config/config';
 import FloatingInput from '../../../Components/FloatingInput';
 import { MdCancel, MdEdit } from 'react-icons/md';
 import { uploadToCloudinary } from '../../../utils/cloudinaryUpload';
+import FloatingTextarea from '../../../Components/FloatingInput/FloatingTextarea';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -205,7 +206,7 @@ const CategoryManagement = () => {
           await axios.put(`${API}/categories/${selectedCategory.id}`, payload);
           toast.success('Category updated successfully');
           console.log(formData);
-          
+
         } else {
           await axios.post(`${API}/categories`, payload);
           toast.success('Category added successfully');
@@ -352,14 +353,14 @@ const CategoryManagement = () => {
           </div>
 
           <div>
-            <FloatingInput
-              type="text"
+            <FloatingTextarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
               placeholder="Description"
+              className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
               error={errors.description}
+              rows={4}
             />
           </div>
 
