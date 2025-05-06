@@ -159,7 +159,7 @@ const UserLogin = ({
         <div className="p-2">
           <h1 className="text-lg font-bold text-gray-800 mb-4">Member Login</h1>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <FloatingInput
                 type="email"
                 placeholder="Email Address"
