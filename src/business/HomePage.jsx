@@ -59,7 +59,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="w-full flex justify-center">
         <Carousel />
       </div>
 
@@ -74,10 +74,10 @@ const HomePage = () => {
                 <div
                   key={category._id}
                   onClick={() => handleCategoryClick(category._id)}
-                  className="group flex flex-col items-center justify-center p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                  className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 >
-                  <div className="w-[60px] h-[60px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 border border-gray-500">
-                    <span className="text-2xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                  <div className="w-[80px] h-[80px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 p-2">
+                    <span className="text-2xl transform group-hover:scale-110  transition-all duration-300">
                       {/* You can add icons based on category if available */}
                       <img
                         src={category.iconUrl}
@@ -86,7 +86,7 @@ const HomePage = () => {
                       />
                     </span>
                   </div>
-                  <span className="text-xs text-center text-gray-400 font-medium group-hover:text-gray-900 transition-colors duration-300">
+                  <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
                     {category.displayName}
                   </span>
                 </div>
@@ -96,11 +96,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 22KT Jewelry Showcase */}
-      <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
+      {/* <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-            {/* Left Content */}
             <div className="text-white lg:px-20 px-5 w-full">
               <h2 className="text-3xl lg:text-5xl font-serif mb-3 w-full">
                 Dial Karaikudi
@@ -113,8 +111,6 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
-
-            {/* Right Swiper */}
             <div>
               <Swiper
                 spaceBetween={15}
@@ -152,7 +148,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div
         className="w-full px-10 lg:px-38 py-10"
@@ -496,7 +492,6 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-
 
       <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-3xl shadow-xl group">
         {/* Video Background */}
