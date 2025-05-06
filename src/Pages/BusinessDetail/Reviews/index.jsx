@@ -3,21 +3,17 @@ import StarRating from "../ReviewStar";
 import { FaStar } from "react-icons/fa6";
 
 const Reviews = ({ formData }) => {
-
   return (
     <div className="rounded-md border border-gray-200 p-4" id="quickinfo">
       <h1 className="font-normal text-xl">Reviews & Ratings</h1>
       <div className="flex flex-wrap items-center gap-2 mt-2 md:text-base">
-        <div className="flex items-center justify-center bg-[#007a0c] text-white p-4 rounded-2xl text-3xl md:text-4xl font-bold">
+        <div className="flex items-center justify-center bg-[#007a0c] text-white p-2 rounded-xl text-md md:text-xl font-bold">
           {formData.business.ratings}
         </div>
         <div>
-          <span className="text-black font-semibold text-lg md:text-2xl">
-            {formData.business.ratings} Ratings
+          <span className="text-black font-semibold text-lg md:text-lg">
+            {formData.business.reviewCount} Ratings
           </span>
-          <p className="text-sm md:text-base">
-            JD rating index based on {formData.business.ratings} ratings across the web
-          </p>
         </div>
       </div>
       <div className="mt-4">

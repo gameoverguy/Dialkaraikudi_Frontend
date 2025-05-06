@@ -182,23 +182,29 @@ const Bussiness_List = () => {
                       <p className="flex items-center">
                         <CiLocationOn /> {data.address.formattedAddress}
                       </p>
-
+                      {/* <div>
+                                <AmentiesModal
+                                    data={data}
+                                    isExpanded={expandedBusinessId === data.id}
+                                    toggleExpand={() => toggleAmenities(data.id)}
+                                />
+                            </div> */}
                       <div className="text-sm flex gap-1">
                         <button
                           onClick={handleShowContact}
-                          className="bg-[#287094] group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                          className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
                         >
                           <span className="text-md text-white px-1">
                             <FaPhoneAlt className="p-1 text-xl" />
                           </span>
-                          {showContact
-                            ? data.contactDetails?.phone
+                          {showContact && isLoggedin
+                            ? formData?.business.contactDetails?.phone
                             : "Show Number"}
                         </button>
                         <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
                           <span className="text-xl px-1 text-white">
                             <FaWhatsapp size={16} className="text-white" />
-                          </span>
+                          </span>{" "}
                           WhatsApp
                         </button>
                       </div>
