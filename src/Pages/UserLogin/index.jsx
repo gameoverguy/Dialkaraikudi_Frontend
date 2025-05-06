@@ -121,7 +121,7 @@ const UserLogin = ({
           toast.success("Login successful!");
           setTimeout(() => {
             setShowLoginModal(false);
-          }, 0);
+          }, 1000);
         }
       } catch (error) {
         console.error("Login failed:", error);

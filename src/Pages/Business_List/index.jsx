@@ -12,7 +12,7 @@ import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
-import {API} from "../../../config/config"
+import { API } from "../../../config/config"
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -42,7 +42,7 @@ const Bussiness_List = () => {
 
         // Only fetch category businesses if we have an ID
         if (id) {
-      
+
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
         } else if (search.state) {
@@ -74,10 +74,10 @@ const Bussiness_List = () => {
       setShowContact(prev => !prev);
     } else {
       toast.warning("Please Login to show contact number");
-     setTimeout(()=>{
-      handleOpenLoginModal();
-     },100)
-      
+      setTimeout(() => {
+        handleOpenLoginModal();
+      }, 100)
+
     }
   };
 
@@ -192,23 +192,24 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                    <div className="text-sm flex gap-1">
-                      <button
-                        onClick={handleShowContact}
-                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
-                      >
-                        <span className="text-md text-white px-1">
-                          <FaPhoneAlt className="p-1 text-xl" />
-                        </span>
-                        {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
+                      <div className="text-sm flex gap-1">
+                        <button
+                          onClick={handleShowContact}
+                          className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                        >
+                          <span className="text-md text-white px-1">
+                            <FaPhoneAlt className="p-1 text-xl" />
+                          </span>
+                          {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
 
-                      </button>
-                      <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
-                        <span className="text-xl px-1 text-white">
-                          <FaWhatsapp size={16} className="text-white" />
-                        </span>{" "}
-                        WhatsApp
-                      </button>
+                        </button>
+                        <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                          <span className="text-xl px-1 text-white">
+                            <FaWhatsapp size={16} className="text-white" />
+                          </span>{" "}
+                          WhatsApp
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))

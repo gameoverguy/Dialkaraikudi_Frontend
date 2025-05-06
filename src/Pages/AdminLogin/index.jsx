@@ -85,7 +85,7 @@ const AdminLogin = () => {
                     toast.success('Login successful!');
                     setTimeout(() => {
                         navigate('/adminpanel');
-                    }, 1500);
+                    }, 500);
                 }
             } catch (error) {
                 console.error('Login failed:', error);
