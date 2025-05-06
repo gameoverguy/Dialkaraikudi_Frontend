@@ -172,7 +172,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                 <div className="p-2">
                     <h1 className="text-lg font-bold text-gray-800 mb-4">Register</h1>
                     <form onSubmit={handleSubmit}>
-                        <div className="2">
+                        <div className="space-y-2">
                             <FloatingInput
                                 type="text"
                                 placeholder="Full Name"

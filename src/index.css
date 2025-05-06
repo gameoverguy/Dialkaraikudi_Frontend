@@ -28,3 +28,19 @@
       transform: translateX(200%);
     }
   }
+
+
+  /* Hide default password eye icon in Microsoft Edge */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Hide default password eye icon in Chrome, Safari (WebKit browsers) */
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+  appearance: none;
+}
