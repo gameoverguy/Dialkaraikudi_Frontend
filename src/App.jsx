@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ScrollToTop from "./Components/ScrollToTop.jsx";
 import Bussiness_List from "./Pages/Business_List";
 import MainLayout from "./Components/MainLayout.jsx";
 import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
@@ -17,7 +18,7 @@ import NotFound from "./Components/NotFound.jsx";
 // import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 // import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 // import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
-// import ContactDetails from "./business/contact.jsx";
+// import ContactDetails from "./business/contact.jsx"; 
 
 function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
     <>
       <LoginModalProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
