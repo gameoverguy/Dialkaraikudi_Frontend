@@ -49,8 +49,9 @@ const Bussiness_List = () => {
             `${API}/business/search/${search.state.searchQuery}`
           );
           setData(res.data.data);
-          console.log("elseifffffff");
-        } else {
+          console.log("elseifffffff", res.data.data);
+        }
+         else {
           // Fetch all businesses if no category ID
           const res = await axios.get(`${API}/business`);
           setData(res.data.data);
@@ -159,6 +160,9 @@ const Bussiness_List = () => {
                     {/* <div className="w-full md:w-[25%]">
                     <SwiperModal data={data.photos} />
                   </div> */}
+                  <div>
+                    <img src={data.photos[0]} alt="Business" className="w-full h-40 object-cover rounded-lg" />
+                    </div>
 
                     {/* Business Info */}
                     <div className="mt-1 md:mt-0 w-full space-y-4">
@@ -189,6 +193,7 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
+<<<<<<< HEAD
                       <div className="text-sm flex gap-1">
                         <button
                           onClick={handleShowContact}
@@ -212,6 +217,30 @@ const Bussiness_List = () => {
                   </div> // ✅ Closing div added
                 ))
               )}
+=======
+                    <div className="text-sm flex gap-1">
+                      <button
+                        onClick={handleShowContact}
+                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                      >
+                        <span className="text-md text-white px-1">
+                          <FaPhoneAlt className="p-1 text-xl" />
+                        </span>
+                        {showContact  ? data?.contactDetails?.phone : "Show Number"}
+
+                      </button>
+                      <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                        <span className="text-xl px-1 text-white">
+                          <FaWhatsapp size={16} className="text-white" />
+                        </span>{" "}
+                        WhatsApp
+                      </button>
+                    </div>
+                  </div>
+                </div>)
+              ))
+}
+>>>>>>> 02e6294deee6d6c2259d7e510ea460cfdce835b6
             </div>
           </div>
         </div>

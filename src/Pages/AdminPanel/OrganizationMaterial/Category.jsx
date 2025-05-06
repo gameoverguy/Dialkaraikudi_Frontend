@@ -14,7 +14,13 @@ import { uploadToCloudinary } from '../../../utils/cloudinaryUpload';
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ name: '', image: null });
+  const [formData, setFormData] = useState({
+    name: '',
+    image: null,
+    icon: null,
+    description: '',
+    categoryType: ''
+  });
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -65,10 +71,29 @@ const CategoryManagement = () => {
       newErrors.name = 'Only letters, numbers, spaces, and & are allowed';
     }
 
-    if (!selectedCategory && !formData.image) {
-      newErrors.image = 'Image is required';
-    } else if (formData.image && formData.image.size > 2 * 1024 * 1024) {
+    if (!formData.description) {
+      newErrors.description = 'Description is required';
+    }
+
+    if (!formData.categoryType) {
+      newErrors.categoryType = 'Category type is required';
+    }
+
+    if (!selectedCategory) {
+      if (!formData.image) {
+        newErrors.image = 'Image is required';
+      }
+      if (!formData.icon) {
+        newErrors.icon = 'Icon is required';
+      }
+    }
+
+    if (formData.image && formData.image.size > 2 * 1024 * 1024) {
       newErrors.image = 'Image size must be less than 2MB';
+    }
+
+    if (formData.icon && formData.icon.size > 2 * 1024 * 1024) {
+      newErrors.icon = 'Icon size must be less than 2MB';
     }
 
     setErrors(newErrors);
@@ -81,8 +106,11 @@ const CategoryManagement = () => {
       const onlyLetters = value.replace(/[^a-zA-Z\s]/g, '');
       setFormData(prev => ({ ...prev, [name]: onlyLetters }));
       setErrors(prev => ({ ...prev, name: value !== onlyLetters ? 'Only letters and spaces are allowed' : '' }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
+
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -109,7 +137,10 @@ const CategoryManagement = () => {
       const transformedData = response.data.data.map(category => ({
         id: category._id,
         name: category.displayName,
-        imageUrl: category.iconUrl || 'placeholder-image-url'
+        imageUrl: category.imageUrl,
+        iconUrl: category.iconUrl,
+        description: category.description,
+        categoryType: category.categoryType
       }));
       setCategories(transformedData);
     } catch (error) {
@@ -122,25 +153,59 @@ const CategoryManagement = () => {
     fetchCategories();
   }, []);
 
+  const [iconPreview, setIconPreview] = useState(null);
+
+  // Add separate onDrop handler for icon
+  const onDropIcon = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setErrors(prev => ({ ...prev, icon: 'Icon size must be less than 2MB' }));
+        return;
+      }
+      setFormData(prev => ({ ...prev, icon: file }));
+      setIconPreview(URL.createObjectURL(file));
+      setErrors(prev => ({ ...prev, icon: '' }));
+    }
+  }, []);
+
+  // Add separate dropzone for icon
+  const { getRootProps: getIconRootProps, getInputProps: getIconInputProps, isDragActive: isIconDragActive } = useDropzone({
+    onDrop: onDropIcon,
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
+    maxFiles: 1
+  });
+
+  // Update handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
         let imageUrl = null;
+        let iconUrl = null;
+
         if (formData.image) {
           imageUrl = await uploadToCloudinary(formData.image);
+        }
+        if (formData.icon) {
+          iconUrl = await uploadToCloudinary(formData.icon);
         }
 
         const payload = {
           categoryName: formData.name.toLowerCase().trim().replace(/\s+/g, '_'),
           displayName: formData.name.trim(),
+          description: formData.description,
+          categoryType: formData.categoryType,
           isActive: true,
-          iconUrl: imageUrl
+          iconUrl: selectedCategory ? (iconUrl || selectedCategory.iconUrl) : iconUrl,
+          imageUrl: selectedCategory ? (imageUrl || selectedCategory.imageUrl) : imageUrl
         };
 
         if (selectedCategory) {
           await axios.put(`${API}/categories/${selectedCategory.id}`, payload);
           toast.success('Category updated successfully');
+          console.log(formData);
+          
         } else {
           await axios.post(`${API}/categories`, payload);
           toast.success('Category added successfully');
@@ -156,10 +221,18 @@ const CategoryManagement = () => {
     }
   };
 
+  // Update resetForm
   const resetForm = () => {
     setImagePreview(null);
+    setIconPreview(null);
     setErrors({});
-    setFormData({ name: '', image: null });
+    setFormData({
+      name: '',
+      image: null,
+      icon: null,
+      description: '',
+      categoryType: ''
+    });
     setSelectedCategory(null);
   };
 
@@ -178,8 +251,15 @@ const CategoryManagement = () => {
 
   const handleEdit = (category) => {
     setSelectedCategory(category);
-    setFormData({ name: category.name, image: null });
+    setFormData({
+      name: category.name,
+      image: null,
+      icon: null,
+      description: category.description || '',
+      categoryType: category.categoryType || ''
+    });
     setImagePreview(category.imageUrl);
+    setIconPreview(category.iconUrl);
     setShowModal(true);
   };
 
@@ -190,9 +270,9 @@ const CategoryManagement = () => {
 
   return (
     <div className="p-6">
-       <div className='shadow bg-white p-6 rounded-lg'>
-       <h1 className="text-2xl font-bold mb-6">Category Management</h1>
-      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+      <div className='shadow bg-white p-6 rounded-lg'>
+        <h1 className="text-2xl font-bold mb-6">Category Management</h1>
+        <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
 
         {/* <button
           onClick={() => {
@@ -230,10 +310,10 @@ const CategoryManagement = () => {
             >
               <MdCancel className="text-base" />
             </button>
-            
+
           </div>
         ))}
-        
+
         <div
           onClick={() => {
             setSelectedCategory(null);
@@ -244,7 +324,7 @@ const CategoryManagement = () => {
           <div className="flex-1 text-center">
             <span className="text-sm font-medium">+ Add</span>
           </div>
-          
+
         </div>
       </div>
 
@@ -264,67 +344,121 @@ const CategoryManagement = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 rounded-lg border ${
-                errors.name ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200`}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
               placeholder="Category Name"
               maxLength={25}
               error={errors.name}
             />
-
-         </div>
+          </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category Image
-            </label>
-            {!imagePreview ? (
-              <div
-                {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition duration-200 ${
-                  isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500'
-                }`}
-              >
-                <input {...getInputProps()} />
-                <FaCloudUploadAlt className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-sm text-gray-600">
-                  {isDragActive
-                    ? "Drop the image here"
-                    : "Drag 'n' drop an image here, or click to select"}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Supported formats: JPG, PNG (Max size: 2MB)
-                </p>
-              </div>
-            ) : (
-              <div className=" flex justify-center">
-                <span className='relative'>
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="h-32 w-32 object-cover rounded-lg"
+            <FloatingInput
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+              placeholder="Description"
+              error={errors.description}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category Type</label>
+            <div className="flex gap-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="categoryType"
+                  value="product"
+                  checked={formData.categoryType === 'product'}
+                  onChange={handleInputChange}
+                  className="form-radio h-4 w-4 text-blue-600"
                 />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setImagePreview(null);
-                    setFormData(prev => ({ ...prev, image: null }));
-                  }}
-                  className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-200 cursor-pointer"
-                >
-               
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                </span>
-              </div>
-            )}
-            <div className='h-6'>
-            {errors.image && (
-              <p className="mt-2 text-xs text-red-500 text-right">{errors.image}</p>
-            )}
+                <span className="ml-2">Product</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="categoryType"
+                  value="service"
+                  checked={formData.categoryType === 'service'}
+                  onChange={handleInputChange}
+                  className="form-radio h-4 w-4 text-blue-600"
+                />
+                <span className="ml-2">Service</span>
+              </label>
             </div>
+            {errors.categoryType && (
+              <p className="mt-1 text-xs text-red-500">{errors.categoryType}</p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+            <div
+              {...getRootProps()}
+              className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                }`}
+            >
+              <input {...getInputProps()} />
+              {imagePreview ? (
+                <div className="relative">
+                  <img src={imagePreview} alt="Preview" className="w-32 h-32 mx-auto object-cover rounded" />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setImagePreview(null);
+                      setFormData(prev => ({ ...prev, image: null }));
+                    }}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <MdCancel />
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <FaCloudUploadAlt className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-500">Drag & drop or click to upload image</p>
+                </div>
+              )}
+            </div>
+            {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}
+          </div>
+
+          {/* Icon Upload */}
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Upload Icon</label>
+            <div
+              {...getIconRootProps()}
+              className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${isIconDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                }`}
+            >
+              <input {...getIconInputProps()} />
+              {iconPreview ? (
+                <div className="relative">
+                  <img src={iconPreview} alt="Icon Preview" className="w-16 h-16 mx-auto object-cover rounded" />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIconPreview(null);
+                      setFormData(prev => ({ ...prev, icon: null }));
+                    }}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <MdCancel />
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <FaCloudUploadAlt className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-500">Drag & drop or click to upload icon</p>
+                </div>
+              )}
+            </div>
+            {errors.icon && <p className="mt-1 text-xs text-red-500">{errors.icon}</p>}
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
@@ -421,22 +555,21 @@ const CategoryManagement = () => {
         </div>
       </CustomModal>
       <ToastContainer
-      position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-      style={{ zIndex: 9999 }}  // This ensures toast appears above modals
-    />
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ zIndex: 9999 }}  // This ensures toast appears above modals
+      />
     </div>
   );
 };
 
 export default CategoryManagement;
 
- 
