@@ -50,7 +50,7 @@ const Bussiness_List = () => {
         else if (search.state){
           const res = await axios.get(`${API}/business/search/${search.state.searchQuery}`);
           setData(res.data.data);
-          console.log("elseifffffff");
+          console.log("elseifffffff", res.data.data);
         }
         else {
           // Fetch all businesses if no category ID
@@ -153,6 +153,9 @@ const Bussiness_List = () => {
                   {/* <div className="w-full md:w-[25%]">
                     <SwiperModal data={data.photos} />
                   </div> */}
+                  <div>
+                    <img src={data.photos[0]} alt="Business" className="w-full h-40 object-cover rounded-lg" />
+                    </div>
 
                   {/* Business Info */}
                   <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
@@ -189,7 +192,7 @@ const Bussiness_List = () => {
                         <span className="text-md text-white px-1">
                           <FaPhoneAlt className="p-1 text-xl" />
                         </span>
-                        {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
+                        {showContact  ? data?.contactDetails?.phone : "Show Number"}
 
                       </button>
                       <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
