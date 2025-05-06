@@ -14,6 +14,7 @@ const BusinessDetails = () => {
   const { id } = useParams();
   const location = useLocation();
   const selectedBusiness = location.state;
+  const [categories, setCategories] = useState([]);
 
   const toggleAmenities = (id) => {
     setExpandedBusinessId(expandedBusinessId === id ? null : id);
@@ -44,6 +45,23 @@ const BusinessDetails = () => {
 
     fetchBusinessDetails();
   }, [id, navigate]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${API}/categories`);
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (category) => {
+    navigate(`/businesslist/${category}`);
+  };
+  
 
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
@@ -79,12 +97,12 @@ const BusinessDetails = () => {
               <IoIosArrowForward />
             </span>
           </Link>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
+          <Link to={`/businesslist/${formData?.business.category._id}`} className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
             {formData?.business.category.displayName} in Karaikudi{" "}
             <span>
               <IoIosArrowForward />
             </span>
-          </p>
+          </Link>
           <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
             {formData?.business.businessName}
           </p>

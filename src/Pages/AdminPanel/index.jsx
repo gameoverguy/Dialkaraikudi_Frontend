@@ -29,7 +29,7 @@ const AdminPanel = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState(() => {
     // Get the saved menu item from localStorage or default to '1' (Dashboard)
-    return localStorage.getItem('selectedMenuItem') || '1';
+    return localStorage.getItem("selectedMenuItem") || "1";
   });
   const [expandedMenu, setExpandedMenu] = useState(null);
 
@@ -101,8 +101,8 @@ const AdminPanel = () => {
   const handleMenuClick = (key) => {
     setSelectedKey(key);
     // Save the selected menu item to localStorage
-    localStorage.setItem('selectedMenuItem', key);
-    
+    localStorage.setItem("selectedMenuItem", key);
+
     // Close any open submenu if clicking a non-submenu item
     if (
       !menuItems.find((item) =>
@@ -116,9 +116,9 @@ const AdminPanel = () => {
   // Update the handleMenuSelect function
   const handleMenuSelect = (key) => {
     setSelectedKey(key);
-    localStorage.setItem('selectedMenuItem', key);
-    if (key === 'categories') {
-      setExpandedMenu('5'); // Open the Organizational Units submenu
+    localStorage.setItem("selectedMenuItem", key);
+    if (key === "categories") {
+      setExpandedMenu("5"); // Open the Organizational Units submenu
     }
   };
   const toggleSubmenu = (key) => {
@@ -141,8 +141,16 @@ const AdminPanel = () => {
       <div key={item.key}>
         <div
           className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-500 ease-in-out 
-            ${isSelected ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : hasSelectedChild ? '' : 'hover:bg-gray-100'}`}
-          onClick={() => item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)}
+            ${
+              isSelected
+                ? "bg-[#0A8A3D]/10 text-[#0A8A3D]"
+                : hasSelectedChild
+                ? ""
+                : "hover:bg-gray-100"
+            }`}
+          onClick={() =>
+            item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)
+          }
         >
           <span
             className={`flex items-center ${
@@ -155,7 +163,11 @@ const AdminPanel = () => {
             <>
               <span className="ml-3 flex-1">{item.label}</span>
               {item.children && (
-                <span className={`flex items-center transition-transform duration-1000 ease-in-out transform ${isExpanded ? 'rotate-180' : ''}`}>
+                <span
+                  className={`flex items-center transition-transform duration-1000 ease-in-out transform ${
+                    isExpanded ? "rotate-180" : ""
+                  }`}
+                >
                   <MdExpandMore size={20} />
                 </span>
               )}
@@ -163,19 +175,23 @@ const AdminPanel = () => {
           )}
         </div>
         {!collapsed && item.children && (isExpanded || hasSelectedChild) && (
-          <div 
+          <div
             className="mt-1 overflow-hidden transition-all duration-1000 ease-in-out transform origin-top"
             style={{
-              maxHeight: isExpanded ? '500px' : '0',
+              maxHeight: isExpanded ? "500px" : "0",
               opacity: isExpanded ? 1 : 0,
-              transform: `scaleY(${isExpanded ? 1 : 0})`
+              transform: `scaleY(${isExpanded ? 1 : 0})`,
             }}
           >
-            {item.children.map(subItem => (
+            {item.children.map((subItem) => (
               <div
                 key={subItem.key}
                 className={`py-2 px-12 rounded-md cursor-pointer text-sm transition-all duration-1000 ease-in-out
-                  ${selectedKey === subItem.key ? 'bg-[#0A8A3D]/10 text-[#0A8A3D]' : 'hover:bg-gray-100'}
+                  ${
+                    selectedKey === subItem.key
+                      ? "bg-[#0A8A3D]/10 text-[#0A8A3D]"
+                      : "hover:bg-gray-100"
+                  }
                   transform hover:translate-x-2`}
                 onClick={() => handleMenuClick(subItem.key)}
               >
@@ -230,13 +246,13 @@ const AdminPanel = () => {
     return componentMap[selectedKey] || <div>Select a menu item</div>;
   };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     // Clear admin token
-    Cookies.remove('adminToken');
+    Cookies.remove("adminToken");
     // Navigate to admin login
-    navigate('/adminlogin');
+    navigate("/adminlogin");
     // toast.success('Logout successful');
   };
 
@@ -283,10 +299,14 @@ const navigate = useNavigate();
           {menuItems.map(renderMenuItem)}
         </div>
 
-        <div className={`border-t ${collapsed ? "mt-0" : "mt-6"} border-gray-200`}>
+        <div
+          className={`border-t ${collapsed ? "mt-0" : "mt-6"} border-gray-200`}
+        >
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 ${collapsed ? 'justify-center' : ''}`}
+            className={`w-full cursor-pointer flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 ${
+              collapsed ? "justify-center" : ""
+            }`}
           >
             <MdLogout size={20} />
             {!collapsed && <span className="ml-3">Logout</span>}
