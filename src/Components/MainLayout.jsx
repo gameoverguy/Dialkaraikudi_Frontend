@@ -8,7 +8,7 @@ const MainLayout = () => {
     <>
       <div className="w-full mx-auto">
         <Header />
-        <div className="min-h-127 w-full">
+        <div className="min-h-127 w-11/12 mx-auto">
           <Outlet />
         </div>
         <Footer />

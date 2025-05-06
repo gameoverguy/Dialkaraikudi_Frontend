@@ -7,16 +7,18 @@ import { API } from '../../../config/config';
 const ReviewPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { rating, businessId } = location.state || { rating: 0, businessId: null };
+    const { rating, businessId, formData } = location.state || { rating: 0, businessId: null };
     const [comment, setComment] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     // const { id } = useParams();
     const userData = JSON.parse(sessionStorage.getItem("userData"));
     const userId = userData?.user_id;
-    // console.log(businessId);
+    const userName = userData?.name;
+    const userAvatar = userData?.avatarUrl || 'https://via.placeholder.com/40';
     const [selectedRating, setSelectedRating] = useState(rating);
     const [existingReview, setExistingReview] = useState(null);
+
 
     useEffect(() => {
         const fetchExistingReview = async () => {
@@ -95,8 +97,38 @@ const ReviewPage = () => {
     return (
         <div className="min-h-screen bg-gray-50 py-12">
             <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-                <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">
-                    Write a Review
+                {/* Business Info Section */}
+                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200">
+                    <img 
+                        src={formData?.business?.photos?.[0] || 'https://via.placeholder.com/60'} 
+                        alt={formData?.business?.businessName} 
+                        className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div>
+                        <h2 className="text-xl font-semibold text-gray-800">
+                            {formData?.business?.businessName}
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                            Writing a review for {formData?.business?.businessName}
+                        </p>
+                    </div>
+                </div>
+
+                {/* User Info Section */}
+                <div className="flex items-center gap-3 mb-8">
+                    <img 
+                        src={userAvatar} 
+                        alt={userName} 
+                        className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                        <p className="text-sm font-medium text-gray-800">{userName}</p>
+                        <p className="text-xs text-gray-500">Posting publicly</p>
+                    </div>
+                </div>
+
+                <h1 className="text-2xl font-bold mb-8 text-gray-800">
+                    Write Your Review
                 </h1>
 
                 <div className="mb-8 bg-gray-50 p-6 pl-0 rounded-lg">

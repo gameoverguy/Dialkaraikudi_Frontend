@@ -97,6 +97,7 @@ const UserLogin = ({
             password: formData.password,
           }
         );
+        console.log(response.data);
 
         if (response.data) {
           const { token, user } = response.data;
@@ -115,6 +116,7 @@ const UserLogin = ({
               user_id: user.id,
               name: user.name,
               email: user.email,
+              avatarUrl: user.avatarUrl,
             })
           );
 
@@ -207,8 +209,8 @@ const UserLogin = ({
               type="submit"
               disabled={loading}
               className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${loading
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-purple-700 cursor-pointer"
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-purple-700 cursor-pointer"
                 }`}
             >
               {loading ? "LOGGING IN..." : "LOGIN"}
