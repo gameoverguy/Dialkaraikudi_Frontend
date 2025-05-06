@@ -12,6 +12,7 @@ import { API } from "../../config/config";
 import { MdCategory } from "react-icons/md";
 import TopProducts from "./Home/TopProducts";
 import TopServices from "./Home/TopServices";
+import LimitedOffer from "./Home/LimitedOffer";
 
 // const serviceCategories = {
 //   essentialServices: [
@@ -530,6 +531,7 @@ const HomePage = () => {
 
       <TopProducts />
       <TopServices />
+      <LimitedOffer />
     </>
   );
 };
