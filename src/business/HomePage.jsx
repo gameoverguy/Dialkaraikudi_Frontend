@@ -6,11 +6,12 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Home/Carousel";
-import Banner from "./Home/Banner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../config/config";
 import { MdCategory } from "react-icons/md";
+import TopProducts from "./Home/TopProducts";
+import TopServices from "./Home/TopServices";
 
 // const serviceCategories = {
 //   essentialServices: [
@@ -376,7 +377,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-3xl shadow-xl group">
+      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"
@@ -493,7 +494,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-3xl shadow-xl group">
+      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"
@@ -526,6 +527,9 @@ const HomePage = () => {
         {/* Glow Border (optional animation) */}
         <div className="absolute inset-0 rounded-3xl border-2 border-white/10 group-hover:border-blue-400 transition-all duration-700 animate-pulse pointer-events-none" />
       </div>
+
+      <TopProducts />
+      <TopServices />
     </>
   );
 };

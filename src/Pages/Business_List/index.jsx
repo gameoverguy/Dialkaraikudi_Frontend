@@ -97,7 +97,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg rounded-xl overflow-hidden md:h-[30vh]">
         <div className="w-full">
           <img
             src={banner}
@@ -112,14 +112,14 @@ const Bussiness_List = () => {
           <div className="flex justify-center items-center w-full flex-col">
             <div className="md:p-4 w-full  xl:w-10/12">
               <div className="flex">
-                <Link className="text-sm text-gray-500 hover:text-blue-500">
+                <Link className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5">
                   Karaikudi &gt;
                 </Link>
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
                   {data?.category?.displayName}
                 </Link>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 md:px-0 px-5">
                 <h1 className="text-lg font-bold">
                   Best Businesses in Karaikudi
                 </h1>
@@ -130,7 +130,7 @@ const Bussiness_List = () => {
                   Filter
                 </button> */}
                   <button
-                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded"
+                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded mr-5 md:mr-0"
                     onClick={() => setFilterOpen(true)}
                   >
                     All Filter
@@ -142,7 +142,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-7 xl:w-[83%]  gap-5 flex flex-col md:p-4">
+            <div className="mt-7 w-full md:w-[85%]  gap-5 flex flex-col p-4 md:p-4">
               {data?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
@@ -153,9 +153,15 @@ const Bussiness_List = () => {
                 data.map((data, i) => (
                   <div
                     key={i}
-                    className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
+                    className="inline md:flex w-full md:gap-3 border border-gray-300 p-3 rounded-lg"
                   >
-                    <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
+                    {/* Swiper Image Slider */}
+                    {/* <div className="w-full md:w-[25%]">
+                    <SwiperModal data={data.photos} />
+                  </div> */}
+
+                    {/* Business Info */}
+                    <div className="mt-1 md:mt-0 w-full space-y-4">
                       <h2
                         className="text-xl font-semibold"
                         onClick={() => handleBusinessClick(data._id)}
