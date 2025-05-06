@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
@@ -16,6 +16,33 @@ const ReviewPage = () => {
     const userId = userData?.user_id;
     // console.log(businessId);
     const [selectedRating, setSelectedRating] = useState(rating);
+    const [existingReview, setExistingReview] = useState(null);
+
+    useEffect(() => {
+        const fetchExistingReview = async () => {
+            if (!userId || !businessId) return;
+
+            try {
+                const response = await axios.get(`${API}/reviews/myreview`, {
+                    params: {
+                        user: userId,
+                        business: businessId
+                    }
+                });
+                console.log(response.data);
+
+                if (response.data?.data) {
+                    setExistingReview(response.data.data);
+                    setComment(response.data.data.comment || '');
+                    setSelectedRating(response.data.data.rating || rating);
+                }
+            } catch (error) {
+                console.error('Error fetching review:', error);
+            }
+        };
+
+        fetchExistingReview();
+    }, [userId, businessId]);
 
     const handleRatingClick = (newRating) => {
         setSelectedRating(newRating);
@@ -40,13 +67,21 @@ const ReviewPage = () => {
         setError('');
 
         try {
-            const res = await axios.post(`${API}/reviews/`, {
-                user: userId,
-                business: businessId,
-                rating: rating || 0,
-                comment: comment
-            });
-            // console.log(res);
+            if (existingReview?._id) {
+                await axios.put(`${API}/reviews/${existingReview._id}`, {
+                    user: userId,
+                    business: businessId,
+                    rating: selectedRating,
+                    comment: comment
+                });
+            } else {
+                await axios.post(`${API}/reviews`, {
+                    user: userId,
+                    business: businessId,
+                    rating: selectedRating,
+                    comment: comment
+                });
+            }
 
             navigate(`/business/${businessId}`);
         } catch (err) {
