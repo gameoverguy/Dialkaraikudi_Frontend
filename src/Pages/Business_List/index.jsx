@@ -12,7 +12,7 @@ import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
-import {API} from "../../../config/config"
+import { API } from "../../../config/config";
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -27,7 +27,7 @@ const Bussiness_List = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(false);
-  const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+  //const [expandedBusinessId, setExpandedBusinessId] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const { id } = useParams();
   const { handleOpenLoginModal } = useLoginModal();
@@ -42,7 +42,6 @@ const Bussiness_List = () => {
 
         // Only fetch category businesses if we have an ID
         if (id) {
-      
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
         } else if (search.state) {
@@ -67,23 +66,22 @@ const Bussiness_List = () => {
     fetchBusinesses();
   }, [id, search.state]);
 
-  const cookies = Cookies.get("userToken")
+  const cookies = Cookies.get("userToken");
 
   const handleShowContact = () => {
     if (cookies) {
-      setShowContact(prev => !prev);
+      setShowContact((prev) => !prev);
     } else {
       toast.warning("Please Login to show contact number");
-     setTimeout(()=>{
-      handleOpenLoginModal();
-     },100)
-      
+      setTimeout(() => {
+        handleOpenLoginModal();
+      }, 100);
     }
   };
 
-  const toggleAmenities = (id) => {
-    setExpandedBusinessId(expandedBusinessId === id ? null : id);
-  };
+  // const toggleAmenities = (id) => {
+  //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
+  // };
 
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
@@ -157,12 +155,6 @@ const Bussiness_List = () => {
                     key={i}
                     className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
                   >
-                    {/* Swiper Image Slider */}
-                    {/* <div className="w-full md:w-[25%]">
-                    <SwiperModal data={data.photos} />
-                  </div> */}
-
-                    {/* Business Info */}
                     <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
                       <h2
                         className="text-xl font-semibold"
@@ -172,45 +164,40 @@ const Bussiness_List = () => {
                       </h2>
                       <div className="flex items-center gap-2">
                         <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
-                          {" "}
                           {data.ratings}
                           <IoIosStar
                             size={18}
                             color="#FFD700"
                             className="inline"
                           />
-                        </div>{" "}
+                        </div>
                         {data.reviewCount} Ratings
                       </div>
                       <p className="flex items-center">
                         <CiLocationOn /> {data.address.formattedAddress}
                       </p>
-                      {/* <div>
-                                <AmentiesModal
-                                    data={data}
-                                    isExpanded={expandedBusinessId === data.id}
-                                    toggleExpand={() => toggleAmenities(data.id)}
-                                />
-                            </div> */}
-                    <div className="text-sm flex gap-1">
-                      <button
-                        onClick={handleShowContact}
-                        className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
-                      >
-                        <span className="text-md text-white px-1">
-                          <FaPhoneAlt className="p-1 text-xl" />
-                        </span>
-                        {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
 
-                      </button>
-                      <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
-                        <span className="text-xl px-1 text-white">
-                          <FaWhatsapp size={16} className="text-white" />
-                        </span>{" "}
-                        WhatsApp
-                      </button>
+                      <div className="text-sm flex gap-1">
+                        <button
+                          onClick={handleShowContact}
+                          className="bg-[#287094] group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                        >
+                          <span className="text-md text-white px-1">
+                            <FaPhoneAlt className="p-1 text-xl" />
+                          </span>
+                          {showContact
+                            ? data.contactDetails?.phone
+                            : "Show Number"}
+                        </button>
+                        <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                          <span className="text-xl px-1 text-white">
+                            <FaWhatsapp size={16} className="text-white" />
+                          </span>
+                          WhatsApp
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  </div> // ✅ Closing div added
                 ))
               )}
             </div>
