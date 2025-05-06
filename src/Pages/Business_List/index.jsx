@@ -12,7 +12,7 @@ import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import banner from "../../assets/banner.jpg";
-import { API } from "../../../config/config"
+import { API } from "../../../config/config";
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
@@ -27,7 +27,7 @@ const Bussiness_List = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(false);
-  const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+  //const [expandedBusinessId, setExpandedBusinessId] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const { id } = useParams();
   const { handleOpenLoginModal } = useLoginModal();
@@ -42,7 +42,6 @@ const Bussiness_List = () => {
 
         // Only fetch category businesses if we have an ID
         if (id) {
-
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
         } else if (search.state) {
@@ -50,7 +49,7 @@ const Bussiness_List = () => {
             `${API}/business/search/${search.state.searchQuery}`
           );
           setData(res.data.data);
-          console.log("elseifffffff");
+          console.log("elseifffffff", res.data.data);
         } else {
           // Fetch all businesses if no category ID
           const res = await axios.get(`${API}/business`);
@@ -67,23 +66,22 @@ const Bussiness_List = () => {
     fetchBusinesses();
   }, [id, search.state]);
 
-  const cookies = Cookies.get("userToken")
+  const cookies = Cookies.get("userToken");
 
   const handleShowContact = () => {
     if (cookies) {
-      setShowContact(prev => !prev);
+      setShowContact((prev) => !prev);
     } else {
       toast.warning("Please Login to show contact number");
       setTimeout(() => {
         handleOpenLoginModal();
-      }, 100)
-
+      }, 100);
     }
   };
 
-  const toggleAmenities = (id) => {
-    setExpandedBusinessId(expandedBusinessId === id ? null : id);
-  };
+  // const toggleAmenities = (id) => {
+  //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
+  // };
 
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
@@ -99,7 +97,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row w-12/12 mx-auto shadow-lg rounded-xl overflow-hidden h-[30vh] md:h-100">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg rounded-xl overflow-hidden md:h-[30vh]">
         <div className="w-full">
           <img
             src={banner}
@@ -114,14 +112,14 @@ const Bussiness_List = () => {
           <div className="flex justify-center items-center w-full flex-col">
             <div className="md:p-4 w-full  xl:w-10/12">
               <div className="flex">
-                <Link className="text-sm text-gray-500 hover:text-blue-500">
+                <Link className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5">
                   Karaikudi &gt;
                 </Link>
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
                   {data?.category?.displayName}
                 </Link>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 md:px-0 px-5">
                 <h1 className="text-lg font-bold">
                   Best Businesses in Karaikudi
                 </h1>
@@ -132,7 +130,7 @@ const Bussiness_List = () => {
                   Filter
                 </button> */}
                   <button
-                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded"
+                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded mr-5 md:mr-0"
                     onClick={() => setFilterOpen(true)}
                   >
                     All Filter
@@ -144,7 +142,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-7 xl:w-[83%]  gap-5 flex flex-col md:p-4">
+            <div className="mt-7 w-full md:w-[85%]  gap-5 flex flex-col p-4 md:p-4">
               {data?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
@@ -155,15 +153,22 @@ const Bussiness_List = () => {
                 data.map((data, i) => (
                   <div
                     key={i}
-                    className="inline md:flex xl:w-[100%] md:gap-3 border border-gray-300 p-3 rounded-lg"
+                    className="inline md:flex w-full md:gap-3 border border-gray-300 p-3 rounded-lg"
                   >
                     {/* Swiper Image Slider */}
                     {/* <div className="w-full md:w-[25%]">
                     <SwiperModal data={data.photos} />
                   </div> */}
+                    <div>
+                      <img
+                        src={data.photos[0]}
+                        alt="Business"
+                        className="w-full h-40 object-cover rounded-lg"
+                      />
+                    </div>
 
                     {/* Business Info */}
-                    <div className="mt-5 md:mt-0 w-full md:w-[100%] space-y-4">
+                    <div className="mt-1 md:mt-0 w-full space-y-4">
                       <h2
                         className="text-xl font-semibold"
                         onClick={() => handleBusinessClick(data._id)}
@@ -172,14 +177,13 @@ const Bussiness_List = () => {
                       </h2>
                       <div className="flex items-center gap-2">
                         <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
-                          {" "}
                           {data.ratings}
                           <IoIosStar
                             size={18}
                             color="#FFD700"
                             className="inline"
                           />
-                        </div>{" "}
+                        </div>
                         {data.reviewCount} Ratings
                       </div>
                       <p className="flex items-center">
@@ -200,8 +204,9 @@ const Bussiness_List = () => {
                           <span className="text-md text-white px-1">
                             <FaPhoneAlt className="p-1 text-xl" />
                           </span>
-                          {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
-
+                          {showContact
+                            ? data?.contactDetails?.phone
+                            : "Show Number"}
                         </button>
                         <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
                           <span className="text-xl px-1 text-white">

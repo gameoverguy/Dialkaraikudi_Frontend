@@ -238,15 +238,21 @@ const Header = () => {
 
         {/* Mobile Search */}
         <div className="lg:hidden relative w-full mt-3">
+        <form onSubmit={handleSearch}>
           <input
             type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for services, products, brands..."
             className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
           />
           <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-          <button className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
+          <button
+           type="submit"
+          className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
             <IoSearchOutline className="text-xl" />
           </button>
+          </form>
         </div>
       </div>
 
