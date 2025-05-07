@@ -1,5 +1,4 @@
 import React from "react";
-import store from "../../assets/store.mp4";
 import toppro2 from "../../assets/toppro2.jpg";
 
 function TopProducts() {
@@ -9,7 +8,7 @@ function TopProducts() {
         <div className="w-full md:w-6/12 relative group overflow-hidden">
           <video
                     className="w-full h-[340px] object-cover"
-                    src={store} // Replace with your actual video path
+                    src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4" // Replace with your actual video path
                     autoPlay
                     muted
                     loop

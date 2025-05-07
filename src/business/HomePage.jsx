@@ -382,7 +382,7 @@ const HomePage = () => {
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"
-          src="./src/assets/banner3.mov" // Replace with your actual video path
+          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611951/banner3_uebtno.mov" // Replace with your actual video path
           autoPlay
           muted
           loop
@@ -498,7 +498,7 @@ const HomePage = () => {
         {/* Video Background */}
         <video
           className="w-full md:h-full object-cover"
-          src="./src/assets/banner2.mov" // Replace with your actual video path
+          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611943/banner2_mfjknu.mov" // Replace with your actual video path
           autoPlay
           muted
           loop
