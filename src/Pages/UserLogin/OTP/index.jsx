@@ -211,7 +211,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                                         type="button"
                                         disabled={isSubmitting}
                                         onClick={handleResendOTP}
-                                        className={`text-xs text-purple-600 hover:text-purple-800 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                                        className={`text-xs blue-link ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
                                             }`}
                                     >
                                         Resend Code

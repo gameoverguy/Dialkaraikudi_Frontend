@@ -209,7 +209,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
                 <button
                   type="button"
                   onClick={handleResendOTP}
-                  className="text-xs text-purple-600 hover:text-purple-800"
+                  className="text-xs blue-link"
                 >
                   Resend Code
                 </button>

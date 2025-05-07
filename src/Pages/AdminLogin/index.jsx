@@ -191,7 +191,7 @@ const AdminLogin = () => {
               <button
                 type="button"
                 onClick={() => setShowForgotPassword(true)}
-                className="cursor-pointer text-sm text-purple-600 hover:text-purple-500"
+                className="cursor-pointer text-xs blue-link"
               >
                 Forgot your password?
               </button>
