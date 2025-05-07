@@ -17,7 +17,7 @@ import BusinessManagement from "./BussinessManagement";
 import DashBoard from "./DashBoard";
 import logo from "../../assets/bulb.png";
 import logo1 from "../../assets/logo_01.png";
-import HomePage from "./Advertisment/HomePage";
+//import HomePage from "./Advertisment/HomePage";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -237,7 +237,7 @@ const AdminPanel = () => {
     platform: <PlatformInfo />,
     gateway: <GatewayConfig />,
     categories: <CategoryManagement />,
-    home: <HomePage />,
+    //home: <HomePage />,
     business: <CategoryManagement />,
   };
 
