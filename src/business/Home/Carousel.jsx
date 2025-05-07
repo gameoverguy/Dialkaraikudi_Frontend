@@ -147,7 +147,7 @@ const Carousel = () => {
   ];
 
   return (
-    <div className="overflow-hidden w-full h-fit min-w-screen">
+    <div className="overflow-hidden w-full h-fit">
       <Slider {...settings}>
         {coursal.map((item) => (
           <div key={item.id}>

@@ -409,7 +409,6 @@ const HomePage = () => {
         </div>
 
         {/* Glow Border (optional animation) */}
-        
       </div>
 
       <div
@@ -526,7 +525,6 @@ const HomePage = () => {
         </div>
 
         {/* Glow Border (optional animation) */}
-        
       </div>
 
       <TopProducts />
