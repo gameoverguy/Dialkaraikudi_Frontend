@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -6,13 +6,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Home/Carousel";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { API } from "../../config/config";
 import { MdCategory } from "react-icons/md";
 import TopProducts from "./Home/TopProducts";
 import TopServices from "./Home/TopServices";
 import LimitedOffer from "./Home/LimitedOffer";
+import Category from "./Home/Category";
 
 // const serviceCategories = {
 //   essentialServices: [
@@ -40,24 +40,7 @@ import LimitedOffer from "./Home/LimitedOffer";
 // };
 
 const HomePage = () => {
-  const [categories, setCategories] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${API}/categories`);
-        setCategories(response.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  const handleCategoryClick = (category) => {
-    navigate(`/businesslist/${category}`);
-  };
+  
 
   return (
     <>
@@ -65,38 +48,7 @@ const HomePage = () => {
         <Carousel />
       </div>
 
-      <div className="py-10 text-center font-serif flex justify-center px-2 md:w-11/12 mx-auto">
-        <div className="w-full max-w-8xl">
-          <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">
-              Products & Services
-            </h2>
-            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4">
-              {categories.map((category) => (
-                <div
-                  key={category._id}
-                  onClick={() => handleCategoryClick(category._id)}
-                  className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-                >
-                  <div className="w-[80px] h-[80px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 p-2">
-                    <span className="text-2xl transform group-hover:scale-110  transition-all duration-300">
-                      {/* You can add icons based on category if available */}
-                      <img
-                        src={category.iconUrl}
-                        alt={category.displayName}
-                        className="w-full h-full text-[8px] rounded-xl"
-                      />
-                    </span>
-                  </div>
-                  <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
-                    {category.displayName}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Category />
 
       {/* <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -529,7 +481,7 @@ const HomePage = () => {
 
       <TopProducts />
       <TopServices />
-      {/* <LimitedOffer /> */}
+      <LimitedOffer />
     </>
   );
 };

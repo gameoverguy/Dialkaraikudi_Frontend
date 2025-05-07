@@ -66,8 +66,8 @@ const CategoryManagement = () => {
     const newErrors = {};
     if (!formData.name) {
       newErrors.name = 'Category name is required';
-    } else if (formData.name.length > 25) {
-      newErrors.name = 'Name must be less than 25 characters';
+    } else if (formData.name.length > 50) {
+      newErrors.name = 'Name must be less than 50 characters';
     } else if (!/^[a-zA-Z0-9\s&]+$/.test(formData.name)) {
       newErrors.name = 'Only letters, numbers, spaces, and & are allowed';
     }
@@ -104,7 +104,7 @@ const CategoryManagement = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'name') {
-      const onlyLetters = value.replace(/[^a-zA-Z\s]/g, '');
+      const onlyLetters = value.replace(/[^a-zA-Z\s&]/g, '');
       setFormData(prev => ({ ...prev, [name]: onlyLetters }));
       setErrors(prev => ({ ...prev, name: value !== onlyLetters ? 'Only letters and spaces are allowed' : '' }));
     } else {
@@ -347,7 +347,7 @@ const CategoryManagement = () => {
               onChange={handleInputChange}
               className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
               placeholder="Category Name"
-              maxLength={25}
+              maxLength={50}
               error={errors.name}
             />
           </div>
