@@ -5,7 +5,7 @@ import toppro2 from "../../assets/toppro2.jpg";
 function TopProducts() {
   return (
     <>
-      <div className="w-full md:w-10/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer py-5">
+      <div className="w-full md:w-11/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer py-5">
         <div className="w-full md:w-6/12 relative group overflow-hidden">
           <video
                     className="w-full h-[340px] object-cover"
