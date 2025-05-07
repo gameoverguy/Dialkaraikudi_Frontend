@@ -26,8 +26,9 @@ const Bussiness_List = () => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showContact, setShowContact] = useState(false);
-  //const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+  const [showContact, setShowContact] = useState(null);
+  // const [expandedBusinessId, setExpandedBusinessId] = useState(null);
+
   const [filterOpen, setFilterOpen] = useState(false);
   const { id } = useParams();
   const { handleOpenLoginModal } = useLoginModal();
@@ -68,9 +69,9 @@ const Bussiness_List = () => {
 
   const cookies = Cookies.get("userToken");
 
-  const handleShowContact = () => {
+  const handleShowContact = (id) => {
     if (cookies) {
-      setShowContact((prev) => !prev);
+      setShowContact((prev) => (prev === id ? null : id)); // Toggle specific contact
     } else {
       toast.warning("Please Login to show contact number");
       setTimeout(() => {
@@ -153,17 +154,17 @@ const Bussiness_List = () => {
                 data.map((data, i) => (
                   <div
                     key={i}
-                    className="inline md:flex w-full md:gap-3 border border-gray-300 p-3 rounded-lg"
+                    className="md:flex w-full md:gap-3 border border-gray-300 rounded-lg flex gap-4"
                   >
                     {/* Swiper Image Slider */}
                     {/* <div className="w-full md:w-[25%]">
                     <SwiperModal data={data.photos} />
                   </div> */}
-                    <div>
+                    <div className="w-full md:w-[25%]">
                       <img
                         src={data.photos[0]}
                         alt="Business"
-                        className="w-full h-40 object-cover rounded-lg"
+                        className="w-full h-40 object-cover rounded"
                       />
                     </div>
 
@@ -187,7 +188,7 @@ const Bussiness_List = () => {
                         {data.reviewCount} Ratings
                       </div>
                       <p className="flex items-center">
-                        <CiLocationOn /> {data.address.formattedAddress}
+                        <CiLocationOn /> {data.address.formattedAddress || data.address.addressArea}
                       </p>
                       {/* <div>
                                 <AmentiesModal
@@ -196,15 +197,15 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                      <div className="text-sm flex gap-1">
+                            <div className="text-sm flex flex-col md:flex-row gap-1">
                         <button
-                          onClick={handleShowContact}
-                          className="bg-[#287094]  group group-hover:text-black flex rounded pr-1 py-1 items-center text-white cursor-pointer"
+                          onClick={() => handleShowContact(data._id)}
+                          className="bg-[#287094] group flex rounded pr-1 md:py-1 items-center text-white cursor-pointer"
                         >
                           <span className="text-md text-white px-1">
                             <FaPhoneAlt className="p-1 text-xl" />
                           </span>
-                          {showContact
+                          {showContact === data._id
                             ? data?.contactDetails?.phone
                             : "Show Number"}
                         </button>
@@ -215,12 +216,14 @@ const Bussiness_List = () => {
                           WhatsApp
                         </button>
                       </div>
+                      
                     </div>
                   </div>
                 ))
               )}
             </div>
           </div>
+          
         </div>
         <div className="hidden xl:block xl:w-4/12">
           <div className="sticky top-30">

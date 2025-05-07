@@ -7,7 +7,7 @@ const Reviews = ({ formData }) => {
     <div className="rounded-md border border-gray-200 p-4" id="quickinfo">
       <h1 className="font-normal text-xl">Reviews & Ratings</h1>
       <div className="flex flex-wrap items-center gap-2 mt-2 md:text-base">
-        <div className="flex items-center justify-center bg-[#007a0c] text-white p-2 rounded-xl text-md md:text-xl font-bold">
+        <div className="flex items-center justify-center bg-[#007a0c] text-white px-3 py-1 rounded-lg text-md md:text-xl font-bold">
           {formData.business.ratings}
         </div>
         <div>
@@ -18,7 +18,7 @@ const Reviews = ({ formData }) => {
       </div>
       <div className="mt-4">
         <p className="text-2xl font-semibold pt-4 pb-2">Start your Review</p>
-        <StarRating businessId={formData.business._id} />
+        <StarRating formData={formData} businessId={formData.business._id} />
       </div>
       <h2 className="text-xl font-semibold pt-6 pb-3">User Reviews</h2>
       {formData?.reviews?.length > 0 ? (
@@ -28,19 +28,23 @@ const Reviews = ({ formData }) => {
               <div className="flex gap-3 items-center">
                 <img
                   src={review.userImage || 'default-avatar.png'}
-                  alt={review.userName}
+                  alt={review.user.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <p className="font-semibold">{review.userName}</p>
+                  <p className="font-semibold">{review.user.name}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+              <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              })}</p>
             </div>
             <div className="flex items-center text-orange-400 mb-2">
               {[...Array(5)].map((_, index) => (
-                <FaStar 
-                  key={index} 
+                <FaStar
+                  key={index}
                   className={`text-xl ${index < review.rating ? 'text-orange-400' : 'text-gray-300'}`}
                 />
               ))}

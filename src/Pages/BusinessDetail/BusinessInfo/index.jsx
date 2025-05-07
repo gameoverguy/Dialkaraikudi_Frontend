@@ -178,7 +178,7 @@ const BusinessInfo = ({ formData, businessId }) => {
             </div>
             <div className="hidden md:block">
               <p className="flex justify-end font-semibold">Click to Rate</p>
-              <StarRating businessId={formData.business._id} />
+              <StarRating formData={formData} businessId={formData.business._id} />
             </div>
           </div>
         </div>
