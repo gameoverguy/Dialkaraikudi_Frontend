@@ -18,7 +18,7 @@ import BusinessLogin from "./business/login.jsx";
 import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
-import ContactDetails from "./business/contact.jsx"; 
+import ContactDetails from "./business/contact.jsx";
 import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
 import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 
@@ -42,7 +42,7 @@ function App() {
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
               <Route path="/review" element={<ReviewPage />} />
-              <Route path="/1" element={<AddToBusiness/>} />
+              <Route path="/1" element={<AddToBusiness />} />
               <Route path="/detailform" element={<BusinessDetailForm />} />
               <Route path="/2/:id" element={<VendorDashboard />} />
 
@@ -52,13 +52,13 @@ function App() {
               <Route path="/Contact" element={<ContactDetails />} /> */}
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
-            <Route path="/adminpanel" element={     
-               <AdminRoute> 
+            <Route path="/adminpanel" element={
+              <AdminRoute>
                 <AdminPanel />
-                </AdminRoute> 
+              </AdminRoute>
             } />
             <Route path="*" element={<NotFound />} />
-            
+
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>
