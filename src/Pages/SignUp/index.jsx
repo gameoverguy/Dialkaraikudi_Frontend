@@ -266,7 +266,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                                 )}
                             </div>
                         </div>
-                        <div className="flex items-start">
+                        <div className="flex items-center">
                             <input
                                 type="checkbox"
                                 name="acceptTerms"
@@ -277,7 +277,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                             />
                             <label htmlFor="acceptTerms" className="text-xs text-gray-600">
                                 I agree to the{" "}
-                                <a href="/terms" className="text-purple-600 hover:text-purple-800">
+                                <a href="/terms" className="blue-link">
                                     Terms and Conditions
                                 </a>
                             </label>
@@ -308,7 +308,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                         <span className="text-gray-600">Already have an account? </span>
                         <button
                             onClick={handleLoginClick}
-                            className="text-purple-600 hover:text-purple-800 font-medium"
+                            className="blue-link"
                         >
                             Login
                         </button>

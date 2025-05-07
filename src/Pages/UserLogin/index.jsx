@@ -222,14 +222,14 @@ const UserLogin = ({
               <span className="text-gray-600">Don't have an account? </span>
               <button
                 onClick={handleSignupClick}
-                className="text-purple-600 hover:text-purple-800 font-medium cursor-pointer"
+                className="blue-link cursor-pointer"
               >
                 Register
               </button>
             </div>
             <a
               onClick={handleForgotPasswordClick}
-              className="text-purple-600 hover:text-purple-800 cursor-pointer"
+              className="blue-link cursor-pointer"
             >
               Forgot Password?
             </a>

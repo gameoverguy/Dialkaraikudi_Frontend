@@ -44,3 +44,19 @@ input[type="password"]::-webkit-textfield-decoration-container {
   display: none !important;
   appearance: none;
 }
+
+
+.blue-link {
+  color: blue;
+  /* You can add other styles here like text-decoration, etc. */
+}
+
+.blue-link:hover {
+  /* Styles for when the link is hovered */
+  color: darkblue; /* Example of a darker blue on hover */
+}
+
+.blue-link:active {
+  /* Styles for when the link is actively clicked */
+  color: navy; /* Example of an even darker blue when clicked */
+}
