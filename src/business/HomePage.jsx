@@ -65,7 +65,7 @@ const HomePage = () => {
         <Carousel />
       </div>
 
-      <div className="py-10 text-center font-serif flex justify-center px-10 md:px-10 lg:px-35">
+      <div className="py-10 text-center font-serif flex justify-center px-2 md:w-11/12 mx-auto">
         <div className="w-full max-w-8xl">
           <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">
@@ -153,7 +153,7 @@ const HomePage = () => {
       </div> */}
 
       <div
-        className="w-full px-10 lg:px-38 py-10"
+        className="w-full px-2 md:px-0 py-10 md:w-11/12 md:mx-auto"
         data-aos="fade-up"
         data-aos-delay="700"
         data-aos-duration="1500"
@@ -223,7 +223,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-4 md:px-10 lg:px-38 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-2 md:px-0 mb-4 md:w-11/12 mx-auto">
         {/* First Swiper */}
         <div className="swiper-container w-full">
           <Swiper
@@ -236,7 +236,7 @@ const HomePage = () => {
             pagination={{ clickable: true }}
             navigation={true}
             modules={[Autoplay, Pagination, Navigation]}
-            className="w-full h-[200px] sm:h-[220px] md:h-[240px] lg:h-[250px] bg-gray-200 rounded-lg"
+            className="w-full h-[200px] md:h-[240px] bg-gray-200 rounded-lg"
           >
             {[
               "https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_leads.webp",
@@ -292,7 +292,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="w-full px-10 lg:px-38 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100"
+        className="w-full px-2 md:px-0 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100 md:w-11/12 mx-auto"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -378,7 +378,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
+      <div className="w-full md:w-11/12 mx-auto md:h-[50vh] relative overflow-hidden shadow-xl group">
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"
@@ -402,18 +402,18 @@ const HomePage = () => {
           </p>
           <a
             href="#services"
-            className="mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
+            className="md:mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
           >
             Explore Now
           </a>
         </div>
 
         {/* Glow Border (optional animation) */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-white/10 group-hover:border-blue-400 transition-all duration-700 animate-pulse pointer-events-none" />
+        
       </div>
 
       <div
-        className="w-full px-10 lg:px-38 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
+        className="w-full md:w-11/12 mx-auto px-2 md:px-0 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -495,10 +495,10 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
+      <div className="w-full md:w-11/12 mx-auto md:h-[50vh] relative overflow-hidden shadow-xl group">
         {/* Video Background */}
         <video
-          className="w-full h-full object-cover"
+          className="w-full md:h-full object-cover"
           src="./src/assets/banner2.mov" // Replace with your actual video path
           autoPlay
           muted
@@ -513,7 +513,7 @@ const HomePage = () => {
           <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-lg animate-fade-up">
             Welcome to Shree Jewellery
           </h1>
-          <p className="mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
+          <p className="md:mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
             Your one-stop hub for services, shopping, and entertainment in
             Karaikudi.
           </p>
@@ -526,12 +526,12 @@ const HomePage = () => {
         </div>
 
         {/* Glow Border (optional animation) */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-white/10 group-hover:border-blue-400 transition-all duration-700 animate-pulse pointer-events-none" />
+        
       </div>
 
       <TopProducts />
       <TopServices />
-      <LimitedOffer />
+      {/* <LimitedOffer /> */}
     </>
   );
 };

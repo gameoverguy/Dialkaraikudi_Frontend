@@ -7,7 +7,7 @@ import AmentiesModal from "./amentiesModal";
 import SwiperModal from "./Swiper";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import FilterModal from "./filter";
-import adds from "../../assets/adds.jpg";
+import adds from "../../assets/adds.jpeg";
 import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
@@ -98,7 +98,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row mx-auto shadow-lg rounded-xl overflow-hidden md:h-[30vh]">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden md:h-[30vh]">
         <div className="w-full">
           <img
             src={banner}
@@ -108,12 +108,12 @@ const Bussiness_List = () => {
         </div>
       </div>
 
-      <div className="flex cursor-pointer py-5">
+      <div className="flex cursor-pointer py-5 mb-5 shadow-2xl">
         <div className="w-full xl:w-9/12 xl:mx-auto">
           <div className="flex justify-center items-center w-full flex-col">
             <div className="md:p-4 w-full  xl:w-10/12">
               <div className="flex">
-                <Link className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5">
+                <Link to="/" className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5">
                   Karaikudi &gt;
                 </Link>
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
@@ -131,7 +131,7 @@ const Bussiness_List = () => {
                   Filter
                 </button> */}
                   <button
-                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded mr-5 md:mr-0"
+                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded md:mr-0"
                     onClick={() => setFilterOpen(true)}
                   >
                     All Filter
@@ -143,7 +143,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-7 w-full md:w-[85%]  gap-5 flex flex-col p-4 md:p-4">
+            <div className="mt-7 w-full md:w-[85%]  gap-5 flex flex-col md:p-4">
               {data?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
@@ -154,7 +154,7 @@ const Bussiness_List = () => {
                 data.map((data, i) => (
                   <div
                     key={i}
-                    className="md:flex w-full md:gap-3 border border-gray-300 rounded-lg flex gap-4"
+                    className="md:flex w-full md:gap-3 border border-gray-300 rounded-lg gap-2"
                   >
                     {/* Swiper Image Slider */}
                     {/* <div className="w-full md:w-[25%]">
@@ -169,7 +169,7 @@ const Bussiness_List = () => {
                     </div>
 
                     {/* Business Info */}
-                    <div className="mt-1 md:mt-0 w-full space-y-4">
+                    <div className="mt-1 md:mt-0 w-full space-y-4 md:p-0 p-3">
                       <h2
                         className="text-xl font-semibold"
                         onClick={() => handleBusinessClick(data._id)}
@@ -197,10 +197,11 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                            <div className="text-sm flex flex-col md:flex-row gap-1">
+                          
+                          <div className="text-sm flex flex-row gap-1">
                         <button
                           onClick={() => handleShowContact(data._id)}
-                          className="bg-[#287094] group flex rounded pr-1 md:py-1 items-center text-white cursor-pointer"
+                          className="bg-[#287094] group flex items-center rounded pr-1 md:py-1 text-white cursor-pointer"
                         >
                           <span className="text-md text-white px-1">
                             <FaPhoneAlt className="p-1 text-xl" />
@@ -209,15 +210,16 @@ const Bussiness_List = () => {
                             ? data?.contactDetails?.phone
                             : "Show Number"}
                         </button>
-                        <button className="flex items-center borde border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                        <button className="flex items-center border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
                           <span className="text-xl px-1 text-white">
                             <FaWhatsapp size={16} className="text-white" />
                           </span>{" "}
                           WhatsApp
                         </button>
                       </div>
-                      
+
                     </div>
+                    
                   </div>
                 ))
               )}
@@ -225,9 +227,9 @@ const Bussiness_List = () => {
           </div>
           
         </div>
-        <div className="hidden xl:block xl:w-4/12">
-          <div className="sticky top-30">
-            <img src={adds} alt="Advertisement" className="h-[75%]" />
+        <div className="hidden md:block md:w-4/12">
+          <div className="sticky top-[200px] flex justify-center items-center">
+            <img src={adds} alt="Advertisement" className="w-6/12" />
           </div>
         </div>
         <ToastContainer />
