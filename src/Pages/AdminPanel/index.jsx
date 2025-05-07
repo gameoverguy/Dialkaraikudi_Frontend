@@ -222,14 +222,6 @@ const AdminPanel = () => {
     )}
   </div>;
 
-  // // Component mapping object
-  // const handleMenuSelect = (key) => {
-  //   setSelectedKey(key);
-  //   if (key === 'categories') {
-  //     setExpandedMenu('5'); // Open the Organizational Units submenu
-  //   }
-  // };
-  // Update the component mapping to pass the handler
   const componentMap = {
     1: <DashBoard onMenuSelect={handleMenuSelect} />,
     2: <UserManagement />,
