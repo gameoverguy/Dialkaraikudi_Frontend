@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Logo from "../assets/logo_01.png";
 import { CiLocationOn } from "react-icons/ci";
 import { IoSearchOutline } from "react-icons/io5";
-import { MdNotificationsActive } from "react-icons/md";
 import { LuCircleUserRound } from "react-icons/lu";
 import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
@@ -56,14 +55,14 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-     if (
-  (desktopDropdownRef.current &&
-    desktopDropdownRef.current.contains(event.target)) ||
-  (mobileDropdownRef.current &&
-    mobileDropdownRef.current.contains(event.target))
-) {
-  return;
-}
+      if (
+        (desktopDropdownRef.current &&
+          desktopDropdownRef.current.contains(event.target)) ||
+        (mobileDropdownRef.current &&
+          mobileDropdownRef.current.contains(event.target))
+      ) {
+        return;
+      }
 
     };
 
@@ -135,7 +134,7 @@ const Header = () => {
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
             {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-              <CiLocationOn />
+              <LocationTracker onLocationSelect={handleLocationSelect} />
             </button>
 
             {/* Notifications */}
@@ -145,6 +144,23 @@ const Header = () => {
               </button>
             </div> */}
 
+            {/* Add business button  */}
+            <Link
+              to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
+              onClick={(e) => {
+                if (!userData) {
+                  e.preventDefault();
+                  setShowLoginModal(true);
+                }
+              }}
+              className="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
+            >
+              {userData && userData.hasBusiness ? (
+                <span className="text-sm font-medium">My Business Profile</span>
+              ) : (
+                <>+<span className="text-sm font-medium">Add Business</span></>
+              )}
+            </Link>
             {/* Auth Section */}
             {userData ? (
               <>
@@ -195,6 +211,12 @@ const Header = () => {
                   className="md:hidden flex items-center gap-2 relative"
                   ref={mobileDropdownRef}
                 >
+                  <Link
+                    to={userData.hasBusiness ? "/business-profile" : "/add-business"}
+                    className="flex md:hidden items-center justify-center w-8 h-8 bg-[#ee6510] hover:bg-[#ee2314] text-white rounded-full transition-colors duration-200 pb-1"
+                  >
+                    {userData.hasBusiness ? "B" : "+"}
+                  </Link>
                   <div
                     className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -225,6 +247,16 @@ const Header = () => {
                   <span>Login</span>
                 </button>
                 {/* Mobile Login */}
+                <Link
+                  to="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowLoginModal(true);
+                  }}
+                  className="flex md:hidden items-center justify-center w-8 h-8 bg-[#ee6510] hover:bg-[#ee2314] text-white rounded-full transition-colors duration-200 pb-1"
+                >
+                  +
+                </Link>
                 <button
                   onClick={() => setShowLoginModal(true)}
                   className="block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors"
@@ -238,20 +270,20 @@ const Header = () => {
 
         {/* Mobile Search */}
         <div className="lg:hidden relative w-full mt-3">
-        <form onSubmit={handleSearch}>
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for services, products, brands..."
-            className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
-          />
-          <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-          <button
-           type="submit"
-          className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
-            <IoSearchOutline className="text-xl" />
-          </button>
+          <form onSubmit={handleSearch}>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for services, products, brands..."
+              className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+            />
+            <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+            <button
+              type="submit"
+              className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
+              <IoSearchOutline className="text-xl" />
+            </button>
           </form>
         </div>
       </div>

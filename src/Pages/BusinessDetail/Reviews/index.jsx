@@ -27,7 +27,7 @@ const Reviews = ({ formData }) => {
             <div className="flex justify-between items-start mb-2">
               <div className="flex gap-3 items-center">
                 <img
-                  src={review.userImage || 'default-avatar.png'}
+                  src={review.userImage || 'https://media.istockphoto.com/id/1393750072/vector/flat-white-icon-man-for-web-design-silhouette-flat-illustration-vector-illustration-stock.jpg?s=612x612&w=0&k=20&c=s9hO4SpyvrDIfELozPpiB_WtzQV9KhoMUP9R9gVohoU='}
                   alt={review.user.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />

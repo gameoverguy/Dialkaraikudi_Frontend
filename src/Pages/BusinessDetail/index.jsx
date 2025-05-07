@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import BusinessInfo from "./BusinessInfo";
 import Photos from "./Photos";
 import Reviews from "./Reviews";
@@ -24,7 +25,7 @@ const BusinessDetails = () => {
   useEffect(() => {
     const fetchBusinessDetails = async () => {
       if (!id) {
-        navigate("/"); // Redirect to home if no ID
+        navigate("/");
         return;
       }
 
@@ -38,8 +39,7 @@ const BusinessDetails = () => {
         });
       } catch (error) {
         console.error("Error fetching business details:", error);
-        // Optionally redirect on error
-        // navigate('/');
+
       }
     };
 
@@ -61,7 +61,7 @@ const BusinessDetails = () => {
   const handleCategoryClick = (category) => {
     navigate(`/businesslist/${category}`);
   };
-  
+
 
   const handleTabClick = (tabName, sectionId) => {
     setActiveTab(tabName);
@@ -84,10 +84,32 @@ const BusinessDetails = () => {
     { name: "Reviews", id: "reviews", key: "reviews" },
   ];
 
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  };
+
+  const staggerChildren = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
   return (
     <React.Fragment>
-      <div className="bg-white shadow-xl pt-2">
-        <div className="flex p-4">
+      <motion.div
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={fadeIn}
+        className="bg-white shadow-xl pt-2"
+      >
+        <motion.div
+          variants={fadeIn}
+          className="flex p-4"
+        >
           <Link
             to="/"
             className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer"
@@ -97,50 +119,82 @@ const BusinessDetails = () => {
               <IoIosArrowForward />
             </span>
           </Link>
-          <Link to={`/businesslist/${formData?.business.category._id}`} className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
+          <Link
+            to={`/businesslist/${formData?.business.category._id}`}
+            className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer"
+          >
             {formData?.business.category.displayName} in Karaikudi{" "}
             <span>
               <IoIosArrowForward />
             </span>
           </Link>
-          <p className="flex items-center text-xs font-semibold hover:text-blue-500  cursor-pointer">
+          <p className="flex items-center text-xs font-semibold hover:text-blue-500 cursor-pointer">
             {formData?.business.businessName}
           </p>
-        </div>
+        </motion.div>
+
         {formData && (
-          <>
-            <BusinessInfo formData={formData} businessId={formData._id} />
-            <div className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide">
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={staggerChildren}
+          >
+            <motion.div variants={fadeIn}>
+              <BusinessInfo formData={formData} businessId={formData._id} />
+            </motion.div>
+
+            <motion.div
+              variants={fadeIn}
+              className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide"
+            >
               {tabs.map((tab) => (
-                <div
+                <motion.div
                   key={tab.key}
-                  className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${
-                    activeTab === tab.key
+                  variants={fadeIn}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${activeTab === tab.key
                       ? "border-b-4 border-blue-500 text-blue-500"
                       : "text-gray-500 hover:text-gray-700"
-                  }`}
+                    }`}
                   onClick={() => handleTabClick(tab.key, tab.id)}
                 >
                   {tab.name}
-                </div>
+                </motion.div>
               ))}
-            </div>
-            <div className="mx-4 space-y-8 pb-10 mb-4">
-              <div id="overview">
-                <div id="description">
+            </motion.div>
+
+            <motion.div
+              variants={fadeIn}
+              className="mx-4 space-y-8 pb-10 mb-4"
+            >
+              <motion.div
+                id="overview"
+                variants={staggerChildren}
+              >
+                <motion.div
+                  id="description"
+                  variants={fadeIn}
+                >
                   <Description formData={formData} />
-                </div>
-                <div id="photos">
+                </motion.div>
+                <motion.div
+                  id="photos"
+                  variants={fadeIn}
+                >
                   <Photos formData={formData} />
-                </div>
-                <div id="reviews">
+                </motion.div>
+                <motion.div
+                  id="reviews"
+                  variants={fadeIn}
+                >
                   <Reviews formData={formData} />
-                </div>
-              </div>
-            </div>
-          </>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </React.Fragment>
   );
 };
