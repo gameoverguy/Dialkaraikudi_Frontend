@@ -12,6 +12,7 @@ import FloatingInput from '../../../Components/FloatingInput';
 import FloatingSelect from '../../../Components/FloatingInput/DropDown';
 import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
 import { MdCancel } from 'react-icons/md';
+import FloatingTextarea from '../../../Components/FloatingInput/FloatingTextarea';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -33,6 +34,7 @@ const BusinessManagement = () => {
     try {
       const response = await axios.get(`${API}/categories`);
       setCategories(response.data.data);
+      
     } catch (error) {
       console.error('Error fetching categories:', error);
       toast.error('Failed to fetch categories');
@@ -52,7 +54,7 @@ const BusinessManagement = () => {
         category: business.category,
         phone: business.contactDetails.phone,
         email: business.contactDetails.email,
-        address: business.address.addressArea,
+        address: business.address.formattedAddress || business.address.addressArea,
         photos: business.photos
       }));
 
@@ -320,7 +322,7 @@ const BusinessManagement = () => {
             email: formData.email
           },
           address: {
-            addressArea: formData.address
+            formattedAddress: formData.address
           },
           photos: uploadedUrls
         };
@@ -375,9 +377,9 @@ const BusinessManagement = () => {
 
   return (
     <div className="p-6">
-       <div className='shadow bg-white p-6 rounded-lg'>
-      <h1 className="text-2xl font-bold mb-6">Business Management</h1>
-      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+      <div className='shadow bg-white p-6 rounded-lg'>
+        <h1 className="text-2xl font-bold mb-6">Business Management</h1>
+        <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
       </div>
       <CustomTable
         columns={columns}
@@ -461,8 +463,8 @@ const BusinessManagement = () => {
           </div>
 
           <div className='mt-4'>
-            <FloatingInput
-              type="textarea"
+
+            <FloatingTextarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
@@ -473,14 +475,13 @@ const BusinessManagement = () => {
           </div>
 
           <div className='mt-4'>
-            <FloatingInput
-              type="textarea"
+            <FloatingTextarea
               name="address"
               value={formData.address}
               onChange={handleInputChange}
               placeholder="Business Address"
               error={errors.address}
-              rows={3}
+              rows={4}
             />
           </div>
 
@@ -520,7 +521,7 @@ const BusinessManagement = () => {
                       onClick={() => removePhoto(index)}
                       className="absolute cursor-pointer -top-2 right-5 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200"
                     >
-                     <MdCancel/>
+                      <MdCancel />
                     </button>
                   </div>
                 ))}
@@ -645,7 +646,7 @@ const BusinessManagement = () => {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={confirmDelete}
         title="Delete Business"
-        message="Are you sure you want to delete this business? This action cannot be undone."
+        message="Are you sure you want to delete this business?"
       />
     </div>
   );
