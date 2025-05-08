@@ -53,7 +53,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === 'phone' || name === 'whatsapp') {
       const numbersOnly = value.replace(/[^0-9]/g, '');
       const limitedLength = numbersOnly.slice(0, 10);
@@ -83,7 +83,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
       const error = validateField(key, formData[key]);
       if (error) newErrors[key] = error;
     });
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -101,11 +101,11 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           website: formData.website
         }
       };
-      
+
       try {
         await onSubmit(updatedData);
         setShowModal(false);
-       
+
       } catch (error) {
         console.error('Error updating business:', error);
       }
@@ -144,13 +144,13 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
             <span className="ml-2">{business?.business?.contactDetails?.email}</span>
           </div>
 
-            <div className="flex items-center">
-              <span className="font-medium">Website:</span>
-              <a href={business?.business?.contactDetails?.website} className="ml-2 text-blue-600 hover:text-blue-700">
-                {business?.business?.contactDetails?.website || '-'}
-              </a>
-            </div>
-        
+          <div className="flex items-center">
+            <span className="font-medium">Website:</span>
+            <a href={business?.business?.contactDetails?.website} className="ml-2 text-blue-600 hover:text-blue-700">
+              {business?.business?.contactDetails?.website || '-'}
+            </a>
+          </div>
+
         </div>
       </div>
       <CustomModal
@@ -158,16 +158,64 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         onClose={() => setShowModal(false)}
         title="Edit Business Details"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <FloatingInput
-            id="businessName"
-            name="businessName"
-            value={formData.businessName}
-            onChange={handleChange}
-            placeholder="Business Name"
-            error={errors.businessName}
-          />
+        <form onSubmit={handleSubmit} className="space-y-4 ">
+          <div className=" grid grid-cols-2 gap-2">
+            <FloatingInput
+              id="businessName"
+              name="businessName"
+              value={formData.businessName}
+              onChange={handleChange}
+              placeholder="Business Name"
+              error={errors.businessName}
+            />
 
+            <FloatingInput
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Phone Number"
+              error={errors.phone}
+            />
+
+            <FloatingInput
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              error={errors.email}
+            />
+
+            <FloatingInput
+              id="whatsapp"
+              name="whatsapp"
+              value={formData.whatsapp}
+              onChange={handleChange}
+              placeholder="GST Number (Optional)"
+              error={errors.whatsapp}
+            />
+
+            <FloatingInput
+              id="website"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              placeholder="Website (Optional)"
+              error={errors.website}
+            />
+
+
+            <FloatingInput
+              id="whatsapp"
+              name="whatsapp"
+              value={formData.whatsapp}
+              onChange={handleChange}
+              placeholder="W.Number (Optional)"
+              error={errors.whatsapp}
+            />
+          </div>
           <FloatingTextarea
             id="description"
             name="description"
@@ -175,42 +223,6 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
             onChange={handleChange}
             placeholder="Business Description"
             error={errors.description}
-          />
-
-          <FloatingInput
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone Number"
-            error={errors.phone}
-          />
-
-          <FloatingInput
-            id="whatsapp"
-            name="whatsapp"
-            value={formData.whatsapp}
-            onChange={handleChange}
-            placeholder="WhatsApp Number (Optional)"
-            error={errors.whatsapp}
-          />
-
-          <FloatingInput
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            error={errors.email}
-          />
-
-          <FloatingInput
-            id="website"
-            name="website"
-            value={formData.website}
-            onChange={handleChange}
-            placeholder="Website (Optional)"
           />
 
           <div className="flex justify-end gap-2">

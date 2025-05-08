@@ -106,7 +106,9 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold flex"><FaMapMarkerAlt className="text-red-500 mt-1 mr-2" />  Address  </h2>
+        <h2 className="text-xl font-bold flex">
+        {/* <FaMapMarkerAlt className="text-red-500 mt-1 mr-2" /> */}
+            Address  </h2>
         <button
           onClick={() => setShowModal(true)}
           className="text-blue-600 hover:text-blue-700 cursor-pointer"
@@ -117,18 +119,18 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
       <div className="space-y-3">
         <div className="flex items-start">
          
-          <div>
+          <div className='space-y-3'>
             <p className=''>
-              <span className='font-bold'>Address Area:</span> {business?.business?.address?.addressArea || '-'}
+              <span className='font-medium'>Address Area:</span> {business?.business?.address?.addressArea || '-'}
             </p>
             <p className="">
-            <span className='font-bold'>City:</span> {business?.business?.address?.city || '-'}
+            <span className='font-medium'>City:</span> {business?.business?.address?.city || '-'}
             </p>
             <p className="">
-            <span className='font-bold'>State:</span> {business?.business?.address?.state ||  '-'}
+            <span className='font-medium'>State:</span> {business?.business?.address?.state ||  '-'}
             </p>
             <p className="">
-            <span className='font-bold'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
+            <span className='font-medium'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
             </p>
           
           </div>
