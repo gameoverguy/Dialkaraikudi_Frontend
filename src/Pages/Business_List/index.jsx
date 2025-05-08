@@ -16,6 +16,7 @@ import { API } from "../../../config/config";
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
+import Loader from "../../Components/Loader";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ const Bussiness_List = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+       <Loader/>
       </div>
     );
   }

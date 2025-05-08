@@ -13,6 +13,7 @@ import { toast, ToastContainer } from 'react-toastify';
 const BusinessDetailForm = () => {
     const [formData, setFormData] = useState({
         businessName: '',
+        ownerName: '',
         address1: '',
         address2: '',
         city: '',
@@ -21,6 +22,8 @@ const BusinessDetailForm = () => {
         categoryId: '',
         phone: '',
         email: '',
+        password: '',
+        confirmPassword: '',
         photos: []
     });
     const [categories, setCategories] = useState([]);
@@ -35,50 +38,80 @@ const BusinessDetailForm = () => {
         const nameRegex = /^[a-zA-Z\s]+$/;
         const cityRegex = /^[a-zA-Z\s]+$/;
 
+        // Business Name validation
         if (!formData.businessName.trim()) {
             newErrors.businessName = 'Business name is required';
         } else if (!nameRegex.test(formData.businessName)) {
             newErrors.businessName = 'Only letters and spaces are allowed';
         }
 
-        if (!formData.address1.trim()) {
-            newErrors.address1 = 'Address is required';
+        // Owner Name validation
+        if (!formData.ownerName.trim()) {
+            newErrors.ownerName = 'Owner name is required';
+        } else if (!nameRegex.test(formData.ownerName)) {
+            newErrors.ownerName = 'Only letters and spaces are allowed';
         }
 
-        if (!formData.city.trim()) {
-            newErrors.city = 'City is required';
-        } else if (!cityRegex.test(formData.city)) {
-            newErrors.city = 'Only letters and spaces are allowed';
-        }
-
-        if (!formData.pincode) {
-            newErrors.pincode = 'Pincode is required';
-        } else if (!/^[0-9]{6}$/.test(formData.pincode)) {
-            newErrors.pincode = 'Enter valid 6 digit pincode';
-        }
-
+        // Phone validation
         if (!formData.phone) {
             newErrors.phone = 'Phone number is required';
         } else if (!phoneRegex.test(formData.phone)) {
-            newErrors.phone = 'Phone number must start with 6-9 and have 10 digits';
+            newErrors.phone = 'Enter valid 10 digit phone number';
         }
 
+        // Email validation
         if (!formData.email) {
             newErrors.email = 'Email is required';
         } else if (!emailRegex.test(formData.email)) {
             newErrors.email = 'Enter valid email address';
         }
 
-        if (!formData.description) {
+        // Address validation
+        if (!formData.address1.trim()) {
+            newErrors.address1 = 'Address is required';
+        }
+
+        // City validation
+        if (!formData.city.trim()) {
+            newErrors.city = 'City is required';
+        } else if (!cityRegex.test(formData.city)) {
+            newErrors.city = 'Only letters and spaces are allowed';
+        }
+
+        // Pincode validation
+        if (!formData.pincode) {
+            newErrors.pincode = 'Pincode is required';
+        } else if (!/^\d{6}$/.test(formData.pincode)) {
+            newErrors.pincode = 'Enter valid 6 digit pincode';
+        }
+
+        // Category validation
+        if (!formData.categoryId) {
+            newErrors.categoryId = 'Category is required';
+        }
+
+        // Description validation
+        if (!formData.description.trim()) {
             newErrors.description = 'Description is required';
         } else if (formData.description.length < 25) {
             newErrors.description = 'Description must be at least 25 characters';
         }
 
-        if (!formData.categoryId) {
-            newErrors.categoryId = 'Please select a category';
+        // Password validation - only check for minimum 8 characters
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+        } else if (formData.password.length < 8) {
+            newErrors.password = 'Password must be at least 8 characters';
         }
 
+        // Confirm Password validation
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = 'Please confirm your password';
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
+        }
+
+        // Photos validation
         if (formData.photos.length === 0) {
             newErrors.photos = 'At least one photo is required';
         }
@@ -146,6 +179,24 @@ const BusinessDetailForm = () => {
                     error = 'Description must be at least 25 characters';
                 }
                 break;
+            case 'ownerName':
+                if (!/^[a-zA-Z\s]*$/.test(value)) {
+                    error = 'Only letters and spaces are allowed';
+                    newValue = formData.ownerName;
+                }
+                break;
+
+            case 'password':
+                if (value && value.length < 8) {
+                    error = 'Password must be at least 8 characters';
+                }
+                break;
+
+            case 'confirmPassword':
+                if (formData.password && value && formData.password !== value) {
+                    error = 'Passwords do not match';
+                }
+                break;
 
             default:
                 break;
@@ -204,63 +255,67 @@ const BusinessDetailForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm()) return;
-    
+        
+        if (!validateForm()) {
+            toast.error('Please fix the errors before submitting');
+            return;
+        }
+
         try {
-            // Upload all photos first
+            // Upload photos to Cloudinary
             const photoUrls = await uploadMultipleToCloudinary(formData.photos);
-    
-            const formattedAddress = [
-                formData.address1,
-                formData.address2,
-                formData.city,
-                formData.pincode
-            ].filter(Boolean).join(', ');
-    
-            const payload = {
+
+            // Prepare the data for submission
+            const submitData = {
+                email: formData.email,
                 businessName: formData.businessName,
-                address:{
-                    formattedAddress:formattedAddress
-                } ,
+                ownerName: formData.ownerName,
                 description: formData.description,
                 category: formData.categoryId,
                 contactDetails: {
-                    phone: formData.phone,
-                    email: formData.email
+                    phone: formData.phone,                   
                 },
+                address: {
+                    addressArea: formData.address1,
+                    city: formData.city,
+                    pincode: formData.pincode,
+                    formatedAddress: formData.address1 + ', ' + formData.city + ', ' + formData.pincode
+                },
+                password: formData.password,
                 photos: photoUrls
             };
-    
-            const response = await axios.post(`${API}/business`, payload);
-            console.log('API Response:', response.data);
-            toast.success("Business added successfully")
-            setFormData({
-                businessName: '',
-                address1: '',
-                address2: '',
-                city: '',
-                pincode: '',
-                description: '',
-                categoryId: '',
-                phone: '',
-                email: '',
-                photos: []
-            });
-            setPhotosPreviews([])
-            setErrors({});
+
+            // Make the API call
+            const response = await axios.post(`${API}/business/signup`, submitData);
+
+            if (response.data.message) {
+                toast.success('Business registered successfully!');
+                // Reset form or redirect
+                setFormData({
+                    businessName: '',
+                    ownerName: '',
+                    address1: '',
+                    address2: '',
+                    city: '',
+                    pincode: '',
+                    description: '',
+                    categoryId: '',
+                    phone: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                    photos: []
+                });
+                setPhotosPreviews([]);
+            }
         } catch (error) {
             console.error('Error submitting form:', error);
+            toast.error(error.response?.data?.message || 'Error registering business');
         }
     };
 
     return (
         <div className="max-w-5xl mx-auto p-8">
-            <div className="text-gray-600 mb-8 flex items-center gap-2">
-                <span className="hover:text-blue-500 cursor-pointer">Home</span>
-                <span className="text-gray-400">›</span>
-                <span className="text-blue-500">Enter Business Details</span>
-            </div>
-
             <form onSubmit={handleSubmit} className="">
                 <h1 className="text-2xl font-bold mb-6">Enter Your Business Details</h1>
 
@@ -292,6 +347,13 @@ const BusinessDetailForm = () => {
                     />
 
                     <FloatingInput
+                        name="address2"
+                        value={formData.address2}
+                        onChange={handleChange}
+                        placeholder="Address Line 2 (Optional)"
+                    />
+
+                    <FloatingInput
                         name="pincode"
                         value={formData.pincode}
                         onChange={handleChange}
@@ -309,13 +371,6 @@ const BusinessDetailForm = () => {
                     />
 
                     <FloatingInput
-                        name="address2"
-                        value={formData.address2}
-                        onChange={handleChange}
-                        placeholder="Address Line 2 (Optional)"
-                    />
-
-                    <FloatingInput
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
@@ -323,6 +378,31 @@ const BusinessDetailForm = () => {
                         error={errors.city}
                     />
 
+                    <FloatingInput
+                        name="ownerName"
+                        value={formData.ownerName}
+                        onChange={handleChange}
+                        placeholder="Owner Name"
+                        error={errors.ownerName}
+                    />
+
+                    <FloatingInput
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Password"
+                        type="password"
+                        error={errors.password}
+                    />
+
+                    <FloatingInput
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm Password"
+                        type="password"
+                        error={errors.confirmPassword}
+                    />
 
                     <FloatingSelect
                         id="category"
@@ -394,7 +474,7 @@ const BusinessDetailForm = () => {
                     Register Business
                 </button>
             </form>
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 };

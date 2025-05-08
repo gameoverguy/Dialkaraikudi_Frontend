@@ -85,7 +85,7 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
         <h2 className="text-xl font-bold">Business Hours</h2>
         <button
           onClick={() => setShowModal(true)}
-          className="text-blue-600 hover:text-blue-700"
+          className="text-blue-600 hover:text-blue-700 cursor-pointer"
         >
           <FaEdit className="text-xl" />
         </button>

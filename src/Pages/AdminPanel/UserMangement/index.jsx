@@ -7,6 +7,7 @@ import ConfirmationModal from '../../../Components/ConfirmationModal';
 import { API } from '../../../../config/config'
 import axios from 'axios';
 import CustomModal from '../../../Components/modal';
+import Loader from '../../../Components/Loader';
 
 
 const UserTable = () => {
@@ -132,7 +133,7 @@ const UserTable = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Loader/></div>;
   }
 
   return (

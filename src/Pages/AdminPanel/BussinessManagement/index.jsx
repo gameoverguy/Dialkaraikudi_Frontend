@@ -52,9 +52,9 @@ const BusinessManagement = () => {
         name: business.businessName,
         description: business.description,
         category: business.category,
-        phone: business.contactDetails.phone,
-        email: business.contactDetails.email,
-        address: business.address.formattedAddress || business.address.addressArea,
+        phone: business.contactDetails?.phone,
+        email: business.email,
+        address: business.address?.formattedAddress || business.address?.addressArea,
         photos: business.photos
       }));
 
@@ -385,7 +385,7 @@ const BusinessManagement = () => {
         columns={columns}
         data={businesses}
         itemsPerPage={10}
-        addButton="Add"
+        // addButton="Add"
         onAddClick={() => {
           setSelectedBusiness(null);
           setShowModal(true);
