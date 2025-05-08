@@ -60,3 +60,9 @@ input[type="password"]::-webkit-textfield-decoration-container {
   /* Styles for when the link is actively clicked */
   color: navy; /* Example of an even darker blue when clicked */
 }
+
+@layer utilities {
+  .animation-delay-150 {
+    animation-delay: 150ms;
+  }
+}

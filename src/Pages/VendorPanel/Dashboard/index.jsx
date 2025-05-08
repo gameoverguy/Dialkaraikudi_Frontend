@@ -102,16 +102,22 @@ const VendorDashboard = () => {
 
   // Add this section in your return statement after the subscription status section
   return (
-    <div className="p-6">
+    <div className="p-2">
       {/* ... existing code ... */}
 
       {/* Analytics Section */}
+      <div className='bg-white shadow rounded mb-4 p-4'>
+        <h1 className='mb-2 text-2xl font-bold '>Dashboard</h1>
+        <p>The dashboard provides vendors with quick access to Business views and customer reviews, helping them monitor engagement, improve service, and build trust with potential buyers.</p>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
         {/* Views Chart */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Page Views</h2>
           <PeriodSelector period={viewsPeriod} setPeriod={setViewsPeriod} />
-          <Bar 
+          <Bar
             data={viewsChartData}
             options={{
               responsive: true,
@@ -132,7 +138,7 @@ const VendorDashboard = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-bold mb-4">Reviews Distribution</h2>
           <PeriodSelector period={reviewsPeriod} setPeriod={setReviewsPeriod} />
-          <Pie 
+          <Pie
             data={reviewsChartData}
             options={{
               responsive: true,

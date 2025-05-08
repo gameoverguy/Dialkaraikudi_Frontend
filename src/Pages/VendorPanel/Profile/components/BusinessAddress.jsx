@@ -24,33 +24,27 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     }
   }, [business]);
 
-  const validateForm = () => {
-    const newErrors = {};
-    const pincodeRegex = /^\d{6}$/;
-
-    if (!formData.addressArea.trim()) {
-      newErrors.addressArea = 'Address area is required';
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'addressArea':
+        return !value.trim() ? 'Address area is required' : '';
+      case 'city':
+        return !value.trim() ? 'City is required' : '';
+      case 'state':
+        return !value.trim() ? 'State is required' : '';
+      case 'pincode':
+        const pincodeRegex = /^\d{6}$/;
+        if (!value) return 'Pincode is required';
+        if (!pincodeRegex.test(value)) return 'Enter valid 6-digit pincode';
+        return '';
+      default:
+        return '';
     }
-    if (!formData.city.trim()) {
-      newErrors.city = 'City is required';
-    }
-    if (!formData.state.trim()) {
-      newErrors.state = 'State is required';
-    }
-    if (!formData.pincode) {
-      newErrors.pincode = 'Pincode is required';
-    } else if (!pincodeRegex.test(formData.pincode)) {
-      newErrors.pincode = 'Enter valid 6-digit pincode';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // For pincode, only allow numbers and max 6 digits
     if (name === 'pincode') {
       const numbersOnly = value.replace(/[^0-9]/g, '');
       const limitedLength = numbersOnly.slice(0, 6);
@@ -58,12 +52,33 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         ...prev,
         [name]: limitedLength
       }));
+      // Validate pincode immediately
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, limitedLength)
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
         [name]: value
       }));
+      // Validate other fields immediately
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, value)
+      }));
     }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -91,10 +106,12 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold flex"><FaMapMarkerAlt className="text-red-500 mt-1 mr-2" />  Address  </h2>
+        <h2 className="text-xl font-bold flex">
+        {/* <FaMapMarkerAlt className="text-red-500 mt-1 mr-2" /> */}
+            Address  </h2>
         <button
           onClick={() => setShowModal(true)}
-          className="text-blue-600 hover:text-blue-700"
+          className="text-blue-600 hover:text-blue-700 cursor-pointer"
         >
           <FaEdit className="text-xl" />
         </button>
@@ -102,18 +119,18 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
       <div className="space-y-3">
         <div className="flex items-start">
          
-          <div>
+          <div className='space-y-3'>
             <p className=''>
-              <span className='font-bold'>Address Area:</span> {business?.business?.address?.addressArea || '-'}
+              <span className='font-medium'>Address Area:</span> {business?.business?.address?.addressArea || '-'}
             </p>
             <p className="">
-            <span className='font-bold'>City:</span> {business?.business?.address?.city || '-'}
+            <span className='font-medium'>City:</span> {business?.business?.address?.city || '-'}
             </p>
             <p className="">
-            <span className='font-bold'>State:</span> {business?.business?.address?.state ||  '-'}
+            <span className='font-medium'>State:</span> {business?.business?.address?.state ||  '-'}
             </p>
             <p className="">
-            <span className='font-bold'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
+            <span className='font-medium'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
             </p>
           
           </div>
