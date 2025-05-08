@@ -16,6 +16,8 @@ const UserLogin = ({
   setShowLoginModal,
   setIsSignupOpen,
   setIsForgotPasswordOpen,
+  setShowBusinessDetailForm,
+  role
 }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -90,40 +92,45 @@ const UserLogin = ({
     if (!newErrors.email && !newErrors.password) {
       try {
         setLoading(true);
+        const endpoint = role === 'business' ? `${API}/business/login` : `${API}/user/login`;
         const response = await axios.post(
-          `${API}/user/login`,
+          endpoint,
           {
             email: formData.email,
             password: formData.password,
           }
         );
-        console.log(response.data);
 
-        if (response.data) {
-          const { token, user } = response.data;
+        const data = response.data;
+        if (data && data.token) {
+          const userData = data.user || data.business || {};
 
-          if (token) {
-            Cookies.set("userToken", token, {
-              expires: 21,
-              secure: true,
-              sameSite: "Strict",
-            });
-          }
+          Cookies.set(role === 'business' ? "businessToken" : "userToken", data.token, {
+            expires: 21,
+            secure: true,
+            sameSite: "Strict",
+          });
 
           sessionStorage.setItem(
-            "userData",
+            role === 'business' ? "businessData" : "userData",
             JSON.stringify({
-              user_id: user.id,
-              name: user.name,
-              email: user.email,
-              avatarUrl: user.avatarUrl,
+              user_id: userData.id || userData._id,
+              name: userData.name || "",
+              email: userData.email || "",
+              avatarUrl: userData.avatarUrl || "",
             })
           );
 
           toast.success("Login successful!");
           setTimeout(() => {
             setShowLoginModal(false);
+            if (role === 'business') {
+              const userId = userData.id || userData._id;
+              window.location.href = `/vendorpanel/${userId}`;
+            }
           }, 1000);
+        } else {
+          throw new Error("Invalid response format");
         }
       } catch (error) {
         console.error("Login failed:", error);
@@ -141,7 +148,13 @@ const UserLogin = ({
 
   const handleSignupClick = () => {
     onClose();
-    if (setIsSignupOpen) setIsSignupOpen(true);
+    if (role === 'business') {
+      // Open BusinessDetailForm modal
+      setShowBusinessDetailForm(true);
+    } else if (setIsSignupOpen) {
+      // Open regular signup modal
+      setIsSignupOpen(true);
+    }
   };
 
   const handleForgotPasswordClick = (e) => {
