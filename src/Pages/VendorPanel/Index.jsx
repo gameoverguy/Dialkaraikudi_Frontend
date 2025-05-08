@@ -212,9 +212,9 @@ const VendorPanel = () => {
 
   const handleLogout = () => {
     // Clear admin token
-    Cookies.remove("adminToken");
+    Cookies.remove("businessToken");
     // Navigate to admin login
-    navigate("/adminlogin");
+    navigate("/");
     // toast.success('Logout successful');
   };
 

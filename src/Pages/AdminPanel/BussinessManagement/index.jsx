@@ -13,9 +13,11 @@ import FloatingSelect from '../../../Components/FloatingInput/DropDown';
 import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
 import { MdCancel } from 'react-icons/md';
 import FloatingTextarea from '../../../Components/FloatingInput/FloatingTextarea';
+import Loader from '../../../Components/Loader';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -32,12 +34,14 @@ const BusinessManagement = () => {
 
   const fetchCategories = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${API}/categories`);
       setCategories(response.data.data);
-      
     } catch (error) {
       console.error('Error fetching categories:', error);
       toast.error('Failed to fetch categories');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,8 +49,8 @@ const BusinessManagement = () => {
 
   const fetchBusinesses = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${API}/business`);
-      console.log(response.data);
       const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,
@@ -65,6 +69,8 @@ const BusinessManagement = () => {
     } catch (error) {
       console.error('Error fetching businesses:', error);
       toast.error('Failed to fetch businesses');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -311,6 +317,7 @@ const BusinessManagement = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        setIsLoading(true);
         const uploadedUrls = await uploadMultipleToCloudinary(formData.photos);
 
         const requestBody = {
@@ -342,6 +349,8 @@ const BusinessManagement = () => {
       } catch (error) {
         console.error('Error handling business:', error);
         toast.error(error.response?.data?.message || 'Failed to process business');
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -364,6 +373,7 @@ const BusinessManagement = () => {
 
   const confirmDelete = async () => {
     try {
+      setIsLoading(true);
       await axios.delete(`${API}/business/${businessToDelete.id}`);
       setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
       toast.success('Business deleted successfully');
@@ -371,12 +381,14 @@ const BusinessManagement = () => {
       console.error('Error deleting business:', error);
       toast.error('Failed to delete business');
     } finally {
+      setIsLoading(false);
       setShowConfirmModal(false);
     }
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 relative">
+      {isLoading && <Loader />}
       <div className='shadow bg-white p-6 rounded-lg'>
         <h1 className="text-2xl font-bold mb-6">Business Management</h1>
         <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>

@@ -6,7 +6,8 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="text-center p-8 max-w-md">
-        <h1 className="text-4xl font-bold text-black mb-2">Oops!</h1>
+        <h1 className="text-4xl font-bold text-black mb-2">Oops! 404</h1>
+        <h1 className="text-6xl font-bold text-black mb-2"></h1>
         <h2 className="text-xl text-gray-600 mb-8">You are lost</h2>
         
         <div className="relative w-full aspect-square mb-8">
