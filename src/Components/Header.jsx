@@ -14,15 +14,17 @@ import SignupModal from "../Pages/SignUp";
 import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
 import OTP from "../Pages/UserLogin/OTP";
 import ResetPassword from "../Pages/UserLogin/ResetPassword";
+import LoginModal from "./User_Business_Modal";
 
 const Header = () => {
-  const { showLoginModal, setShowLoginModal } = useLoginModal();
+  const { showLoginModal, setShowLoginModal, loginRole } = useLoginModal();
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [showUserBusinessModal, setShowUserBusinessModal] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -39,14 +41,13 @@ const Header = () => {
   }, [showLoginModal]);
 
   const handleLogout = () => {
-    console.log("Logout clicked");
     sessionStorage.removeItem("userData");
     Cookies.remove("userToken", {
       secure: true,
       sameSite: "Strict",
     });
     setUserData(null);
-    window.location.reload(); // Add this to force a refresh
+    window.location.reload();
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -57,13 +58,12 @@ const Header = () => {
     const handleClickOutside = (event) => {
       if (
         (desktopDropdownRef.current &&
-          desktopDropdownRef.current.contains(event.target)) ||
+          !desktopDropdownRef.current.contains(event.target)) ||
         (mobileDropdownRef.current &&
-          mobileDropdownRef.current.contains(event.target))
+          !mobileDropdownRef.current.contains(event.target))
       ) {
-        return;
+        setIsDropdownOpen(false);
       }
-
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,7 +73,6 @@ const Header = () => {
   }, []);
 
   const handleLocationSelect = (location) => {
-    // You can handle the location selection here
     console.log("Selected location:", location);
   };
 
@@ -104,7 +103,7 @@ const Header = () => {
                 className="h-10 md:h-24 my-0 object-contain"
               />
             </Link>
-            {/* Replace the Location Selector with LocationTracker */}
+            {/* Location Tracker */}
             <div className="hidden md:block">
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </div>
@@ -137,14 +136,7 @@ const Header = () => {
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </button>
 
-            {/* Notifications */}
-            {/* <div className="relative">
-              <button className="w-8 md:w-12 h-8 md:h-12 rounded-full bg-gray-200 hover:bg-emerald-100 flex items-center justify-center shadow-sm transition-all duration-200">
-                <MdNotificationsActive className="text-xl md:text-2xl text-gray-700 hover:text-emerald-600" />
-              </button>
-            </div> */}
-
-            {/* Add business button  */}
+            {/* Add business button */}
             <Link
               to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
               onClick={(e) => {
@@ -161,9 +153,11 @@ const Header = () => {
                 <>+<span className="text-sm font-medium">Add Business</span></>
               )}
             </Link>
+
             {/* Auth Section */}
             {userData ? (
               <>
+                {/* Desktop Profile */}
                 <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
                   <div ref={desktopDropdownRef} className="relative">
                     <div
@@ -177,8 +171,7 @@ const Header = () => {
                         {userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
-                          }`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -240,25 +233,15 @@ const Header = () => {
               <>
                 {/* Desktop Login */}
                 <button
-                  onClick={() => setShowLoginModal(true)}
+                  onClick={() => setShowUserBusinessModal(true)}
                   className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
                 >
                   <LuCircleUserRound className="text-xl" />
                   <span>Login</span>
                 </button>
                 {/* Mobile Login */}
-                <Link
-                  to="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowLoginModal(true);
-                  }}
-                  className="flex md:hidden items-center justify-center w-8 h-8 bg-[#ee6510] hover:bg-[#ee2314] text-white rounded-full transition-colors duration-200 pb-1"
-                >
-                  +
-                </Link>
                 <button
-                  onClick={() => setShowLoginModal(true)}
+                  onClick={() => setShowUserBusinessModal(true)}
                   className="block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors"
                 >
                   <LuCircleUserRound />
@@ -281,7 +264,8 @@ const Header = () => {
             <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             <button
               type="submit"
-              className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200">
+              className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+            >
               <IoSearchOutline className="text-xl" />
             </button>
           </form>
@@ -289,12 +273,19 @@ const Header = () => {
       </div>
 
       {/* Modals */}
+      {showUserBusinessModal && (
+        <LoginModal
+          isOpen={showUserBusinessModal}
+          onClose={() => setShowUserBusinessModal(false)}
+        />
+      )}
       <UserLogin
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         setShowLoginModal={setShowLoginModal}
         setIsSignupOpen={setIsSignupOpen}
         setIsForgotPasswordOpen={setIsForgotPasswordOpen}
+        role={loginRole}
       />
       <SignupModal
         isOpen={isSignupOpen}
@@ -304,24 +295,28 @@ const Header = () => {
           setShowLoginModal(true);
         }}
         setShowLoginModal={setShowLoginModal}
+        role={loginRole}
       />
       <ForgotPassword
         isOpen={isForgotPasswordOpen}
         onClose={() => setIsForgotPasswordOpen(false)}
         setShowOTPModal={setShowOTPModal}
         setOtpEmail={setOtpEmail}
+        role={loginRole}
       />
       <OTP
         isOpen={showOTPModal}
         onClose={() => setShowOTPModal(false)}
         email={otpEmail}
         setShowResetPasswordModal={setShowResetPasswordModal}
+        role={loginRole}
       />
       <ResetPassword
         isOpen={showResetPasswordModal}
         onClose={() => setShowResetPasswordModal(false)}
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
+        role={loginRole}
       />
     </>
   );

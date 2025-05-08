@@ -4,13 +4,17 @@ export const LoginModalContext = createContext();
 
 export const LoginModalProvider = ({ children }) => {
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [loginRole, setLoginRole] = useState(null)
 
     const handleOpenLoginModal = () => {
         setShowLoginModal(true);
     };
 
     return (
-        <LoginModalContext.Provider value={{ showLoginModal, setShowLoginModal, handleOpenLoginModal }}>
+        <LoginModalContext.Provider value={{
+            showLoginModal, setShowLoginModal, handleOpenLoginModal, loginRole,
+            setLoginRole
+        }}>
             {children}
         </LoginModalContext.Provider>
     );
