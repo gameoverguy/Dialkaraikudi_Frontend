@@ -113,7 +113,10 @@ const Bussiness_List = () => {
           <div className="flex justify-center items-center w-full flex-col">
             <div className="md:p-4 w-full  xl:w-10/12">
               <div className="flex">
-                <Link to="/" className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5">
+                <Link
+                  to="/"
+                  className="text-sm text-gray-500 hover:text-blue-500 md:px-0 px-5"
+                >
                   Karaikudi &gt;
                 </Link>
                 <Link className="text-sm text-gray-500 hover:text-blue-500">
@@ -188,7 +191,9 @@ const Bussiness_List = () => {
                         {data.reviewCount} Ratings
                       </div>
                       <p className="flex items-center">
-                        <CiLocationOn /> {data.address.formattedAddress || data.address.addressArea}
+                        <CiLocationOn />{" "}
+                        {data.address.formattedAddress ||
+                          data.address.addressArea}
                       </p>
                       {/* <div>
                                 <AmentiesModal
@@ -197,8 +202,8 @@ const Bussiness_List = () => {
                                     toggleExpand={() => toggleAmenities(data.id)}
                                 />
                             </div> */}
-                          
-                          <div className="text-sm flex flex-row gap-1">
+
+                      <div className="text-sm flex flex-row gap-1">
                         <button
                           onClick={() => handleShowContact(data._id)}
                           className="bg-[#287094] group flex items-center rounded pr-1 md:py-1 text-white cursor-pointer"
@@ -217,18 +222,15 @@ const Bussiness_List = () => {
                           WhatsApp
                         </button>
                       </div>
-
                     </div>
-                    
                   </div>
                 ))
               )}
             </div>
           </div>
-          
         </div>
         <div className="hidden md:block md:w-4/12">
-          <div className="sticky top-[200px] flex justify-center items-center">
+          <div className="sticky top-32 flex justify-center items-center">
             <img src={adds} alt="Advertisement" className="w-6/12" />
           </div>
         </div>
