@@ -8,12 +8,11 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
-import AdminRoute from "./Components/AdminRoute.jsx";
+import {AdminRoute, VendorRoute} from "./Components/AdminRoute";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import NotFound from "./Components/NotFound.jsx";
-
 import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
 import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
 import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
@@ -57,9 +56,9 @@ function App() {
             <Route
               path="/vendorpanel/:id"
               element={
-                <AdminRoute>
+                <VendorRoute>
                   <VendorPanel />
-                </AdminRoute>
+                </VendorRoute>
               }
             />
             <Route path="*" element={<NotFound />} />
