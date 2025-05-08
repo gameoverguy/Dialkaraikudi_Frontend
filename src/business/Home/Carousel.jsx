@@ -113,18 +113,18 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import coursal1 from "../../assets/coursal1.jpg";
-import coursal2 from "../../assets/coursal2.avif";
-import coursal3 from "../../assets/coursal3.avif";
+import coursal2 from "../../assets/coursal2.webp";
+import coursal3 from "../../assets/coursal3.webp";
 
 const Carousel = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1500, // Increased for smoother effect
+    speed: 2500, // Increased for smoother effect
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2500,
+    autoplaySpeed: 4000,
     arrows: true,
     cssEase: "linear", // Smooth animation
     lazyLoad: "progressive", // Improves loading performance
@@ -141,9 +141,9 @@ const Carousel = () => {
   };
 
   const coursal = [
-    { id: 1, image: coursal1 },
-    { id: 2, image: coursal2 },
-    { id: 3, image: coursal3 },
+    { id: 1, image: coursal2 },
+    { id: 2, image: coursal3 },
+    { id: 3, image: coursal1 },
   ];
 
   return (

@@ -49,60 +49,7 @@ const HomePage = () => {
       </div>
 
       <Category />
-
-      {/* <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-            <div className="text-white lg:px-20 px-5 w-full">
-              <h2 className="text-3xl lg:text-5xl font-serif mb-3 w-full">
-                Dial Karaikudi
-              </h2>
-              <div className="mb-6 w-full">
-                <p className="text-xl mb-1">Grab for Advertising with us</p>
-                <p className="text-xl mb-5">Starting your own Business Now</p>
-                <button className="bg-white text-blue-950 px-6 py-2 rounded-md hover:bg-gray-100 transition duration-300 uppercase text-sm font-semibold">
-                  Signup now
-                </button>
-              </div>
-            </div>
-            <div>
-              <Swiper
-                spaceBetween={15}
-                navigation={true}
-                modules={[Navigation]}
-                breakpoints={{
-                  320: { slidesPerView: 1, spaceBetween: 10 },
-                  640: { slidesPerView: 2, spaceBetween: 12 },
-                  768: { slidesPerView: 3, spaceBetween: 14 },
-                  1024: { slidesPerView: 4, spaceBetween: 15 },
-                  1280: { slidesPerView: 5, spaceBetween: 18 },
-                }}
-                className="jewelry-swiper"
-              >
-                {[
-                  "https://4.imimg.com/data4/DA/MJ/MY-2539624/plumber-services.png",
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS51yo6fFV1-sQ-9-CqK_TotKCEmtwpnvaFjQ&s",
-                  "https://acservicegurgaon.com/ac-repair-sushant-lok.jpg",
-                  "https://img.freepik.com/free-vector/hand-drawn-painter-cartoon-illustration_23-2151046691.jpg?semt=ais_hybrid&w=740",
-                  "https://www.safetyandhealthmagazine.com/ext/resources/images/safety-tips/welder.jpg?t=1483464014&width=768",
-                ].map((src, i) => (
-                  <SwiperSlide key={i}>
-                    <div className="rounded-lg overflow-hidden">
-                      <div className="lg:aspect-[3/4] overflow-hidden flex justify-center items-center">
-                        <img
-                          src={src}
-                          alt={`Service ${i + 1}`}
-                          className="w-[50%] h-[25vh] lg:w-full lg:h-[25vh] object-cover transition-transform duration-300 hover:scale-105 rounded-lg"
-                        />
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
-        </div>
-      </div> */}
+    
 
       <div
         className="w-full px-2 md:px-0 py-10 md:w-11/12 md:mx-auto"

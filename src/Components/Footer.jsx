@@ -29,9 +29,9 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row flex-wrap justify-evenly items-start w-full bg-[#F3F4F6] py-10 px-7 md:px-10 xl:px-20 gap-10">
+      <div className="flex flex-col xl:flex-row flex-wrap justify-evenly items-start md:w-full bg-[#F3F4F6] py-10 px-7 gap-10">
         {/* Left Section */}
-        <div className="w-full sm:w-10/12 md:w-6/12 xl:w-3/12 flex flex-col gap-5 text-left">
+        <div className="w-full md:w-4/12 flex flex-col gap-5 text-left md:pr-10">
           <p className="text-[15px] xl:text-[18px] font-bold">
             One-Stop for All Local Services
           </p>
