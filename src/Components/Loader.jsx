@@ -24,7 +24,7 @@ import animationData from "../assets/animations/loader.json";
 export default function LottieLoader() {
   return (
     <div className="flex items-center justify-center h-screen bg-white">
-      <div className="w-100 h-100">
+      <div className="w-60 h-60">
         <Lottie animationData={animationData} loop={true} />
       </div>
     </div>
