@@ -330,7 +330,7 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-4">
                     {/* Business Information Section */}
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                    <div className="p-4 rounded-lg space-y-3">
                         <h3 className="text-lg font-semibold text-gray-700">Business Information</h3>
                         <FloatingInput
                             name="businessName"
@@ -369,7 +369,7 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                     </div>
 
                     {/* Contact Information Section */}
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                    <div className="p-4 rounded-lg">
                         <h3 className="text-lg font-semibold text-gray-700">Contact Information</h3>
                         <FloatingInput
                             name="phone"
