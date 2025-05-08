@@ -24,33 +24,27 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     }
   }, [business]);
 
-  const validateForm = () => {
-    const newErrors = {};
-    const pincodeRegex = /^\d{6}$/;
-
-    if (!formData.addressArea.trim()) {
-      newErrors.addressArea = 'Address area is required';
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'addressArea':
+        return !value.trim() ? 'Address area is required' : '';
+      case 'city':
+        return !value.trim() ? 'City is required' : '';
+      case 'state':
+        return !value.trim() ? 'State is required' : '';
+      case 'pincode':
+        const pincodeRegex = /^\d{6}$/;
+        if (!value) return 'Pincode is required';
+        if (!pincodeRegex.test(value)) return 'Enter valid 6-digit pincode';
+        return '';
+      default:
+        return '';
     }
-    if (!formData.city.trim()) {
-      newErrors.city = 'City is required';
-    }
-    if (!formData.state.trim()) {
-      newErrors.state = 'State is required';
-    }
-    if (!formData.pincode) {
-      newErrors.pincode = 'Pincode is required';
-    } else if (!pincodeRegex.test(formData.pincode)) {
-      newErrors.pincode = 'Enter valid 6-digit pincode';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // For pincode, only allow numbers and max 6 digits
     if (name === 'pincode') {
       const numbersOnly = value.replace(/[^0-9]/g, '');
       const limitedLength = numbersOnly.slice(0, 6);
@@ -58,12 +52,33 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         ...prev,
         [name]: limitedLength
       }));
+      // Validate pincode immediately
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, limitedLength)
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
         [name]: value
       }));
+      // Validate other fields immediately
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, value)
+      }));
     }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -94,7 +109,7 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         <h2 className="text-xl font-bold flex"><FaMapMarkerAlt className="text-red-500 mt-1 mr-2" />  Address  </h2>
         <button
           onClick={() => setShowModal(true)}
-          className="text-blue-600 hover:text-blue-700"
+          className="text-blue-600 hover:text-blue-700 cursor-pointer"
         >
           <FaEdit className="text-xl" />
         </button>

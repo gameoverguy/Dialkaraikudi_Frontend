@@ -17,50 +17,75 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
   });
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
+  const validateField = (name, value) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     const phoneRegex = /^[6-9]\d{9}$/;
     const nameRegex = /^[a-zA-Z\s]+$/;
+    const websiteRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
 
-    if (!formData.businessName.trim()) {
-      newErrors.businessName = 'Business name is required';
-    } else if (!nameRegex.test(formData.businessName)) {
-      newErrors.businessName = 'Only letters and spaces are allowed';
+    switch (name) {
+      case 'businessName':
+        if (!value.trim()) return 'Business name is required';
+        if (!nameRegex.test(value)) return 'Only letters and spaces are allowed';
+        return '';
+      case 'description':
+        if (!value.trim()) return 'Description is required';
+        if (value.length < 25) return 'Description must be at least 25 characters';
+        return '';
+      case 'phone':
+        if (!value) return 'Phone number is required';
+        if (!phoneRegex.test(value)) return 'Enter valid 10 digit phone number';
+        return '';
+      case 'whatsapp':
+        if (value && !phoneRegex.test(value)) return 'Enter valid 10 digit WhatsApp number';
+        return '';
+      case 'email':
+        if (!value) return 'Email is required';
+        if (!emailRegex.test(value)) return 'Enter valid email address';
+        return '';
+      case 'website':
+        if (value && !websiteRegex.test(value)) return 'Enter valid website URL';
+        return '';
+      default:
+        return '';
     }
-
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
-    } else if (formData.description.length < 25) {
-      newErrors.description = 'Description must be at least 25 characters';
-    }
-
-    if (!formData.phone) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!phoneRegex.test(formData.phone)) {
-      newErrors.phone = 'Enter valid 10 digit phone number';
-    }
-
-    if (formData.whatsapp && !phoneRegex.test(formData.whatsapp)) {
-      newErrors.whatsapp = 'Enter valid 10 digit WhatsApp number';
-    }
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Enter valid email address';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    if (name === 'phone' || name === 'whatsapp') {
+      const numbersOnly = value.replace(/[^0-9]/g, '');
+      const limitedLength = numbersOnly.slice(0, 10);
+      setFormData(prev => ({
+        ...prev,
+        [name]: limitedLength
+      }));
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, limitedLength)
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, value)
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
+  
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -93,7 +118,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         <h2 className="text-xl font-bold">Business Details</h2>
         <button
           onClick={() => setShowModal(true)}
-          className="text-blue-600 hover:text-blue-700"
+          className="text-blue-600 hover:text-blue-700 cursor-pointer"
         >
           <FaEdit className="text-xl" />
         </button>
