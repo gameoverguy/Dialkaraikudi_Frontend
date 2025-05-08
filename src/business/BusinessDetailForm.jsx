@@ -9,8 +9,9 @@ import FloatingSelect from '../Components/FloatingInput/DropDown';
 import FloatingTextarea from '../Components/FloatingInput/FloatingTextarea';
 import { uploadToCloudinary } from '../utils/cloudinaryUpload';
 import { toast, ToastContainer } from 'react-toastify';
+import CustomModal from '../Components/modal';
 
-const BusinessDetailForm = () => {
+const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusinessDetailForm }) => {
     const [formData, setFormData] = useState({
         businessName: '',
         ownerName: '',
@@ -255,7 +256,7 @@ const BusinessDetailForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             toast.error('Please fix the errors before submitting');
             return;
@@ -273,7 +274,7 @@ const BusinessDetailForm = () => {
                 description: formData.description,
                 category: formData.categoryId,
                 contactDetails: {
-                    phone: formData.phone,                   
+                    phone: formData.phone,
                 },
                 address: {
                     addressArea: formData.address1,
@@ -287,6 +288,7 @@ const BusinessDetailForm = () => {
 
             // Make the API call
             const response = await axios.post(`${API}/business/signup`, submitData);
+            console.log(response.data);
 
             if (response.data.message) {
                 toast.success('Business registered successfully!');
@@ -307,6 +309,11 @@ const BusinessDetailForm = () => {
                     photos: []
                 });
                 setPhotosPreviews([]);
+
+                setTimeout(() => {
+                    setShowBusinessDetailForm(false);
+                    setShowLoginModal(true);
+                }, 1000);
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -315,167 +322,174 @@ const BusinessDetailForm = () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto p-8">
-            <form onSubmit={handleSubmit} className="">
-                <h1 className="text-2xl font-bold mb-6">Enter Your Business Details</h1>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <FloatingInput
-                        name="businessName"
-                        value={formData.businessName}
-                        onChange={handleChange}
-                        placeholder="Business Name"
-                        error={errors.businessName}
-                    />
-
-                    <FloatingInput
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="Phone Number"
-                        type="text"
-                        error={errors.phone}
-                    />
-
-                    <FloatingInput
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email Address"
-                        type="text"
-                        error={errors.email}
-                    />
-
-                    <FloatingInput
-                        name="address2"
-                        value={formData.address2}
-                        onChange={handleChange}
-                        placeholder="Address Line 2 (Optional)"
-                    />
-
-                    <FloatingInput
-                        name="pincode"
-                        value={formData.pincode}
-                        onChange={handleChange}
-                        placeholder="Pincode"
-                        maxLength={6}
-                        error={errors.pincode}
-                    />
-
-                    <FloatingInput
-                        name="address1"
-                        value={formData.address1}
-                        onChange={handleChange}
-                        placeholder="Address Line 1"
-                        error={errors.address1}
-                    />
-
-                    <FloatingInput
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        placeholder="City"
-                        error={errors.city}
-                    />
-
-                    <FloatingInput
-                        name="ownerName"
-                        value={formData.ownerName}
-                        onChange={handleChange}
-                        placeholder="Owner Name"
-                        error={errors.ownerName}
-                    />
-
-                    <FloatingInput
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Password"
-                        type="password"
-                        error={errors.password}
-                    />
-
-                    <FloatingInput
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        placeholder="Confirm Password"
-                        type="password"
-                        error={errors.confirmPassword}
-                    />
-
-                    <FloatingSelect
-                        id="category"
-                        name="categoryId"
-                        value={formData.categoryId}
-                        onChange={handleChange}
-                        placeholder="Select Category"
-                        error={errors.categoryId}
-                        options={categories.map(category => ({
-                            value: category._id,
-                            label: category.displayName
-                        }))}
-                    />
-
-                </div>
-
-                <div className="w-full">
-                    <FloatingTextarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Business Description"
-                        error={errors.description}
-                        rows={4}
-                    />
-                </div>
-
-                {/* Photos Upload */}
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Business Photos (Min 1, Max 6)
-                    </label>
-                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                        {photosPreviews.map((photo, index) => (
-                            <div key={index} className="relative aspect-square">
-                                <img
-                                    src={photo.preview}
-                                    alt={`Preview ${index + 1}`}
-                                    className="w-full h-full object-cover rounded absolute inset-0"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => removePhoto(index)}
-                                    className="absolute cursor-pointer top-1 right-1 bg-red-500 text-white rounded-full shadow-lg hover:bg-red-600 transition-colors"
-                                >
-                                    <MdCancel className="text-sm" />
-                                </button>
-                            </div>
-                        ))}
-                        {photosPreviews.length < 6 && (
-                            <div
-                                {...getPhotosRootProps()}
-                                className={`aspect-square relative flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${errors.photos ? 'border-red-500' : 'border-gray-300'} hover:border-blue-500 transition-colors`}
-                            >
-                                <input {...getPhotosInputProps()} />
-                                <FaCloudUploadAlt className="h-8 w-8 text-gray-400" />
-                                <p className="mt-1 text-xs text-gray-500">Add Photo</p>
-                            </div>
-                        )}
+        <CustomModal
+            isOpen={isOpen}
+            onClose={onClose}
+            classname="w-11/12 md:w-8/12 lg:w-6/12"
+        >
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-4">
+                    {/* Business Information Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <h3 className="text-lg font-semibold text-gray-700">Business Information</h3>
+                        <FloatingInput
+                            name="businessName"
+                            value={formData.businessName}
+                            onChange={handleChange}
+                            placeholder="Business Name"
+                            error={errors.businessName}
+                        />
+                        <FloatingInput
+                            name="ownerName"
+                            value={formData.ownerName}
+                            onChange={handleChange}
+                            placeholder="Owner Name"
+                            error={errors.ownerName}
+                        />
+                        <FloatingSelect
+                            id="category"
+                            name="categoryId"
+                            value={formData.categoryId}
+                            onChange={handleChange}
+                            placeholder="Select Category"
+                            error={errors.categoryId}
+                            options={categories.map(category => ({
+                                value: category._id,
+                                label: category.displayName
+                            }))}
+                        />
+                        <FloatingTextarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            placeholder="Business Description"
+                            error={errors.description}
+                            rows={4}
+                        />
                     </div>
-                    {errors.photos && <p className="mt-1 text-xs text-right text-red-500">{errors.photos}</p>}
+
+                    {/* Contact Information Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <h3 className="text-lg font-semibold text-gray-700">Contact Information</h3>
+                        <FloatingInput
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                            type="text"
+                            error={errors.phone}
+                        />
+                        <FloatingInput
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email Address"
+                            type="text"
+                            error={errors.email}
+                        />
+                    </div>
+
+                    {/* Address Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <h3 className="text-lg font-semibold text-gray-700">Business Address</h3>
+                        <FloatingInput
+                            name="address1"
+                            value={formData.address1}
+                            onChange={handleChange}
+                            placeholder="Address Line 1"
+                            error={errors.address1}
+                        />
+                        <FloatingInput
+                            name="address2"
+                            value={formData.address2}
+                            onChange={handleChange}
+                            placeholder="Address Line 2 (Optional)"
+                        />
+                        <div className="grid grid-cols-2 gap-3">
+                            <FloatingInput
+                                name="city"
+                                value={formData.city}
+                                onChange={handleChange}
+                                placeholder="City"
+                                error={errors.city}
+                            />
+                            <FloatingInput
+                                name="pincode"
+                                value={formData.pincode}
+                                onChange={handleChange}
+                                placeholder="Pincode"
+                                maxLength={6}
+                                error={errors.pincode}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Account Security Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <h3 className="text-lg font-semibold text-gray-700">Account Security</h3>
+                        <FloatingInput
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            type="password"
+                            error={errors.password}
+                        />
+                        <FloatingInput
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="Confirm Password"
+                            type="password"
+                            error={errors.confirmPassword}
+                        />
+                    </div>
+
+                    {/* Photos Section */}
+                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                        <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3>
+                        <p className="text-sm text-gray-500">Upload 1-6 photos of your business</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            {photosPreviews.map((photo, index) => (
+                                <div key={index} className="relative aspect-square">
+                                    <img
+                                        src={photo.preview}
+                                        alt={`Preview ${index + 1}`}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removePhoto(index)}
+                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-colors"
+                                    >
+                                        <MdCancel className="text-lg" />
+                                    </button>
+                                </div>
+                            ))}
+                            {photosPreviews.length < 6 && (
+                                <div
+                                    {...getPhotosRootProps()}
+                                    className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${errors.photos ? 'border-red-500' : 'border-gray-300'} hover:border-blue-500 transition-colors`}
+                                >
+                                    <input {...getPhotosInputProps()} />
+                                    <FaCloudUploadAlt className="h-8 w-8 text-gray-400" />
+                                    <p className="mt-2 text-sm text-gray-500">Add Photo</p>
+                                </div>
+                            )}
+                        </div>
+                        {errors.photos && <p className="text-sm text-red-500">{errors.photos}</p>}
+                    </div>
                 </div>
 
                 <button
                     type="submit"
-                    className=" mt-2 inline-flex bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl  items-center justify-center gap-2 transition-all hover:shadow-lg text-lg font-medium"
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors"
                 >
                     Register Business
                 </button>
             </form>
             <ToastContainer />
-        </div>
+        </CustomModal>
     );
 };
 

@@ -16,6 +16,7 @@ const UserLogin = ({
   setShowLoginModal,
   setIsSignupOpen,
   setIsForgotPasswordOpen,
+  setShowBusinessDetailForm,
   role
 }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -147,7 +148,13 @@ const UserLogin = ({
 
   const handleSignupClick = () => {
     onClose();
-    if (setIsSignupOpen) setIsSignupOpen(true);
+    if (role === 'business') {
+      // Open BusinessDetailForm modal
+      setShowBusinessDetailForm(true);
+    } else if (setIsSignupOpen) {
+      // Open regular signup modal
+      setIsSignupOpen(true);
+    }
   };
 
   const handleForgotPasswordClick = (e) => {
