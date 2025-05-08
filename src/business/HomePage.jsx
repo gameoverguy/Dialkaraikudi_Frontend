@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -6,13 +6,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Home/Carousel";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { API } from "../../config/config";
 import { MdCategory } from "react-icons/md";
 import TopProducts from "./Home/TopProducts";
 import TopServices from "./Home/TopServices";
 import LimitedOffer from "./Home/LimitedOffer";
+import Category from "./Home/Category";
 
 // const serviceCategories = {
 //   essentialServices: [
@@ -40,24 +40,7 @@ import LimitedOffer from "./Home/LimitedOffer";
 // };
 
 const HomePage = () => {
-  const [categories, setCategories] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${API}/categories`);
-        setCategories(response.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  const handleCategoryClick = (category) => {
-    navigate(`/businesslist/${category}`);
-  };
+  
 
   return (
     <>
@@ -65,38 +48,7 @@ const HomePage = () => {
         <Carousel />
       </div>
 
-      <div className="py-10 text-center font-serif flex justify-center px-10 md:px-10 lg:px-35">
-        <div className="w-full max-w-8xl">
-          <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-6 bg-white">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800 transform hover:scale-105 transition-transform duration-300">
-              Products & Services
-            </h2>
-            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4">
-              {categories.map((category) => (
-                <div
-                  key={category._id}
-                  onClick={() => handleCategoryClick(category._id)}
-                  className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-                >
-                  <div className="w-[80px] h-[80px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 p-2">
-                    <span className="text-2xl transform group-hover:scale-110  transition-all duration-300">
-                      {/* You can add icons based on category if available */}
-                      <img
-                        src={category.iconUrl}
-                        alt={category.displayName}
-                        className="w-full h-full text-[8px] rounded-xl"
-                      />
-                    </span>
-                  </div>
-                  <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
-                    {category.displayName}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Category />
 
       {/* <div className="bg-[#8e8dbb] py-8 sm:py-10 md:py-12 mt-8">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -153,7 +105,7 @@ const HomePage = () => {
       </div> */}
 
       <div
-        className="w-full px-10 lg:px-38 py-10"
+        className="w-full px-2 md:px-0 py-10 md:w-11/12 md:mx-auto"
         data-aos="fade-up"
         data-aos-delay="700"
         data-aos-duration="1500"
@@ -223,7 +175,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-4 md:px-10 lg:px-38 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-2 md:px-0 mb-4 md:w-11/12 mx-auto">
         {/* First Swiper */}
         <div className="swiper-container w-full">
           <Swiper
@@ -236,7 +188,7 @@ const HomePage = () => {
             pagination={{ clickable: true }}
             navigation={true}
             modules={[Autoplay, Pagination, Navigation]}
-            className="w-full h-[200px] sm:h-[220px] md:h-[240px] lg:h-[250px] bg-gray-200 rounded-lg"
+            className="w-full h-[200px] md:h-[240px] bg-gray-200 rounded-lg"
           >
             {[
               "https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/banner_leads.webp",
@@ -292,7 +244,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="w-full px-10 lg:px-38 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100"
+        className="w-full px-2 md:px-0 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100 md:w-11/12 mx-auto"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -378,11 +330,11 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
+      <div className="w-full md:w-11/12 mx-auto md:h-[50vh] relative overflow-hidden shadow-xl group">
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"
-          src="./src/assets/banner3.mov" // Replace with your actual video path
+          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611951/banner3_uebtno.mov" // Replace with your actual video path
           autoPlay
           muted
           loop
@@ -402,18 +354,17 @@ const HomePage = () => {
           </p>
           <a
             href="#services"
-            className="mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
+            className="md:mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
           >
             Explore Now
           </a>
         </div>
 
         {/* Glow Border (optional animation) */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-white/10 group-hover:border-blue-400 transition-all duration-700 animate-pulse pointer-events-none" />
       </div>
 
       <div
-        className="w-full px-10 lg:px-38 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
+        className="w-full md:w-11/12 mx-auto px-2 md:px-0 py-12 bg-gradient-to-b from-white via-gray-50 to-gray-100"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
@@ -495,11 +446,11 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="w-10/12 mx-auto h-[50vh] relative overflow-hidden rounded-xl shadow-xl group">
+      <div className="w-full md:w-11/12 mx-auto md:h-[50vh] relative overflow-hidden shadow-xl group">
         {/* Video Background */}
         <video
-          className="w-full h-full object-cover"
-          src="./src/assets/banner2.mov" // Replace with your actual video path
+          className="w-full md:h-full object-cover"
+          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611943/banner2_mfjknu.mov" // Replace with your actual video path
           autoPlay
           muted
           loop
@@ -513,7 +464,7 @@ const HomePage = () => {
           <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-lg animate-fade-up">
             Welcome to Shree Jewellery
           </h1>
-          <p className="mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
+          <p className="md:mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
             Your one-stop hub for services, shopping, and entertainment in
             Karaikudi.
           </p>
@@ -526,7 +477,6 @@ const HomePage = () => {
         </div>
 
         {/* Glow Border (optional animation) */}
-        <div className="absolute inset-0 rounded-3xl border-2 border-white/10 group-hover:border-blue-400 transition-all duration-700 animate-pulse pointer-events-none" />
       </div>
 
       <TopProducts />

@@ -15,7 +15,9 @@ import "aos/dist/aos.css";
 import NotFound from "./Components/NotFound.jsx";
 
 import BusinessDetailForm from "./business/BusinessDetailForm.jsx";
-
+import BusinessTiming from "./Pages/BusinessTiming/index.jsx";
+import BusinessCategory from "./Pages/BusinessCategory/index.jsx";
+import ContactDetails from "./business/contact.jsx";
 import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
 import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 import VendorPanel from "./Pages/VendorPanel/Index.jsx";
@@ -40,23 +42,27 @@ function App() {
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
               <Route path="/review" element={<ReviewPage />} />
-              <Route path="/addbusiness" element={<AddToBusiness/>} />
+              <Route path="/1" element={<AddToBusiness />} />
               <Route path="/detailform" element={<BusinessDetailForm />} />
-
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
-            <Route path="/adminpanel" element={     
-               <AdminRoute> 
-                <AdminPanel />
-                </AdminRoute> 
-            } />
-            <Route path="/vendorpanel/:id" element={     
-               <AdminRoute> 
-                <VendorPanel />
-                </AdminRoute> 
-            } />
+            <Route
+              path="/adminpanel"
+              element={
+                <AdminRoute>
+                  <AdminPanel />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/vendorpanel/:id"
+              element={
+                <AdminRoute>
+                  <VendorPanel />
+                </AdminRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
-            
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>
