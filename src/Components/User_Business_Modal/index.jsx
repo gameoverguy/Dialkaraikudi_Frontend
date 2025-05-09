@@ -17,9 +17,10 @@ const LoginModal = ({ isOpen, onClose }) => {
 
   return (
     <CustomModal
+      title={" "}
       isOpen={isOpen}
       onClose={onClose}
-      classname="w-11/12 md:w-10/12 lg:w-9/12 px-4 py-12"
+      classname="w-11/12 md:w-10/12 lg:w-9/12 px-4 pb-12"
     >
       <div className="grid md:grid-cols-2 gap-6">
         {/* Business Owner Section */}
@@ -39,7 +40,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           <p className="text-gray-600">List your business on our platform and reach more customers</p>
           <motion.button
             onClick={() => handleLoginClick('business')}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -64,7 +65,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           <p className="text-gray-600">Discover the best local businesses and services in Karaikudi</p>
           <motion.button
             onClick={() => handleLoginClick('user')}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >

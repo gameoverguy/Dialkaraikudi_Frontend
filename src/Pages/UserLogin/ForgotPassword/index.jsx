@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API } from "../../../../config/config";
 
-const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
+const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail, role }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [errorOverall, setErrorOverall] = useState("");
@@ -59,12 +59,16 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
       setIsSubmitting(false);
     } else {
       try {
+        const endpoint = role === 'business' ? `${API}/business/forgotPassword` : `${API}/user/forgotpassword`;
         const response = await axios.post(
-          `${API}/user/forgotpassword`,
+          endpoint,
           {
             email: email,
           }
         );
+console.log(role);
+console.log(response.data);
+
 
         if (response.data) {
           console.log("Reset password for:", email);
