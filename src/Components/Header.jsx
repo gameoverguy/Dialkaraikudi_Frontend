@@ -118,14 +118,14 @@ const Header = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for services, products, brands..."
-                  className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+                  className="w-full pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
                 />
-                <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+                {/* <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" /> */}
                 <button
                   type="submit"
-                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
                 >
-                  <IoSearchOutline className="text-xl" />
+                  <IoSearchOutline className="text-lg" />
                 </button>
               </form>
             </div>
@@ -139,14 +139,8 @@ const Header = () => {
             </button>
 
             {/* Add business button */}
-            <Link
-              to={
-                userData
-                  ? userData.hasBusiness
-                    ? "/business-profile"
-                    : "/add-business"
-                  : "#"
-              }
+            {/* <Link
+              to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
               onClick={(e) => {
                 if (!userData) {
                   e.preventDefault();
@@ -162,7 +156,7 @@ const Header = () => {
                   +<span className="text-sm font-medium">Add Business</span>
                 </>
               )}
-            </Link>
+            </Link> */}
 
             {/* Auth Section */}
             {userData ? (
