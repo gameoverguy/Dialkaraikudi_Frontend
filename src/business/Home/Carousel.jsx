@@ -154,7 +154,7 @@ const Carousel = () => {
             <img
               src={item.image}
               alt="Slide"
-              className="bg-cover shadow-lg w-full md:h-[50vh]"
+              className="bg-cover w-full md:h-[50vh]"
               loading="lazy" // Ensures smooth loading
             />
           </div>

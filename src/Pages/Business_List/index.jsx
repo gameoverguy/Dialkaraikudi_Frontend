@@ -11,7 +11,7 @@ import adds from "../../assets/adds.jpeg";
 import { IoIosStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
-import banner from "../../assets/banner.jpg";
+import coursal11 from "../../assets/coursal11.jpg";
 import { API } from "../../../config/config";
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
@@ -102,7 +102,7 @@ const Bussiness_List = () => {
       <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden md:h-[30vh]">
         <div className="w-full">
           <img
-            src={banner}
+            src={coursal11}
             alt="Banner"
             className="w-full h-full object-cover"
           />
