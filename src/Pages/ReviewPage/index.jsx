@@ -4,6 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
 import { API } from '../../../config/config';
 import { motion, AnimatePresence } from 'framer-motion';
+axios.defaults.withCredentials = true;
 
 const ReviewPage = () => {
     const location = useLocation();
