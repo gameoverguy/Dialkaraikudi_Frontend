@@ -47,6 +47,9 @@ const ReviewPage = () => {
         }
       } catch (error) {
         console.error("Error fetching review:", error);
+        if (error.response) {
+          console.log("Backend error response:", error.response.data);
+        }
       }
     };
 
