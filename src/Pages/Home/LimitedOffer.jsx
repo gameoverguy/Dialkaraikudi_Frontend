@@ -30,7 +30,7 @@ const LimitedOffer = () => {
 
   return (
     <div
-  className="relative flex justify-center items-center text-white md:w-11/12 mt-3 mx-auto md:py-20 bg-cover bg-center h-fit md:min-h-[60vh] md:mb-5 rounded"
+  className="relative flex justify-center items-center text-white md:w-11/12 mx-auto bg-cover bg-center h-fit md:min-h-[60vh] rounded"
   style={{
     backgroundImage: "url('https://www.dialkaraikudi.com/assets/img2-CxJPdS18.jpg')",
   }}

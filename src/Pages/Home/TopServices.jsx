@@ -6,7 +6,7 @@ import topser2 from "../../assets/topser2.jpg";
 function TopServices() {
   return (
     <>
-          <div className="w-full md:w-11/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer py-5">
+          <div className="w-full md:w-11/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer">
             <div className="w-full md:w-6/12 relative group overflow-hidden">
             <img src={topser1} alt='' className='w-full md:h-[340px]' />
             

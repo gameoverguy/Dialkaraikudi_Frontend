@@ -1,14 +1,14 @@
 import React from 'react'
 
-function Category2() {
+function Category3() {
   return (
     <div
-        className="w-full px-2 md:px-0 py-16 bg-gradient-to-b from-gray-50 via-white to-gray-100 md:w-11/12 mx-auto"
+        className="w-full md:w-11/12 mx-auto px-2 md:px-0"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
       >
-        <div className="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-10">
           {[
             {
               href: "/movies",
@@ -50,39 +50,35 @@ function Category2() {
             <a
               key={item.title}
               href={item.href}
-              className="relative group bg-white/70 backdrop-blur-md border border-gray-200 rounded-3xl shadow-lg overflow-hidden transform transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:ring-2 hover:ring-blue-300"
-              data-aos="flip-left"
+              className={`flex flex-col md:flex-row ${
+                index % 2 !== 0 ? "md:flex-row-reverse" : ""
+              } group transition-all duration-700`}
+              data-aos="fade-up"
               data-aos-delay={index * 150}
               data-aos-duration="900"
             >
-              {/* Top image with float-in effect */}
-              <div className="h-48 overflow-hidden relative rounded-t-3xl">
+              {/* Image Panel */}
+              <div className="w-full md:w-1/2 h-40 md:h-56 overflow-hidden">
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
               </div>
 
-              {/* Text content */}
-              <div className="p-6 text-center">
-                <h3 className="text-xl font-black text-gray-800 tracking-wide transition-colors duration-500 group-hover:text-blue-700 group-hover:translate-y-[-1px]">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-300">
-                  Discover amazing {item.title.toLowerCase()} services around
-                  you.
-                </p>
-                <span className="block mt-3 w-10 h-1 bg-blue-400 rounded-full mx-auto transition-all duration-500 group-hover:w-16 group-hover:bg-blue-700"></span>
-              </div>
-
-              {/* Bottom gradient line effect */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-
-              {/* Shine animation */}
-              <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-[-60%] w-[50%] h-full bg-white/20 rotate-12 transform animate-[shimmer_2.5s_infinite]" />
+              {/* Text Content */}
+              <div className="w-full md:w-1/2 flex items-center justify-center bg-white/80 backdrop-blur-md px-4 py-6 md:py-0 shadow-blue-100 shadow-2xl">
+                <div className="text-center md:text-left space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-all duration-500">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Explore premium {item.title.toLowerCase()} services nearby.
+                  </p>
+                  <div className="text-blue-500 font-medium group-hover:underline transition-all text-sm">
+                    Discover →
+                  </div>
+                </div>
               </div>
             </a>
           ))}
@@ -91,4 +87,4 @@ function Category2() {
   )
 }
 
-export default Category2
+export default Category3
