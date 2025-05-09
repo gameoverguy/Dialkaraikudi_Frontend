@@ -4,7 +4,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 function Advertisment() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 px-2 md:px-0 mb-4 md:w-11/12 mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2 md:px-0 md:w-11/12 mx-auto">
         {/* First Swiper */}
         <div className="swiper-container w-full">
           <Swiper
@@ -50,7 +50,7 @@ function Advertisment() {
             pagination={{ clickable: true }}
             navigation={true}
             modules={[Autoplay, Pagination, Navigation]}
-            className="w-full h-[200px] sm:h-[220px] md:h-[240px] lg:h-[250px] bg-gray-200 rounded-lg"
+            className="w-full h-[200px] md:h-[240px] bg-gray-200 rounded-lg"
           >
             {[
               "https://akam.cdn.jdmagicbox.com/images/icontent/newwap/web2022/summerweb.png",

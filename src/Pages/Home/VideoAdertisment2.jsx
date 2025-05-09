@@ -1,13 +1,12 @@
 import React from 'react'
 
-function VideoAdertisment1() {
+function VideoAdertisment2() {
   return (
-
-    <div className="w-full md:w-11/12 mx-auto md:h-[50vh] relative overflow-hidden shadow-xl group">
+    <div className="w-full md:w-11/12 mx-auto md:h-[60vh] relative overflow-hidden group">
         {/* Video Background */}
         <video
-          className="w-full h-full object-cover"
-          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611951/banner3_uebtno.mov" // Replace with your actual video path
+          className="w-full md:h-full object-cover"
+          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611943/banner2_mfjknu.mov" // Replace with your actual video path
           autoPlay
           muted
           loop
@@ -21,13 +20,13 @@ function VideoAdertisment1() {
           <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-lg animate-fade-up">
             Welcome to Shree Jewellery
           </h1>
-          <p className="mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
+          <p className="md:mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
             Your one-stop hub for services, shopping, and entertainment in
             Karaikudi.
           </p>
           <a
             href="#services"
-            className="md:mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
+            className="mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
           >
             Explore Now
           </a>
@@ -38,4 +37,4 @@ function VideoAdertisment1() {
   )
 }
 
-export default VideoAdertisment1
+export default VideoAdertisment2

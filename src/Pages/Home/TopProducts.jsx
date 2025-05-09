@@ -4,10 +4,10 @@ import toppro2 from "../../assets/toppro2.jpg";
 function TopProducts() {
   return (
     <>
-      <div className="w-full md:w-11/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer py-5">
+      <div className="w-full md:w-11/12 flex flex-col md:flex-row justify-center items-center mx-auto cursor-pointer">
         <div className="w-full md:w-6/12 relative group overflow-hidden">
           <video
-            className="w-full h-[340px] object-cover"
+            className="w-full md:h-[400px] object-cover"
             src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4" // Replace with your actual video path
             autoPlay
             muted
@@ -22,7 +22,7 @@ function TopProducts() {
           </div>
         </div>
         <div className="w-full md:w-6/12">
-          <img src={toppro2} alt="" />
+          <img src={toppro2} alt="" className="md:h-[400px]" />
         </div>
       </div>
     </>
