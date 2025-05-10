@@ -10,6 +10,7 @@ import FloatingTextarea from '../Components/FloatingInput/FloatingTextarea';
 import { uploadToCloudinary } from '../utils/cloudinaryUpload';
 import { toast, ToastContainer } from 'react-toastify';
 import CustomModal from '../Components/modal';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusinessDetailForm }) => {
     const [errorOverall, setErrorOverall] = useState('');
@@ -32,7 +33,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
     const [photosPreviews, setPhotosPreviews] = useState([]);
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     // Update the validateForm function with new regex and rules
     const validateForm = () => {
         const newErrors = {};
@@ -456,23 +458,54 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
 
                     {/* Account Security Section */}
                     <div className="rounded-lg space-y-2">
-                        {/* <h3 className="text-lg font-semibold text-gray-700">Account Security</h3> */}
-                        <FloatingInput
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Password"
-                            type="password"
-                            error={errors.password}
-                        />
-                        <FloatingInput
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            placeholder="Confirm Password"
-                            type="password"
-                            error={errors.confirmPassword}
-                        />
+                        <div className="relative">
+                            <FloatingInput
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Password"
+                                type={showPassword ? "text" : "password"}
+                                error={errors.password}
+                            />
+                            {formData.password && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    title={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? (
+                                        <AiOutlineEye className="w-5 h-5" />
+                                    ) : (
+                                        <AiOutlineEyeInvisible className="w-5 h-5" />
+                                    )}
+                                </button>
+                            )}
+                        </div>
+                        <div className="relative">
+                            <FloatingInput
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Confirm Password"
+                                type={showConfirmPassword ? "text" : "password"}
+                                error={errors.confirmPassword}
+                            />
+                            {formData.confirmPassword && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                    title={showConfirmPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showConfirmPassword ? (
+                                        <AiOutlineEye className="w-5 h-5" />
+                                    ) : (
+                                        <AiOutlineEyeInvisible className="w-5 h-5" />
+                                    )}
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     {/* Photos Section */}

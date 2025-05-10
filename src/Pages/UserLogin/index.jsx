@@ -172,7 +172,9 @@ const UserLogin = ({
         classname="w-full max-w-md"
       >
         <div className="p-2">
-          <h1 className="text-lg font-bold text-gray-800 mb-4">Member Login</h1>
+          <h1 className="text-lg text-center font-bold text-gray-800 mb-4">
+            {role === 'business' ? 'Business Login' : 'Member Login'}
+          </h1>
           <form onSubmit={handleSubmit}>
             <div className="space-y-6">
               <FloatingInput
@@ -247,17 +249,17 @@ const UserLogin = ({
               Forgot Password?
             </a>
           </div>
-          <div className="flex items-center justify-center text-center gap-3 my-6">
+          {/* <div className="flex items-center justify-center text-center gap-3 my-6">
             <div className="flex-1 h-px bg-gray-400"></div>
             <p className="text-md text-gray-500 px-3 bg-white">or</p>
             <div className="flex-1 h-px bg-gray-400"></div>
-          </div>
+          </div> */}
 
-          <div className="mt-2">
-            <div className="relative group cursor-pointer overflow-hidden rounded-lg">
-              <div className="absolute inset-0 w-full h-full transition duration-300"></div>
+          {/* <div className="mt-2"> */}
+            {/* <div className="relative group cursor-pointer overflow-hidden rounded-lg"> */}
+              {/* <div className="absolute inset-0 w-full h-full transition duration-300"></div> */}
               {/* <div className="border border-gray-300 rounded-lg p-0.5 transition duration-300 group-hover:border-gray-400"> */}
-              <GoogleLogin
+              {/* <GoogleLogin
                 onSuccess={credentialResponse => {
                   const credentialResponsedecoded = jwtDecode(credentialResponse.credential);
                   console.log(credentialResponsedecoded);
@@ -275,10 +277,10 @@ const UserLogin = ({
                 containerProps={{
                   className: "flex items-center justify-center w-full py-2.5 px-4"
                 }}
-              />
+              /> */}
               {/* </div> */}
-            </div>
-          </div>
+            {/* </div> */}
+          {/* </div> */}
         </div>
       </CustomModal>
 
