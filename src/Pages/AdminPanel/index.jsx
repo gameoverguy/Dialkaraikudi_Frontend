@@ -244,6 +244,7 @@ const AdminPanel = () => {
     // Clear admin token
     Cookies.remove("adminToken");
     // Navigate to admin login
+    localStorage.setItem("selectedMenuItem", "1");
     navigate("/adminlogin");
     // toast.success('Logout successful');
   };

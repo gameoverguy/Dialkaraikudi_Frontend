@@ -135,7 +135,7 @@ const Header = () => {
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
             {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-              <LocationTracker onLocationSelect={handleLocationSelect} />
+             <span><LocationTracker onLocationSelect={handleLocationSelect} /></span> 
             </button>
 
             {/* Add business button */}
