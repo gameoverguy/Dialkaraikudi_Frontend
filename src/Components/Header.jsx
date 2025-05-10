@@ -42,27 +42,28 @@ const Header = () => {
     };
   }, [showLoginModal]);
 
-  const handleLogout = (e) => {
-    if (e) {
-      e.preventDefault();
+  const handleLogout = () => {
+    try {
+      // First, update all the states
+      setUserData(null);
+      setIsDropdownOpen(false);
+      setShowUserBusinessModal(false);
+
+      // Then clear storage
+      sessionStorage.clear();
+      localStorage.clear();
+
+      // Remove cookies
+      Cookies.remove("userToken", { path: "/" });
+      Cookies.remove("businessToken", { path: "/" });
+
+      // Finally, navigate after a short delay to ensure state updates are processed
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
-    
-    // Remove user data from session storage
-    sessionStorage.clear();
-    
-    // Remove cookies
-    Cookies.remove("userToken");
-    Cookies.remove("businessToken");
-    
-    // Reset states
-    setUserData(null);
-    setIsDropdownOpen(false);
-    
-    // Navigate to home page
-    navigate("/");
-    
-    // Force a page reload to clear any remaining state
-    window.location.reload();
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -148,7 +149,7 @@ const Header = () => {
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
             {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-             <span><LocationTracker onLocationSelect={handleLocationSelect} /></span> 
+              <span><LocationTracker onLocationSelect={handleLocationSelect} /></span>
             </button>
 
             {/* Add business button */}
@@ -199,17 +200,22 @@ const Header = () => {
                         />
                       </svg>
                     </div>
+                    <button className="flex bg-red-500 text-white p-2 rounded-2xl" onClick={handleLogout}>Logout</button>
 
                     {isDropdownOpen && (
                       // For desktop logout button
                       <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
-                        <div 
-                          onClick={(e) => handleLogout(e)}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLogout();
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md"
                         >
                           <CiLogout className="text-lg text-red-500" />
                           <span className="text-sm font-medium">Logout</span>
-                        </div>
+                        </button>
                       </div>
                     )}
                   </div>
@@ -235,7 +241,7 @@ const Header = () => {
                   {isDropdownOpen && (
                     // For mobile logout button
                     <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-                      <div 
+                      <div
                         onClick={(e) => handleLogout(e)}
                         className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                       >
