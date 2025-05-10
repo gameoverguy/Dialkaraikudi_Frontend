@@ -91,17 +91,17 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate('/businesslist', {
+      navigate("/businesslist", {
         state: {
-          searchQuery
-        }
+          searchQuery,
+        },
       });
     }
   };
 
   return (
     <>
-      <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-2 items-center shadow-md border-b border-gray-200">
+      <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
         <div className="md:w-11/12 mx-auto flex">
           <div className="w-full xl:w-7/12 flex space-x-6 items-center">
             {/* Logo */}
@@ -109,7 +109,7 @@ const Header = () => {
               <img
                 src={Logo}
                 alt="Logo"
-                className="h-10 md:h-24 my-0 object-contain"
+                className="h-10 md:h-18 my-0 object-contain"
               />
             </Link>
             {/* Location Tracker */}
@@ -125,14 +125,14 @@ const Header = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for services, products, brands..."
-                  className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+                  className="w-full pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
                 />
-                <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+                {/* <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" /> */}
                 <button
                   type="submit"
-                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
                 >
-                  <IoSearchOutline className="text-xl" />
+                  <IoSearchOutline className="text-lg" />
                 </button>
               </form>
             </div>
@@ -146,7 +146,7 @@ const Header = () => {
             </button>
 
             {/* Add business button */}
-            <Link
+            {/* <Link
               to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
               onClick={(e) => {
                 if (!userData) {
@@ -159,9 +159,11 @@ const Header = () => {
               {userData && userData.hasBusiness ? (
                 <span className="text-sm font-medium">My Business Profile</span>
               ) : (
-                <>+<span className="text-sm font-medium">Add Business</span></>
+                <>
+                  +<span className="text-sm font-medium">Add Business</span>
+                </>
               )}
-            </Link>
+            </Link> */}
 
             {/* Auth Section */}
             {userData ? (
@@ -180,7 +182,9 @@ const Header = () => {
                         {userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
+                          isDropdownOpen ? "rotate-180" : ""
+                        }`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -214,7 +218,11 @@ const Header = () => {
                   ref={mobileDropdownRef}
                 >
                   <Link
-                    to={userData.hasBusiness ? "/business-profile" : "/add-business"}
+                    to={
+                      userData.hasBusiness
+                        ? "/business-profile"
+                        : "/add-business"
+                    }
                     className="flex md:hidden items-center justify-center w-8 h-8 bg-[#ee6510] hover:bg-[#ee2314] text-white rounded-full transition-colors duration-200 pb-1"
                   >
                     {userData.hasBusiness ? "B" : "+"}

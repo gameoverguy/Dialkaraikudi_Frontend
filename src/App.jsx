@@ -3,7 +3,7 @@ import ScrollToTop from "./Components/ScrollToTop.jsx";
 import Bussiness_List from "./Pages/Business_List";
 import MainLayout from "./Components/MainLayout.jsx";
 import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
-import HomePage from "./business/HomePage.jsx";
+import HomePage from "./Pages/Home/Index.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
