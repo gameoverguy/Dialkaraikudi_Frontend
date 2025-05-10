@@ -214,6 +214,7 @@ const VendorPanel = () => {
     // Clear admin token
     Cookies.remove("businessToken");
     // Navigate to admin login
+    localStorage.setItem("selectedMenuItem", "1");
     navigate("/");
     // toast.success('Logout successful');
   };
