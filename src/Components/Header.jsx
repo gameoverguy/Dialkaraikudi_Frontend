@@ -43,27 +43,14 @@ const Header = () => {
   }, [showLoginModal]);
 
   const handleLogout = () => {
-    try {
-      // First, update all the states
-      setUserData(null);
-      setIsDropdownOpen(false);
-      setShowUserBusinessModal(false);
-
-      // Then clear storage
-      sessionStorage.clear();
-      localStorage.clear();
-
-      // Remove cookies
-      Cookies.remove("userToken", { path: "/" });
-      Cookies.remove("businessToken", { path: "/" });
-
-      // Finally, navigate after a short delay to ensure state updates are processed
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 100);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    sessionStorage.removeItem("userData");
+    Cookies.remove("userToken", {
+      path: "/", // Make sure this matches how it was set
+      secure: true,
+      sameSite: "Strict",
+    });
+    setUserData(null);
+    navigate("/"); // Or homepage
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -72,6 +59,12 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if the click is on the logout button or its children
+      const isLogoutClick = event.target.closest('button')?.textContent?.includes('Logout');
+      if (isLogoutClick) {
+        return; // Don't close dropdown if clicking logout
+      }
+  
       if (
         (desktopDropdownRef.current &&
           !desktopDropdownRef.current.contains(event.target)) ||
@@ -81,7 +74,7 @@ const Header = () => {
         setIsDropdownOpen(false);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -149,26 +142,22 @@ const Header = () => {
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
             {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-              <span><LocationTracker onLocationSelect={handleLocationSelect} /></span>
+             <span><LocationTracker onLocationSelect={handleLocationSelect} /></span> 
             </button>
 
             {/* Add business button */}
-            <Link
-              to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
-              onClick={(e) => {
-                if (!userData) {
-                  e.preventDefault();
-                  setShowLoginModal(true);
-                }
-              }}
-              className="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
-            >
-              {userData && userData.hasBusiness ? (
-                <span className="text-sm font-medium">My Business Profile</span>
-              ) : (
-                <>+<span className="text-sm font-medium">Add Business</span></>
-              )}
-            </Link>
+              {/* <Link
+                    userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
+                    ick={(e) => {
+                      !userData) {
+                        eventDefault();
+                        howLoginModal(true);
+                                                             sName="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                                     rData && userData.hasBusiness ? (
+                      n className="text-sm font-medium">My Business Profile</span>
+                    (
+                      span className="text-sm font-medium">Add Business</span></>
+                                      nk> */}
 
             {/* Auth Section */}
             {userData ? (
@@ -200,18 +189,12 @@ const Header = () => {
                         />
                       </svg>
                     </div>
-                    <button className="flex bg-red-500 text-white p-2 rounded-2xl" onClick={handleLogout}>Logout</button>
 
                     {isDropdownOpen && (
-                      // For desktop logout button
                       <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
                         <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLogout();
-                          }}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md"
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                         >
                           <CiLogout className="text-lg text-red-500" />
                           <span className="text-sm font-medium">Logout</span>
@@ -239,15 +222,14 @@ const Header = () => {
                     {userData.name.charAt(0).toUpperCase()}
                   </div>
                   {isDropdownOpen && (
-                    // For mobile logout button
                     <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-                      <div
-                        onClick={(e) => handleLogout(e)}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                       >
-                        <CiLogout className="text-lg text-red-500" />
-                        <span className="text-sm font-medium">Logout</span>
-                      </div>
+                        <CiLogout className="text-xl text-red-500" />
+                        <span >Logout</span>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -260,7 +242,7 @@ const Header = () => {
                   className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
                 >
                   <LuCircleUserRound className="text-xl" />
-                  <span>Login</span>
+                  <span>Login / Sign Up</span>
                 </button>
                 {/* Mobile Login */}
                 <button
@@ -348,7 +330,7 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
         role={loginRole}
-
+        
       />
     </>
   );

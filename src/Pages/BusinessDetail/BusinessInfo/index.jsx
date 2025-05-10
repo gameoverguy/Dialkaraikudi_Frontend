@@ -7,9 +7,12 @@ import { useLoginModal } from "../../../context/LoginContext";
 import CustomModal from "../../../Components/modal";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import { FaBookmark } from "react-icons/fa6";
+import { FaRegBookmark } from "react-icons/fa";
 
 const BusinessInfo = ({ formData, businessId }) => {
   const [showContact, setShowContact] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const { handleOpenLoginModal } = useLoginModal();
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialSlide, setInitialSlide] = useState(0);
@@ -27,6 +30,14 @@ const BusinessInfo = ({ formData, businessId }) => {
   const handleImageClick = (index) => {
     setInitialSlide(index);
     setShowImageModal(true);
+  };
+
+  const handleBookmarkClick = () => {
+    if (isLoggedin) {
+      setIsBookmarked(prev => !prev);
+    } else {
+      handleOpenLoginModal();
+    }
   };
 
   return (
@@ -135,9 +146,17 @@ const BusinessInfo = ({ formData, businessId }) => {
         </CustomModal>
 
         <div className="p-4">
-          <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
-            {formData?.business.businessName}
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
+              {formData?.business.businessName}
+            </h1>
+            <div
+              onClick={handleBookmarkClick}
+              className="cursor-pointer text-xl text-purple-600 hover:text-purple-700 transition-colors"
+            >
+              {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+            </div>
+          </div>
           <div className="flex items-center gap-2 mt-2 text-sm md:text-base">
             <div className="flex items-center bg-green-600 text-white px-2 py-1 rounded">
               {formData?.business.ratings}
