@@ -105,11 +105,11 @@ const UserLogin = ({
         if (data && data.token) {
           const userData = data.user || data.business || {};
 
-          Cookies.set(role === 'business' ? "businessToken" : "userToken", data.token, {
-            expires: 21,
-            secure: true,
-            sameSite: "Strict",
-          });
+          // Cookies.set(role === 'business' ? "businessToken" : "userToken", data.token, {
+          //   expires: 21,
+          //   secure: true,
+          //   sameSite: "Strict",
+          // });
 
           sessionStorage.setItem(
             role === 'business' ? "businessData" : "userData",

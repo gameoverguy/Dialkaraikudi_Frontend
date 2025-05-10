@@ -42,13 +42,26 @@ const Header = () => {
     };
   }, [showLoginModal]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("userData");
-    Cookies.remove("userToken", {
-      secure: true,
-      sameSite: "Strict",
-    });
+  const handleLogout = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    
+    // Remove user data from session storage
+    sessionStorage.clear();
+    
+    // Remove cookies
+    Cookies.remove("userToken");
+    Cookies.remove("businessToken");
+    
+    // Reset states
     setUserData(null);
+    setIsDropdownOpen(false);
+    
+    // Navigate to home page
+    navigate("/");
+    
+    // Force a page reload to clear any remaining state
     window.location.reload();
   };
 
@@ -188,14 +201,15 @@ const Header = () => {
                     </div>
 
                     {isDropdownOpen && (
+                      // For desktop logout button
                       <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
-                        <button
-                          onClick={handleLogout}
+                        <div 
+                          onClick={(e) => handleLogout(e)}
                           className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                         >
                           <CiLogout className="text-lg text-red-500" />
                           <span className="text-sm font-medium">Logout</span>
-                        </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -219,14 +233,15 @@ const Header = () => {
                     {userData.name.charAt(0).toUpperCase()}
                   </div>
                   {isDropdownOpen && (
+                    // For mobile logout button
                     <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                      <div 
+                        onClick={(e) => handleLogout(e)}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                       >
-                        <CiLogout className="text-xl text-red-500" />
-                        <span>Logout</span>
-                      </button>
+                        <CiLogout className="text-lg text-red-500" />
+                        <span className="text-sm font-medium">Logout</span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -327,7 +342,7 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
         role={loginRole}
-        
+
       />
     </>
   );
