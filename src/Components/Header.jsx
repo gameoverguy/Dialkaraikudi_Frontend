@@ -43,13 +43,27 @@ const Header = () => {
   }, [showLoginModal]);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("userData");
-    Cookies.remove("userToken", {
-      secure: true,
-      sameSite: "Strict",
-    });
-    setUserData(null);
-    window.location.reload();
+    try {
+      // First, update all the states
+      setUserData(null);
+      setIsDropdownOpen(false);
+      setShowUserBusinessModal(false);
+
+      // Then clear storage
+      sessionStorage.clear();
+      localStorage.clear();
+
+      // Remove cookies
+      Cookies.remove("userToken", { path: "/" });
+      Cookies.remove("businessToken", { path: "/" });
+
+      // Finally, navigate after a short delay to ensure state updates are processed
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -135,7 +149,7 @@ const Header = () => {
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
             {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-             <span><LocationTracker onLocationSelect={handleLocationSelect} /></span> 
+              <span><LocationTracker onLocationSelect={handleLocationSelect} /></span>
             </button>
 
             {/* Add business button */}
@@ -190,12 +204,18 @@ const Header = () => {
                         />
                       </svg>
                     </div>
+                    <button className="flex bg-red-500 text-white p-2 rounded-2xl" onClick={handleLogout}>Logout</button>
 
                     {isDropdownOpen && (
+                      // For desktop logout button
                       <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
                         <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLogout();
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md"
                         >
                           <CiLogout className="text-lg text-red-500" />
                           <span className="text-sm font-medium">Logout</span>
@@ -227,14 +247,15 @@ const Header = () => {
                     {userData.name.charAt(0).toUpperCase()}
                   </div>
                   {isDropdownOpen && (
+                    // For mobile logout button
                     <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                      <div
+                        onClick={(e) => handleLogout(e)}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
                       >
-                        <CiLogout className="text-xl text-red-500" />
-                        <span>Logout</span>
-                      </button>
+                        <CiLogout className="text-lg text-red-500" />
+                        <span className="text-sm font-medium">Logout</span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -335,7 +356,7 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
         role={loginRole}
-        
+
       />
     </>
   );
