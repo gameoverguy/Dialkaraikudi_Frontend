@@ -308,7 +308,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
                         <span className="text-gray-600">Already have an account? </span>
                         <button
                             onClick={handleLoginClick}
-                            className="blue-link"
+                            className="blue-link cursor-pointer"
                         >
                             Login
                         </button>

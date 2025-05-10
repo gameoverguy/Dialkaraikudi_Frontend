@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API } from '../../../../config/config';
 
-const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
+const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [error, setError] = useState('');
     const [timer, setTimer] = useState(60);
@@ -77,10 +77,14 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
         }
 
         try {
-            const response = await axios.post(`${API}/user/verifyotp`, {
+            const endpoint = role === 'business' ? `${API}/business/verifyOtp` : `${API}/user/verifyotp`;
+            const response = await axios.post(endpoint, {
                 email: email,
                 otp: otpValue
             });
+            console.log(role);
+            console.log(response.data);
+
 
             if (response.data) {
                 console.log('OTP Verified:', otpValue);
@@ -89,20 +93,22 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
                 setError('');
                 setErrorOverall('');
                 onClose();
-                setShowResetPasswordModal(true);
+                setShowResetPasswordModal(true); 
+                sessionStorage.setItem('resetPasswordOtp', otpValue);
             }
         } catch (error) {
             console.error('OTP verification failed:', error);
             toast.error('OTP verification failed');
             setErrorOverall(error.response?.data?.message || 'Invalid OTP. Please try again.');
         } finally {
-            setIsSubmitting(false); // Re-enable button
+            setIsSubmitting(false);
         }
     };
 
     const handleResendOTP = async () => {
         try {
-            const response = await axios.post(`${API}/user/forgotpassword`, {
+            const endpoint = role === 'business' ? `${API}/business/forgotPassword` : `${API}/user/forgotpassword`;
+            const response = await axios.post(endpoint, {
                 email: email
             });
 
@@ -119,6 +125,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal }) => {
             setErrorOverall(error.response?.data?.message || 'Failed to resend OTP. Please try again.');
         }
     };
+
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;

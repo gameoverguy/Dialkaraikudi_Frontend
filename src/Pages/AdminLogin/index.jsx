@@ -127,7 +127,7 @@ const AdminLogin = () => {
       {/* Right side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-3 bg-white p-8 rounded-2xl shadow-xl">
-          <div className="text-leftr">
+          <div className="text-left">
             <h2 className="text-lg font-bold text-gray-900">Admin Login</h2>
           </div>
 
@@ -212,8 +212,8 @@ const AdminLogin = () => {
         onClose={() => setShowOTPModal(false)}
         email={otpEmail}
         onVerificationSuccess={() => {
-          setShowOTPModal(false);
-          setOtpEmail("");
+          setShowOTPModal(false)
+          setOtpEmail("")
         }}
       />
 
@@ -231,7 +231,7 @@ const AdminLogin = () => {
         toastClassName="z-[9999]"
       />
     </div>
-  );
-};
+  )
+}
 
-export default AdminLogin;
+export default AdminLogin

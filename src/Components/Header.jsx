@@ -15,6 +15,7 @@ import ForgotPassword from "../Pages/UserLogin/ForgotPassword";
 import OTP from "../Pages/UserLogin/OTP";
 import ResetPassword from "../Pages/UserLogin/ResetPassword";
 import LoginModal from "./User_Business_Modal";
+import BusinessDetailForm from "../business/BusinessDetailForm";
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal, loginRole } = useLoginModal();
@@ -25,6 +26,7 @@ const Header = () => {
   const [otpEmail, setOtpEmail] = useState("");
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [showUserBusinessModal, setShowUserBusinessModal] = useState(false);
+  const [showBusinessDetailForm, setShowBusinessDetailForm] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -285,7 +287,15 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         setIsSignupOpen={setIsSignupOpen}
         setIsForgotPasswordOpen={setIsForgotPasswordOpen}
+        setShowBusinessDetailForm={setShowBusinessDetailForm}
+        setShowUserBusinessModal={setShowUserBusinessModal}
         role={loginRole}
+      />
+      <BusinessDetailForm
+        isOpen={showBusinessDetailForm}
+        onClose={() => setShowBusinessDetailForm(false)}
+        setShowLoginModal={setShowLoginModal}
+        setShowBusinessDetailForm={setShowBusinessDetailForm}
       />
       <SignupModal
         isOpen={isSignupOpen}
@@ -317,6 +327,7 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
         role={loginRole}
+        
       />
     </>
   );
