@@ -104,7 +104,7 @@ const BusinessDetails = () => {
         animate="animate"
         exit="exit"
         variants={fadeIn}
-        className="bg-white shadow-xl pt-2"
+        className="bg-white shadow-xl w-11/12 mx-auto pt-2"
       >
         <motion.div
           variants={fadeIn}

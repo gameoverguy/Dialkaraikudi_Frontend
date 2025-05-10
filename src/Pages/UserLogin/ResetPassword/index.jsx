@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API } from "../../../../config/config";
 
-const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
+const ResetPassword = ({ isOpen, onClose, setShowLoginModal, email, role, otpValue }) => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
@@ -69,6 +69,7 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        const storedOtp = sessionStorage.getItem('resetPasswordOtp');
         if (!newPassword) {
             setNewPasswordError("New password is required");
             setIsSubmitting(false);
@@ -86,17 +87,27 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
         }
 
         try {
-            const response = await axios.post(`${API}/user/resetpassword`, {
+            const endpoint = role === 'business' ? `${API}/business/resetPassword` : `${API}/user/resetpassword`;
+            const payload = role === 'business' ? {
+                email: email,
+                otp: storedOtp,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword
+            } : {
                 email: email,
                 newPassword: newPassword,
                 confirmPassword: confirmPassword
-            });
+            };
+
+            const response = await axios.post(endpoint, payload);
 
             if (response.data) {
                 console.log("Password reset successful!");
                 toast.success('Password reset successful!', {
                     autoClose: 2000
                 });
+                // Clear the stored OTP
+                sessionStorage.removeItem('resetPasswordOtp');
 
                 setTimeout(() => {
                     setNewPassword("");
@@ -187,16 +198,15 @@ const ResetPassword = ({ isOpen, onClose, setShowLoginModal,email }) => {
                         </div>
 
                         <button
-            type="submit"
-            disabled={!isFormValid() || isSubmitting}
-            className={`w-full text-xs py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
-                isFormValid() && !isSubmitting
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-gray-300 cursor-not-allowed text-gray-500"
-            }`}
-        >
-            {isSubmitting ? 'RESETTING PASSWORD...' : 'RESET PASSWORD'}
-        </button>
+                            type="submit"
+                            disabled={!isFormValid() || isSubmitting}
+                            className={`w-full text-xs py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${isFormValid() && !isSubmitting
+                                ? "bg-purple-600 hover:bg-purple-700 text-white"
+                                : "bg-gray-300 cursor-not-allowed text-gray-500"
+                                }`}
+                        >
+                            {isSubmitting ? 'RESETTING PASSWORD...' : 'RESET PASSWORD'}
+                        </button>
                     </form>
                 </div>
             </CustomModal>

@@ -12,6 +12,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import CustomModal from '../Components/modal';
 
 const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusinessDetailForm }) => {
+    const [errorOverall, setErrorOverall] = useState('');
     const [formData, setFormData] = useState({
         businessName: '',
         ownerName: '',
@@ -25,7 +26,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         email: '',
         password: '',
         confirmPassword: '',
-        photos: []
+        photos: [],
+        agreeToTerms: false
     });
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
@@ -116,6 +118,10 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         if (formData.photos.length === 0) {
             newErrors.photos = 'At least one photo is required';
         }
+        // Terms and Conditions validation
+        if (!formData.agreeToTerms) {
+            newErrors.agreeToTerms = 'You must agree to the Terms and Conditions';
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -133,6 +139,29 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        if (!isOpen) {
+            setErrors({});
+            setErrorOverall('');
+            setFormData({
+                businessName: '',
+                ownerName: '',
+                address1: '',
+                address2: '',
+                city: '',
+                pincode: '',
+                description: '',
+                categoryId: '',
+                phone: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                photos: []
+            });
+            setPhotosPreviews([]);
+        }
+    }, [isOpen]);
+
     // Update handleChange to include real-time validation
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -142,35 +171,35 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         switch (name) {
             case 'businessName':
                 if (!/^[a-zA-Z\s]*$/.test(value)) {
-                    error = 'Only letters and spaces are allowed';
+                    // error = 'Only letters and spaces are allowed';
                     newValue = formData.businessName; // Keep old value
                 }
                 break;
 
             case 'phone':
                 if (!/^[6-9]\d{0,9}$/.test(value)) {
-                    error = 'Phone number must start with 6-9 and have 10 digits';
+                    // error = 'Phone number must start with 6-9 and have 10 digits';
                     newValue = formData.phone; // Keep old value
                 }
                 break;
 
             case 'email':
                 if (value && !/^[a-zA-Z0-9._-]+@?[a-zA-Z0-9.-]*\.?[a-zA-Z]*$/.test(value)) {
-                    error = 'Enter valid email address';
+                    // error = 'Enter valid email address';
                     newValue = formData.email; // Keep old value
                 }
                 break;
 
             case 'city':
                 if (!/^[a-zA-Z\s]*$/.test(value)) {
-                    error = 'Only letters and spaces are allowed';
+                    // error = 'Only letters and spaces are allowed';
                     newValue = formData.city; // Keep old value
                 }
                 break;
 
             case 'pincode':
                 if (!/^\d{0,6}$/.test(value)) {
-                    error = 'Enter valid 6 digit pincode';
+                    // error = 'Enter valid 6 digit pincode';
                     newValue = formData.pincode; // Keep old value
                 }
                 break;
@@ -182,14 +211,14 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                 break;
             case 'ownerName':
                 if (!/^[a-zA-Z\s]*$/.test(value)) {
-                    error = 'Only letters and spaces are allowed';
+                    // error = 'Only letters and spaces are allowed';
                     newValue = formData.ownerName;
                 }
                 break;
 
             case 'password':
                 if (value && value.length < 8) {
-                    error = 'Password must be at least 8 characters';
+                    // error = 'Password must be at least 8 characters';
                 }
                 break;
 
@@ -258,7 +287,7 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         e.preventDefault();
 
         if (!validateForm()) {
-            toast.error('Please fix the errors before submitting');
+            // toast.error('Please fix the errors before submitting');
             return;
         }
 
@@ -317,7 +346,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
             }
         } catch (error) {
             console.error('Error submitting form:', error);
-            toast.error(error.response?.data?.message || 'Error registering business');
+            setErrorOverall(error.response?.data?.message || 'Error registering business');
+            // toast.error(error.response?.data?.message || 'Error registering business');
         }
     };
 
@@ -325,13 +355,13 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
         <CustomModal
             isOpen={isOpen}
             onClose={onClose}
-            classname="w-11/12 md:w-8/12 lg:w-6/12"
+            classname="w-full max-w-md"
         >
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="">
                 <div className="space-y-4">
                     {/* Business Information Section */}
-                    <div className="p-4 rounded-lg space-y-3">
-                        <h3 className="text-lg font-semibold text-gray-700">Business Information</h3>
+                    <div className="rounded-lg space-y-2">
+                        <h3 className="text-lg font-bold text-gray-700">Business Registration</h3>
                         <FloatingInput
                             name="businessName"
                             value={formData.businessName}
@@ -369,8 +399,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                     </div>
 
                     {/* Contact Information Section */}
-                    <div className="p-4 rounded-lg">
-                        <h3 className="text-lg font-semibold text-gray-700">Contact Information</h3>
+                    <div className="rounded-lg">
+                        {/* <h3 className="text-lg font-bold text-gray-700">Contact Information</h3> */}
                         <FloatingInput
                             name="phone"
                             value={formData.phone}
@@ -390,8 +420,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                     </div>
 
                     {/* Address Section */}
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <h3 className="text-lg font-semibold text-gray-700">Business Address</h3>
+                    <div className="rounded-lg space-y-2">
+                        {/* <h3 className="text-lg font-semibold text-gray-700">Business Address</h3> */}
                         <FloatingInput
                             name="address1"
                             value={formData.address1}
@@ -405,7 +435,7 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                             onChange={handleChange}
                             placeholder="Address Line 2 (Optional)"
                         />
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-2">
                             <FloatingInput
                                 name="city"
                                 value={formData.city}
@@ -425,8 +455,8 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                     </div>
 
                     {/* Account Security Section */}
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <h3 className="text-lg font-semibold text-gray-700">Account Security</h3>
+                    <div className="rounded-lg space-y-2">
+                        {/* <h3 className="text-lg font-semibold text-gray-700">Account Security</h3> */}
                         <FloatingInput
                             name="password"
                             value={formData.password}
@@ -446,10 +476,10 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                     </div>
 
                     {/* Photos Section */}
-                    <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3>
-                        <p className="text-sm text-gray-500">Upload 1-6 photos of your business</p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="rounded-lg space-y-2">
+                        {/* <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3> */}
+                        <p className="text-xs text-gray-500">Upload 1-6 photos of your business</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3">
                             {photosPreviews.map((photo, index) => (
                                 <div key={index} className="relative aspect-square">
                                     <img
@@ -477,16 +507,56 @@ const BusinessDetailForm = ({ isOpen, onClose, setShowLoginModal, setShowBusines
                                 </div>
                             )}
                         </div>
-                        {errors.photos && <p className="text-sm text-red-500">{errors.photos}</p>}
+                        <div className='h-2'>
+                            {errors.photos && <p className="text-xs text-red-500">{errors.photos}</p>}
+                        </div>
+                    </div>
+                    <div className="">
+                        <div className="flex items-center">
+                            <input
+                                type="checkbox"
+                                id="agreeToTerms"
+                                checked={formData.agreeToTerms}
+                                onChange={(e) => setFormData(prev => ({
+                                    ...prev,
+                                    agreeToTerms: e.target.checked
+                                }))}
+                                className="mt-1 mr-2"
+                            />
+                            <label htmlFor="agreeToTerms" className="text-xs text-gray-600">
+                                I agree to the <a href="/terms" className="blue-link">Terms and Conditions</a>
+                            </label>
+                        </div>
+                        <div className="h-2 mb-2">
+                            {errors.agreeToTerms && (
+                                <p className="text-xs text-red-500">{errors.agreeToTerms}</p>
+                            )}</div>
                     </div>
                 </div>
-
+                <div className="h-2 mb-2">
+                    {errorOverall && (
+                        <p className="text-red-500 text-xs text-center">{errorOverall}</p>
+                    )}
+                </div>
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs py-3 rounded-lg font-medium cursor-pointer transition-colors"
                 >
-                    Register Business
+                    REGISTER BUSINESS
                 </button>
+                <div className="text-center mt-4 text-xs text-gray-600">
+                    Already have an account?{' '}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            onClose();
+                            setShowLoginModal(true);
+                        }}
+                        className="text-purple-600 hover:text-purple-700 font-medium cursor-pointer"
+                    >
+                        Login
+                    </button>
+                </div>
             </form>
             <ToastContainer />
         </CustomModal>

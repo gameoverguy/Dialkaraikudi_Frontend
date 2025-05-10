@@ -335,6 +335,7 @@ const Header = () => {
         setShowLoginModal={setShowLoginModal}
         email={otpEmail}
         role={loginRole}
+        
       />
     </>
   );
