@@ -53,7 +53,10 @@ const Index = () => {
         serviceCategories={serviceCategories}
         />
         <Advertisment />
-        <Category2 />
+        <Category2
+        productCategories={productCategories}
+        serviceCategories={serviceCategories}
+         />
         <VideoAdertisment1 />
         <Category3 />
         <VideoAdertisment2 />
