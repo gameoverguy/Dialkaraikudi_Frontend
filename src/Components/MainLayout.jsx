@@ -16,17 +16,20 @@ const MainLayout = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Show only loader until loading is false
+  if (loading) {
+    return <Loader />;
+  }
+
+  // Main layout after loading is complete
   return (
-    <>
-      {loading && <Loader />}
-      <div className="w-full mx-auto">
-        <Header />
-        <div className="min-h-127 mx-auto">
-          <Outlet />
-        </div>
-        <Footer />
+    <div className="w-full mx-auto">
+      <Header />
+      <div className="min-h-127 mx-auto">
+        <Outlet />
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

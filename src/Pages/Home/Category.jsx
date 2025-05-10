@@ -29,7 +29,7 @@ function Category({ productCategories, serviceCategories }) {
                         ✕
                     </button>
                     <h2 className="text-2xl font-semibold mb-6 text-center">{title}</h2>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-1 md:gap-4 overflow-y-auto max-h-[calc(100vh-120px)] md:max-h-[70vh] p-2">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4 overflow-y-auto max-h-[calc(100vh-120px)] md:max-h-[70vh] p-4">
                         {categories.map((category) => (
                             <div
                                 key={category._id}
@@ -39,16 +39,16 @@ function Category({ productCategories, serviceCategories }) {
                                 }}
                                 className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                <div className=" w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300">
+                                <div className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300">
                                     <span className="text-2xl transform group-hover:scale-110 transition-all duration-300">
                                         <img
                                             src={category.iconUrl}
                                             alt={category.displayName}
-                                            className="w-[full] h-full text-[8px] rounded-xl p-1 md:p-2"
+                                            className="w-full h-full text-[8px] rounded-xl p-2"
                                         />
                                     </span>
                                 </div>
-                                <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
+                                <span className="text-xs text-center text-gray-400 font-semibold mt-2 transition-colors duration-300">
                                     {category.displayName}
                                 </span>
                             </div>
@@ -61,45 +61,49 @@ function Category({ productCategories, serviceCategories }) {
 
     const CategoryGrid = ({ categories, title }) => (
         <div className="category-section border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out px-6 bg-white w-full mx-4 md:m-0">
-            <div className="text-2xl font-semibold py-1 md:py-4 text-gray-800 flex justify-center items-center">
+            <div className="text-2xl font-semibold py-4 text-gray-800 flex justify-center items-center">
                 {title}
             </div>
-            <div className="grid grid-cols-4 md:grid-cols-6 py-2 md:py-0">
+            <div className="grid grid-cols-4 md:grid-cols-6 gap-4 py-4">
                 {categories && categories.length > 0 ? (
                     <>
                         {categories.slice(0, 11).map((category) => (
                             <div
                                 key={category._id}
                                 onClick={() => handleCategoryClick(category._id)}
-                                className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                className="group flex flex-col items-center justify-start h-full"
                             >
-                                <div className="w-[60px] h-[60px] mb-2 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 p-2">
+                                <div className="w-[60px] h-[60px] bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 hover:-translate-y-1 cursor-pointer">
                                     <span className="text-2xl transform group-hover:scale-110 transition-all duration-300">
                                         <img
                                             src={category.iconUrl}
                                             alt={category.displayName}
-                                            className="w-full h-full text-[8px] rounded-xl p-1"
+                                            className="w-full h-full text-[8px] rounded-xl p-2"
                                         />
                                     </span>
                                 </div>
-                                <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">   
-                                    {category.displayName}
-                                </span>
+                                <div className="h-12 flex items-center justify-center mt-2">
+                                    <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300 line-clamp-2">
+                                        {category.displayName}
+                                    </span>
+                                </div>
                             </div>
                         ))}
                         {categories.length > 11 && (
                             <div
                                 onClick={() => handleSeeAll(title.toLowerCase())}
-                                className="group flex flex-col items-center justify-start p-2 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                className="group flex flex-col items-center justify-start h-full"
                             >
-                                <div className="w-[60px] h-[60px] mb-2 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 p-2">
+                                <div className="w-[60px] h-[60px] rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-gradient-to-tr transition-all duration-300 hover:-translate-y-1 cursor-pointer">
                                     <span className="text-2xl transform group-hover:scale-110 transition-all duration-300">
-                                        <img src={menu} alt="" className="p-1" />
+                                        <img src={menu} alt="" className="p-2" />
                                     </span>
                                 </div>
-                                <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
-                                    See All
-                                </span>
+                                <div className="h-12 flex items-center justify-center mt-2">
+                                    <span className="text-xs text-center text-gray-400 font-semibold transition-colors duration-300">
+                                        See All
+                                    </span>
+                                </div>
                             </div>
                         )}
                     </>
