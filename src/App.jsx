@@ -8,7 +8,7 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
-import {AdminRoute, VendorRoute} from "./Components/AdminRoute";
+import {AdminRoute, VendorRoute} from "./Components/AdminRoute.jsx";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
