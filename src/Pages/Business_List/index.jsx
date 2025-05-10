@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../Components/Loader";
+import { FaFilter } from "react-icons/fa6";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ const Bussiness_List = () => {
   const { id } = useParams();
   const { handleOpenLoginModal } = useLoginModal();
 
+  const [activeFilter, setActiveFilter] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
+
   useEffect(() => {
     const fetchBusinesses = async () => {
       try {
@@ -46,6 +50,8 @@ const Bussiness_List = () => {
         if (id) {
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
+          console.log("if", res.data.data);
+          
         } else if (search.state) {
           const res = await axios.get(
             `${API}/business/search/${search.state.searchQuery}`
@@ -68,10 +74,35 @@ const Bussiness_List = () => {
     fetchBusinesses();
   }, [id, search.state]);
 
+  useEffect(() => {
+    if (!activeFilter) {
+      // Sort all data by reviewCount when no filter is active
+      const sorted = [...data].sort((a, b) => b.reviewCount - a.reviewCount);
+      setFilteredData(sorted);
+      return;
+    }
+  
+    const filtered = data.filter(business => {
+      if (activeFilter === 'top') {
+        return business.ratings >= 2;
+      }
+      return Math.floor(business.ratings) === activeFilter;
+    });
+  
+    // Sort filtered results by reviewCount
+    const sortedFiltered = filtered.sort((a, b) => b.reviewCount - a.reviewCount);
+    setFilteredData(sortedFiltered);
+  }, [activeFilter, data]);
+
+  const handleFilter = (rating) => {
+    setActiveFilter(activeFilter === rating ? null : rating);
+  };
+
   const cookies = Cookies.get("userToken");
+  const user = JSON.parse(sessionStorage.getItem("userData"));
 
   const handleShowContact = (id) => {
-    if (cookies) {
+    if (cookies && user) {
       setShowContact((prev) => (prev === id ? null : id)); // Toggle specific contact
     } else {
       toast.warning("Please Login to show contact number");
@@ -92,7 +123,7 @@ const Bussiness_List = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-       <Loader/>
+        <Loader />
       </div>
     );
   }
@@ -109,10 +140,10 @@ const Bussiness_List = () => {
         </div>
       </div>
 
-      <div className="flex cursor-pointer py-5 mb-5 shadow-2xl">
+      <div className="flex  py-5 mb-5 shadow-2xl">
         <div className="w-full xl:w-9/12 xl:mx-auto">
           <div className="flex justify-center items-center w-full flex-col">
-            <div className="md:p-4 w-full  xl:w-10/12">
+            <div className="md:p-2 w-full  xl:w-10/12">
               <div className="flex">
                 <Link
                   to="/"
@@ -129,16 +160,41 @@ const Bussiness_List = () => {
                   Best Businesses in Karaikudi
                 </h1>
               </div>
-              <div className="relative bg-white">
-                <div className="sticky top-20 bg-white py-2">
-                  {/* <button className="border border-gray-400 px-2 py-1 rounded">
-                  Filter
-                </button> */}
-                  <button
-                    className="absolute right-0 top-0 border border-gray-400 px-2 py-1 rounded md:mr-0"
-                    onClick={() => setFilterOpen(true)}
+              <div className="relative  bg-white">
+
+                <div className="sticky flex space-x-3 top-20 bg-white py-2">
+                  <button className="border flex items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                  onClick={()=>handleFilter(null)}
                   >
-                    All Filter
+                    Filter <FaFilter />
+                  </button>
+                  <button
+                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+            ${activeFilter === 5 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                    onClick={() => handleFilter(5)}
+                  >
+                    5 Star
+                  </button>
+                  <button
+                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+            ${activeFilter === 4 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                    onClick={() => handleFilter(4)}
+                  >
+                    4 Star
+                  </button>
+                  <button
+                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+            ${activeFilter === 3 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                    onClick={() => handleFilter(3)}
+                  >
+                    3 Star
+                  </button>
+                  <button
+                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+            ${activeFilter === 'top' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                    onClick={() => handleFilter('top')}
+                  >
+                    Top Rating
                   </button>
                 </div>
               </div>
@@ -147,18 +203,18 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-7 w-full md:w-[85%]  gap-5 flex flex-col md:p-4">
-              {data?.length === 0 ? (
+            <div className="mt-2 w-full md:w-[85%]  gap-5 flex flex-col md:p-4">
+              {filteredData?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
                     No businesses found in this category.
                   </p>
                 </div>
               ) : (
-                data.map((data, i) => (
+                filteredData.map((data, i) => (
                   <div
                     key={i}
-                    className="md:flex w-full md:gap-3 border border-gray-300 rounded-lg gap-2"
+                    className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2"
                   >
                     {/* Swiper Image Slider */}
                     {/* <div className="w-full md:w-[25%]">
@@ -193,8 +249,8 @@ const Bussiness_List = () => {
                       </div>
                       <p className="flex items-center">
                         <CiLocationOn />{" "}
-                        {data.address.formattedAddress ||
-                          data.address.addressArea}
+                        {data?.address?.formattedAddress ||
+                          data?.address?.addressArea}
                       </p>
                       {/* <div>
                                 <AmentiesModal

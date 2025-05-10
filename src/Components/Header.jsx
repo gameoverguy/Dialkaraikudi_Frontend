@@ -45,11 +45,12 @@ const Header = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("userData");
     Cookies.remove("userToken", {
+      path: "/", // Make sure this matches how it was set
       secure: true,
       sameSite: "Strict",
     });
     setUserData(null);
-    window.location.reload();
+    navigate("/"); // Or homepage
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -58,6 +59,12 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if the click is on the logout button or its children
+      const isLogoutClick = event.target.closest('button')?.textContent?.includes('Logout');
+      if (isLogoutClick) {
+        return; // Don't close dropdown if clicking logout
+      }
+  
       if (
         (desktopDropdownRef.current &&
           !desktopDropdownRef.current.contains(event.target)) ||
@@ -67,7 +74,7 @@ const Header = () => {
         setIsDropdownOpen(false);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -225,7 +232,7 @@ const Header = () => {
                         className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                       >
                         <CiLogout className="text-xl text-red-500" />
-                        <span>Logout</span>
+                        <span >Logout</span>
                       </button>
                     </div>
                   )}
