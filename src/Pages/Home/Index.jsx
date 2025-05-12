@@ -26,11 +26,15 @@ const Index = () => {
       try {
         const response = await axios.get(`${API}/categories`);
         const allCategories = response.data.data;
-        
+
         // Separate products and services based on category type
-        const products = allCategories.filter(cat => cat.categoryType === 'product');
-        const services = allCategories.filter(cat => cat.categoryType === 'service');
-        
+        const products = allCategories.filter(
+          (cat) => cat.categoryType === "product"
+        );
+        const services = allCategories.filter(
+          (cat) => cat.categoryType === "service"
+        );
+
         setProductCategories(products);
         setServiceCategories(services);
       } catch (error) {
@@ -44,19 +48,19 @@ const Index = () => {
     <>
       <div className="flex flex-col gap-5">
         <Carousel />
-        <Category 
+        <Category
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-        <Category1 
-        productCategories={productCategories}
-        serviceCategories={serviceCategories}
+        <Category1
+          productCategories={productCategories}
+          serviceCategories={serviceCategories}
         />
         <Advertisment />
         <Category2
-        productCategories={productCategories}
-        serviceCategories={serviceCategories}
-         />
+          productCategories={productCategories}
+          serviceCategories={serviceCategories}
+        />
         <VideoAdertisment1 />
         <Category3 />
         <VideoAdertisment2 />
