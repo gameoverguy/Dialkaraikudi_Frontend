@@ -80,12 +80,12 @@ const AdminLogin = () => {
         const response = await axios.post(`${API}/admin/login`, formData);
 
         if (response.data) {
-          const { token, admin } = response.data;
-          Cookies.set("adminToken", token, {
-            expires: 21,
-            secure: true,
-            sameSite: "Strict",
-          });
+          const { admin } = response.data;
+          // Cookies.set("adminToken", token, {
+          //   expires: 21,
+          //   secure: true,
+          //   sameSite: "Strict",
+          // });
           sessionStorage.setItem(
             "adminData",
             JSON.stringify({
@@ -212,8 +212,8 @@ const AdminLogin = () => {
         onClose={() => setShowOTPModal(false)}
         email={otpEmail}
         onVerificationSuccess={() => {
-          setShowOTPModal(false)
-          setOtpEmail("")
+          setShowOTPModal(false);
+          setOtpEmail("");
         }}
       />
 
@@ -231,7 +231,7 @@ const AdminLogin = () => {
         toastClassName="z-[9999]"
       />
     </div>
-  )
-}
+  );
+};
 
-export default AdminLogin
+export default AdminLogin;

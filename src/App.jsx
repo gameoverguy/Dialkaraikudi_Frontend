@@ -8,7 +8,7 @@ import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
-import {AdminRoute, VendorRoute} from "./Components/AdminRoute.jsx";
+import { AdminRoute, BusinessRoute } from "./Components/ProtectedRoutes.jsx";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -56,9 +56,9 @@ function App() {
             <Route
               path="/vendorpanel/:id"
               element={
-                <VendorRoute>
+                <BusinessRoute>
                   <VendorPanel />
-                </VendorRoute>
+                </BusinessRoute>
               }
             />
             <Route path="*" element={<NotFound />} />
