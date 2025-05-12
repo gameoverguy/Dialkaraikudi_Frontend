@@ -44,7 +44,7 @@ const VendorProfile = () => {
   const handleSubmit = async (formData) => {
     try {
       const response = await axios.put(`${API}/business/${id}`, formData);
-      if (response.data.message) {
+      if (response.data.success) {
         toast.success('Business details updated successfully', {
           position: "top-right",
           autoClose: 3000,
