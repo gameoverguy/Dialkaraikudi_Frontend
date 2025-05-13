@@ -16,12 +16,20 @@ import Category2 from "./Category2";
 import VideoAdertisment1 from "./VideoAdertisment1";
 import Category3 from "./Category3";
 import VideoAdertisment2 from "./VideoAdertisment2";
+axios.defaults.withCredentials = true;
 
 const Index = () => {
   const [productCategories, setProductCategories] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
 
   useEffect(() => {
+    const ClearAuthentication = async () => {
+      const response = await axios.post(`${API}/authentication/verifyToken`);
+      if (response.data.success) {
+        console.log("upto here");
+      }
+    };
+    ClearAuthentication();
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${API}/categories`);
