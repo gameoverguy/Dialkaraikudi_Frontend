@@ -141,9 +141,29 @@ const LocationTracker = ({ onLocationSelect }) => {
 
     if (error) {
         return (
-            <div className="text-red-500 text-sm flex items-center space-x-2">
-                <CiLocationOn className="text-xl" />
-                <span>{error}</span>
+            <div className="relative">
+                <div 
+                    className="text-red-500 text-sm flex items-center space-x-2" 
+                    onClick={() => setShowPopup(!showPopup)}
+                >
+                    <CiLocationOn className="text-xl" />
+                    <span className='hidden md:block'>{error}</span>
+                </div>
+    
+                {/* Error Popup for Mobile */}
+                {showPopup && (
+                    <div className="absolute top-full right-0 md:left-0 mt-2 w-48 md:w-64 bg-white rounded-lg shadow-lg p-3 border border-gray-200 z-50">
+                        <div className="mb-2">
+                            <span className="text-xs text-red-500">{error}</span>
+                        </div>
+                        <button
+                            onClick={() => setShowPopup(false)}
+                            className="w-full bg-gray-100 text-gray-700 px-3 py-1.5 rounded-md text-xs hover:bg-gray-200 transition-colors duration-200"
+                        >
+                            Close
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

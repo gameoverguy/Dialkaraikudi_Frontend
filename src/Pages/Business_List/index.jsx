@@ -8,7 +8,7 @@ import SwiperModal from "./Swiper";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import FilterModal from "./filter";
 import adds from "../../assets/adds.jpeg";
-import { IoIosStar } from "react-icons/io";
+import { IoIosStar, IoMdStar } from "react-icons/io";
 import axios from "axios";
 import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
 import coursal11 from "../../assets/coursal11.jpg";
@@ -51,7 +51,7 @@ const Bussiness_List = () => {
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
           console.log("if", res.data.data);
-          
+
         } else if (search.state) {
           const res = await axios.get(
             `${API}/business/search/${search.state.searchQuery}`
@@ -81,14 +81,14 @@ const Bussiness_List = () => {
       setFilteredData(sorted);
       return;
     }
-  
+
     const filtered = data.filter(business => {
       if (activeFilter === 'top') {
         return business.ratings >= 2;
       }
       return Math.floor(business.ratings) === activeFilter;
     });
-  
+
     // Sort filtered results by reviewCount
     const sortedFiltered = filtered.sort((a, b) => b.reviewCount - a.reviewCount);
     setFilteredData(sortedFiltered);
@@ -162,39 +162,44 @@ const Bussiness_List = () => {
               </div>
               <div className="relative  bg-white">
 
-                <div className="sticky flex space-x-3 top-20 bg-white py-2">
-                  <button className="border flex items-center gap-2 border-gray-400 px-2 py-1 rounded"
-                  onClick={()=>handleFilter(null)}
+                <div className="sticky flex space-x-3 top-20 bg-white py-2 px-2">
+                  <button className="hidden md:flex border  items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                    onClick={() => handleFilter(null)}
                   >
                     Filter <FaFilter />
                   </button>
+                  <button className="border flex md:hidden items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                    onClick={() => handleFilter(null)}
+                  >
+                     <FaFilter />
+                  </button>
                   <button
-                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 5 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(5)}
                   >
-                    5 Star
+                    5 <IoMdStar className="text-lg m-1 text-yellow-400"/>
                   </button>
                   <button
-                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 4 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(4)}
                   >
-                    4 Star
+                    4 <IoMdStar className="text-lg m-1 text-yellow-400"/>
                   </button>
                   <button
-                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 3 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(3)}
                   >
-                    3 Star
+                    3 <IoMdStar className="text-lg m-1 text-yellow-400"/>
                   </button>
                   <button
-                    className={`border border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
+                    className={`border flex border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 'top' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter('top')}
                   >
-                    Top Rating
+                    Top Rating 
                   </button>
                 </div>
               </div>
@@ -203,7 +208,7 @@ const Bussiness_List = () => {
                 filterOpen={filterOpen}
               />
             </div>
-            <div className="mt-2 w-full md:w-[85%]  gap-5 flex flex-col md:p-4">
+            <div className="mt-2 p-2 w-full md:w-[85%]  gap-5 flex flex-col md:p-4">
               {filteredData?.length === 0 ? (
                 <div className="text-center py-10">
                   <p className="text-gray-500">
@@ -229,29 +234,32 @@ const Bussiness_List = () => {
                     </div>
 
                     {/* Business Info */}
-                    <div className="mt-1 md:mt-0 w-full space-y-4 md:p-0 p-3">
-                      <h2
-                        className="text-xl font-semibold"
-                        onClick={() => handleBusinessClick(data._id)}
-                      >
-                        {data.businessName}
-                      </h2>
-                      <div className="flex items-center gap-2">
-                        <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
-                          {data.ratings}
-                          <IoIosStar
-                            size={18}
-                            color="#FFD700"
-                            className="inline"
-                          />
+                    <div className="w-full flex flex-col md:flex-row  justify-between p-1 md:p-3 md:pr-6">
+
+                      <div className="space-y-4 mt-1 md:mt-0 w-full p-2">
+                        <h2
+                          className="text-xl font-semibold"
+                          onClick={() => handleBusinessClick(data._id)}
+                        >
+                          {data.businessName}
+                        </h2>
+                        <div className="flex items-center gap-2">
+                          <div className="bg-[#287094] text-sm px-2 py-1 text-center rounded text-white flex items-center gap-1">
+                            {data.ratings}
+                            <IoIosStar
+                              size={18}
+                              color="#FFD700"
+                              className="inline"
+                            />
+                          </div>
+                          {data.reviewCount} Ratings
                         </div>
-                        {data.reviewCount} Ratings
+                        <p className="md:flex">
+                          <CiLocationOn className="text-lg" />
+                          {data?.address?.formattedAddress ||
+                            data?.address?.addressArea}
+                        </p>
                       </div>
-                      <p className="flex items-center">
-                        <CiLocationOn />{" "}
-                        {data?.address?.formattedAddress ||
-                          data?.address?.addressArea}
-                      </p>
                       {/* <div>
                                 <AmentiesModal
                                     data={data}
@@ -260,19 +268,19 @@ const Bussiness_List = () => {
                                 />
                             </div> */}
 
-                      <div className="text-sm flex flex-row gap-1">
+                      <div className="text-sm flex md:flex-col flex-row gap-2 text-nowrap md:justify-center px-2 pb-2">
                         <button
                           onClick={() => handleShowContact(data._id)}
-                          className="bg-[#287094] group flex items-center rounded pr-1 md:py-1 text-white cursor-pointer"
+                          className="bg-[#287094] group flex items-center rounded pr-1 md:py-1 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start"
                         >
-                          <span className="text-md text-white px-1">
+                          <span className="text-md text-white px-1 py-1">
                             <FaPhoneAlt className="p-1 text-xl" />
                           </span>
                           {showContact === data._id
                             ? data?.contactDetails?.phone
                             : "Show Number"}
                         </button>
-                        <button className="flex items-center border-gray-600 px-2 py-1 rounded bg-green-600 text-white cursor-pointer">
+                        <button className="flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start">
                           <span className="text-xl px-1 text-white">
                             <FaWhatsapp size={16} className="text-white" />
                           </span>{" "}
@@ -280,6 +288,7 @@ const Bussiness_List = () => {
                         </button>
                       </div>
                     </div>
+
                   </div>
                 ))
               )}

@@ -12,7 +12,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     description: business?.business?.description || '',
     phone: business?.business?.contactDetails?.phone || '',
     whatsapp: business?.business?.contactDetails?.whatsapp || '',
-    email: business?.business?.contactDetails?.email || '',
+    email: business?.business?.email || '',
     website: business?.business?.contactDetails?.website || ''
   });
   const [errors, setErrors] = useState({});
@@ -92,12 +92,12 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     e.preventDefault();
     if (validateForm()) {
       const updatedData = {
+        email: formData.email,
         businessName: formData.businessName,
         description: formData.description,
         contactDetails: {
           phone: formData.phone,
           whatsapp: formData.whatsapp,
-          email: formData.email,
           website: formData.website
         }
       };
@@ -141,7 +141,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           </div>
           <div className="flex items-center">
             <span className="font-medium">Email:</span>
-            <span className="ml-2">{business?.business?.contactDetails?.email}</span>
+            <span className="ml-2">{business?.business?.email}</span>
           </div>
 
           <div className="flex items-center">
