@@ -30,6 +30,7 @@ const Header = () => {
   const [showBusinessDetailForm, setShowBusinessDetailForm] = useState(false);
 
   const navigate = useNavigate();
+  console.log(businessData?.user_id);
 
   useEffect(() => {
     let isMounted = true;
@@ -64,12 +65,13 @@ const Header = () => {
     setBusinessData(null);
     navigate("/");
   };
-
-  const handleToBusinessDashboard = (businessData) => {
-    alert("Clicked");
-    console.log(businessData);
-    navigate(`/vendorpanel/${businessData.user_id}`);
-  };
+  // const handleToBusinessDashboard = () => {
+  //   if (businessData?.user_id) {
+  //     setIsDropdownOpen(false);
+  //     console.log("closed");
+  //     navigate(`/vendorpanel/${businessData.user_id}`);
+  //   }
+  // };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const desktopDropdownRef = useRef(null);
@@ -153,59 +155,35 @@ const Header = () => {
             {userData || businessData ? (
               <>
                 <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
-                  <div ref={desktopDropdownRef} className="relative">
+                  <div ref={desktopDropdownRef} className="relative flex items-center gap-4">
+                    {businessData?.user_id && (
+                      <Link
+                        to={`/vendorpanel/${businessData.user_id}`}
+                        className="text-gray-700 hover:text-emerald-600 transition-colors duration-200 text-sm font-medium"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
                     <div
                       className="flex items-center gap-2 cursor-pointer group"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                       <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                        {(businessData?.businessName || userData?.name || "U")
-                          .charAt(0)
-                          .toUpperCase()}
+                        {(businessData?.businessName || userData?.name || "U").charAt(0).toUpperCase()}
                       </div>
                       <span className="text-gray-800 font-semibold text-sm group-hover:text-emerald-600 transition">
-                        {businessData
-                          ? businessData.businessName
-                          : userData.name}
+                        {businessData ? businessData.businessName : userData?.name}
                       </span>
-                      <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
-                          isDropdownOpen ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
                     </div>
-
                     {isDropdownOpen && (
-                      <div className="absolute right-0 top-full w-26 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
-                        {businessData && (
-                          <button
-                            onClick={() =>
-                              handleToBusinessDashboard(businessData)
-                            }
-                            className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-t-md cursor-pointer"
-                          >
-                            <span className="text-sm font-medium">
-                              Dashboard
-                            </span>
-                          </button>
-                        )}
-                        <button
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-[999]">
+                        <div
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-lg cursor-pointer z-[9999]"
                         >
                           <CiLogout className="text-lg text-red-500" />
                           <span className="text-sm font-medium">Logout</span>
-                        </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -223,25 +201,27 @@ const Header = () => {
                       .charAt(0)
                       .toUpperCase()}{" "}
                   </div>
+                  {/* // Update the mobile dropdown menu */}
                   {isDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-26 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-                      {businessData && (
-                        <button
-                          onClick={() =>
-                            navigate(`/vendorpanel/${businessData.user_id}`)
-                          }
-                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg"
+                    <div className="absolute right-0 top-full min-w-[160px] mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-[999]">
+                      {businessData?.user_id && (
+                        <Link
+                          to={`/vendorpanel/${businessData.user_id}`}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-t-lg cursor-pointer"
                         >
-                          <span>Dashboard</span>
-                        </button>
+                          <span className="text-sm font-medium">Dashboard</span>
+                        </Link>
                       )}
-                      <button
+                      <div
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                        className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-b-lg cursor-pointer z-[999]"
                       >
-                        <CiLogout className="text-xl text-red-500" />
-                        <span>Logout</span>
-                      </button>
+                        <div className="flex items-center gap-2">
+                          <CiLogout className="text-lg text-red-500" />
+                          <span className="text-sm font-medium">Logout</span>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
