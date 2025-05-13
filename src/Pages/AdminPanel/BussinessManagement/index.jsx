@@ -321,6 +321,7 @@ const BusinessManagement = () => {
         const uploadedUrls = await uploadMultipleToCloudinary(formData.photos);
 
         const requestBody = {
+          email: formData.email,
           businessName: formData.name,
           description: formData.description,
           category: formData.category,

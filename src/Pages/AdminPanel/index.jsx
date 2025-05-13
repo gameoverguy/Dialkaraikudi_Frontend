@@ -146,7 +146,7 @@ const AdminPanel = () => {
                 ? "bg-[#0A8A3D]/10 text-[#0A8A3D]"
                 : hasSelectedChild
                 ? ""
-                : "hover:bg-gray-100"
+                : "hover:bg-[#9effc5]"
             }`}
           onClick={() =>
             item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)
