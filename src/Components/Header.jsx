@@ -5,7 +5,6 @@ import { IoSearchOutline } from "react-icons/io5";
 import { LuCircleUserRound } from "react-icons/lu";
 import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
-import { useRef } from "react";
 import { CiLogout } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
@@ -28,6 +27,7 @@ const Header = () => {
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [showUserBusinessModal, setShowUserBusinessModal] = useState(false);
   const [showBusinessDetailForm, setShowBusinessDetailForm] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   console.log(businessData?.user_id);
@@ -65,38 +65,6 @@ const Header = () => {
     setBusinessData(null);
     navigate("/");
   };
-  // const handleToBusinessDashboard = () => {
-  //   if (businessData?.user_id) {
-  //     setIsDropdownOpen(false);
-  //     console.log("closed");
-  //     navigate(`/vendorpanel/${businessData.user_id}`);
-  //   }
-  // };
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const desktopDropdownRef = useRef(null);
-  const mobileDropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const isLogoutClick = event.target
-        .closest("button")
-        ?.textContent?.includes("Logout");
-      if (isLogoutClick) return;
-
-      if (
-        (desktopDropdownRef.current &&
-          !desktopDropdownRef.current.contains(event.target)) ||
-        (mobileDropdownRef.current &&
-          !mobileDropdownRef.current.contains(event.target))
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -114,8 +82,8 @@ const Header = () => {
   return (
     <>
       <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
-        <div className="md:w-11/12 mx-auto flex">
-          <div className="w-full xl:w-7/12 flex space-x-6 items-center">
+        <div className="md:w-11/12 mx-auto flex justify-between items-center">
+          <div className="flex space-x-6 items-center">
             <Link to="/">
               <img
                 src={Logo}
@@ -145,7 +113,7 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="w-5/12 flex flex-row justify-end items-center gap-6">
+          <div className="flex items-center gap-6">
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
               <span>
                 <LocationTracker onLocationSelect={handleLocationSelect} />
@@ -153,99 +121,68 @@ const Header = () => {
             </button>
 
             {userData || businessData ? (
-              <>
-                <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
-                  <div ref={desktopDropdownRef} className="relative flex items-center gap-4">
-                    {businessData?.user_id && (
-                      <Link
-                        to={`/vendorpanel/${businessData.user_id}`}
-                        className="text-gray-700 hover:text-emerald-600 transition-colors duration-200 text-sm font-medium"
-                      >
-                        Dashboard
-                      </Link>
-                    )}
-                    <div
-                      className="flex items-center gap-2 cursor-pointer group"
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                        {(businessData?.businessName || userData?.name || "U").charAt(0).toUpperCase()}
-                      </div>
-                      <span className="text-gray-800 font-semibold text-sm group-hover:text-emerald-600 transition">
-                        {businessData ? businessData.businessName : userData?.name}
-                      </span>
-                    </div>
-                    {isDropdownOpen && (
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-[999]">
-                        <div
-                          onClick={handleLogout}
-                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-lg cursor-pointer z-[9999]"
-                        >
-                          <CiLogout className="text-lg text-red-500" />
-                          <span className="text-sm font-medium">Logout</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div
-                  className="md:hidden flex items-center gap-2 relative"
-                  ref={mobileDropdownRef}
-                >
-                  <div
-                    className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              <div className="hidden md:flex items-center gap-4">
+                {businessData?.user_id && (
+                  <Link
+                    to={`/vendorpanel/${businessData.user_id}`}
+                    className="text-gray-700 hover:text-emerald-600 transition-colors duration-200 text-sm font-medium"
                   >
-                    {(businessData?.businessName || userData?.name || "U")
-                      .charAt(0)
-                      .toUpperCase()}{" "}
-                  </div>
-                  {/* // Update the mobile dropdown menu */}
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 top-full min-w-[160px] mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-[999]">
-                      {businessData?.user_id && (
-                        <Link
-                          to={`/vendorpanel/${businessData.user_id}`}
-                          onClick={() => setIsDropdownOpen(false)}
-                          className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-t-lg cursor-pointer"
-                        >
-                          <span className="text-sm font-medium">Dashboard</span>
-                        </Link>
-                      )}
-                      <div
-                        onClick={handleLogout}
-                        className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-b-lg cursor-pointer z-[999]"
-                      >
-                        <div className="flex items-center gap-2">
-                          <CiLogout className="text-lg text-red-500" />
-                          <span className="text-sm font-medium">Logout</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                    Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-gray-700 hover:text-red-500 transition-colors duration-200 text-sm font-medium"
+                >
+                  <CiLogout className="text-lg" />
+                  Logout
+                </button>
+                <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
+                  {(businessData?.businessName || userData?.name || "U")
+                    .charAt(0)
+                    .toUpperCase()}
                 </div>
-              </>
+              </div>
             ) : (
-              <>
-                <button
-                  onClick={() => setShowUserBusinessModal(true)}
-                  className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
-                >
-                  <LuCircleUserRound className="text-xl" />
-                  <span>Login / Sign Up</span>
-                </button>
-                <button
-                  onClick={() => setShowUserBusinessModal(true)}
-                  className="block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors"
-                >
-                  <LuCircleUserRound />
-                </button>
-              </>
+              <button
+                onClick={() => setShowUserBusinessModal(true)}
+                className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
+              >
+                <LuCircleUserRound className="text-xl" />
+                <span>Login / Sign Up</span>
+              </button>
             )}
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-700 hover:text-emerald-500 transition-colors"
+              >
+                <svg
+                  className="w-6 h-6 fill-current"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {isMobileMenuOpen ? (
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829z"
+                    />
+                  ) : (
+                    <path
+                      fillRule="evenodd"
+                      d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+                    />
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
+        {/* Mobile Search */}
         <div className="lg:hidden relative w-full mt-3">
           <form onSubmit={handleSearch}>
             <input
@@ -264,6 +201,37 @@ const Header = () => {
             </button>
           </form>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-full right-0 left-0 bg-white shadow-md border-b border-gray-200 z-50">
+            <div className="px-4 py-3">
+              {businessData?.user_id && (
+                <Link
+                  to={`/vendorpanel/${businessData.user_id}`}
+                  className="block py-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
+                >
+                  Dashboard
+                </Link>
+              )}
+              {userData || businessData ? (
+                <button
+                  onClick={handleLogout}
+                  className="block py-2 text-gray-700 hover:text-red-500 transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowUserBusinessModal(true)}
+                  className="block py-2 text-gray-700 hover:text-emerald-500 transition-colors duration-200"
+                >
+                  Login / Sign Up
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {showUserBusinessModal && (
