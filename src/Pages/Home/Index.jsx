@@ -56,16 +56,25 @@ const Index = () => {
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
+        <div className="flex flex-col items-center justify-center gap-4"> 
+        <h1 className="text-3xl font-semibold text-green-800">Top Products</h1>
         <Advertisment />
+        </div>
+
+        
         <Category2
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
         <VideoAdertisment1 />
-        <Category3 />
-        <VideoAdertisment2 />
+        <div className="flex flex-col items-center justify-center gap-4"> 
+        <h1 className="text-3xl font-semibold text-cyan-700">Top Services</h1>
         <TopProducts />
-        <TopServices />
+        </div>
+        {/* <Category3 /> */}
+        <VideoAdertisment2 />
+        
+        {/* <TopServices /> */}
         <LimitedOffer />
       </div>
     </>
