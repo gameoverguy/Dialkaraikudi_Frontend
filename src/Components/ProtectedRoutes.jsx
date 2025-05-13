@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export const AdminRoute = ({ children }) => {
-  const [adminData, setAdminData] = useState(null);
+  const [adminData, setAdminData] = useState(undefined);
 
   useEffect(() => {
     setAdminData(sessionStorage.getItem("adminData"));
