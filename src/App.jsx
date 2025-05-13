@@ -3,12 +3,12 @@ import ScrollToTop from "./Components/ScrollToTop.jsx";
 import Bussiness_List from "./Pages/Business_List";
 import MainLayout from "./Components/MainLayout.jsx";
 import BusinessDetails from "./Pages/BusinessDetail/index.jsx";
-import HomePage from "./business/HomePage.jsx";
+import HomePage from "./Pages/Home/Index.jsx";
 import AdminPanel from "./Pages/AdminPanel/index.jsx";
 import { LoginModalProvider } from "./context/LoginContext.jsx";
 import ReviewPage from "./Pages/ReviewPage/index.jsx";
 import AdminLogin from "./Pages/AdminLogin/index.jsx";
-import {AdminRoute, VendorRoute} from "./Components/AdminRoute.jsx";
+import { AdminRoute, BusinessRoute } from "./Components/ProtectedRoutes.jsx";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -56,9 +56,9 @@ function App() {
             <Route
               path="/vendorpanel/:id"
               element={
-                <VendorRoute>
+                <BusinessRoute>
                   <VendorPanel />
-                </VendorRoute>
+                </BusinessRoute>
               }
             />
             <Route path="*" element={<NotFound />} />

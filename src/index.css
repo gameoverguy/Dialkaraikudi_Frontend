@@ -66,3 +66,7 @@ input[type="password"]::-webkit-textfield-decoration-container {
     animation-delay: 150ms;
   }
 }
+
+body {
+  overflow-x: hidden;
+}
