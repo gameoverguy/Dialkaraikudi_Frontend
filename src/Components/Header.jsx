@@ -29,6 +29,8 @@ const Header = () => {
   const [showUserBusinessModal, setShowUserBusinessModal] = useState(false);
   const [showBusinessDetailForm, setShowBusinessDetailForm] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     let isMounted = true;
 
@@ -53,19 +55,20 @@ const Header = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("userData");
     sessionStorage.removeItem("businessData");
-    Cookies.remove("userToken", {
-      path: "/",
-      secure: true,
-      sameSite: "Strict",
-    });
-    Cookies.remove("businessToken", {
-      path: "/",
-      secure: true,
-      sameSite: "Strict",
-    });
+    sessionStorage.removeItem("adminData");
+    Cookies.remove("userToken");
+    Cookies.remove("businessToken");
+    Cookies.remove("adminToken");
+
     setUserData(null);
     setBusinessData(null);
     navigate("/");
+  };
+
+  const handleToBusinessDashboard = (businessData) => {
+    alert("Clicked");
+    console.log(businessData);
+    navigate(`/vendorpanel/${businessData.user_id}`);
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -93,7 +96,6 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e) => {
@@ -113,7 +115,11 @@ const Header = () => {
         <div className="md:w-11/12 mx-auto flex">
           <div className="w-full xl:w-7/12 flex space-x-6 items-center">
             <Link to="/">
-              <img src={Logo} alt="Logo" className="h-10 md:h-18 my-0 object-contain" />
+              <img
+                src={Logo}
+                alt="Logo"
+                className="h-10 md:h-18 my-0 object-contain"
+              />
             </Link>
             <div className="hidden md:block">
               <LocationTracker onLocationSelect={handleLocationSelect} />
@@ -153,19 +159,29 @@ const Header = () => {
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                       <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                        {((businessData?.businessName || userData?.name) || 'U').charAt(0).toUpperCase()}
+                        {(businessData?.businessName || userData?.name || "U")
+                          .charAt(0)
+                          .toUpperCase()}
                       </div>
                       <span className="text-gray-800 font-semibold text-sm group-hover:text-emerald-600 transition">
-                        {businessData ? businessData.businessName : userData.name}
+                        {businessData
+                          ? businessData.businessName
+                          : userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
+                          isDropdownOpen ? "rotate-180" : ""
+                        }`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </div>
 
@@ -173,11 +189,14 @@ const Header = () => {
                       <div className="absolute right-0 top-full w-26 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
                         {businessData && (
                           <button
-                            onClick={()=> {
-                              navigate(`/vendorpanel/${businessData.user_id}`)}}
+                            onClick={() =>
+                              handleToBusinessDashboard(businessData)
+                            }
                             className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-t-md cursor-pointer"
                           >
-                            <span className="text-sm font-medium">Dashboard</span>
+                            <span className="text-sm font-medium">
+                              Dashboard
+                            </span>
                           </button>
                         )}
                         <button
@@ -192,17 +211,25 @@ const Header = () => {
                   </div>
                 </div>
 
-                <div className="md:hidden flex items-center gap-2 relative" ref={mobileDropdownRef}>
+                <div
+                  className="md:hidden flex items-center gap-2 relative"
+                  ref={mobileDropdownRef}
+                >
                   <div
                     className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    {((businessData?.businessName || userData?.name) || 'U').charAt(0).toUpperCase()}                  </div>
+                    {(businessData?.businessName || userData?.name || "U")
+                      .charAt(0)
+                      .toUpperCase()}{" "}
+                  </div>
                   {isDropdownOpen && (
                     <div className="absolute right-0 top-full mt-2 w-26 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
                       {businessData && (
                         <button
-                          onClick={() => navigate(`/vendorpanel/${businessData.user_id}`)}
+                          onClick={() =>
+                            navigate(`/vendorpanel/${businessData.user_id}`)
+                          }
                           className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg"
                         >
                           <span>Dashboard</span>
