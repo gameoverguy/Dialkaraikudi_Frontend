@@ -98,11 +98,11 @@ const Bussiness_List = () => {
     setActiveFilter(activeFilter === rating ? null : rating);
   };
 
-  const cookies = Cookies.get("userToken");
+  // const cookies = Cookies.get("userToken");
   const user = JSON.parse(sessionStorage.getItem("userData"));
 
   const handleShowContact = (id) => {
-    if (cookies && user) {
+    if (user) {
       setShowContact((prev) => (prev === id ? null : id)); // Toggle specific contact
     } else {
       toast.warning("Please Login to show contact number");
@@ -113,9 +113,9 @@ const Bussiness_List = () => {
   };
 
   const handleWhatsAppClick = (whatsappNumber) => {
-    if (cookies && user) {
+    if (user) {
       // Format the WhatsApp number and create the chat URL
-      const formattedNumber = whatsappNumber.replace(/\D/g, '');
+      const formattedNumber = whatsappNumber?.replace(/\D/g, '');
       const whatsappUrl = `https://wa.me/${formattedNumber}`;
       window.open(whatsappUrl, '_blank');
     } else {
@@ -302,9 +302,10 @@ const Bussiness_List = () => {
                           <span className="text-xl px-1 text-white">
                             <FaWhatsapp size={16} className="text-white" />
                           </span>
-                          {showContact === data._id
+                          {/* {showContact === data._id
                             ? data?.contactDetails?.whatsapp
-                            : "WhatsApp"}
+                            : "WhatsApp"} */}
+                            Whatsapp
                         </button>
                       </div>
                     </div>

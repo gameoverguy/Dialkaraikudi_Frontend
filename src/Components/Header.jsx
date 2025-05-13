@@ -22,6 +22,7 @@ const Header = () => {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [businessData, setBusinessData] = useState(null);
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
@@ -32,9 +33,16 @@ const Header = () => {
     let isMounted = true;
 
     const storedUserData = sessionStorage.getItem("userData");
+    const storedBusinessData = sessionStorage.getItem("businessData");
+
     if (storedUserData && isMounted) {
       const parsedData = JSON.parse(storedUserData);
       setUserData(parsedData);
+    }
+
+    if (storedBusinessData && isMounted) {
+      const parsedData = JSON.parse(storedBusinessData);
+      setBusinessData(parsedData);
     }
 
     return () => {
@@ -44,13 +52,20 @@ const Header = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("userData");
+    sessionStorage.removeItem("businessData");
     Cookies.remove("userToken", {
-      path: "/", // Make sure this matches how it was set
+      path: "/",
+      secure: true,
+      sameSite: "Strict",
+    });
+    Cookies.remove("businessToken", {
+      path: "/",
       secure: true,
       sameSite: "Strict",
     });
     setUserData(null);
-    navigate("/"); // Or homepage
+    setBusinessData(null);
+    navigate("/");
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -59,13 +74,10 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the click is on the logout button or its children
       const isLogoutClick = event.target
         .closest("button")
         ?.textContent?.includes("Logout");
-      if (isLogoutClick) {
-        return; // Don't close dropdown if clicking logout
-      }
+      if (isLogoutClick) return;
 
       if (
         (desktopDropdownRef.current &&
@@ -78,14 +90,8 @@ const Header = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleLocationSelect = (location) => {
-    console.log("Selected location:", location);
-  };
 
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -93,12 +99,12 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate("/businesslist", {
-        state: {
-          searchQuery,
-        },
-      });
+      navigate("/businesslist", { state: { searchQuery } });
     }
+  };
+
+  const handleLocationSelect = (location) => {
+    console.log("Selected location:", location);
   };
 
   return (
@@ -106,20 +112,12 @@ const Header = () => {
       <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
         <div className="md:w-11/12 mx-auto flex">
           <div className="w-full xl:w-7/12 flex space-x-6 items-center">
-            {/* Logo */}
             <Link to="/">
-              <img
-                src={Logo}
-                alt="Logo"
-                className="h-10 md:h-18 my-0 object-contain"
-              />
+              <img src={Logo} alt="Logo" className="h-10 md:h-18 my-0 object-contain" />
             </Link>
-            {/* Location Tracker */}
             <div className="hidden md:block">
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </div>
-
-            {/* Search Bar */}
             <div className="hidden lg:block relative w-full">
               <form onSubmit={handleSearch}>
                 <input
@@ -129,7 +127,6 @@ const Header = () => {
                   placeholder="Search for services, products, brands..."
                   className="w-full pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
                 />
-                {/* <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" /> */}
                 <button
                   type="submit"
                   className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
@@ -140,51 +137,15 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Right Section */}
           <div className="w-5/12 flex flex-row justify-end items-center gap-6">
-            {/* Mobile Location */}
             <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
               <span>
                 <LocationTracker onLocationSelect={handleLocationSelect} />
               </span>
             </button>
 
-            {/* Add business button */}
-            {/* <Link
-              to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
-              onClick={(e) => {
-                if (!userData) {
-                  e.preventDefault();
-                  setShowLoginModal(true);
-                }
-              }}
-              className="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
-            >
-              {userData && userData.hasBusiness ? (
-                <span className="text-sm font-medium">My Business Profile</span>
-              ) : (
-                <>
-                  +<span className="text-sm font-medium">Add Business</span>
-                </>
-              )}
-            </Link> */}
-            {/* <Link
-                    userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
-                    ick={(e) => {
-                      !userData) {
-                        eventDefault();
-                        howLoginModal(true);
-                                                             sName="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                                     rData && userData.hasBusiness ? (
-                      n className="text-sm font-medium">My Business Profile</span>
-                    (
-                      span className="text-sm font-medium">Add Business</span></>
-                                      nk> */}
-
-            {/* Auth Section */}
-            {userData ? (
+            {userData || businessData ? (
               <>
-                {/* Desktop Profile */}
                 <div className="hidden md:flex items-center gap-4 relative bg-white rounded-2xl px-3 py-2">
                   <div ref={desktopDropdownRef} className="relative">
                     <div
@@ -192,30 +153,33 @@ const Header = () => {
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                       <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                        {userData.name.charAt(0).toUpperCase()}
+                        {((businessData?.businessName || userData?.name) || 'U').charAt(0).toUpperCase()}
                       </div>
                       <span className="text-gray-800 font-semibold text-sm group-hover:text-emerald-600 transition">
-                        {userData.name}
+                        {businessData ? businessData.businessName : userData.name}
                       </span>
                       <svg
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
-                          isDropdownOpen ? "rotate-180" : ""
-                        }`}
+                        className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                         viewBox="0 0 24 24"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 9l-7 7-7-7"
-                        />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
 
                     {isDropdownOpen && (
-                      <div className="absolute right-0 top-full w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
+                      <div className="absolute right-0 top-full w-26 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 animate-fadeIn">
+                        {businessData && (
+                          <button
+                            onClick={()=> {
+                              navigate(`/vendorpanel/${businessData.user_id}`)}}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-t-md cursor-pointer"
+                          >
+                            <span className="text-sm font-medium">Dashboard</span>
+                          </button>
+                        )}
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
@@ -228,29 +192,22 @@ const Header = () => {
                   </div>
                 </div>
 
-                {/* Mobile Profile */}
-                <div
-                  className="md:hidden flex items-center gap-2 relative"
-                  ref={mobileDropdownRef}
-                >
-                  <Link
-                    to={
-                      userData.hasBusiness
-                        ? "/business-profile"
-                        : "/add-business"
-                    }
-                    className="flex md:hidden items-center justify-center w-8 h-8 bg-[#ee6510] hover:bg-[#ee2314] text-white rounded-full transition-colors duration-200 pb-1"
-                  >
-                    {userData.hasBusiness ? "B" : "+"}
-                  </Link>
+                <div className="md:hidden flex items-center gap-2 relative" ref={mobileDropdownRef}>
                   <div
                     className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white font-semibold text-sm"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    {userData.name.charAt(0).toUpperCase()}
-                  </div>
+                    {((businessData?.businessName || userData?.name) || 'U').charAt(0).toUpperCase()}                  </div>
                   {isDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                    <div className="absolute right-0 top-full mt-2 w-26 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                      {businessData && (
+                        <button
+                          onClick={() => navigate(`/vendorpanel/${businessData.user_id}`)}
+                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg"
+                        >
+                          <span>Dashboard</span>
+                        </button>
+                      )}
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
@@ -264,7 +221,6 @@ const Header = () => {
               </>
             ) : (
               <>
-                {/* Desktop Login */}
                 <button
                   onClick={() => setShowUserBusinessModal(true)}
                   className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
@@ -272,7 +228,6 @@ const Header = () => {
                   <LuCircleUserRound className="text-xl" />
                   <span>Login / Sign Up</span>
                 </button>
-                {/* Mobile Login */}
                 <button
                   onClick={() => setShowUserBusinessModal(true)}
                   className="block md:hidden text-2xl text-gray-700 hover:text-emerald-500 transition-colors"
@@ -284,7 +239,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Search */}
         <div className="lg:hidden relative w-full mt-3">
           <form onSubmit={handleSearch}>
             <input
@@ -305,7 +259,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Modals */}
       {showUserBusinessModal && (
         <LoginModal
           isOpen={showUserBusinessModal}
