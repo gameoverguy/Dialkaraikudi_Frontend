@@ -146,18 +146,22 @@ const Header = () => {
             </button>
 
             {/* Add business button */}
-              {/* <Link
-                    userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
-                    ick={(e) => {
-                      !userData) {
-                        eventDefault();
-                        howLoginModal(true);
-                                                             sName="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
-                                     rData && userData.hasBusiness ? (
-                      n className="text-sm font-medium">My Business Profile</span>
-                    (
-                      span className="text-sm font-medium">Add Business</span></>
-                                      nk> */}
+            <Link
+              to={userData ? (userData.hasBusiness ? "/business-profile" : "/add-business") : "#"}
+              onClick={(e) => {
+                if (!userData) {
+                  e.preventDefault();
+                  setShowLoginModal(true);
+                }
+              }}
+              className="hidden md:flex justify-center items-center gap-2 bg-[#ee6510] hover:bg-[#ee2314] text-white px-4 py-2 rounded-lg transition-colors duration-200"
+            >
+              {userData && userData.hasBusiness ? (
+                <span className="text-sm font-medium">My Business Profile</span>
+              ) : (
+                <>+<span className="text-sm font-medium">Add Business</span></>
+              )}
+            </Link>
 
             {/* Auth Section */}
             {userData ? (
@@ -242,7 +246,7 @@ const Header = () => {
                   className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
                 >
                   <LuCircleUserRound className="text-xl" />
-                  <span>Login / Sign Up</span>
+                  <span>Login</span>
                 </button>
                 {/* Mobile Login */}
                 <button
