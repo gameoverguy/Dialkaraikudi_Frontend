@@ -7,8 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { API } from "../../../config/config";
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from "@react-oauth/google";
 
 const UserLogin = ({
   isOpen,
@@ -17,7 +16,7 @@ const UserLogin = ({
   setIsSignupOpen,
   setIsForgotPasswordOpen,
   setShowBusinessDetailForm,
-  role
+  role,
 }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -47,8 +46,8 @@ const UserLogin = ({
         emailValue.length > 50
           ? "Email must not exceed 50 characters"
           : emailValue.includes("@") && !emailRegex.test(emailValue)
-            ? "Please enter a valid email"
-            : "";
+          ? "Please enter a valid email"
+          : "";
       setErrors((prev) => ({ ...prev, email: errorMessage }));
     }
 
@@ -71,19 +70,19 @@ const UserLogin = ({
       email: !formData.email
         ? "Email is required"
         : formData.email.length < 10
-          ? "Email must be at least 10 characters"
-          : formData.email.length > 50
-            ? "Email must not exceed 50 characters"
-            : !emailRegex.test(formData.email)
-              ? "Please enter a valid email"
-              : "",
+        ? "Email must be at least 10 characters"
+        : formData.email.length > 50
+        ? "Email must not exceed 50 characters"
+        : !emailRegex.test(formData.email)
+        ? "Please enter a valid email"
+        : "",
       password: !formData.password
         ? "Password is required"
         : formData.password.length < 8
-          ? "Password must be at least 8 characters"
-          : formData.password.length > 20
-            ? "Password must not exceed 20 characters"
-            : "",
+        ? "Password must be at least 8 characters"
+        : formData.password.length > 20
+        ? "Password must not exceed 20 characters"
+        : "",
     };
 
     setErrors(newErrors);
@@ -92,16 +91,16 @@ const UserLogin = ({
     if (!newErrors.email && !newErrors.password) {
       try {
         setLoading(true);
-        const endpoint = role === 'business' ? `${API}/business/login` : `${API}/user/login`;
-        const response = await axios.post(
-          endpoint,
-          {
-            email: formData.email,
-            password: formData.password,
-          }
-        );
+        const endpoint =
+          role === "business" ? `${API}/business/login` : `${API}/user/login`;
+        const response = await axios.post(endpoint, {
+          email: formData.email,
+          password: formData.password,
+        });
 
         const data = response.data;
+        console.log(data);
+
         if (data && data.token) {
           const userData = data.user || data.business || {};
 
@@ -112,7 +111,7 @@ const UserLogin = ({
           // });
 
           sessionStorage.setItem(
-            role === 'business' ? "businessData" : "userData",
+            role === "business" ? "businessData" : "userData",
             JSON.stringify({
               user_id: userData.id || userData._id,
               name: userData.name || "",
@@ -124,7 +123,7 @@ const UserLogin = ({
           toast.success("Login successful!");
           setTimeout(() => {
             setShowLoginModal(false);
-            if (role === 'business') {
+            if (role === "business") {
               const userId = userData.id || userData._id;
               window.location.href = `/vendorpanel/${userId}`;
             }
@@ -148,7 +147,7 @@ const UserLogin = ({
 
   const handleSignupClick = () => {
     onClose();
-    if (role === 'business') {
+    if (role === "business") {
       // Open BusinessDetailForm modal
       setShowBusinessDetailForm(true);
     } else if (setIsSignupOpen) {
@@ -173,7 +172,7 @@ const UserLogin = ({
       >
         <div className="p-2">
           <h1 className="text-lg text-center font-bold text-gray-800 mb-4">
-            {role === 'business' ? 'Business Login' : 'Member Login'}
+            {role === "business" ? "Business Login" : "Member Login"}
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="space-y-6">
@@ -223,10 +222,11 @@ const UserLogin = ({
             <button
               type="submit"
               disabled={loading}
-              className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${loading
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-purple-700 cursor-pointer"
-                }`}
+              className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${
+                loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-purple-700 cursor-pointer"
+              }`}
             >
               {loading ? "LOGGING IN..." : "LOGIN"}
             </button>
@@ -256,10 +256,10 @@ const UserLogin = ({
           </div> */}
 
           {/* <div className="mt-2"> */}
-            {/* <div className="relative group cursor-pointer overflow-hidden rounded-lg"> */}
-              {/* <div className="absolute inset-0 w-full h-full transition duration-300"></div> */}
-              {/* <div className="border border-gray-300 rounded-lg p-0.5 transition duration-300 group-hover:border-gray-400"> */}
-              {/* <GoogleLogin
+          {/* <div className="relative group cursor-pointer overflow-hidden rounded-lg"> */}
+          {/* <div className="absolute inset-0 w-full h-full transition duration-300"></div> */}
+          {/* <div className="border border-gray-300 rounded-lg p-0.5 transition duration-300 group-hover:border-gray-400"> */}
+          {/* <GoogleLogin
                 onSuccess={credentialResponse => {
                   const credentialResponsedecoded = jwtDecode(credentialResponse.credential);
                   console.log(credentialResponsedecoded);
@@ -278,8 +278,8 @@ const UserLogin = ({
                   className: "flex items-center justify-center w-full py-2.5 px-4"
                 }}
               /> */}
-              {/* </div> */}
-            {/* </div> */}
+          {/* </div> */}
+          {/* </div> */}
           {/* </div> */}
         </div>
       </CustomModal>
