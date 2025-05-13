@@ -243,6 +243,7 @@ const AdminPanel = () => {
   const handleLogout = () => {
     // Clear admin token
     Cookies.remove("adminToken");
+    sessionStorage.removeItem("adminData");
     // Navigate to admin login
     localStorage.setItem("selectedMenuItem", "1");
     navigate("/adminlogin");
