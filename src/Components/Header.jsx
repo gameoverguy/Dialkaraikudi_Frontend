@@ -270,7 +270,7 @@ const Header = () => {
                   className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
                 >
                   <LuCircleUserRound className="text-xl" />
-                  <span>Login</span>
+                  <span>Login / Sign Up</span>
                 </button>
                 {/* Mobile Login */}
                 <button
