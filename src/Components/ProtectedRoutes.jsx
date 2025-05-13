@@ -20,11 +20,15 @@ export const AdminRoute = ({ children }) => {
 };
 
 export const BusinessRoute = ({ children }) => {
-  const [businessData, setBusinessData] = useState(null);
+  const [businessData, setBusinessData] = useState(undefined);
 
   useEffect(() => {
     setBusinessData(sessionStorage.getItem("businessData"));
   }, []);
+
+  if (businessData === undefined) {
+    return null; // or a loading spinner while checking sessionStorage
+  }
 
   if (!businessData) {
     return <Navigate to="/" replace />;
