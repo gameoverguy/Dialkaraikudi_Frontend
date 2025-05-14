@@ -18,6 +18,7 @@ import { useLoginModal } from "../../context/LoginContext";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../Components/Loader";
 import { FaFilter } from "react-icons/fa6";
+import FloatingAdBalloon from "../../Components/FloatAd";
 
 const Bussiness_List = () => {
   const navigate = useNavigate();
@@ -323,6 +324,7 @@ const Bussiness_List = () => {
         </div>
         <ToastContainer />
       </div>
+      <FloatingAdBalloon />
     </>
   );
 };
