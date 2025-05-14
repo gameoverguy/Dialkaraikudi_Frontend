@@ -224,19 +224,14 @@ const VendorPanel = () => {
         console.log(response.data);
 
         if (response.data.success) {
-          sessionStorage.removeItem("userData");
-          sessionStorage.removeItem("businessData");
+          localStorage.removeItem("userData");
+          localStorage.removeItem("businessData");
           sessionStorage.removeItem("adminData");
           localStorage.setItem("selectedMenuItem", "1");
           navigate("/");
         }
       } catch (error) {
         console.log(error);
-        // sessionStorage.clear();
-        // localStorage.clear();
-        // setUserData(null);
-        // setBusinessData(null);
-        // navigate("/");
       }
     };
 

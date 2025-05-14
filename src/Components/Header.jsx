@@ -32,14 +32,12 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigate = useNavigate();
-  console.log(businessData?.user_id);
-  console.log(businessData);
 
   useEffect(() => {
     let isMounted = true;
 
-    const storedUserData = sessionStorage.getItem("userData");
-    const storedBusinessData = sessionStorage.getItem("businessData");
+    const storedUserData = localStorage.getItem("userData");
+    const storedBusinessData = localStorage.getItem("businessData");
 
     console.log(storedUserData, storedBusinessData);
 
@@ -68,8 +66,8 @@ const Header = () => {
         console.log(response.data);
 
         if (response.data.success) {
-          sessionStorage.removeItem("userData");
-          sessionStorage.removeItem("businessData");
+          localStorage.removeItem("userData");
+          localStorage.removeItem("businessData");
           sessionStorage.removeItem("adminData");
           setUserData(null);
           setBusinessData(null);
@@ -77,18 +75,10 @@ const Header = () => {
         }
       } catch (error) {
         console.log(error);
-        // sessionStorage.clear();
-        // localStorage.clear();
-        // setUserData(null);
-        // setBusinessData(null);
-        // navigate("/");
       }
     };
 
     clearAuthentication();
-    // sessionStorage.removeItem("userData");
-    // sessionStorage.removeItem("businessData");
-    // sessionStorage.removeItem("adminData");
   };
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,25 +123,24 @@ const Header = () => {
             {/* <div className="hidden md:block">
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </div> */}
-           
           </div>
           <div className="hidden md:block relative w-6/12 xl:w-4/12">
-              <form onSubmit={handleSearch}>
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for services, products, brands..."
-                  className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
-                />
-                <button
-                  type="submit"
-                  className="absolute top-1/2 -translate-y-1/2 right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
-                >
-                  <IoSearchOutline className="" />
-                </button>
-              </form>
-            </div>
+            <form onSubmit={handleSearch}>
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for services, products, brands..."
+                className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+              />
+              <button
+                type="submit"
+                className="absolute top-1/2 -translate-y-1/2 right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
+              >
+                <IoSearchOutline className="" />
+              </button>
+            </form>
+          </div>
 
           <div className="flex items-center gap-6">
             {/* <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">

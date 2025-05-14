@@ -10,29 +10,25 @@ const MainLayout = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const clearAuthentication = async () => {
-      try {
-        const response = await axios.get(`${API}/authentication/verifytoken`, {
-          withCredentials: true, // needed to send cookies
-        });
-
-        if (!response.data.success) {
-          sessionStorage.clear(); // ✅ Clear sessionStorage
-          localStorage.clear(); // ✅ Optional: clear localStorage too
-        }
-
-        // optionally handle logged-in user info
-        // console.log("User is logged in:", response.data.user);
-      } catch (error) {
-        // On error (e.g., token expired or network fail), treat as logged out
-        console.log(error);
-
-        sessionStorage.clear();
-        localStorage.clear();
-      }
-    };
-
-    clearAuthentication();
+    // const clearAuthentication = async () => {
+    //   try {
+    //     const response = await axios.get(`${API}/authentication/verifytoken`, {
+    //       withCredentials: true, // needed to send cookies
+    //     });
+    //     if (!response.data.isTokenValid) {
+    //       sessionStorage.clear(); // ✅ Clear sessionStorage
+    //       localStorage.clear(); // ✅ Optional: clear localStorage too
+    //     }
+    //     // optionally handle logged-in user info
+    //     // console.log("User is logged in:", response.data.user);
+    //   } catch (error) {
+    //     // On error (e.g., token expired or network fail), treat as logged out
+    //     console.log(error);
+    //     sessionStorage.clear();
+    //     localStorage.clear();
+    //   }
+    // };
+    // clearAuthentication();
   }, []);
 
   useEffect(() => {

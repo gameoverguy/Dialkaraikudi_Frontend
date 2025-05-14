@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { API } from "../../../config/config";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 const UserLogin = ({
   isOpen,
@@ -23,6 +24,8 @@ const UserLogin = ({
   const [errorOverall, setErrorOverall] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isOpen) {
@@ -99,12 +102,11 @@ const UserLogin = ({
         });
 
         const data = response.data;
-        console.log(data);
 
         if (data && data.token) {
           const userData = data.user || data.business || {};
 
-          sessionStorage.setItem(
+          localStorage.setItem(
             role === "business" ? "businessData" : "userData",
             JSON.stringify({
               user_id: userData.id || userData._id,
@@ -115,13 +117,19 @@ const UserLogin = ({
           );
 
           toast.success("Login successful!");
+          console.log("test 1");
+
           setTimeout(() => {
+            console.log("test 2");
             setShowLoginModal(false);
             if (role === "business") {
+              console.log("test 3");
               const userId = userData.id || userData._id;
-              window.location.href = `/vendorpanel/${userId}`;
+              //window.location.href = `/vendorpanel/${userId}`;
+              navigate(`/vendorpanel/${userId}`);
             }
-          }, 1000);
+          }, 500);
+          console.log("test 4");
         } else {
           throw new Error("Invalid response format");
         }

@@ -23,7 +23,7 @@ export const BusinessRoute = ({ children }) => {
   const [businessData, setBusinessData] = useState(undefined);
 
   useEffect(() => {
-    setBusinessData(sessionStorage.getItem("businessData"));
+    setBusinessData(localStorage.getItem("businessData"));
   }, []);
 
   if (businessData === undefined) {
