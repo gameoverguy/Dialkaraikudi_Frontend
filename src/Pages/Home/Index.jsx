@@ -23,13 +23,18 @@ const Index = () => {
   const [serviceCategories, setServiceCategories] = useState([]);
 
   useEffect(() => {
-    const ClearAuthentication = async () => {
-      const response = await axios.post(`${API}/authentication/verifyToken`);
-      if (response.data.success) {
-        console.log("upto here");
-      }
-    };
-    ClearAuthentication();
+    // const ClearAuthentication = async () => {
+    //   try {
+    //     const response = await axios.post(`${API}/authentication/verifyToken`);
+    //     console.log(response.data);
+    //     if (response.data.success) {
+    //       console.log(response.data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching categories:", error.response.data);
+    //   }
+    // };
+    // ClearAuthentication();
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${API}/categories`);
