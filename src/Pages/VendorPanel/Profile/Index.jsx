@@ -10,6 +10,7 @@ import VerificationStatus from './components/VerificationStatus';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loader from '../../../Components/Loader';
+import BusinessImages from './components/BusinessImages';
 
 const VendorProfile = () => {
   const { id } = useParams();
@@ -75,24 +76,13 @@ const VendorProfile = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    
+      <ToastContainer />
       <div className="p-2">
-      <div className='bg-white shadow rounded mb-4 p-4'>
-        <h1 className='mb-2 text-2xl font-bold '>Profile</h1>
-        <p>The profile section allows vendors to manage business details and update address information, ensuring accurate contact data and a professional presence on the platform.</p>
-      </div>
+        <div className='bg-white shadow rounded mb-4 p-4'>
+          <h1 className='mb-2 text-2xl font-bold'>Profile</h1>
+          <p>The profile section allows vendors to manage business details and update address information, ensuring accurate contact data and a professional presence on the platform.</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <BusinessDetails
             business={business}
@@ -112,8 +102,15 @@ const VendorProfile = () => {
             fetchBusinessDetails={fetchBusinessDetails}
             onSubmit={handleSubmit}
           />
+         
           <VerificationStatus business={business} />
         </div>
+        
+        <BusinessImages
+            business={business}
+            onEdit={handleEdit}
+            onSubmit={handleSubmit}
+          />
       </div>
     </>
   );

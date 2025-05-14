@@ -1,12 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+import { API } from '../../../../config/config';
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
 const VendorSubscription = () => {
+  const { id } = useParams();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [businessData, setBusinessData] = useState(null);
+
+  useEffect(() => {
+    const fetchBusinessData = async () => {
+      try {
+        const response = await axios.get(`${API}/business/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('businessToken')}`,
+          },
+        });
+        setBusinessData(response.data);
+        if (response.data.subscription?.planName) {
+          setSelectedPlan(response.data.subscription.planName);
+        }
+      } catch (error) {
+        console.error('Error fetching business data:', error);
+        toast.error('Failed to fetch business details');
+      }
+    };
+
+    fetchBusinessData();
+
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [id]);
 
   const plans = [
     {
@@ -21,6 +57,7 @@ const VendorSubscription = () => {
     {
       name: 'Home Page Ads',
       price: '₹200',
+      amount: 200,
       features: [
         'All Basic features',
         'Advertisement on home page',
@@ -30,6 +67,7 @@ const VendorSubscription = () => {
     {
       name: 'Premium',
       price: '₹250',
+      amount: 250,
       features: [
         'All Home Page Ads features',
         'Under home page placement',
@@ -39,6 +77,7 @@ const VendorSubscription = () => {
     {
       name: 'Business Pro',
       price: '₹300',
+      amount: 300,
       features: [
         'All Premium features',
         'Top business advertisement',
@@ -48,6 +87,7 @@ const VendorSubscription = () => {
     {
       name: 'Ultimate',
       price: '₹500',
+      amount: 500,
       features: [
         'All Business Pro features',
         'Video advertisements',
@@ -57,72 +97,90 @@ const VendorSubscription = () => {
     }
   ];
 
-  const handleSubscribe = (plan) => {
-    setCurrentPlan(plan);
-    setShowPaymentModal(true);
-  };
+  const handleSubscribe = async (plan) => {
+    if (plan.price === 'Free') {
+      try {
+        await updateSubscription({
+          planName: plan.name,
+          amount: 0,
+          isActive: true,
+          paymentId: 'free_plan'
+        });
+        setSelectedPlan(plan.name);
+        toast.success('Successfully subscribed to Free plan');
+      } catch (error) {
+        toast.error('Failed to subscribe to Free plan');
+      }
+      return;
+    }
 
-  const handlePaymentSuccess = () => {
-    setPaymentSuccess(true);
-    setSelectedPlan(currentPlan.name);
+    // In the options object, update the handler function:
     
-    setTimeout(() => {
-      console.log('Payment successful for:', {
-        planName: currentPlan.name,
-        price: currentPlan.price,
-        features: currentPlan.features
-      });
-      setShowPaymentModal(false);
-      setPaymentSuccess(false);
-    }, 2000);
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: plan.amount * 100,
+      currency: 'INR',
+      name: 'DialKaraikudi',
+      description: `Subscribe to ${plan.name} Plan`,
+      handler: async function (response) {
+        try {
+          // Log the complete Razorpay response
+          console.log('Razorpay Payment Response:', {
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            fullResponse: response
+          });
+    
+          await updateSubscription({
+            planName: plan.name,
+            amount: plan.amount,
+            isActive: true,
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            paymentTimestamp: new Date().toISOString()
+          });
+    
+          setPaymentSuccess(true);
+          setSelectedPlan(plan.name);
+          toast.success('Payment successful!');
+          setTimeout(() => {
+            setShowPaymentModal(false);
+            setPaymentSuccess(false);
+          }, 2000);
+        } catch (error) {
+          console.error('Payment update error:', error);
+          toast.error('Failed to update subscription');
+        }
+      },
+      prefill: {
+        name: businessData?.businessName || '',
+        email: businessData?.email || '',
+      },
+      theme: {
+        color: '#2563EB'
+      }
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
   };
 
-  const PaymentModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-bold">Complete Payment</h3>
-          <button 
-            onClick={() => setShowPaymentModal(false)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <MdClose size={24} />
-          </button>
-        </div>
-
-        {paymentSuccess ? (
-          <div className="text-center py-8">
-            <div className="text-6xl mb-4 text-green-500">✓</div>
-            <h4 className="text-xl font-bold text-green-600 mb-2">Payment Successful!</h4>
-            <p className="text-gray-600">Your subscription has been activated</p>
-          </div>
-        ) : (
-          <div className="text-center">
-            <div className="mb-6">
-              <h4 className="font-bold mb-2">Scan QR Code to Pay</h4>
-              <p className="text-gray-600 mb-4">Amount: {currentPlan?.price}</p>
-              <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                {/* Replace with actual QR code image */}
-                <div className="w-48 h-48 mx-auto bg-white border-2 border-gray-300 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">QR Code</p>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={handlePaymentSuccess}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Confirm Payment
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const updateSubscription = async (subscriptionData) => {
+    try {
+      const response = await axios.put(`${API}/business/${id}`, subscriptionData, );
+       setBusinessData(response.data);
+      console.log(response.data, `${API}/business/${id}`);
+      
+    } catch (error) {
+      console.error('Subscription update error:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {showPaymentModal && <PaymentModal />}
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>

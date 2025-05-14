@@ -98,11 +98,11 @@ const Bussiness_List = () => {
     setActiveFilter(activeFilter === rating ? null : rating);
   };
 
-  const cookies = Cookies.get("userToken");
+  // const cookies = Cookies.get("userToken");
   const user = JSON.parse(sessionStorage.getItem("userData"));
 
   const handleShowContact = (id) => {
-    if (cookies && user) {
+    if (user) {
       setShowContact((prev) => (prev === id ? null : id)); // Toggle specific contact
     } else {
       toast.warning("Please Login to show contact number");
@@ -111,6 +111,21 @@ const Bussiness_List = () => {
       }, 100);
     }
   };
+
+  const handleWhatsAppClick = (whatsappNumber) => {
+    if (user) {
+      // Format the WhatsApp number and create the chat URL
+      const formattedNumber = whatsappNumber?.replace(/\D/g, '');
+      const whatsappUrl = `https://wa.me/${formattedNumber}`;
+      window.open(whatsappUrl, '_blank');
+    } else {
+      toast.warning("Please Login to contact via WhatsApp");
+      setTimeout(() => {
+        handleOpenLoginModal();
+      }, 100);
+    }
+  };
+
 
   // const toggleAmenities = (id) => {
   //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
@@ -171,35 +186,35 @@ const Bussiness_List = () => {
                   <button className="border flex md:hidden items-center gap-2 border-gray-400 px-2 py-1 rounded"
                     onClick={() => handleFilter(null)}
                   >
-                     <FaFilter />
+                    <FaFilter />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 5 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(5)}
                   >
-                    5 <IoMdStar className="text-lg m-1 text-yellow-400"/>
+                    5 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 4 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(4)}
                   >
-                    4 <IoMdStar className="text-lg m-1 text-yellow-400"/>
+                    4 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 3 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter(3)}
                   >
-                    3 <IoMdStar className="text-lg m-1 text-yellow-400"/>
+                    3 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
             ${activeFilter === 'top' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
                     onClick={() => handleFilter('top')}
                   >
-                    Top Rating 
+                    Top Rating
                   </button>
                 </div>
               </div>
@@ -229,7 +244,7 @@ const Bussiness_List = () => {
                       <img
                         src={data.photos[0]}
                         alt="Business"
-                        className="w-full h-40 object-cover rounded"
+                        className="w-full h-60 md:h-40 object-cover rounded"
                       />
                     </div>
 
@@ -280,11 +295,17 @@ const Bussiness_List = () => {
                             ? data?.contactDetails?.phone
                             : "Show Number"}
                         </button>
-                        <button className="flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start">
+                        <button
+                          onClick={() => handleWhatsAppClick(data?.contactDetails?.whatsapp)}
+                          className="flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start"
+                        >
                           <span className="text-xl px-1 text-white">
                             <FaWhatsapp size={16} className="text-white" />
-                          </span>{" "}
-                          WhatsApp
+                          </span>
+                          {/* {showContact === data._id
+                            ? data?.contactDetails?.whatsapp
+                            : "WhatsApp"} */}
+                            Whatsapp
                         </button>
                       </div>
                     </div>
