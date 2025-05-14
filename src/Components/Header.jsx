@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Logo from "../assets/logo_01.png";
 import { CiLocationOn } from "react-icons/ci";
 import { IoSearchOutline } from "react-icons/io5";
@@ -31,12 +31,17 @@ const Header = () => {
 
   const navigate = useNavigate();
   console.log(businessData?.user_id);
+  console.log(businessData);
+  
 
   useEffect(() => {
     let isMounted = true;
 
     const storedUserData = sessionStorage.getItem("userData");
     const storedBusinessData = sessionStorage.getItem("businessData");
+
+    console.log(storedUserData, storedBusinessData);
+    
 
     if (storedUserData && isMounted) {
       const parsedData = JSON.parse(storedUserData);
@@ -79,6 +84,20 @@ const Header = () => {
     console.log("Selected location:", location);
   };
 
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <>
       <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
@@ -88,7 +107,7 @@ const Header = () => {
               <img
                 src={Logo}
                 alt="Logo"
-                className="h-10 md:h-18 my-0 object-contain"
+                className="h-10 md:h-14 lg:h-18 my-0 object-contain"
               />
             </Link>
             <div className="hidden md:block">
@@ -121,26 +140,52 @@ const Header = () => {
             </button>
 
             {userData || businessData ? (
-              <div className="hidden md:flex items-center gap-4">
-                {businessData?.user_id && (
-                  <Link
-                    to={`/vendorpanel/${businessData.user_id}`}
-                    className="text-gray-700 hover:text-emerald-600 transition-colors duration-200 text-sm font-medium"
+              <div className=" md:flex items-center gap-4">
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    className="flex items-center gap-2 cursor-pointer"
                   >
-                    Dashboard
-                  </Link>
-                )}
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-gray-700 hover:text-red-500 transition-colors duration-200 text-sm font-medium"
-                >
-                  <CiLogout className="text-lg" />
-                  Logout
-                </button>
-                <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                  {(businessData?.businessName || userData?.name || "U")
-                    .charAt(0)
-                    .toUpperCase()}
+                    <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
+                      {(businessData?.name || userData?.name || "U")
+                        .charAt(0)
+                        .toUpperCase()}
+                    </div>
+                    <svg
+                      className={`w-4 h-4 text-gray-600 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showDropdown && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
+                      {businessData?.user_id && (
+                        <Link
+                          to={`/vendorpanel/${businessData.user_id}`}
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors duration-200"
+                          onClick={() => setShowDropdown(false)}
+                        >
+                          Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setShowDropdown(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-red-500 transition-colors duration-200"
+                      >
+                        <span className="flex items-center gap-2">
+                          <CiLogout className="text-lg" />
+                          Logout
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -154,31 +199,18 @@ const Header = () => {
             )}
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            {userData || businessData ? (''):
+            (
+              <div className="md:hidden">
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={() => setShowUserBusinessModal(true)}
                 className="text-gray-700 hover:text-emerald-500 transition-colors"
               >
-                <svg
-                  className="w-6 h-6 fill-current"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {isMobileMenuOpen ? (
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829z"
-                    />
-                  ) : (
-                    <path
-                      fillRule="evenodd"
-                      d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-                    />
-                  )}
-                </svg>
+               <LuCircleUserRound className="text-3xl" />
               </button>
             </div>
+              )}
+           
           </div>
         </div>
 
