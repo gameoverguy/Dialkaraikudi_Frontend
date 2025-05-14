@@ -121,43 +121,44 @@ const Header = () => {
   return (
     <>
       <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
-        <div className="md:w-11/12 mx-auto flex justify-between items-center">
+        <div className="px-4 py-3 md:w-11/12 mx-auto flex justify-between items-center">
           <div className="flex space-x-6 items-center">
             <Link to="/">
               <img
                 src={Logo}
                 alt="Logo"
-                className="h-10 md:h-14 lg:h-18 my-0 object-contain"
+                className="h-10 md:h-12 lg:h-14 my-0 object-contain"
               />
             </Link>
-            <div className="hidden md:block">
+            {/* <div className="hidden md:block">
               <LocationTracker onLocationSelect={handleLocationSelect} />
-            </div>
-            <div className="hidden lg:block relative w-full">
+            </div> */}
+           
+          </div>
+          <div className="hidden md:block relative w-6/12 xl:w-4/12">
               <form onSubmit={handleSearch}>
                 <input
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for services, products, brands..."
-                  className="w-full pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+                  className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
                 />
                 <button
                   type="submit"
-                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
+                  className="absolute top-1/2 -translate-y-1/2 right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
                 >
-                  <IoSearchOutline className="text-lg" />
+                  <IoSearchOutline className="" />
                 </button>
               </form>
             </div>
-          </div>
 
           <div className="flex items-center gap-6">
-            <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
+            {/* <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
               <span>
                 <LocationTracker onLocationSelect={handleLocationSelect} />
               </span>
-            </button>
+            </button> */}
 
             {userData || businessData ? (
               <div className=" md:flex items-center gap-4">
@@ -242,21 +243,20 @@ const Header = () => {
         </div>
 
         {/* Mobile Search */}
-        <div className="lg:hidden relative w-full mt-3">
+        <div className="md:hidden relative w-full md:w-11/12 mx-auto mt-3">
           <form onSubmit={handleSearch}>
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for services, products, brands..."
-              className="w-full pl-12 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+              className="w-full pl-2 pr-10 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all text-sm"
             />
-            <IoSearchOutline className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             <button
               type="submit"
-              className="absolute top-1/2 -translate-y-1/2 right-2 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+              className="absolute top-1/2 -translate-y-1/2 right-1 md:right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
             >
-              <IoSearchOutline className="text-xl" />
+              <IoSearchOutline className="text-base" />
             </button>
           </form>
         </div>
