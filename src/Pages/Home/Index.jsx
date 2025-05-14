@@ -16,6 +16,7 @@ import Category2 from "./Category2";
 import VideoAdertisment1 from "./VideoAdertisment1";
 import Category3 from "./Category3";
 import VideoAdertisment2 from "./VideoAdertisment2";
+import AdPopup from "../AdPop/AdPopup";
 axios.defaults.withCredentials = true;
 
 const Index = () => {
@@ -48,6 +49,7 @@ const Index = () => {
   return (
     <>
       <div className="flex flex-col gap-5">
+        <AdPopup />
         <Carousel />
         <Category
           productCategories={productCategories}

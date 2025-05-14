@@ -20,7 +20,7 @@ import ContactDetails from "./business/contact.jsx";
 import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
 import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 import VendorPanel from "./Pages/VendorPanel/Index.jsx";
-import AdPopup from "./Pages/AdPop/AdPopup.jsx";
+
 
 function App() {
   useEffect(() => {
@@ -38,12 +38,14 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
+              
               <Route path="/businesslist/:id" element={<Bussiness_List />} />
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/1" element={<AddToBusiness />} />
               <Route path="/detailform" element={<BusinessDetailForm />} />
+              
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route
@@ -66,7 +68,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>
-      <AdPopup />
+      
     </>
   );
 }
