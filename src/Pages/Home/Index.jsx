@@ -23,18 +23,6 @@ const Index = () => {
   const [serviceCategories, setServiceCategories] = useState([]);
 
   useEffect(() => {
-    // const ClearAuthentication = async () => {
-    //   try {
-    //     const response = await axios.post(`${API}/authentication/verifyToken`);
-    //     console.log(response.data);
-    //     if (response.data.success) {
-    //       console.log(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching categories:", error.response.data);
-    //   }
-    // };
-    // ClearAuthentication();
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${API}/categories`);
@@ -69,24 +57,25 @@ const Index = () => {
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-        <div className="flex flex-col items-center justify-center gap-4"> 
-        <h1 className="text-3xl font-semibold text-green-800">Top Products</h1>
-        <Advertisment />
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h1 className="text-3xl font-semibold text-green-800">
+            Top Products
+          </h1>
+          <Advertisment />
         </div>
 
-        
         <Category2
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
         <VideoAdertisment1 />
-        <div className="flex flex-col items-center justify-center gap-4"> 
-        <h1 className="text-3xl font-semibold text-cyan-700">Top Services</h1>
-        <TopProducts />
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h1 className="text-3xl font-semibold text-cyan-700">Top Services</h1>
+          <TopProducts />
         </div>
         {/* <Category3 /> */}
         <VideoAdertisment2 />
-        
+
         {/* <TopServices /> */}
         <LimitedOffer />
       </div>
