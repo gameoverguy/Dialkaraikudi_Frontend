@@ -20,6 +20,7 @@ import ContactDetails from "./business/contact.jsx";
 import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
 import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 import VendorPanel from "./Pages/VendorPanel/Index.jsx";
+import AdPopup from "./Pages/AdPop/AdPopup.jsx";
 
 function App() {
   useEffect(() => {
@@ -65,6 +66,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>
+      <AdPopup />
     </>
   );
 }
