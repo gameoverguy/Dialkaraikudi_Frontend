@@ -83,7 +83,7 @@ const VendorProfile = () => {
           <p>The profile section allows vendors to manage business details and update address information, ensuring accurate contact data and a professional presence on the platform.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <BusinessDetails
             business={business}
             onEdit={handleEdit}

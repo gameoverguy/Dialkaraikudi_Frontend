@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   MdDashboard,
   MdPeople,
@@ -22,12 +23,16 @@ import VendorSubcription from "./Subscription/Index";
 
 
 const VendorPanel = () => {
+  const { id } = useParams(); // Get the slug/id from URL
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedKey, setSelectedKey] = useState(() => {
-    // Get the saved menu item from localStorage or default to '1' (Dashboard)
-    return localStorage.getItem("selectedMenuItem") || "1";
-  });
+  const [selectedKey, setSelectedKey] = useState("1");
   const [expandedMenu, setExpandedMenu] = useState(null);
+
+  // Add effect to watch for URL changes
+  useEffect(() => {
+    setSelectedKey("1");
+    localStorage.setItem("selectedMenuItem", "1");
+  }, [id]); // Reset when id changes
 
   // Add window resize handler
   useEffect(() => {
@@ -213,10 +218,10 @@ const VendorPanel = () => {
   const handleLogout = () => {
     // Clear admin token
     Cookies.remove("businessToken");
+    sessionStorage.removeItem("businessData");
     // Navigate to admin login
     localStorage.setItem("selectedMenuItem", "1");
     navigate("/");
-    // toast.success('Logout successful');
   };
 
   return (
@@ -233,7 +238,11 @@ const VendorPanel = () => {
               : "justify-between items-center"
           }`}
         >
-          <div>
+          <div onClick={()=>{
+            navigate("/")
+          }}
+          className="cursor-pointer"
+          >
             {!collapsed ? (
               <img src={logo1} className="h-14" />
             ) : (

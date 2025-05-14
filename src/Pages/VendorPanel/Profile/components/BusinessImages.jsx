@@ -88,9 +88,9 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Business Images</h2>
+        <h2 className="text-xl font-bold">Business Images</h2>
         <button
           onClick={() => setIsEditing(!isEditing)}
           className="text-blue-600 hover:text-blue-800"
@@ -117,7 +117,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
             <p className="text-center text-gray-500 mt-2">Drag and drop images here or click to select</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="flex flex-row gap-4 flex-wrap">
             {business?.business?.photos?.map((photo, index) => (
               <div key={`existing-${index}`} className="relative group">
                 <img
@@ -128,7 +128,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 <button
                   type="button"
                   onClick={() => handleImageDelete(photo)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 >
                   <MdDelete size={20} />
                 </button>
@@ -144,7 +144,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 <button
                   type="button"
                   onClick={() => handleImageDelete(null, true, index)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 >
                   <MdDelete size={20} />
                 </button>
@@ -169,7 +169,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
           </button>
         </form>
       ) : (
-        <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="flex flex-row gap-4">
           {business?.business?.photos?.map((photo, index) => (
             <div key={index} className="relative group">
               <img
@@ -177,6 +177,13 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 alt={`Business ${index + 1}`}
                 className="w-40 h-40 object-cover rounded-lg"
               />
+              <button
+                type="button"
+                onClick={() => handleImageDelete(photo)}
+                className="absolute z-50 -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              >
+                <MdDelete size={20} />
+              </button>
             </div>
           ))}
           {business?.business?.photos?.length < 6 && (

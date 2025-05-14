@@ -130,7 +130,7 @@ const VendorSubscription = () => {
             orderId: response.razorpay_order_id,
             signature: response.razorpay_signature,
             fullResponse: response
-          });
+          });         
     
           await updateSubscription({
             planName: plan.name,
