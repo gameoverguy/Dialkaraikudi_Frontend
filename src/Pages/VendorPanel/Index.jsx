@@ -20,7 +20,8 @@ import VendorDashboard from "./Dashboard";
 import VendorProfile from "./Profile/Index";
 import VendorReview from "./Review/Index";
 import VendorSubcription from "./Subscription/Index";
-
+import axios from "axios";
+import { API } from "../../../config/config";
 
 const VendorPanel = () => {
   const { id } = useParams(); // Get the slug/id from URL
@@ -45,12 +46,11 @@ const VendorPanel = () => {
     // Initial check
     handleResize();
     // Add event listener
-    window.addEventListener("resize", handleResize); 
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   const menuItems = [
     {
@@ -73,7 +73,6 @@ const VendorPanel = () => {
       icon: <MdBusiness size={20} />,
       label: "Subscription Management",
     },
-   
   ];
 
   const handleMenuClick = (key) => {
@@ -205,7 +204,7 @@ const VendorPanel = () => {
     1: <VendorDashboard />,
     2: <VendorProfile />,
     3: <VendorReview />,
-    4: <VendorSubcription />
+    4: <VendorSubcription />,
   };
 
   // Get the current component based on selected key
@@ -216,12 +215,32 @@ const VendorPanel = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear admin token
-    Cookies.remove("businessToken");
-    sessionStorage.removeItem("businessData");
-    // Navigate to admin login
-    localStorage.setItem("selectedMenuItem", "1");
-    navigate("/");
+    const clearAuthentication = async () => {
+      try {
+        const response = await axios.post(`${API}/authentication/logout`, {
+          withCredentials: true, // needed to send cookies
+        });
+
+        console.log(response.data);
+
+        if (response.data.success) {
+          sessionStorage.removeItem("userData");
+          sessionStorage.removeItem("businessData");
+          sessionStorage.removeItem("adminData");
+          localStorage.setItem("selectedMenuItem", "1");
+          navigate("/");
+        }
+      } catch (error) {
+        console.log(error);
+        // sessionStorage.clear();
+        // localStorage.clear();
+        // setUserData(null);
+        // setBusinessData(null);
+        // navigate("/");
+      }
+    };
+
+    clearAuthentication();
   };
 
   return (
@@ -238,10 +257,11 @@ const VendorPanel = () => {
               : "justify-between items-center"
           }`}
         >
-          <div onClick={()=>{
-            navigate("/")
-          }}
-          className="cursor-pointer"
+          <div
+            onClick={() => {
+              navigate("/");
+            }}
+            className="cursor-pointer"
           >
             {!collapsed ? (
               <img src={logo1} className="h-14" />

@@ -25,6 +25,8 @@ const MainLayout = () => {
         // console.log("User is logged in:", response.data.user);
       } catch (error) {
         // On error (e.g., token expired or network fail), treat as logged out
+        console.log(error);
+
         sessionStorage.clear();
         localStorage.clear();
       }

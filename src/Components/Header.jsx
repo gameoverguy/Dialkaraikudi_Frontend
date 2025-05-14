@@ -15,6 +15,8 @@ import OTP from "../Pages/UserLogin/OTP";
 import ResetPassword from "../Pages/UserLogin/ResetPassword";
 import LoginModal from "./User_Business_Modal";
 import BusinessDetailForm from "../business/BusinessDetailForm";
+import axios from "axios";
+import { API } from "../../config/config";
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal, loginRole } = useLoginModal();
@@ -32,7 +34,6 @@ const Header = () => {
   const navigate = useNavigate();
   console.log(businessData?.user_id);
   console.log(businessData);
-  
 
   useEffect(() => {
     let isMounted = true;
@@ -41,7 +42,6 @@ const Header = () => {
     const storedBusinessData = sessionStorage.getItem("businessData");
 
     console.log(storedUserData, storedBusinessData);
-    
 
     if (storedUserData && isMounted) {
       const parsedData = JSON.parse(storedUserData);
@@ -59,16 +59,36 @@ const Header = () => {
   }, [showLoginModal]);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("userData");
-    sessionStorage.removeItem("businessData");
-    sessionStorage.removeItem("adminData");
-    Cookies.remove("userToken");
-    Cookies.remove("businessToken");
-    Cookies.remove("adminToken");
+    const clearAuthentication = async () => {
+      try {
+        const response = await axios.post(`${API}/authentication/logout`, {
+          withCredentials: true, // needed to send cookies
+        });
 
-    setUserData(null);
-    setBusinessData(null);
-    navigate("/");
+        console.log(response.data);
+
+        if (response.data.success) {
+          sessionStorage.removeItem("userData");
+          sessionStorage.removeItem("businessData");
+          sessionStorage.removeItem("adminData");
+          setUserData(null);
+          setBusinessData(null);
+          navigate("/");
+        }
+      } catch (error) {
+        console.log(error);
+        // sessionStorage.clear();
+        // localStorage.clear();
+        // setUserData(null);
+        // setBusinessData(null);
+        // navigate("/");
+      }
+    };
+
+    clearAuthentication();
+    // sessionStorage.removeItem("userData");
+    // sessionStorage.removeItem("businessData");
+    // sessionStorage.removeItem("adminData");
   };
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -94,8 +114,8 @@ const Header = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -152,12 +172,19 @@ const Header = () => {
                         .toUpperCase()}
                     </div>
                     <svg
-                      className={`w-4 h-4 text-gray-600 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 text-gray-600 transition-transform ${
+                        showDropdown ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </button>
 
@@ -199,18 +226,18 @@ const Header = () => {
             )}
 
             {/* Mobile Menu Button */}
-            {userData || businessData ? (''):
-            (
+            {userData || businessData ? (
+              ""
+            ) : (
               <div className="md:hidden">
-              <button
-                onClick={() => setShowUserBusinessModal(true)}
-                className="text-gray-700 hover:text-emerald-500 transition-colors"
-              >
-               <LuCircleUserRound className="text-3xl" />
-              </button>
-            </div>
-              )}
-           
+                <button
+                  onClick={() => setShowUserBusinessModal(true)}
+                  className="text-gray-700 hover:text-emerald-500 transition-colors"
+                >
+                  <LuCircleUserRound className="text-3xl" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

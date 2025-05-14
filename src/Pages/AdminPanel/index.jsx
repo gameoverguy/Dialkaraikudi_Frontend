@@ -20,6 +20,8 @@ import logo1 from "../../assets/logo_01.png";
 //import HomePage from "./Advertisment/HomePage";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API } from "../../../config/config";
 
 // Placeholder components - Replace these with your actual components
 const PlatformInfo = () => <div>Platform Info Content</div>;
@@ -241,10 +243,32 @@ const AdminPanel = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear admin token
-    Cookies.remove("adminToken");
-    sessionStorage.removeItem("adminData");
-    // Navigate to admin login
+    const clearAuthentication = async () => {
+      try {
+        const response = await axios.post(`${API}/authentication/logout`, {
+          withCredentials: true, // needed to send cookies
+        });
+
+        console.log(response.data);
+
+        if (response.data.success) {
+          sessionStorage.removeItem("userData");
+          sessionStorage.removeItem("businessData");
+          sessionStorage.removeItem("adminData");
+          localStorage.setItem("selectedMenuItem", "1");
+          navigate("/");
+        }
+      } catch (error) {
+        console.log(error);
+        // sessionStorage.clear();
+        // localStorage.clear();
+        // setUserData(null);
+        // setBusinessData(null);
+        // navigate("/");
+      }
+    };
+
+    clearAuthentication();
     localStorage.setItem("selectedMenuItem", "1");
     navigate("/adminlogin");
     // toast.success('Logout successful');
