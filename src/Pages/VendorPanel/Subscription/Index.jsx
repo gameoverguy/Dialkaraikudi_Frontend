@@ -158,16 +158,28 @@ const VendorSubscription = () => {
       ]
     },
     {
-      name: 'Basic Listing',
-      price: 'Free',
+      name: 'Ballon Ads',
+      price: '₹300',
+      amount: 300,
       features: [
-        'Standard business listing',
-        'Basic business profile',
-        'Contact information',
-        'Location display'
+        'Strategic popup timing',
+        'Custom targeting',
+        'Mobile optimization',
+        'Performance tracking'
       ]
-    }
-  ];
+    },
+    {
+      name: 'Sticky Ads',
+      price: '₹300',
+      amount: 300,
+      features: [
+        'Strategic popup timing',
+        'Custom targeting',
+        'Mobile optimization',
+        'Performance tracking'
+      ]
+    },
+      ];
 
   const MediaRequirementsPopup = () => (
     <div className="fixed inset-0 bg-black/70  flex items-center justify-center z-50">
