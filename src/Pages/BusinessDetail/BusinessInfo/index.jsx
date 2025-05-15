@@ -16,12 +16,12 @@ const BusinessInfo = ({ formData, businessId }) => {
   const { handleOpenLoginModal } = useLoginModal();
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialSlide, setInitialSlide] = useState(0);
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const isLoggedin = !!userData;
 
   const handleShowContact = () => {
     if (isLoggedin) {
-      setShowContact(prev => !prev);
+      setShowContact((prev) => !prev);
     } else {
       handleOpenLoginModal();
     }
@@ -34,7 +34,7 @@ const BusinessInfo = ({ formData, businessId }) => {
 
   const handleBookmarkClick = () => {
     if (isLoggedin) {
-      setIsBookmarked(prev => !prev);
+      setIsBookmarked((prev) => !prev);
     } else {
       handleOpenLoginModal();
     }
@@ -60,23 +60,29 @@ const BusinessInfo = ({ formData, businessId }) => {
         </div>
         <div className="hidden md:block mb-6 overflow-hidden">
           <div className="grid grid-cols-6 gap-2 h-[300px]">
-            {formData?.business.photos?.length > 0 ? (<>
-
-              <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative" onClick={() => handleImageClick(0)}>
-                <img
-                  src={formData.business.photos[0]}
-                  alt="Main"
-                  className="w-full h-full object-cover absolute inset-0 rounded-tl-lg"
-                />
-              </div>
-              <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative" onClick={() => handleImageClick(0)}>
-                <img
-                  src={formData.business.photos[1]}
-                  alt="Main"
-                  className="w-full h-full object-cover absolute inset-0 rounded-tl-lg"
-                />
-              </div>
-            </>
+            {formData?.business.photos?.length > 0 ? (
+              <>
+                <div
+                  className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative"
+                  onClick={() => handleImageClick(0)}
+                >
+                  <img
+                    src={formData.business.photos[0]}
+                    alt="Main"
+                    className="w-full h-full object-cover absolute inset-0 rounded-tl-lg"
+                  />
+                </div>
+                <div
+                  className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative"
+                  onClick={() => handleImageClick(0)}
+                >
+                  <img
+                    src={formData.business.photos[1]}
+                    alt="Main"
+                    className="w-full h-full object-cover absolute inset-0 rounded-tl-lg"
+                  />
+                </div>
+              </>
             ) : (
               <div className="col-span-2 row-span-2 bg-gray-100 flex items-center justify-center rounded-tl-lg">
                 <span className="text-gray-400">No Images Available</span>
@@ -87,12 +93,14 @@ const BusinessInfo = ({ formData, businessId }) => {
                 key={index}
                 className={`
       col-span-1
-      ${index === 5 ? 'rounded-tr-lg' : ''}
-      ${index === 4 ? 'rounded-br-lg' : ''}
+      ${index === 5 ? "rounded-tr-lg" : ""}
+      ${index === 4 ? "rounded-br-lg" : ""}
       relative cursor-pointer overflow-hidden
-      ${index <= 2 ? 'h-[150px]' : 'h-[148px]'}
+      ${index <= 2 ? "h-[150px]" : "h-[148px]"}
     `}
-                onClick={() => formData?.business.photos?.[index] && handleImageClick(index)}
+                onClick={() =>
+                  formData?.business.photos?.[index] && handleImageClick(index)
+                }
               >
                 {formData?.business.photos?.[index] ? (
                   <img
@@ -103,7 +111,9 @@ const BusinessInfo = ({ formData, businessId }) => {
                 ) : (
                   <div className="bg-gray-100 h-full w-full flex items-center justify-center absolute inset-0">
                     <span className="text-gray-400 text-sm">
-                      {formData?.business.photos?.length === 0 ? 'No Images' : 'No More Images'}
+                      {formData?.business.photos?.length === 0
+                        ? "No Images"
+                        : "No More Images"}
                     </span>
                   </div>
                 )}
@@ -162,13 +172,18 @@ const BusinessInfo = ({ formData, businessId }) => {
               {formData?.business.ratings}
               <MdOutlineStar className="ml-1" />
             </div>
-            <span className="text-gray-600">{formData?.business.reviewCount} Ratings</span>
+            <span className="text-gray-600">
+              {formData?.business.reviewCount} Ratings
+            </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">
             <p className="flex items-center font-semibold text-gray-700">
               <SlLocationPin className="mr-1 text-base" />
-              {formData?.business.address?.addressArea} {formData?.business.address?.city} {formData?.business.address?.state} {formData?.business.address?.pincode}
+              {formData?.business.address?.addressArea}{" "}
+              {formData?.business.address?.city}{" "}
+              {formData?.business.address?.state}{" "}
+              {formData?.business.address?.pincode}
             </p>
           </div>
           <div className="flex justify-between">
@@ -181,7 +196,9 @@ const BusinessInfo = ({ formData, businessId }) => {
                   className="animate-bounce mr-2"
                   style={{ animationDuration: "0.7s" }}
                 />
-                {showContact && isLoggedin ? formData?.business.contactDetails?.phone : "Show Number"}
+                {showContact && isLoggedin
+                  ? formData?.business.contactDetails?.phone
+                  : "Show Number"}
               </div>
               <div className="md:hidden flex justify-around text-center">
                 <div className="flex flex-col items-center w-20">
@@ -197,7 +214,10 @@ const BusinessInfo = ({ formData, businessId }) => {
             </div>
             <div className="hidden md:block">
               <p className="flex justify-end font-semibold">Click to Rate</p>
-              <StarRating formData={formData} businessId={formData.business._id} />
+              <StarRating
+                formData={formData}
+                businessId={formData.business._id}
+              />
             </div>
           </div>
         </div>

@@ -52,7 +52,6 @@ const Bussiness_List = () => {
           const res = await axios.get(`${API}/business/category/${id}`);
           setData(res.data.data);
           console.log("if", res.data.data);
-
         } else if (search.state) {
           const res = await axios.get(
             `${API}/business/search/${search.state.searchQuery}`
@@ -83,15 +82,17 @@ const Bussiness_List = () => {
       return;
     }
 
-    const filtered = data.filter(business => {
-      if (activeFilter === 'top') {
+    const filtered = data.filter((business) => {
+      if (activeFilter === "top") {
         return business.ratings >= 2;
       }
       return Math.floor(business.ratings) === activeFilter;
     });
 
     // Sort filtered results by reviewCount
-    const sortedFiltered = filtered.sort((a, b) => b.reviewCount - a.reviewCount);
+    const sortedFiltered = filtered.sort(
+      (a, b) => b.reviewCount - a.reviewCount
+    );
     setFilteredData(sortedFiltered);
   }, [activeFilter, data]);
 
@@ -100,7 +101,7 @@ const Bussiness_List = () => {
   };
 
   // const cookies = Cookies.get("userToken");
-  const user = JSON.parse(sessionStorage.getItem("userData"));
+  const user = JSON.parse(localStorage.getItem("userData"));
 
   const handleShowContact = (id) => {
     if (user) {
@@ -116,9 +117,9 @@ const Bussiness_List = () => {
   const handleWhatsAppClick = (whatsappNumber) => {
     if (user) {
       // Format the WhatsApp number and create the chat URL
-      const formattedNumber = whatsappNumber?.replace(/\D/g, '');
+      const formattedNumber = whatsappNumber?.replace(/\D/g, "");
       const whatsappUrl = `https://wa.me/${formattedNumber}`;
-      window.open(whatsappUrl, '_blank');
+      window.open(whatsappUrl, "_blank");
     } else {
       toast.warning("Please Login to contact via WhatsApp");
       setTimeout(() => {
@@ -126,7 +127,6 @@ const Bussiness_List = () => {
       }, 100);
     }
   };
-
 
   // const toggleAmenities = (id) => {
   //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
@@ -177,43 +177,60 @@ const Bussiness_List = () => {
                 </h1>
               </div>
               <div className="relative  bg-white">
-
                 <div className="sticky flex space-x-3 top-20 bg-white py-2 px-2">
-                  <button className="hidden md:flex border  items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                  <button
+                    className="hidden md:flex border  items-center gap-2 border-gray-400 px-2 py-1 rounded"
                     onClick={() => handleFilter(null)}
                   >
                     Filter <FaFilter />
                   </button>
-                  <button className="border flex md:hidden items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                  <button
+                    className="border flex md:hidden items-center gap-2 border-gray-400 px-2 py-1 rounded"
                     onClick={() => handleFilter(null)}
                   >
                     <FaFilter />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 5 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+            ${
+              activeFilter === 5
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(5)}
                   >
                     5 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 4 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+            ${
+              activeFilter === 4
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(4)}
                   >
                     4 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 3 ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+            ${
+              activeFilter === 3
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(3)}
                   >
                     3 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 'top' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
-                    onClick={() => handleFilter('top')}
+            ${
+              activeFilter === "top"
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
+                    onClick={() => handleFilter("top")}
                   >
                     Top Rating
                   </button>
@@ -251,7 +268,6 @@ const Bussiness_List = () => {
 
                     {/* Business Info */}
                     <div className="w-full flex flex-col md:flex-row  justify-between p-1 md:p-3 md:pr-6">
-
                       <div className="space-y-4 mt-1 md:mt-0 w-full p-2">
                         <h2
                           className="text-xl font-semibold"
@@ -297,7 +313,9 @@ const Bussiness_List = () => {
                             : "Show Number"}
                         </button>
                         <button
-                          onClick={() => handleWhatsAppClick(data?.contactDetails?.whatsapp)}
+                          onClick={() =>
+                            handleWhatsAppClick(data?.contactDetails?.whatsapp)
+                          }
                           className="flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start"
                         >
                           <span className="text-xl px-1 text-white">
@@ -306,11 +324,10 @@ const Bussiness_List = () => {
                           {/* {showContact === data._id
                             ? data?.contactDetails?.whatsapp
                             : "WhatsApp"} */}
-                            Whatsapp
+                          Whatsapp
                         </button>
                       </div>
                     </div>
-
                   </div>
                 ))
               )}

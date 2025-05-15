@@ -17,7 +17,7 @@ const ReviewPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   // const { id } = useParams();
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const userId = userData?.user_id;
   const userName = userData?.name;
   const userAvatar =
