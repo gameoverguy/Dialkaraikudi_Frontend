@@ -7,16 +7,17 @@ import "swiper/css/navigation";
 import "swiper/css/bundle";
 import Carousel from "./Carousel";
 import TopProducts from "./TopProducts";
-import TopServices from "./TopServices";
 import LimitedOffer from "./LimitedOffer";
 import Category from "./Category";
 import Category1 from "./Category1";
-import Advertisment from "./Advertisment";
+
 import Category2 from "./Category2";
 import VideoAdertisment1 from "./VideoAdertisment1";
 import Category3 from "./Category3";
 import VideoAdertisment2 from "./VideoAdertisment2";
 import AdPopup from "../AdPop/AdPopup";
+import SesanoalProduct from "./SesanoalProduct";
+import TopService from "./TopService";
 axios.defaults.withCredentials = true;
 
 const Index = () => {
@@ -48,38 +49,48 @@ const Index = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-5">
-        <AdPopup />
+      <div className="flex flex-col gap-3 md:gap-5">
+        {/* <AdPopup /> */}
         <Carousel />
         <Category
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
+
+
+        <div className="flex flex-col items-center justify-center md:gap-4">
+          <h1 className="text-2xl md:text-3xl font-semibold text-green-800">
+            Top Products
+          </h1>
+          <TopProducts />
+        </div>
+
+        <div className="flex flex-col items-center justify-center md:gap-4">
+          <h1 className="text-2xl md:text-3xl font-semibold text-cyan-700">Top Services</h1>
+          <TopService />
+        </div>
+
         <Category1
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-        <div className="flex flex-col items-center justify-center gap-4">
-          <h1 className="text-3xl font-semibold text-green-800">
-            Top Products
-          </h1>
-          <Advertisment />
-        </div>
+
+        <SesanoalProduct />
+        
+        <VideoAdertisment1 />
 
         <Category2
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-        <VideoAdertisment1 />
-        <div className="flex flex-col items-center justify-center gap-4">
-          <h1 className="text-3xl font-semibold text-cyan-700">Top Services</h1>
-          <TopProducts />
-        </div>
-        {/* <Category3 /> */}
         <VideoAdertisment2 />
+        
+        {/* <Category3 /> */}
+        
 
         {/* <TopServices /> */}
-        <LimitedOffer />
+        {/* <LimitedOffer /> */}
+        
       </div>
     </>
   );

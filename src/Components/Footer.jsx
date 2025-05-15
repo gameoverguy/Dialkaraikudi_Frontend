@@ -117,8 +117,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6]">
-        Copyrights 2025-26. All Rights Reserved. Digitaly Pvt ltd.
+      <div className="text-[11px] md:text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6] md:px-0 px-2">
+        Copyrights @ 2025-26. All Rights Reserved. Digitaly Pvt ltd.
       </div>
     </>
   );

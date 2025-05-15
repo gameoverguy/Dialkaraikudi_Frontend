@@ -31,12 +31,12 @@ function Category2({productCategories}) {
         data-aos-delay="100"
         data-aos-duration="800"
       >
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-3 md:gap-8 grid-cols-1 md:grid-cols-3">
           {shuffledCategories?.map((item, index) => (
             <div
             key={item._id}
             onClick={() => handleCategoryClick(item._id)}
-            className="group bg-white rounded-xl shadow-md hover:shadow-blue-200 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 hover:ring-2 hover:ring-blue-100 cursor-pointer"
+            className="group bg-white rounded shadow-md hover:shadow-blue-200 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 hover:ring-2 hover:ring-blue-100 cursor-pointer"
             data-aos="fade-up"
             data-aos-delay={100 + index * 100}
             data-aos-duration="600"
@@ -49,7 +49,7 @@ function Category2({productCategories}) {
             }}
           >
               {/* Top image with float-in effect */}
-              <div className="h-48 overflow-hidden relative rounded-t-3xl">
+              <div className="h-48 overflow-hidden relative rounded">
                 <img
                   src={item.imageUrl}
                   alt={item.displayName}
@@ -59,7 +59,7 @@ function Category2({productCategories}) {
               </div>
 
               {/* Text content */}
-              <div className="p-6 text-center">
+              <div className="p-4 text-center">
                 <h3 className="text-xl font-black text-gray-800 tracking-wide transition-colors duration-500 group-hover:text-blue-700 group-hover:translate-y-[-1px]">
                   {item.displayName}
                 </h3>
