@@ -104,16 +104,16 @@ const ForgotPassword = ({
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        classname="w-full max-w-md"
+        classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <div className="p-2">
-          <h1 className="text-lg font-bold text-gray-800 mb-4">
+        <div className="p-2 sm:p-4">
+          <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
             Forgot Password
           </h1>
-          <p className="text-gray-600 text-xs mb-4">
+          <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             Enter your email address to reset your password.
           </p>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <FloatingInput
               type="email"
               placeholder="Email Address"
@@ -122,6 +122,7 @@ const ForgotPassword = ({
               onChange={handleChange}
               error={error}
               maxLength={50}
+              className="text-sm sm:text-base"
             />
             <div className="h-2 mb-2">
               {successMessage && (
@@ -144,11 +145,11 @@ const ForgotPassword = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full cursor-pointer text-xs bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
+              className={`w-full text-[11px] sm:text-xs font-semibold py-2.5 sm:py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
                 isSubmitting
                   ? "opacity-70 cursor-not-allowed"
-                  : "hover:bg-purple-700"
-              }`}
+                  : "hover:bg-purple-700 cursor-pointer hover:shadow-md"
+              } bg-purple-600 text-white`}
             >
               {isSubmitting ? "SENDING OTP..." : "SEND OTP"}
             </button>
