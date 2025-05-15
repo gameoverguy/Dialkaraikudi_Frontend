@@ -27,12 +27,12 @@ function Category1({ serviceCategories }) {
       className="w-full px-2 md:px-0 md:w-11/12 md:mx-auto"
       data-aos="fade-up"
     >
-      <div className="grid gap-5 grid-cols-1 md:grid-cols-4">
+      <div className="grid gap-3 md:gap-5 grid-cols-1 md:grid-cols-4">
         {shuffledCategories?.map((item, index) => (
           <div
             key={item._id}
             onClick={() => handleCategoryClick(item._id)}
-            className="group bg-white rounded-xl shadow-md hover:shadow-blue-200 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 hover:ring-2 hover:ring-blue-100 cursor-pointer"
+            className="group bg-white rounded shadow-md hover:shadow-blue-200 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 hover:ring-2 hover:ring-blue-100 cursor-pointer"
             data-aos="fade-up"
             data-aos-delay={100 + index * 100}
             data-aos-duration="600"
@@ -44,7 +44,7 @@ function Category1({ serviceCategories }) {
               }
             }}
           >
-            <div className="overflow-hidden rounded-t-xl h-40">
+            <div className="overflow-hidden rounded h-40">
               <img
                 src={item.imageUrl}
                 alt={item.displayName}
