@@ -3,12 +3,13 @@ import FloatingInput from "../../Components/FloatingInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 import CustomModal from "../../Components/modal";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { toast, ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { API } from "../../../config/config";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { CiCircleInfo } from "react-icons/ci";
 
 const UserLogin = ({
   isOpen,
@@ -23,6 +24,7 @@ const UserLogin = ({
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [errorOverall, setErrorOverall] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -32,6 +34,7 @@ const UserLogin = ({
       setFormData({ email: "", password: "" });
       setErrors({ email: "", password: "" });
       setErrorOverall("");
+      setSuccessMessage("");
       setShowPassword(false);
     }
   }, [isOpen]);
@@ -89,6 +92,7 @@ const UserLogin = ({
     };
 
     setErrors(newErrors);
+    setSuccessMessage("");
     setErrorOverall("");
 
     if (!newErrors.email && !newErrors.password) {
@@ -115,27 +119,21 @@ const UserLogin = ({
               avatarUrl: userData.avatarUrl || "",
             })
           );
-
-          toast.success("Login successful!");
+          setSuccessMessage("Login successful!");
           console.log("test 1");
 
           setTimeout(() => {
-            console.log("test 2");
             setShowLoginModal(false);
             if (role === "business") {
-              console.log("test 3");
               const userId = userData.id || userData._id;
-              //window.location.href = `/vendorpanel/${userId}`;
               navigate(`/vendorpanel/${userId}`);
             }
-          }, 500);
-          console.log("test 4");
+          }, 1000);
         } else {
           throw new Error("Invalid response format");
         }
       } catch (error) {
         console.error("Login failed:", error);
-        toast.error("Login failed!");
         setErrorOverall(
           error.response?.data?.message || "Invalid email or password"
         );
@@ -170,14 +168,14 @@ const UserLogin = ({
         isOpen={isOpen}
         onClose={onClose}
         title=""
-        classname="w-full max-w-md"
+        classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <div className="p-2">
-          <h1 className="text-lg text-center font-bold text-gray-800 mb-4">
+        <div className="p-2 sm:p-3">
+          <h1 className="text-base sm:text-lg text-center font-bold text-gray-800 mb-8 sm:mb-6">
             {role === "business" ? "Business Login" : "Member Login"}
           </h1>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
+            <div className="flex flex-col gap-2">
               <FloatingInput
                 type="email"
                 placeholder="Email Address"
@@ -186,6 +184,7 @@ const UserLogin = ({
                 onChange={handleChange}
                 error={errors.email}
                 maxLength={50}
+                className="text-sm sm:text-base"
               />
 
               <div className="relative">
@@ -197,56 +196,70 @@ const UserLogin = ({
                   onChange={handleChange}
                   error={errors.password}
                   maxLength={20}
+                  className="text-sm sm:text-base"
                 />
                 {formData.password && (
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    className="absolute right-2 sm:right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none p-1"
                     title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
-                      <AiOutlineEye className="w-5 h-5" />
+                      <AiOutlineEye className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
-                      <AiOutlineEyeInvisible className="w-5 h-5" />
+                      <AiOutlineEyeInvisible className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </button>
                 )}
               </div>
             </div>
-            <div className="h-2 mb-2">
+            <div className="h-3 mb-2">
+              {successMessage && (
+                <>
+                  {/* // <div className="flex items-center bg-green-50 border border-green-200 rounded-md animate-fade-in"> */}
+                  <p className="flex text-green-600 text-[10px] items-center justify-center sm:text-xs">
+                    <CiCircleInfo className=" mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
+                    {successMessage}
+                  </p>
+                </>
+              )}
               {errorOverall && (
-                <p className="text-red-500 text-xs text-center">
-                  {errorOverall}
-                </p>
+                // <div className="flex items-center bg-red-50 border border-red-200 rounded-md animate-fade-in">
+                <>
+                  <p className="flex text-red-500 text-[10px] items-center justify-center sm:text-xs">
+                    <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
+                    {errorOverall}
+                  </p>
+                </>
               )}
             </div>
             <button
               type="submit"
               disabled={loading}
-              className={`w-full text-xs font-bold bg-purple-600 text-white py-3 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] ${
+              className={`w-full text-[12px] sm:text-xs font-bold bg-purple-600 text-white py-2.5 sm:py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
                 loading
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-purple-700 cursor-pointer"
+                  : "hover:bg-purple-700 cursor-pointer hover:shadow-md"
               }`}
             >
               {loading ? "LOGGING IN..." : "LOGIN"}
             </button>
           </form>
 
-          <div className="flex justify-between items-center mt-4 text-xs">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 mt-3 sm:mt-4 text-[12px] sm:text-xs">
             <div>
               <span className="text-gray-600">Don't have an account? </span>
               <button
                 onClick={handleSignupClick}
-                className="blue-link cursor-pointer"
+                className="blue-link cursor-pointer hover:underline"
               >
                 Register
               </button>
             </div>
             <a
               onClick={handleForgotPasswordClick}
-              className="blue-link cursor-pointer"
+              className="blue-link cursor-pointer hover:underline"
             >
               Forgot Password?
             </a>
@@ -285,19 +298,6 @@ const UserLogin = ({
           {/* </div> */}
         </div>
       </CustomModal>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </>
   );
 };

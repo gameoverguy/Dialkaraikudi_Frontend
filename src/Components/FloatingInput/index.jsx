@@ -37,7 +37,7 @@ const FloatingInput = ({
   };
 
   return (
-    <div className="mb-2 w-full">
+    <div className="mb-1 w-full">
       {label && (
         <label
           htmlFor={id}
@@ -88,8 +88,8 @@ const FloatingInput = ({
         </div>
       </div>
 
-      <div className="flex justify-end h-4">
-        {error && <p className="mt-1 text-xs mb-2 text-red-500">{error}</p>}
+      <div className="flex justify-end h-5">
+        {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
       </div>
     </div>
   );
