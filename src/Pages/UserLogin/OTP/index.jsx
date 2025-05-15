@@ -174,20 +174,19 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        // title="Enter Verification Code"
-        classname="w-full max-w-md"
+        classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <div className="p-2">
-          <h1 className="text-lg font-bold text-gray-800 mb-4">
+        <div className="p-2 sm:p-4">
+          <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
             Enter Verification Code
           </h1>
-          <p className="text-gray-600 text-xs mb-4">
+          <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             We have sent a verification code to{" "}
             <span className="font-medium">{email}</span>
           </p>
 
-          <form onSubmit={handleSubmit}>
-            <div className="flex justify-center gap-4 mb-2">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <div className="flex justify-center gap-2 sm:gap-4">
               {otp.map((data, index) => (
                 <input
                   key={index}
@@ -198,7 +197,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
                   ref={otpRefs[index]}
-                  className="w-8 h-8 text-center text-md border-2 border-gray-500 rounded-lg focus:border-purple-500 focus:outline-none"
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-center text-base sm:text-lg border-2 border-gray-500 rounded-lg focus:border-purple-500 focus:outline-none"
                 />
               ))}
             </div>
@@ -213,7 +212,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
                 <>
                   {" "}
                   <p className="flex justify-center items-center text-green-600 text-[10px] sm:text-xs">
-                  <CiCircleInfo className="mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
+                    <CiCircleInfo className="mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
                     {successMessage}
                   </p>
                 </>
@@ -232,17 +231,17 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full cursor-pointer bg-purple-600 text-xs text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
+                className={`w-full text-[11px] sm:text-xs font-semibold py-2.5 sm:py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
                   isSubmitting
                     ? "opacity-70 cursor-not-allowed"
-                    : "hover:bg-purple-700"
-                }`}
+                    : "hover:bg-purple-700 cursor-pointer hover:shadow-md"
+                } bg-purple-600 text-white`}
               >
                 {isSubmitting ? "VERIFYING..." : "VERIFY CODE"}
               </button>
               <div className="text-center">
                 {timer > 0 ? (
-                  <p className="text-xs text-gray-600">
+                  <p className="text-[11px] sm:text-xs text-gray-600">
                     Time Left :{" "}
                     <span className="font-medium">{formatTime(timer)}</span>
                   </p>
@@ -251,7 +250,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
                     type="button"
                     disabled={isSubmitting}
                     onClick={handleResendOTP}
-                    className={`text-xs blue-link ${
+                    className={`text-[11px] sm:text-xs blue-link ${
                       isSubmitting ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >
