@@ -19,6 +19,7 @@ import AdPopup from "../AdPop/AdPopup";
 import TopService from "./TopService";
 import Offers from "./Offers";
 import SeasonalProducts from "./SeasonalProducts";
+import SeasonalServices from "./SeasonalServices";
 axios.defaults.withCredentials = true;
 
 const Index = () => {
@@ -89,6 +90,7 @@ const Index = () => {
         {/* <Category3 /> */}
         
         <SeasonalProducts />
+        <SeasonalServices />
         <LimitedOffer />
         
       </div>

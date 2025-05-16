@@ -3,7 +3,7 @@ import React from "react";
 const LimitedOffer = () => {
   return (
     <>
-    <div className="w-11/12 mx-auto flex justify-center items-center text-2xl lg:text-4xl font-bold">
+    <div className="w-11/12 mx-auto flex justify-center items-center text-2xl lg:text-3xl font-bold text-green-800">
       Limited Offers
     </div>
       <div className="w-11/12 mx-auto flex flex-col md:flex-row justify-center items-center gap-3 lg:gap-5 lg:mb-6">

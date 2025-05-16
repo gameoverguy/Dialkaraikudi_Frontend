@@ -11,7 +11,7 @@ const products = Array.from({ length: 20 }, (_, i) => ({
 
 // Shuffle helper
 const getRandomProducts = (array, count) => {
-  const shuffled = [...array].sort(() => 0.5 - Math.random());
+  const shuffled = [...array].sort(() => 0.7 - Math.random());
   return shuffled.slice(0, count);
 };
 
@@ -49,16 +49,16 @@ export default function SeasonalProducts() {
 
   return (
     <div className="w-full px-4 bg-white">
-      <h2 className="text-2xl lg:text-3xl font-bold text-center text-green-800 mb-5">
-        🌟 Seasonal Products
+      <h2 className="text-2xl lg:text-3xl font-bold text-center text-cyan-700 mb-5">
+        🌟 Seasonal Services
       </h2>
 
       <AnimatePresence mode="wait">
         <motion.div
           key={visibleProducts.map((p) => p.id).join("-")} // Force re-render
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -30 }}
+          exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 1 }}
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto min-h-[220px]"
         >

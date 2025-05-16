@@ -29,9 +29,9 @@ const Footer = () => {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row flex-wrap justify-evenly items-start md:w-full bg-[#F3F4F6] py-10 px-7 gap-10">
+      <div className="flex flex-col md:flex-col lg:flex-row md:justify-start lg:justify-evenly items-start md:w-full bg-[#F3F4F6] py-10 px-7 gap-6 md:gap-4 lg:gap-10">
         {/* Left Section */}
-        <div className="w-full md:w-4/12 flex flex-col gap-5 text-left md:pr-10">
+        <div className="w-full lg:w-4/12 flex flex-col gap-5 text-left lg:pr-10">
           <p className="text-[15px] xl:text-[18px] font-bold">
             One-Stop for All Local Services
           </p>
@@ -48,7 +48,7 @@ const Footer = () => {
         </div>
 
         {/* Center Section - Quick & Our Links */}
-        <div className="w-full sm:w-10/12 md:w-6/12 xl:w-3/12 flex flex-col sm:flex-row justify-center sm:justify-start gap-10 xl:gap-25 text-left">
+        <div className="w-full lg:w-3/12 flex flex-col lg:flex-row justify-center md:justify-start gap-6 lg:gap-25 text-left">
           <div className="flex flex-col gap-3">
             <p className="text-xl font-bold pb-3">Quick Links</p>
             {footText1.map((item, i) => (
@@ -76,7 +76,7 @@ const Footer = () => {
         </div>
 
         {/* Right Section - Offices + Social */}
-        <div className="w-full sm:w-10/12 xl:w-3/12 flex flex-col gap-6 text-left">
+        <div className="w-full lg:w-3/12 flex flex-col gap-6 text-left">
           <div className="flex flex-col gap-4">
             <p className="text-xl font-bold pb-3">Our Offices</p>
             <div>
@@ -93,7 +93,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-2">
             <p className="text-sm text-[#4B5563] font-bold">Connect with us</p>
             <div className="flex gap-2">
               {social.map((item, i) => (
@@ -117,7 +117,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="text-[11px] md:text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6] md:px-0 px-2">
+      <div className="w-full text-[11px] md:text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6] md:px-0 px-2">
         Copyrights @ 2025-26. All Rights Reserved. Digitaly Pvt ltd.
       </div>
     </>
