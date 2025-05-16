@@ -100,14 +100,15 @@ export default function SesanoalProduct() {
                 reverseDirection: true,
               }}
               breakpoints={{
-                320: { slidesPerView: 2 }, // Added smaller breakpoint
-                480: { slidesPerView: 2 }, // Added medium-small breakpoint
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
-              }}
+  0: { slidesPerView: 2 },      // real small phones
+  360: { slidesPerView: 2 },    // larger phones
+  480: { slidesPerView: 2 },      // wide phones (still mobile)
+  640: { slidesPerView: 2 },      // small tablets (Tailwind sm)
+  768: { slidesPerView: 3 },
+  1024: { slidesPerView: 4 },
+}}
               modules={[Autoplay, FreeMode]}
-              className="md:px-6 py-12"
+              className="px-4 md:px-6 py-12"
             >
               {deals.map((deal) => (
                 <SwiperSlide key={deal.id}>
@@ -158,14 +159,15 @@ export default function SesanoalProduct() {
     disableOnInteraction: false,
   }}
   breakpoints={{
-    320: { slidesPerView: 2 },
-    480: { slidesPerView: 2 },
-    640: { slidesPerView: 3 },
-    768: { slidesPerView: 4 },
-    1024: { slidesPerView: 4 },
-  }}
+  0: { slidesPerView: 2 },      // real small phones
+  360: { slidesPerView: 2 },    // larger phones
+  480: { slidesPerView: 2 },      // wide phones (still mobile)
+  640: { slidesPerView: 2 },      // small tablets (Tailwind sm)
+  768: { slidesPerView: 3 },
+  1024: { slidesPerView: 4 },
+}}
   modules={[Autoplay, FreeMode]}
-  className="md:px-6 py-12"
+  className="px-4 md:px-6 py-12"
 >
 
               {deals.map((deal) => (
