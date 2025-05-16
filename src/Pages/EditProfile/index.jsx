@@ -9,6 +9,7 @@ const EditProfile = () => {
     name: "",
     email: "",
     phone: "",
+    user_id: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const EditProfile = () => {
             name: user.name || "",
             email: user.email || "",
             phone: user.phone || "",
+            user_id: userData.user_id,
           });
 
           console.log("Fetched user for form:", user);
@@ -61,7 +63,7 @@ const EditProfile = () => {
           ...formData,
         };
         localStorage.setItem("userData", JSON.stringify(updatedUserData));
-        navigate('/');
+        window.location.href = '/';
       }
       
     } catch (error) {
