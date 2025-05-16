@@ -383,9 +383,9 @@ const BusinessDetailForm = ({
       <form onSubmit={handleSubmit} className="p-2 sm:p-4">
         <div className="space-y-4 sm:space-y-4">
           {/* Business Information Section */}
-          <div className="rounded-lg space-y-2 sm:space-y-3">
-            <h3 className="text-lg font-bold text-gray-700">
-              Business Registration
+          <div className="rounded-lg space-y-2 sm:space-y-3 mb-0">
+            <h3 className="text-lg text-center font-bold text-gray-700">
+              Register
             </h3>
             <FloatingInput
               name="businessName"
@@ -424,7 +424,7 @@ const BusinessDetailForm = ({
           </div>
 
           {/* Contact Information Section */}
-          <div className="">
+          <div className="mb-0">
             {/* <h3 className="text-lg font-bold text-gray-700">Contact Information</h3> */}
             <FloatingInput
               name="phone"
@@ -445,7 +445,7 @@ const BusinessDetailForm = ({
           </div>
 
           {/* Address Section */}
-          <div className="">
+          <div className="mb-0">
             {/* <h3 className="text-lg font-semibold text-gray-700">Business Address</h3> */}
             <FloatingInput
               name="address1"
@@ -480,7 +480,7 @@ const BusinessDetailForm = ({
           </div>
 
           {/* Account Security Section */}
-          <div className="">
+          <div className="mb-0">
             <div className="relative">
               <FloatingInput
                 name="password"
@@ -536,7 +536,7 @@ const BusinessDetailForm = ({
           {/* Photos Section */}
           <div className="">
             {/* <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3> */}
-            <p className="text-xs text-gray-500">
+            <p className="text-xs mb-2 text-gray-500">
               Upload 1-6 photos of your business
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3">
