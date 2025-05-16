@@ -20,6 +20,7 @@ import ContactDetails from "./business/contact.jsx";
 import AddToBusiness from "./Pages/VendorPanel/AddToBussiness.jsx";
 import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 import VendorPanel from "./Pages/VendorPanel/Index.jsx";
+import Favorites from "./Pages/Favorites/index.jsx";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/1" element={<AddToBusiness />} />
               <Route path="/detailform" element={<BusinessDetailForm />} />
+              <Route path="/favorites" element={<Favorites />} />
               
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
