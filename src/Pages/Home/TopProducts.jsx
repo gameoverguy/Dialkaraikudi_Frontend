@@ -68,11 +68,12 @@ const deals = [
   },
 ];
 
-const TopProducts = () => {
+const TopService = () => {
   return (
-    <div className="w-11/12 mx-auto flex flex-col md:flex-row md:border md:h-fit md:border-gray-200">
+    <div className="w-11/12 mx-auto flex md:border md:h-fit md:border-gray-200">
+
       {/* Left Section - Video and Promo */}
-      <div className="hidden md:block text-white w-full md:w-4/12">
+      <div className="hidden md:block text-white w-full md:w-6/12 lg:w-4/12">
         <video
           className="w-full h-full object-cover"
           src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
@@ -83,48 +84,49 @@ const TopProducts = () => {
       </div>
 
       {/* Right Section - Products Slider */}
-      <div className="w-full md:w-8/12 flex justify-center items-center">
-              <div className="w-full px-2 md:px-8 py-4 md:h-[330px] flex justify-center items-center">
-                <Swiper
-  spaceBetween={15}
-  freeMode={true}
-  grabCursor={true}
-  loop={true}
-  autoplay={{
-    delay: 3000,
-    disableOnInteraction: false,
-  }}
-  breakpoints={{
-    320: { slidesPerView: 2 },    // ✅ 2 full products on smallest screens
-    480: { slidesPerView: 2 },
-    640: { slidesPerView: 3 },
-    768: { slidesPerView: 3 },
-    1024: { slidesPerView: 5 },
-  }}
-  modules={[Autoplay, FreeMode]}
-  className="px-2 md:px-6 py-6"
->
-                  {deals.map((deal) => (
-                    <SwiperSlide key={deal.id}>
-                      <div className="border border-gray-200 p-4 shadow-md flex flex-col items-start text-start md:h-[300px] bg-white rounded-md">
-                        <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
-                          {deal.label}
-                        </div>
-                        <img
-                          src={deal.image}
-                          alt={deal.title}
-                          className="h-32 object-contain mb-3 w-full"
-                        />
-                        <h3 className="font-semibold text-sm mb-1 text-start">{deal.title}</h3>
-                        <p className="text-sm text-gray-500 mb-1 text-start">By Lucky Supermarket</p>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            </div>
+      <div className="w-full md:w-6/12 lg:w-8/12 flex justify-center items-center">
+        <div className="w-full px-2 md:px-8 py-4 md:h-[330px] flex justify-center items-center">
+          <Swiper
+            spaceBetween={15}
+            grabCursor={true}
+            loop={true}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+              reverseDirection: false,
+              
+            }}
+            breakpoints={{
+              0: { slidesPerView: 2 },
+              480: { slidesPerView: 1.5 },
+              640: { slidesPerView: 2 },
+              // 768: { slidesPerView: 2 },
+              1024: { slidesPerView: 5 },
+            }}
+            modules={[Autoplay, FreeMode]}
+            className="px-2 md:px-6 py-6"
+          >
+            {deals.map((deal) => (
+              <SwiperSlide key={deal.id}>
+                <div className="border border-gray-200 p-4 shadow-md flex flex-col items-start text-start md:h-[300px] bg-white rounded-md">
+                  <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
+                    {deal.label}
+                  </div>
+                  <img
+                    src={deal.image}
+                    alt={deal.title}
+                    className="h-32 object-contain mb-3 w-full"
+                  />
+                  <h3 className="font-semibold text-sm mb-1 text-start line-clamp-2">{deal.title}</h3>
+                  <p className="text-sm text-gray-500 mb-1 text-start">By Lucky Supermarket</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default TopProducts;
+export default TopService;

@@ -16,8 +16,9 @@ import VideoAdertisment1 from "./VideoAdertisment1";
 import Category3 from "./Category3";
 import VideoAdertisment2 from "./VideoAdertisment2";
 import AdPopup from "../AdPop/AdPopup";
-import SesanoalProduct from "./SesanoalProduct";
 import TopService from "./TopService";
+import Offers from "./Offers";
+import SeasonalProducts from "./SeasonalProducts";
 axios.defaults.withCredentials = true;
 
 const Index = () => {
@@ -49,7 +50,7 @@ const Index = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-3 md:gap-5">
+      <div className="flex flex-col gap-3">
         {/* <AdPopup /> */}
         <Carousel />
         <Category
@@ -59,14 +60,14 @@ const Index = () => {
 
 
         <div className="flex flex-col items-center justify-center md:gap-4">
-          <h1 className="text-2xl md:text-3xl font-semibold text-green-800">
+          <h1 className="text-2xl lg:text-3xl font-semibold text-green-800">
             Top Products
           </h1>
           <TopProducts />
         </div>
 
         <div className="flex flex-col items-center justify-center md:gap-4">
-          <h1 className="text-2xl md:text-3xl font-semibold text-cyan-700">Top Services</h1>
+          <h1 className="text-2xl lg:text-3xl font-semibold text-cyan-700">Top Services</h1>
           <TopService />
         </div>
 
@@ -75,7 +76,7 @@ const Index = () => {
           serviceCategories={serviceCategories}
         />
 
-        <SesanoalProduct />
+        <Offers />
         
         <VideoAdertisment1 />
 
@@ -87,9 +88,8 @@ const Index = () => {
         
         {/* <Category3 /> */}
         
-
-        {/* <TopServices /> */}
-        {/* <LimitedOffer /> */}
+        <SeasonalProducts />
+        <LimitedOffer />
         
       </div>
     </>

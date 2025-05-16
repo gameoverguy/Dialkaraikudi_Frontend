@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import bulbImage from '../../assets/bulb.png'; // Make sure the path is correct
+import balloon from "../../assets/balloon.png"; // Make sure the path is correct
 
 const getRandomLeft = () => {
   const vw = window.innerWidth;
@@ -130,7 +131,7 @@ const FloatingAdBalloon = () => {
                   aria-label="Special Offer Balloon"
                 >
                   <img
-                    src={bulbImage}
+                    src={balloon}
                     alt="Special Offer"
                     className="w-12 sm:w-14 md:w-16 lg:w-18 h-auto select-none"
                     style={{

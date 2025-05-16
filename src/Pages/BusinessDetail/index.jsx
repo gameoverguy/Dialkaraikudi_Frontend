@@ -140,7 +140,7 @@ const BusinessDetails = () => {
             variants={staggerChildren}
           >
             <motion.div variants={fadeIn}>
-              <BusinessInfo formData={formData} businessId={formData._id} />
+              <BusinessInfo formData={formData} businessId={formData.business._id} />
             </motion.div>
 
             <motion.div
