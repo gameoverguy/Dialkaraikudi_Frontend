@@ -278,14 +278,14 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full right-0 left-0 bg-white shadow-md border-b border-gray-200 z-50">
             <div className="px-4 py-3">
-              {businessData?.user_id && (
+            {businessData?.user_id && (
                 <Link
                   to={`/vendorpanel/${businessData.user_id}`}
                   className="block py-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
-              )}
+              )}  
               {userData || businessData ? (
                 <button
                   onClick={handleLogout}
