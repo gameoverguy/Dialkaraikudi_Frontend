@@ -63,7 +63,7 @@ const AdminLogin = () => {
         : formData.email.length > 50
         ? "Email must not exceed 50 characters"
         : !emailRegex.test(formData.email)
-        ? "Please enter a valid email"
+        ? "Please enter a valid email address"
         : "",
       password: !formData.password
         ? "Password is required"

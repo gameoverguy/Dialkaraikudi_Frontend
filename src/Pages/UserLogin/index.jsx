@@ -52,7 +52,7 @@ const UserLogin = ({
         emailValue.length > 50
           ? "Email must not exceed 50 characters"
           : emailValue.includes("@") && !emailRegex.test(emailValue)
-          ? "Please enter a valid email"
+          ? "Please enter a valid email address"
           : "";
       setErrors((prev) => ({ ...prev, email: errorMessage }));
     }
@@ -80,7 +80,7 @@ const UserLogin = ({
         : formData.email.length > 50
         ? "Email must not exceed 50 characters"
         : !emailRegex.test(formData.email)
-        ? "Please enter a valid email"
+        ? "Please enter a valid email address"
         : "",
       password: !formData.password
         ? "Password is required"

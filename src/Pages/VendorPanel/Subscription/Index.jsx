@@ -49,8 +49,8 @@ const VendorSubscription = () => {
   const plans = [
     {
       name: 'Home Page Banner',
-      price: '₹1000',
-      amount: 1000,
+      price: '₹1',
+      amount: 1,
       features: [
         'Prime visibility on home page',
         'Large banner display',
@@ -221,8 +221,6 @@ const VendorSubscription = () => {
       return;
     }
 
-    // In the options object, update the handler function:
-    
     const options = {
       key: RAZORPAY_KEY_ID,
       amount: plan.amount * 100,
@@ -231,34 +229,20 @@ const VendorSubscription = () => {
       description: `Subscribe to ${plan.name} Plan`,
       handler: async function (response) {
         try {
-          // Log the complete Razorpay response
-          console.log('Razorpay Payment Response:', {
-            paymentId: response.razorpay_payment_id,
-            orderId: response.razorpay_order_id,
-            signature: response.razorpay_signature,
-            fullResponse: response
-          });         
-    
           await updateSubscription({
             planName: plan.name,
             amount: plan.amount,
             isActive: true,
             paymentId: response.razorpay_payment_id,
-            orderId: response.razorpay_order_id,
-            signature: response.razorpay_signature,
             paymentTimestamp: new Date().toISOString()
           });
-    
+
           setPaymentSuccess(true);
           setSelectedPlan(plan.name);
           toast.success('Payment successful!');
-          setTimeout(() => {
-            setShowPaymentModal(false);
-            setPaymentSuccess(false);
-          }, 2000);
         } catch (error) {
           console.error('Payment update error:', error);
-          toast.error('Failed to update subscription');
+          toast.error('Payment verification failed');
         }
       },
       prefill: {
@@ -272,7 +256,7 @@ const VendorSubscription = () => {
 
     const razorpay = new window.Razorpay(options);
     razorpay.open();
-  };
+};
 
   const updateSubscription = async (subscriptionData) => {
     try {

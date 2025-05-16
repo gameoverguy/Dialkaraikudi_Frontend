@@ -22,7 +22,7 @@
 - **Format Validation**
 
   - Test invalid email formats
-  - Verify error message: "Please enter a valid email"
+  - Verify error message: "Please enter a valid email address"
 
 - **Length Validation**
 

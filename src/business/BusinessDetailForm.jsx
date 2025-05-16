@@ -557,6 +557,7 @@ const BusinessDetailForm = ({
                 </div>
               ))}
               {photosPreviews.length < 6 && (
+                <div className="w-full">
                 <div
                   {...getPhotosRootProps()}
                   className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${
@@ -567,8 +568,15 @@ const BusinessDetailForm = ({
                   <FaCloudUploadAlt className="h-8 w-8 text-gray-400" />
                   <p className="mt-2 text-sm text-gray-500">Add Photo</p>
                 </div>
+                
+                </div>
               )}
             </div>
+            <div className="h-5 ">
+                {errors.photos && (
+                  <p className="text-red-500 text-xs mt-1">{errors.photos}</p>
+                )}
+                </div>
           </div>
           <div className="">
             <div className="flex items-center">
