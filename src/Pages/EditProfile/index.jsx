@@ -45,7 +45,7 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("test");
+  
     e.preventDefault();
     setIsLoading(true);
 
@@ -55,23 +55,15 @@ const EditProfile = () => {
         `${API}/user/${userData.user_id}`,
         formData
       );
-
-      if (response.data.success) {
-        // Update localStorage first
+      if (response?.data && (response.data.success || response.status === 200)) {
         const updatedUserData = {
           ...userData,
           ...formData,
         };
         localStorage.setItem("userData", JSON.stringify(updatedUserData));
-
-        
-        
-
-        // Force a small delay to ensure localStorage is updated
-        setTimeout(() => {
-          navigate('/');
-        }, 100);
+        navigate('/');
       }
+      
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
