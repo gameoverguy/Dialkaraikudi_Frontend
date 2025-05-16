@@ -129,15 +129,15 @@ const Carousel = () => {
     cssEase: "linear", // Smooth animation
     lazyLoad: "progressive", // Improves loading performance
 
-    responsive: [
-      {
-        breakpoint: 768, // Screens below 768px (Tablets & Mobile)
-        settings: {
-          arrows: false, // Hide arrows on small screens
-          dots: true,
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 1024, // Screens below 768px (Tablets & Mobile)
+    //     settings: {
+    //       arrows: false, // Hide arrows on small screens
+    //       dots: true,
+    //     },
+    //   },
+    // ],
   };
 
   const coursal = [
@@ -154,7 +154,7 @@ const Carousel = () => {
             <img
               src={item.image}
               alt="Slide"
-              className="bg-cover w-full md:h-[50vh]"
+              className="bg-cover w-full lg:h-[50vh]"
               loading="lazy" // Ensures smooth loading
             />
           </div>

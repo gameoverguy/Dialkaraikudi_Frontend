@@ -146,7 +146,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden md:h-[30vh]">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[36vh]">
         <div className="w-full">
           <img
             src={coursal11}
@@ -156,10 +156,10 @@ const Bussiness_List = () => {
         </div>
       </div>
 
-      <div className="flex  py-5 mb-5 shadow-2xl">
-        <div className="w-full xl:w-9/12 xl:mx-auto">
+      <div className="flex  py-5 mb-5 w-full lg:w-11/12">
+        <div className="w-full lg:w-9/12 mx-auto">
           <div className="flex justify-center items-center w-full flex-col">
-            <div className="md:p-2 w-full  xl:w-10/12">
+            <div className="md:p-2 w-full  lg:w-10/12">
               <div className="flex">
                 <Link
                   to="/"
@@ -334,10 +334,18 @@ const Bussiness_List = () => {
             </div>
           </div>
         </div>
-        <div className="hidden md:block md:w-4/12">
-          <div className="sticky top-32 flex justify-center items-center">
-            <img src={adds} alt="Advertisement" className="w-6/12" />
+        <div className=" hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5">
+          <div className="h-[300px] w-full bg-black">
+            <img src="./square.jfif" alt="" />
+
           </div>
+          <div className="h-[300px] w-full bg-black">
+            <img src="./square2.jpg" alt="" />
+
+          </div>
+          
+
+
         </div>
         <ToastContainer />
       </div>
