@@ -41,7 +41,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
         const errorMessage = !email ? "Email is required" :
             email.length < 10 ? "Email must be at least 10 characters" :
                 email.length > 50 ? "Email must not exceed 50 characters" :
-                    !emailRegex.test(email) ? "Please enter a valid email" : "";
+                    !emailRegex.test(email) ? "Please enter a valid email address" : "";
 
         setErrorOverall("");
 

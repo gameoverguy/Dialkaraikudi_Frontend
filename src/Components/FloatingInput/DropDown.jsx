@@ -35,7 +35,7 @@ const FloatingSelect = ({
   };
 
   return (
-    <div className="mb-2 w-full">
+    <div className="mb-1 w-full">
       <div className="relative w-full">
         {icon && (
           <div
@@ -92,7 +92,7 @@ const FloatingSelect = ({
         </div>
       </div>
 
-      <div className="flex justify-end h-6">
+      <div className="flex justify-end h-5">
         {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
     </div>
