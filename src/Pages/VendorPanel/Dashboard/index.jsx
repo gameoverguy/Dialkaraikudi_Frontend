@@ -100,12 +100,9 @@ const VendorDashboard = () => {
     </div>
   );
 
-  // Add this section in your return statement after the subscription status section
   return (
     <div className="p-2">
-      {/* ... existing code ... */}
 
-      {/* Analytics Section */}
       <div className='bg-white shadow rounded mb-4 p-4'>
         <h1 className='mb-2 text-2xl font-bold '>Dashboard</h1>
         <p>The dashboard provides vendors with quick access to Business views and customer reviews, helping them monitor engagement, improve service, and build trust with potential buyers.</p>
@@ -156,7 +153,7 @@ const VendorDashboard = () => {
         </div>
       </div>
 
-      {/* ... rest of your existing code ... */}
+    
     </div>
   );
 };

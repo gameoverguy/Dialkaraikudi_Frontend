@@ -54,6 +54,7 @@ const Index = () => {
       <div className="flex flex-col gap-3">
         <AdPopup />
         <Carousel />
+
         <Category
           productCategories={productCategories}
           serviceCategories={serviceCategories}
