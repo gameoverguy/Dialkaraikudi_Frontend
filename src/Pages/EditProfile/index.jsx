@@ -13,6 +13,7 @@ const EditProfile = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -27,8 +28,6 @@ const EditProfile = () => {
             phone: user.phone || "",
             user_id: userData.user_id,
           });
-
-          console.log("Fetched user for form:", user);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -40,32 +39,39 @@ const EditProfile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    // Only allow name field to be changed
+    if (name === 'name') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
-  
     e.preventDefault();
     setIsLoading(true);
 
     try {
       const userData = JSON.parse(localStorage.getItem("userData"));
+      // Only send name in the update request
+      const updateData = {
+        name: formData.name,
+      };
+      
       const response = await axios.put(
         `${API}/user/${userData.user_id}`,
-        formData
+        updateData
       );
+      
       if (response?.data && (response.data.success || response.status === 200)) {
         const updatedUserData = {
           ...userData,
-          ...formData,
+          name: formData.name, // Only update the name
         };
         localStorage.setItem("userData", JSON.stringify(updatedUserData));
         window.location.href = '/';
       }
-      
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
@@ -96,6 +102,8 @@ const EditProfile = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              disabled={true}
+              className="bg-gray-50 cursor-not-allowed"
             />
 
             <FloatingInput
@@ -104,7 +112,10 @@ const EditProfile = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
+              disabled={true}
+              className="bg-gray-50 cursor-not-allowed"
             />
+
             <button
               type="submit"
               disabled={isLoading}
