@@ -30,6 +30,10 @@ const Bussiness_List = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(null);
+  const [fetchBanner , setFetchBanner] = useState(null);
+  const [fetchBand , setFetchBand] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [fadeIn, setFadeIn] = useState(true);
   // const [expandedBusinessId, setExpandedBusinessId] = useState(null);
 
   const [filterOpen, setFilterOpen] = useState(false);
@@ -38,6 +42,24 @@ const Bussiness_List = () => {
 
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+
+  
+  useEffect(()=>{
+    const fetchAds = async ()=>{
+      try{
+        const response = await axios.get(`${API}/adverts`);        
+        const ads = response.data.filter(ad => ad.slotId?.page === "businesslisting");
+        if (ads.length > 0) {
+          setFetchBanner(ads.filter(ad => ad.slotId?._id === "68283ba4158ec22d9c5bae48"));
+          console.log("fetchAds", ads);
+        }
+      }
+      catch(error){
+        console.log(error);
+      }
+    } 
+    fetchAds();
+  }, [])
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -128,9 +150,27 @@ const Bussiness_List = () => {
     }
   };
 
+  useEffect(() => {
+    if (fetchBanner && fetchBanner.length > 0) {
+      const interval = setInterval(() => {
+        setFadeIn(false); // Start fade out
+        setTimeout(() => {
+          setCurrentImageIndex((prevIndex) => 
+            (prevIndex + 1) % fetchBanner.length
+          );
+          setFadeIn(true); // Start fade in
+        }, 1000); // Wait for fade out to complete
+      }, 5000); // Change image every 5 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [fetchBanner]);
+
   // const toggleAmenities = (id) => {
   //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
   // };
+
+ 
 
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
@@ -147,12 +187,16 @@ const Bussiness_List = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[36vh]">
-        <div className="w-full">
-          <img
-            src={coursal11}
-            alt="Banner"
-            className="w-full h-full object-cover"
-          />
+      <div className="w-full">
+          {fetchBanner && fetchBanner.length > 0 && (
+            <img
+              src={fetchBanner[currentImageIndex]?.contentUrl}
+              alt="Banner"
+              className={`w-full h-full object-cover transition-opacity duration-500 ${
+                fadeIn ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          )}
         </div>
       </div>
 
