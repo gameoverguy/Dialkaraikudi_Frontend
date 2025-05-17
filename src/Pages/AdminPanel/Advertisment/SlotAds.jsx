@@ -6,8 +6,7 @@ import FloatingInput from "../../../Components/FloatingInput";
 import FloatingTextarea from "../../../Components/FloatingInput/FloatingTextarea";
 import { API } from "../../../../config/config";
 
-const SlotAds = () => {
-  const { slotId } = useParams();
+const SlotAds = ({slotId}) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
