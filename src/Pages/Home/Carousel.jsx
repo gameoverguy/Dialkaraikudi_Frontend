@@ -147,14 +147,14 @@ const Carousel = () => {
   ];
 
   return (
-    <div className="overflow-hidden w-full h-[60vh]">
+    <div className="overflow-hidden w-full h-fit">
       <Slider {...settings}>
         {coursal.map((item) => (
           <div key={item.id}>
             <img
               src={item.image}
               alt="Slide"
-              className="bg-cover w-full lg:h-full"
+              className="bg-cover w-full lg:h-[60vh]"
               loading="lazy" // Ensures smooth loading
             />
           </div>
