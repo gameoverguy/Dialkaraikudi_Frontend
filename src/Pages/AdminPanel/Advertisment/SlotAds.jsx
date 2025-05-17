@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import CustomModal from "../../../Components/modal";
 import FloatingInput from "../../../Components/FloatingInput";
@@ -7,6 +6,9 @@ import FloatingSelect from "../../../Components/FloatingInput/DropDown";
 import FloatingTextarea from "../../../Components/FloatingInput/FloatingTextarea";
 import { API } from "../../../../config/config";
 import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+
 const SlotAds = ({ slotId }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ const SlotAds = ({ slotId }) => {
     type: "Image",
     contentUrl: "",
     description: "",
-    priority: 1,
+    priority: "",
     startDate: "",
     endDate: "",
   });
@@ -34,6 +36,8 @@ const SlotAds = ({ slotId }) => {
           axios.get(`${API}/adverts?slotId=${slotId}`),
           axios.get(`${API}/advertslots/${slotId}`),
         ]);
+        console.log(adsResponse.data);
+        console.log(slotResponse.data.allowedBusinesses);
 
         setAds(adsResponse.data);
         setSelectedSlot(slotResponse.data);
@@ -103,6 +107,105 @@ const SlotAds = ({ slotId }) => {
     });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API}/adverts/${id}`);
+      setAds(ads.filter(ad => ad._id !== id));
+    } catch (error) {
+      console.error("Error deleting ad:", error);
+    }
+  };
+
+  const [editingAd, setEditingAd] = useState(null);
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    setUploadLoading(true);
+    try {
+      let contentUrl = editingAd.contentUrl;
+      if (selectedImage) {
+        contentUrl = await uploadToCloudinary(selectedImage);
+      }
+
+      const response = await axios.put(`${API}/adverts/${editingAd._id}`, {
+        ...formData,
+        contentUrl,
+      });
+
+      setAds(ads.map(ad => ad._id === editingAd._id ? response.data : ad));
+      setShowModal(false);
+      setEditingAd(null);
+      setFormData({
+        slotId: slotId,
+        businessId: "",
+        type: "Image",
+        description: "",
+        priority: 1,
+        startDate: "",
+        endDate: "",
+      });
+      setSelectedImage(null);
+    } catch (error) {
+      console.error("Error updating ad:", error);
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
+  const openEditModal = (ad) => {
+    setEditingAd(ad);
+    setFormData({
+      slotId: ad.slotId,
+      businessId: ad.businessId._id,
+      type: ad.type,
+      description: ad.description,
+      priority: ad.priority,
+      startDate: new Date(ad.startDate).toISOString().split('T')[0],
+      endDate: new Date(ad.endDate).toISOString().split('T')[0],
+    });
+    setShowModal(true);
+  };
+
+  const handleImageRemove = () => {
+    setSelectedImage(null);
+    if (editingAd) {
+      setFormData(prev => ({
+        ...prev,
+        contentUrl: ''
+      }));
+      setEditingAd(prev => ({
+        ...prev,
+        contentUrl: ''
+      }));
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.add('border-emerald-500');
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('border-emerald-500');
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('border-emerald-500');
+    
+    const files = e.dataTransfer.files;
+    if (files && files[0]) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        setSelectedImage(file);
+      }
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div className="shadow bg-white p-6 rounded-lg">
@@ -120,13 +223,39 @@ const SlotAds = ({ slotId }) => {
           <div className="flex justify-center items-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
           </div>
+        ) : ads.length === 0 ? (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <div className="mb-4">
+              <span className="text-4xl">🖼️</span>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No advertisements yet
+            </h3>
+            <p className="text-gray-500 max-w-sm mx-auto">
+              This slot doesn't have any advertisements. Click "Add New Ad" to create your first advertisement.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {ads.map((ad) => (
               <div
                 key={ad._id}
-                className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow relative group"
               >
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                  <button
+                    onClick={() => openEditModal(ad)}
+                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FaRegEdit className="text-blue-600" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(ad._id)}
+                    className="bg-white p-2 rounded-full  text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <MdDeleteOutline className="text-red-500" />
+                  </button>
+                </div>
                 <div className="aspect-video bg-gray-100">
                   <img
                     src={ad.contentUrl}
@@ -162,10 +291,23 @@ const SlotAds = ({ slotId }) => {
 
       <CustomModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        title="Add New Advertisement"
+        onClose={() => {
+          setShowModal(false);
+          setEditingAd(null);
+          setFormData({
+            slotId: slotId,
+            businessId: "",
+            type: "Image",
+            description: "",
+            priority: 1,
+            startDate: "",
+            endDate: "",
+          });
+          setSelectedImage(null);
+        }}
+        title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={editingAd ? handleEdit : handleSubmit} className="space-y-4">
           <FloatingSelect
             name="businessId"
             value={formData.businessId}
@@ -181,30 +323,35 @@ const SlotAds = ({ slotId }) => {
             <label className="block text-sm font-medium text-gray-700">
               Upload Image
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-emerald-500 transition-colors">
-              <div className="space-y-1 text-center">
-                {selectedImage ? (
-                  <div className="space-y-2">
+            <div 
+              className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-emerald-500 transition-colors"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="space-y-1 text-center w-full">
+                {(selectedImage || (editingAd && editingAd.contentUrl && !selectedImage)) ? (
+                  <div className="space-y-2 relative">
+                    <button
+                      type="button"
+                      onClick={handleImageRemove}
+                      className="absolute -top-2 -right-2 bg-white p-1.5 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <MdDeleteOutline className="text-red-500 text-lg" />
+                    </button>
                     <div className="flex items-center justify-center">
                       <img
-                        src={URL.createObjectURL(selectedImage)}
+                        src={selectedImage ? URL.createObjectURL(selectedImage) : editingAd?.contentUrl}
                         alt="Preview"
                         className="h-32 w-auto object-contain"
                       />
                     </div>
                     <p className="text-sm text-emerald-600">
-                      {selectedImage.name}
+                      {selectedImage ? selectedImage.name : 'Current Image'}
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedImage(null)}
-                      className="text-xs text-red-500 hover:text-red-700"
-                    >
-                      Remove
-                    </button>
                   </div>
                 ) : (
-                  <div className="flex text-sm text-gray-600">
+                  <div className="flex flex-col items-center text-sm text-gray-600">
                     <label className="relative cursor-pointer bg-white rounded-md font-medium text-emerald-600 hover:text-emerald-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-500">
                       <span>Upload a file</span>
                       <input
@@ -212,14 +359,14 @@ const SlotAds = ({ slotId }) => {
                         className="sr-only"
                         accept="image/*"
                         onChange={handleImageChange}
-                        required
+                        required={!editingAd}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      PNG, JPG up to 10MB
+                    </p>
                   </div>
-                )}
-                {!selectedImage && (
-                  <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
                 )}
               </div>
             </div>
@@ -239,19 +386,16 @@ const SlotAds = ({ slotId }) => {
             placeholder="Priority"
             required
           />
-          <FloatingInput
-            type="datetime-local"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            placeholder="Start Date"
-            required
-          />
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setEditingAd(null);
+                setSelectedImage(null);
+              }}
               className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              disabled={uploadLoading}
             >
               Cancel
             </button>
@@ -266,7 +410,7 @@ const SlotAds = ({ slotId }) => {
                   <span>Uploading...</span>
                 </>
               ) : (
-                "Create Ad"
+                editingAd ? 'Update Ad' : 'Create Ad'
               )}
             </button>
           </div>
