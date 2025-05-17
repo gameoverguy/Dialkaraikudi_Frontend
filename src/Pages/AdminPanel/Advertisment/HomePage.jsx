@@ -28,6 +28,7 @@ const HomePage = () => {
         const response = await axios.get(
           `${API}/advertslots`
         );
+        console.log(response.data);        
         setAdSlots(response.data);
         setLoading(false);
       } catch (error) {
