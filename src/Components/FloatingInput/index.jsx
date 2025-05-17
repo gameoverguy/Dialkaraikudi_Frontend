@@ -7,6 +7,7 @@ const FloatingInput = ({
   type = "text",
   placeholder = " ",
   value,
+  className = "",
   onChange,
   required = false,
   prefix = null,
@@ -14,6 +15,7 @@ const FloatingInput = ({
   maxLength,
   icon = null,
   iconPosition = "left",
+  disabled = false,
 }) => {
   const getIconStyles = () => {
     if (typeof iconPosition === 'object') {
@@ -72,8 +74,9 @@ const FloatingInput = ({
             required={required}
             maxLength={maxLength}
             placeholder=" "
-            className={`peer block w-full h-[48px] ${getInputPadding()} pt-4 pb-4 text-sm text-gray-900 bg-white border appearance-none focus:outline-none focus:ring-0 rounded-md
-              ${error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-600"}`}
+            className={`peer block w-full h-[48px] ${getInputPadding()} pt-4 pb-4 text-sm text-gray-900 border appearance-none focus:outline-none focus:ring-0 rounded-md
+              ${error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-600"} ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}
+              ${className}`}
           />
           <label
             htmlFor={id}
@@ -81,7 +84,7 @@ const FloatingInput = ({
               peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 
               peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:text-xs
               ${icon && iconPosition === 'left' ? 'ml-0' : ''}
-              ${error ? "peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:text-red-500" : ""}`}
+              ${error ? "peer-focus:text-red-500 peer-[:not(:placeholder-shown)]:text-red-500" : ""}${disabled ? "bg-gray-100" : ""}`}
           >
             {placeholder}
           </label>

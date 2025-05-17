@@ -3,7 +3,7 @@ import React from 'react'
 function VideoAdertisment1() {
   return (
 
-    <div className="w-full md:w-11/12 mx-auto md:h-[60vh] relative overflow-hidden group">
+    <div className="w-full lg:w-11/12 mx-auto lg:h-[60vh] relative overflow-hidden group">
         {/* Video Background */}
         <video
           className="w-full h-full object-cover"

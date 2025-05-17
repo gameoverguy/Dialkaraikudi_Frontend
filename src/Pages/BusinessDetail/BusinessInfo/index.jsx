@@ -14,7 +14,7 @@ import { API } from "../../../../config/config";
 const BusinessInfo = ({ formData, businessId }) => {
   const [showContact, setShowContact] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { handleOpenLoginModal } = useLoginModal();
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialSlide, setInitialSlide] = useState(0);
@@ -222,14 +222,18 @@ const BusinessInfo = ({ formData, businessId }) => {
               onClick={handleBookmarkClick}
               disabled={isLoading}
               className={`
-    relative group p-2.5 rounded-full transition-all duration-300 transform
-    ${isLoading ? "cursor-wait opacity-50" : "hover:scale-110 active:scale-95"}
-    ${
-      isBookmarked
-        ? "text-red-600 hover:text-red-700 bg-red-50"
-        : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-    }
-  `}
+                relative group p-2.5 rounded-full transition-all duration-300 transform
+                ${
+                  isLoading
+                    ? "cursor-wait opacity-50"
+                    : "hover:scale-110 active:scale-95"
+                }
+                ${
+                  isLoggedin && isBookmarked
+                    ? "text-red-600 hover:text-red-700 bg-red-50"
+                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                }
+              `}
             >
               {isLoading ? (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -237,17 +241,17 @@ const BusinessInfo = ({ formData, businessId }) => {
                 </div>
               ) : (
                 <>
-                  {isBookmarked ? (
+                  {isLoggedin && isBookmarked ? (
                     <FaHeart className="text-2xl transition-transform" />
                   ) : (
                     <FaRegHeart className="text-2xl transition-transform" />
                   )}
-                  {isBookmarked && (
+                  {/* {isLoggedin && isBookmarked && (
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
                     </span>
-                  )}
+                  )} */}
                 </>
               )}
             </button>

@@ -17,6 +17,7 @@ import LoginModal from "./User_Business_Modal";
 import BusinessDetailForm from "../business/BusinessDetailForm";
 import axios from "axios";
 import { API } from "../../config/config";
+import { AiOutlineHeart } from "react-icons/ai";
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal, loginRole } = useLoginModal();
@@ -180,7 +181,7 @@ const Header = () => {
 
                   {showDropdown && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
-                      {businessData?.user_id && (
+                      {businessData?.user_id ? (
                         <Link
                           to={`/vendorpanel/${businessData.user_id}`}
                           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors duration-200"
@@ -188,6 +189,29 @@ const Header = () => {
                         >
                           Dashboard
                         </Link>
+                      ) : (
+                        <>
+                          <Link
+                            to="/profile"
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors duration-200"
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            <span className="flex items-center gap-2">
+                              <LuCircleUserRound className="text-lg" />
+                              Edit Profile
+                            </span>
+                          </Link>
+                          <Link
+                            to="/favorites"
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors duration-200"
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            <span className="flex items-center gap-2">
+                              <AiOutlineHeart className="text-lg" />
+                              Favorites
+                            </span>
+                          </Link>
+                        </>
                       )}
                       <button
                         onClick={() => {
@@ -254,14 +278,14 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full right-0 left-0 bg-white shadow-md border-b border-gray-200 z-50">
             <div className="px-4 py-3">
-              {businessData?.user_id && (
+            {businessData?.user_id && (
                 <Link
                   to={`/vendorpanel/${businessData.user_id}`}
                   className="block py-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
-              )}
+              )}  
               {userData || businessData ? (
                 <button
                   onClick={handleLogout}
