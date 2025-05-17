@@ -52,13 +52,12 @@ const Index = () => {
   return (
     <>
       <div className="flex flex-col gap-3">
-        {/* <AdPopup /> */}
+        <AdPopup />
         <Carousel />
         <Category
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-
 
         <div className="flex flex-col items-center justify-center md:gap-4">
           <h1 className="text-2xl lg:text-3xl font-semibold text-green-800">
@@ -68,7 +67,9 @@ const Index = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center md:gap-4">
-          <h1 className="text-2xl lg:text-3xl font-semibold text-cyan-700">Top Services</h1>
+          <h1 className="text-2xl lg:text-3xl font-semibold text-cyan-700">
+            Top Services
+          </h1>
           <TopService />
         </div>
 
@@ -78,7 +79,7 @@ const Index = () => {
         />
 
         <Offers />
-        
+
         <VideoAdertisment1 />
 
         <Category2
@@ -86,13 +87,12 @@ const Index = () => {
           serviceCategories={serviceCategories}
         />
         <VideoAdertisment2 />
-        
+
         {/* <Category3 /> */}
-        
+
         <SeasonalProducts />
         <SeasonalServices />
         <LimitedOffer />
-        
       </div>
     </>
   );
