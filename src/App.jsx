@@ -22,6 +22,7 @@ import VendorDashboard from "./Pages/VendorPanel/Dashboard/index.jsx";
 import VendorPanel from "./Pages/VendorPanel/Index.jsx";
 import Favorites from "./Pages/Favorites/index.jsx";
 import EditProfile from "./Pages/EditProfile/index.jsx";
+import SlotAds from "./Pages/AdminPanel/Advertisment/SlotAds.jsx";
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
                 </AdminRoute>
               }
             />
+            <Route path="/adminpanel/advertisement/slot/:slotId" element={<SlotAds />} />
             <Route
               path="/vendorpanel/:id"
               element={
