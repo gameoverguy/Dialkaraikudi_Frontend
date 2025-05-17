@@ -30,8 +30,8 @@ const Bussiness_List = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(null);
-  const [fetchBanner , setFetchBanner] = useState(null);
-  const [fetchBand , setFetchBand] = useState(null);
+  const [fetchBanner, setFetchBanner] = useState(null);
+  const [fetchBand, setFetchBand] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [fadeIn, setFadeIn] = useState(true);
   // const [expandedBusinessId, setExpandedBusinessId] = useState(null);
@@ -43,23 +43,25 @@ const Bussiness_List = () => {
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
 
-  
-  useEffect(()=>{
-    const fetchAds = async ()=>{
-      try{
-        const response = await axios.get(`${API}/adverts`);        
-        const ads = response.data.filter(ad => ad.slotId?.page === "businesslisting");
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(`${API}/adverts`);
+        const ads = response.data.filter(
+          (ad) => ad.slotId?.page === "businesslisting"
+        );
         if (ads.length > 0) {
-          setFetchBanner(ads.filter(ad => ad.slotId?._id === "68283ba4158ec22d9c5bae48"));
+          setFetchBanner(
+            ads.filter((ad) => ad.slotId?._id === "68283ba4158ec22d9c5bae48")
+          );
           console.log("fetchAds", ads);
         }
-      }
-      catch(error){
+      } catch (error) {
         console.log(error);
       }
-    } 
+    };
     fetchAds();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -155,8 +157,8 @@ const Bussiness_List = () => {
       const interval = setInterval(() => {
         setFadeIn(false); // Start fade out
         setTimeout(() => {
-          setCurrentImageIndex((prevIndex) => 
-            (prevIndex + 1) % fetchBanner.length
+          setCurrentImageIndex(
+            (prevIndex) => (prevIndex + 1) % fetchBanner.length
           );
           setFadeIn(true); // Start fade in
         }, 1000); // Wait for fade out to complete
@@ -169,8 +171,6 @@ const Bussiness_List = () => {
   // const toggleAmenities = (id) => {
   //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
   // };
-
- 
 
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
@@ -187,13 +187,13 @@ const Bussiness_List = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[36vh]">
-      <div className="w-full">
+        <div className="w-full">
           {fetchBanner && fetchBanner.length > 0 && (
             <img
               src={fetchBanner[currentImageIndex]?.contentUrl}
               alt="Banner"
               className={`w-full h-full object-cover transition-opacity duration-500 ${
-                fadeIn ? 'opacity-100' : 'opacity-0'
+                fadeIn ? "opacity-100" : "opacity-0"
               }`}
             />
           )}
@@ -381,15 +381,10 @@ const Bussiness_List = () => {
         <div className=" hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5">
           <div className="h-[300px] w-full bg-black">
             <img src="./square.jfif" alt="" />
-
           </div>
           <div className="h-[300px] w-full bg-black">
             <img src="./square2.jpg" alt="" />
-
           </div>
-          
-
-
         </div>
         <ToastContainer />
       </div>
