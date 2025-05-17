@@ -5,11 +5,13 @@ import FloatingInput from "../../../Components/FloatingInput";
 import FloatingTextarea from "../../../Components/FloatingInput/FloatingTextarea";
 import { API } from "../../../../config/config";
 import { useNavigate } from "react-router-dom";
+import SlotAds from "./SlotAds";
 
 const HomePage = () => {
   const [adSlots, setAdSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -69,8 +71,26 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleManageAds = (slotId) => {
-    navigate(`/adminpanel/advertisement/slot/${slotId}`);
+    const slot = adSlots.find(slot => slot._id === slotId);
+    setSelectedSlot(slot);
   };
+
+  if (selectedSlot) {
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold">Managing Slot: {selectedSlot.name}</h1>
+          <button
+            onClick={() => setSelectedSlot(null)}
+            className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+          >
+            <span>←</span> Back to Slots
+          </button>
+        </div>
+        <SlotAds slotId={selectedSlot._id} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
