@@ -1,17 +1,23 @@
 import React from "react";
 import Logo from "../assets/logo_01.png";
-import { FaInstagram, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaMapMarkerAlt,
+  FaFacebookF,
+  FaTwitter,
+} from "react-icons/fa";
 import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 
 const Footer = () => {
-  const social = [
-    { icon: <FaInstagram />, color: "#C13584" },
-    { icon: <TiSocialFacebook />, color: "#3b5998" },
-    { icon: <IoLogoWhatsapp />, color: "#25D366" },
-    { icon: <CiYoutube />, color: "#FF0000" },
-    { icon: <CiLinkedin />, color: "#0077b5" },
+  const socialLinks = [
+    { icon: FaInstagram, color: "#C13584", href: "https://instagram.com" },
+    { icon: TiSocialFacebook, color: "#3b5998", href: "https://facebook.com" },
+    { icon: IoLogoWhatsapp, color: "#25D366" },
+    { icon: CiYoutube, color: "#FF0000" },
+    { icon: CiLinkedin, color: "#0077b5" },
+    // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
 
   const footText1 = [
@@ -29,10 +35,10 @@ const Footer = () => {
 
   return (
     <footer className="bg-gradient-to-t from-blue-300 to-white text-teal-800">
-      <div className="w-11/12 mx-auto px-6 pt-18">
-        <div className="flex flex-col lg:flex-row w-full justify-between items-start">
+      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
+        <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
-          <div className="w-4/12 p-3 ">
+          <div className="w-full flex flex-col items-center md:items-start md:w-4/12 p-3 ">
             <img
               src={Logo}
               alt="Dialkaraikudi"
@@ -45,7 +51,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="w-2/12 p-3">
+          <div className="w-full md:w-2/12 p-3">
             <h4 className="text-lg font-semibold mb-4 text-gray-800">
               Quick Links
             </h4>
@@ -64,7 +70,7 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="w-2/12 p-3">
+          <div className="w-full md:w-2/12 p-3">
             <h4 className="text-lg font-semibold mb-4 text-gray-800">
               Contact Us
             </h4>
@@ -80,7 +86,7 @@ const Footer = () => {
               <li>
                 <a
                   href="mailto:info@dialkaraikudi.com"
-                  className="hover:text-blue-600 transition"
+                  className="hover:text-blue-600 transition wrap-break-word"
                 >
                   info@dialkaraikudi.com
                 </a>
@@ -89,7 +95,7 @@ const Footer = () => {
           </div>
 
           {/* Office Locations */}
-          <div className="w-4/12 p-3">
+          <div className="w-full md:w-4/12 p-3">
             <h4 className="text-lg text-center font-semibold mb-4 text-gray-800">
               Our Offices
             </h4>
@@ -116,46 +122,45 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div className="mt-10 border-t border-gray-400 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          {/* Copyright */}
-          <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
-            © {new Date().getFullYear()} Digitaly AI Technolgy Solutions. All
-            Rights Reserved.
-          </p>
+      {/* Divider */}
+      <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
+        {/* Copyright */}
+        <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
+          © {new Date().getFullYear()} Digitaly AI Technolgy Solutions. All
+          Rights Reserved.
+        </p>
 
-          {/* Links */}
-          <div className="flex gap-4 text-xs sm:text-sm">
-            <a href="#" className="hover:text-blue-600 transition-colors">
-              Privacy Policy
-            </a>
-            <span className="text-gray-400">•</span>
-            <a href="#" className="hover:text-blue-600 transition-colors">
-              Terms of Service
-            </a>
-          </div>
+        {/* Links */}
+        <div className="flex gap-4 text-xs sm:text-sm">
+          <a href="#" className="hover:text-blue-600 transition-colors">
+            Privacy Policy
+          </a>
+          <span className="text-gray-400">•</span>
+          <a href="#" className="hover:text-blue-600 transition-colors">
+            Terms of Service
+          </a>
+        </div>
 
-          {/* Social Icons */}
-          <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
-            {social.map((item, index) => (
+        {/* Social Icons */}
+        <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+          {socialLinks.map((item, index) => {
+            const Icon = item.icon;
+            return (
               <a
                 key={index}
-                href="#"
-                className="group flex items-center justify-center hover:scale-110 transition-all duration-300"
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-center rounded-full transition-transform duration-300 hover:scale-110 cursor-pointer"
                 style={{ color: item.color }}
-                aria-label={`Visit our ${
-                  item.icon.type?.displayName || "social"
-                } page`}
+                aria-label={`Visit our ${Icon.displayName || "social"} page`}
               >
-                {React.cloneElement(item.icon, {
-                  size: 32,
-                  className:
-                    "group-hover:scale-110 transition-transform duration-300",
-                })}
+                <Icon className="lg:text-3xl transition-transform duration-300 group-hover:scale-125" />
               </a>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </footer>
