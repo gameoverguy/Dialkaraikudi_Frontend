@@ -197,7 +197,7 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
                   ref={otpRefs[index]}
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-center text-base sm:text-lg border-2 border-gray-500 rounded-lg focus:border-purple-500 focus:outline-none"
+                  className="w-8 h-8 text-center text-md border-2 border-gray-500 rounded-lg focus:border-purple-500 focus:outline-none"
                 />
               ))}
             </div>

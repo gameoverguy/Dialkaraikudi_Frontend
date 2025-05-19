@@ -69,7 +69,7 @@ const Header = () => {
         if (response.data.success) {
           localStorage.removeItem("userData");
           localStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          localStorage.removeItem("adminData");
           setUserData(null);
           setBusinessData(null);
           navigate("/");

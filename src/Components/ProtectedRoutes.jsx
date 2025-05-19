@@ -5,7 +5,7 @@ export const AdminRoute = ({ children }) => {
   const [adminData, setAdminData] = useState(undefined);
 
   useEffect(() => {
-    setAdminData(sessionStorage.getItem("adminData"));
+    setAdminData(localStorage.getItem("adminData"));
   }, []);
 
   if (adminData === undefined) {
