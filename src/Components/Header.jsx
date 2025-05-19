@@ -111,7 +111,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-[#a9d8ff] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
+      <div className="sticky top-0 bg-[#e0d8ff] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
         <div className="px-4 py-3 md:w-11/12 mx-auto flex justify-between items-center">
           <div className="flex space-x-6 items-center">
             <Link to="/">
