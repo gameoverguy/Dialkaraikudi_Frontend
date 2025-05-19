@@ -111,7 +111,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-white z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-md border-gray-200">
+      <div className="sticky top-0 bg-[#e0d8ff] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
         <div className="px-4 py-3 md:w-11/12 mx-auto flex justify-between items-center">
           <div className="flex space-x-6 items-center">
             <Link to="/">
@@ -132,13 +132,16 @@ const Header = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for services, products, brands..."
-                className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 transition-all"
+                className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-200 border border-gray-400 rounded-lg text-gray-800 focus:outline-none focus:border-green-400 focus:ring-3 focus:ring-green-300 transition-all"
               />
               <button
                 type="submit"
-                className="absolute top-1/2 -translate-y-1/2 right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200 cursor-pointer"
+                className="absolute top-1/2 -translate-y-1/2 right-1 
+             bg-green-600 p-2 rounded-lg text-white 
+             transition-all duration-200 cursor-pointer
+             hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none"
               >
-                <IoSearchOutline className="" />
+                <IoSearchOutline className="w-5 h-5" />
               </button>
             </form>
           </div>
@@ -232,10 +235,10 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => setShowUserBusinessModal(true)}
-                className="hidden md:flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 cursor-pointer"
+                className="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-green-800 hover:scale-110 text-white px-3 py-2 rounded transition-normal duration-300 cursor-pointer"
               >
                 <LuCircleUserRound className="text-xl" />
-                <span>Login / Sign Up</span>
+                <span>Login / Signup</span>
               </button>
             )}
 
@@ -278,14 +281,14 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full right-0 left-0 bg-white shadow-md border-b border-gray-200 z-50">
             <div className="px-4 py-3">
-            {businessData?.user_id && (
+              {businessData?.user_id && (
                 <Link
                   to={`/vendorpanel/${businessData.user_id}`}
                   className="block py-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
-              )}  
+              )}
               {userData || businessData ? (
                 <button
                   onClick={handleLogout}
