@@ -63,7 +63,7 @@ const VendorPanel = () => {
     {
       key: "2",
       icon: <MdPeople size={20} />,
-      label: "Profile Management",
+      label: "Business Profile",
     },
     {
       key: "3",
@@ -73,7 +73,7 @@ const VendorPanel = () => {
     {
       key: "4",
       icon: <MdBusiness size={20} />,
-      label: "Adverts Management",
+      label: "Advert Addons",
     },
   ];
 
