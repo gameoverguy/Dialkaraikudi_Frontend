@@ -64,7 +64,7 @@ function Category({ productCategories, serviceCategories }) {
             <div className="text-2xl font-semibold py-4 text-gray-800 flex justify-center items-center">
                 {title}
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 md:gap-6 lg:gap-4 lg:py-4">
+            <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-6 md:gap-6 lg:gap-4 lg:py-4">
                 {categories && categories.length > 0 ? (
                     <>
                         {categories.slice(0, 11).map((category) => (

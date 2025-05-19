@@ -33,12 +33,12 @@ const AdPopup = () => {
     <>
       {showAd && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60">
-          <div className="relative h-[50vh] w-11/12 md:w-5/12 md:h-[50vh] overflow-hidden shadow-lg">
+          <div className="relative h-[30vh] w-10/12 md:w-9/12 md:h-[40vh] lg:w-5/12 lg:h-[50vh] overflow-hidden shadow-lg">
             {/* Background Image */}
             <img
               src={popup}
               alt="Ad"
-              className="absolute inset-0 md:w-full md:h-full object-cover z-0"
+              className="absolute inset-0 w-full h-full z-0"
             />
 
             {/* Close Icon */}

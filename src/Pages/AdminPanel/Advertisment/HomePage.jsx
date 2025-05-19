@@ -234,8 +234,8 @@ const HomePage = () => {
                 <input
                   type="radio"
                   name="slotType"
-                  value="video"
-                  checked={formData.slotType === "video"}
+                  value="Video"
+                  checked={formData.slotType === "Video"}
                   onChange={handleChange}
                   className="form-radio text-emerald-500 focus:ring-emerald-500"
                 />
