@@ -67,9 +67,8 @@ const Header = () => {
         console.log(response.data);
 
         if (response.data.success) {
-          localStorage.removeItem("userData");
-          localStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          sessionStorage.clear();
+          localStorage.clear();
           setUserData(null);
           setBusinessData(null);
           navigate("/");
@@ -186,7 +185,7 @@ const Header = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
                       {businessData?.user_id ? (
                         <Link
-                          to={`/vendorpanel/${businessData.user_id}`}
+                          to={`/vendorpanel`}
                           className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors duration-200"
                           onClick={() => setShowDropdown(false)}
                         >
