@@ -250,9 +250,9 @@ const AdminPanel = () => {
         console.log(response.data);
 
         if (response.data.success) {
-          sessionStorage.removeItem("userData");
-          sessionStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          localStorage.removeItem("userData");
+          localStorage.removeItem("businessData");
+          localStorage.removeItem("adminData");
           localStorage.setItem("selectedMenuItem", "1");
           navigate("/");
         }

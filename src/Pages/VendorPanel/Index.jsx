@@ -228,7 +228,7 @@ const VendorPanel = () => {
         if (response.data.success) {
           localStorage.removeItem("userData");
           localStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          localStorage.removeItem("adminData");
           localStorage.setItem("selectedMenuItem", "1");
           navigate("/");
         }

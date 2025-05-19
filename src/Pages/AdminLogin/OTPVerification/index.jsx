@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import CustomModal from "../../../Components/modal";
 import FloatingInput from "../../../Components/FloatingInput";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { API } from "../../../../config/config";
+import { CiCircleInfo } from "react-icons/ci";
 
 const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
   const [otp, setOtp] = useState(new Array(4).fill(""));
@@ -17,6 +17,30 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [timer, setTimer] = useState(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [otpSuccessMessage, setOtpSuccessMessage] = useState("");
+  const [resetSuccessMessage, setResetSuccessMessage] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setOtp(new Array(4).fill(""));
+      setNewPassword("");
+      setConfirmPassword("");
+      setError("");
+      setOtpSuccessMessage(""); // This is clearing the message
+      setResetSuccessMessage("");
+      setStep("otp");
+      setShowNewPassword(false);
+      setShowConfirmPassword(false);
+      setTimer(60);
+      // Focus on the first OTP input when modal opens
+      setTimeout(() => {
+        if (otpRefs.current[0]) {
+          otpRefs.current[0].focus();
+        }
+      }, 100);
+    }
+  }, [isOpen]);
+
   const handleChange = (index, value) => {
     if (isNaN(value)) return;
     const newOtp = [...otp];
@@ -53,14 +77,15 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
 
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     const otpValue = otp.join("");
     if (!otpValue || otpValue.length !== 4) {
       setError("Please enter complete OTP");
       setIsSubmitting(false);
       return;
     }
-
+    setError("");
+    setIsSubmitting(true);
+    setOtpSuccessMessage("");
     try {
       const response = await axios.post(`${API}/admin/verifyotp`, {
         email: email,
@@ -68,21 +93,22 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
       });
 
       if (response.data) {
-        setStep("password");
         setError("");
-        toast.success("OTP verified successfully!");
+        setOtpSuccessMessage("OTP verified successfully!");
+
+        setTimeout(() => {
+          setStep("password");
+        }, 1500); // Show success message for 1.5 seconds
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");
-      toast.error("OTP verification failed");
     } finally {
-      setIsSubmitting(false); // Re-enable button
+      setIsSubmitting(false);
     }
   };
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     if (!newPassword || !confirmPassword) {
       setError("Please fill all fields");
       return;
@@ -96,6 +122,10 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
       return;
     }
 
+    setError("");
+    setIsSubmitting(true);
+    setResetSuccessMessage("");
+
     try {
       const response = await axios.post(`${API}/admin/resetpassword`, {
         email: email,
@@ -104,45 +134,38 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
       });
 
       if (response.data) {
-        toast.success("Password reset successful!");
-        onClose();
-        onVerificationSuccess?.();
+        setResetSuccessMessage("Password reset successful!");
+        setTimeout(() => {
+          onClose();
+          onVerificationSuccess?.();
+        }, 1000);
       }
     } catch (err) {
       setError(err.response?.data?.message || "Password reset failed");
-      toast.error("Password reset failed");
     } finally {
       setIsSubmitting(false);
     }
   };
+
   const handleResendOTP = async () => {
     try {
       const response = await axios.post(`${API}/admin/forgotpassword`, {
         email: email,
       });
       if (response.data) {
-        toast.success("OTP resent successfully!");
-        setTimer(30); // Reset timer
-        setOtp(new Array(4).fill("")); // Clear OTP fields
+        setOtpSuccessMessage("OTP resent successfully!");
+        setTimer(30);
+        setOtp(new Array(4).fill(""));
         setError("");
+        // Add a timeout to clear the success message after 3 seconds
+        setTimeout(() => {
+          setOtpSuccessMessage("");
+        }, 3000);
       }
     } catch (err) {
-      toast.error("Failed to resend OTP");
       setError(err.response?.data?.message || "Failed to resend OTP");
     }
   };
-  useEffect(() => {
-    if (isOpen) {
-      setOtp(new Array(4).fill(""));
-      setNewPassword("");
-      setConfirmPassword("");
-      setError("");
-      setStep("otp");
-      setShowNewPassword(false);
-      setShowConfirmPassword(false);
-      setTimer(60);
-    }
-  }, [isOpen]);
   useEffect(() => {
     let interval;
     if (isOpen && timer > 0) {
@@ -159,8 +182,8 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
   };
   return (
     <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md">
-      <div className="p-2">
-        <h2 className="text-lg font-bold mb-4 text-left">
+      <div className=" text-center p-2">
+        <h2 className="text-lg font-bold mb-4">
           {step === "otp" ? "Enter Verification Code" : "Reset Password"}
         </h2>
         <p className="text-gray-600 text-xs mb-4">
@@ -185,14 +208,26 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
                 />
               ))}
             </div>
-            {error && (
-              <p className="text-red-500 text-xs text-center">{error}</p>
-            )}
+            {/* // In the render section, make sure the success message is displayed: */}
+            <div className="h-2 mb-3">
+              {otpSuccessMessage && (
+                <p className="flex justify-center items-center text-green-600 text-xs">
+                  <CiCircleInfo className="mr-2 w-4 h-4 flex-shrink-0" />
+                  {otpSuccessMessage}
+                </p>
+              )}
+              {error && (
+                <p className="flex justify-center items-center text-red-500 text-xs">
+                  <CiCircleInfo className="mr-2 w-4 h-4 flex-shrink-0" />
+                  {error}
+                </p>
+              )}
+            </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || otp.join("").length !== 4}
               className={`w-full cursor-pointer text-xs font-semibold bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
-                isSubmitting
+                isSubmitting || otp.join("").length !== 4
                   ? "opacity-70 cursor-not-allowed"
                   : "hover:bg-purple-700"
               }`}
@@ -217,7 +252,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
             </div>
           </form>
         ) : (
-          <form onSubmit={handlePasswordReset} className="space-y-4">
+          <form onSubmit={handlePasswordReset} className="">
             <div className="relative">
               <FloatingInput
                 type={showNewPassword ? "text" : "password"}
@@ -228,7 +263,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 {showNewPassword ? (
                   <AiOutlineEye className="w-5 h-5" />
@@ -247,7 +282,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 {showConfirmPassword ? (
                   <AiOutlineEye className="w-5 h-5" />
@@ -256,19 +291,30 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
                 )}
               </button>
             </div>
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
-            )}
+            <div className="h-2 mb-2">
+              {resetSuccessMessage && (
+                <p className="flex text-green-600 text-[10px] items-center justify-center sm:text-xs">
+                  <CiCircleInfo className="mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
+                  {resetSuccessMessage}
+                </p>
+              )}
+              {error && (
+                <p className="flex text-red-500 text-[10px] items-center justify-center sm:text-xs">
+                  <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
+                  {error}
+                </p>
+              )}
+            </div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !newPassword || !confirmPassword}
               className={`w-full cursor-pointer text-sm font-semibold bg-purple-600 text-white py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] ${
-                isSubmitting
+                isSubmitting || !newPassword || !confirmPassword
                   ? "opacity-70 cursor-not-allowed"
                   : "hover:bg-purple-700"
               }`}
             >
-              {isSubmitting ? "RESETTING..." : "RESET PASSWORD"}
+              {isSubmitting && !error ? "RESETTING..." : "RESET PASSWORD"}
             </button>
           </form>
         )}
