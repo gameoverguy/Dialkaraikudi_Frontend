@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import popup from "../../assets/popup.jpg";
 
@@ -16,15 +16,15 @@ const AdPopup = () => {
       }, 5000);
 
       // Auto-close popup after 10 seconds
-      const autoCloseTimer = setTimeout(() => {
-        setShowAd(false);
-      }, 10000);
+      // const autoCloseTimer = setTimeout(() => {
+      //   setShowAd(false);
+      // }, 10000);
 
       return () => {
         clearTimeout(closeIconTimer);
-        clearTimeout(autoCloseTimer);
+        // clearTimeout(autoCloseTimer);
       };
-    }, 6000); // Show popup after 6 seconds
+    }, 2000); // Show popup after 6 seconds
 
     return () => clearTimeout(adTimer);
   }, []);
@@ -34,7 +34,6 @@ const AdPopup = () => {
       {showAd && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60">
           <div className="relative h-[50vh] w-11/12 md:w-5/12 md:h-[50vh] overflow-hidden shadow-lg">
-            
             {/* Background Image */}
             <img
               src={popup}
