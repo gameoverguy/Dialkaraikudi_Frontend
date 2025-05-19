@@ -25,12 +25,13 @@ const Bussiness_List = () => {
   const location = useLocation();
   const search = useLocation();
   const searchList = search.state;
-  console.log("searchList", searchList);
+  // console.log("searchList", searchList);
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(null);
   const [fetchBanner, setFetchBanner] = useState(null);
+  const [sideBanner, setSideBanner] = useState(null);
   const [fetchBand, setFetchBand] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [fadeIn, setFadeIn] = useState(true);
@@ -54,7 +55,9 @@ const Bussiness_List = () => {
           setFetchBanner(
             ads.filter((ad) => ad.slotId?._id === "68283ba4158ec22d9c5bae48")
           );
-          console.log("fetchAds", ads);
+          setSideBanner(
+            ads.filter((ad) => ad.slotId?._id === "68283c12158ec22d9c5bae4e")
+          );
         }
       } catch (error) {
         console.log(error);
@@ -378,13 +381,18 @@ const Bussiness_List = () => {
             </div>
           </div>
         </div>
-        <div className=" hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5">
-          <div className="h-[300px] w-full bg-black">
-            <img src="./square.jfif" alt="" />
-          </div>
-          <div className="h-[300px] w-full bg-black">
-            <img src="./square2.jpg" alt="" />
-          </div>
+        {/* // Replace the side banner div with this: */}
+        <div className="hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5">
+          {sideBanner &&
+            sideBanner.map((banner, index) => (
+              <div key={index} className="h-[300px] w-full bg-black">
+                <img
+                  src={banner.contentUrl}
+                  alt={`Side Banner ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
         </div>
         <ToastContainer />
       </div>
