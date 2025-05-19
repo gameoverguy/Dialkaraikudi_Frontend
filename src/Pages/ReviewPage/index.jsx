@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { API } from "../../../config/config";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 axios.defaults.withCredentials = true;
 
 const ReviewPage = () => {
@@ -16,7 +16,6 @@ const ReviewPage = () => {
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  // const { id } = useParams();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userId = userData?.user_id;
   const userName = userData?.name;
