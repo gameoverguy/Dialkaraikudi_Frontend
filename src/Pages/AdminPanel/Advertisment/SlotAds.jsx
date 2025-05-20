@@ -10,7 +10,7 @@ import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
-const SlotAds = ({ slotId }) => {
+const SlotAds = ({ slotId, type }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -20,13 +20,15 @@ const SlotAds = ({ slotId }) => {
   const [formData, setFormData] = useState({
     slotId: slotId,
     businessId: "",
-    type: "Image",
+    type: type,
     contentUrl: "",
     description: "",
     priority: "",
     startDate: "",
     endDate: "",
   });
+  console.log(formData.type);
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [allowedBusinesses, setAllowedBusinesses] = useState([]);
 
@@ -205,6 +207,19 @@ const SlotAds = ({ slotId }) => {
       }));
     }
   };
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
+        setSelectedImage(file);
+      } else {
+        alert(`Please upload a ${type.toLowerCase()} file`);
+      }
+    }
+  };
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -226,8 +241,13 @@ const SlotAds = ({ slotId }) => {
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       const file = files[0];
-      if (file.type.startsWith("image/")) {
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
         setSelectedImage(file);
+      } else {
+        alert(`Please upload a ${type.toLowerCase()} file`);
       }
     }
   };
@@ -626,6 +646,186 @@ const SlotAds = ({ slotId }) => {
           </form>
         </CustomModal>
       </div>
+
+      <CustomModal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setEditingAd(null);
+          setFormData({
+            slotId: slotId,
+            businessId: "",
+            type: "Image",
+            description: "",
+            priority: 1,
+            startDate: "",
+            endDate: "",
+          });
+          setSelectedImage(null);
+        }}
+        title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
+      >
+        <form
+          onSubmit={editingAd ? handleEdit : handleSubmit}
+          className="space-y-4"
+        >
+          <FloatingSelect
+            name="businessId"
+            value={formData.businessId}
+            onChange={handleChange}
+            options={allowedBusinesses.map((business) => ({
+              value: business._id,
+              label: business.businessName,
+            }))}
+            placeholder="Select Business"
+            required
+          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Upload {type}
+            </label>
+            <div
+              className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-emerald-500 transition-colors"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="space-y-1 text-center w-full">
+                {selectedImage ||
+                (editingAd && editingAd.contentUrl && !selectedImage) ? (
+                  <div className="space-y-2 relative">
+                    <button
+                      type="button"
+                      onClick={handleImageRemove}
+                      className="absolute -top-2 -right-2 bg-white p-1.5 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <MdDeleteOutline className="text-red-500 text-lg" />
+                    </button>
+                    <div className="flex items-center justify-center">
+                      {type === "Video" ? (
+                        <video
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
+                          className="h-32 w-auto"
+                          controls
+                        />
+                      ) : (
+                        <img
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
+                          alt="Preview"
+                          className="h-32 w-auto object-contain"
+                        />
+                      )}
+                    </div>
+                    <p className="text-sm text-emerald-600">
+                      {selectedImage ? selectedImage.name : "Current File"}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center text-sm text-gray-600">
+                    <label className="relative cursor-pointer bg-white rounded-md font-medium text-emerald-600 hover:text-emerald-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        accept={type === "Video" ? "video/*" : "image/*"}
+                        onChange={handleFileChange}
+                        required={!editingAd}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {type === "Video"
+                        ? "MP4, WebM up to 50MB"
+                        : "PNG, JPG up to 10MB"}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <FloatingTextarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Description"
+            required
+          />
+          <FloatingInput
+            type="number"
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            placeholder="Priority"
+            required
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setShowModal(false);
+                setEditingAd(null);
+                setSelectedImage(null);
+              }}
+              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              disabled={uploadLoading}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 flex items-center gap-2"
+              disabled={uploadLoading}
+            >
+              {uploadLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Uploading...</span>
+                </>
+              ) : editingAd ? (
+                "Update Ad"
+              ) : (
+                "Create Ad"
+              )}
+            </button>
+          </div>
+        </form>
+      </CustomModal>
+
+      {/* Delete Confirmation Modal */}
+      <CustomModal
+        isOpen={deleteConfirmation.show}
+        onClose={() => setDeleteConfirmation({ show: false, adId: null })}
+        title="Confirm Delete"
+      >
+        <div className="p-6">
+          <p className="text-gray-700 mb-6">
+            Are you sure you want to delete this advertisement? This action
+            cannot be undone.
+          </p>
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setDeleteConfirmation({ show: false, adId: null })}
+              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirmDelete}
+              className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </CustomModal>
       <ToastContainer
         position="top-right"
         autoClose={3000}

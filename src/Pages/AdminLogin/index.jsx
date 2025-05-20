@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import FloatingInput from "../../Components/FloatingInput";
-import img from "../../assets/img.png";
+import adminImage from "../../assets/admin02.webp";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import OTPVerification from "./OTPVerification";
 import ForgotPassword from "./ForgotPasswordLogin";
@@ -112,12 +112,14 @@ const AdminLogin = () => {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-indigo-600 via-purple-550 to-pink-500">
       {/* Left side - Image */}
-      <div className="hidden lg:flex lg:w-1/2">
-        <img
-          src={img}
-          alt="Login"
-          className="w-full h-full object-cover rounded-r-3xl"
-        />
+      <div className="hidden lg:flex lg:justify-center lg:w-1/2">
+        <div className="flex justify-center w-11/12">
+          <img
+            src={adminImage}
+            alt="Login"
+            className="w-full h-full object-scale-down"
+          />
+        </div>
       </div>
 
       {/* Right side - Login Form */}
