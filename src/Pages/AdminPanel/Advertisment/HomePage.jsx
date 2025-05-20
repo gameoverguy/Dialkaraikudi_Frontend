@@ -319,7 +319,7 @@ const HomePage = () => {
               slotType: "Image",
               maxAds: "",
               page: "home",
-              interval: 5000,
+              interval: "",
               isActive: true,
             });
           }}
