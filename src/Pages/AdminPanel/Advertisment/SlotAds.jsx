@@ -9,7 +9,7 @@ import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
-const SlotAds = ({ slotId , type}) => {
+const SlotAds = ({ slotId, type }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +27,7 @@ const SlotAds = ({ slotId , type}) => {
     endDate: "",
   });
   console.log(formData.type);
-  
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [allowedBusinesses, setAllowedBusinesses] = useState([]);
 
@@ -111,20 +111,20 @@ const SlotAds = ({ slotId , type}) => {
 
   const [deleteConfirmation, setDeleteConfirmation] = useState({
     show: false,
-    adId: null
+    adId: null,
   });
 
   const handleDeleteClick = (id) => {
     setDeleteConfirmation({
       show: true,
-      adId: id
+      adId: id,
     });
   };
 
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(`${API}/adverts/${deleteConfirmation.adId}`);
-      setAds(ads.filter(ad => ad._id !== deleteConfirmation.adId));
+      setAds(ads.filter((ad) => ad._id !== deleteConfirmation.adId));
       setDeleteConfirmation({ show: false, adId: null });
     } catch (error) {
       console.error("Error deleting ad:", error);
@@ -147,7 +147,7 @@ const SlotAds = ({ slotId , type}) => {
         contentUrl,
       });
 
-      setAds(ads.map(ad => ad._id === editingAd._id ? response.data : ad));
+      setAds(ads.map((ad) => (ad._id === editingAd._id ? response.data : ad)));
       setShowModal(false);
       setEditingAd(null);
       setFormData({
@@ -175,8 +175,8 @@ const SlotAds = ({ slotId , type}) => {
       type: ad.type,
       description: ad.description,
       priority: ad.priority,
-      startDate: new Date(ad.startDate).toISOString().split('T')[0],
-      endDate: new Date(ad.endDate).toISOString().split('T')[0],
+      startDate: new Date(ad.startDate).toISOString().split("T")[0],
+      endDate: new Date(ad.endDate).toISOString().split("T")[0],
     });
     setShowModal(true);
   };
@@ -184,21 +184,23 @@ const SlotAds = ({ slotId , type}) => {
   const handleImageRemove = () => {
     setSelectedImage(null);
     if (editingAd) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        contentUrl: ''
+        contentUrl: "",
       }));
-      setEditingAd(prev => ({
+      setEditingAd((prev) => ({
         ...prev,
-        contentUrl: ''
+        contentUrl: "",
       }));
     }
   };
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if ((type === "Image" && file.type.startsWith('image/')) || 
-          (type === "Video" && file.type.startsWith('video/'))) {
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
         setSelectedImage(file);
       } else {
         alert(`Please upload a ${type.toLowerCase()} file`);
@@ -209,25 +211,27 @@ const SlotAds = ({ slotId , type}) => {
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    e.currentTarget.classList.add('border-emerald-500');
+    e.currentTarget.classList.add("border-emerald-500");
   };
 
   const handleDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    e.currentTarget.classList.remove('border-emerald-500');
+    e.currentTarget.classList.remove("border-emerald-500");
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    e.currentTarget.classList.remove('border-emerald-500');
-    
+    e.currentTarget.classList.remove("border-emerald-500");
+
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       const file = files[0];
-      if ((type === "Image" && file.type.startsWith('image/')) || 
-          (type === "Video" && file.type.startsWith('video/'))) {
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
         setSelectedImage(file);
       } else {
         alert(`Please upload a ${type.toLowerCase()} file`);
@@ -261,7 +265,8 @@ const SlotAds = ({ slotId , type}) => {
               No advertisements yet
             </h3>
             <p className="text-gray-500 max-w-sm mx-auto">
-              This slot doesn't have any advertisements. Click "Add New Ad" to create your first advertisement.
+              This slot doesn't have any advertisements. Click "Add New Ad" to
+              create your first advertisement.
             </p>
           </div>
         ) : (
@@ -286,20 +291,20 @@ const SlotAds = ({ slotId , type}) => {
                   </button>
                 </div>
                 <div className="aspect-video bg-gray-100">
-                {type === "Video" ? (
-                  <video
-                    src={ad.contentUrl}
-                    className="w-full h-full object-cover"
-                    controls
-                  />
-                ) : (
-                  <img
-                    src={ad.contentUrl}
-                    alt={ad.description}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
+                  {type === "Video" ? (
+                    <video
+                      src={ad.contentUrl}
+                      className="w-full h-full object-cover"
+                      controls
+                    />
+                  ) : (
+                    <img
+                      src={ad.contentUrl}
+                      alt={ad.description}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-800 mb-1">
                     {ad.businessId.businessName}
@@ -344,7 +349,10 @@ const SlotAds = ({ slotId , type}) => {
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
-        <form onSubmit={editingAd ? handleEdit : handleSubmit} className="space-y-4">
+        <form
+          onSubmit={editingAd ? handleEdit : handleSubmit}
+          className="space-y-4"
+        >
           <FloatingSelect
             name="businessId"
             value={formData.businessId}
@@ -356,18 +364,19 @@ const SlotAds = ({ slotId , type}) => {
             placeholder="Select Business"
             required
           />
-           <div className="space-y-2">
+          <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Upload {type}
             </label>
-            <div 
+            <div
               className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-emerald-500 transition-colors"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <div className="space-y-1 text-center w-full">
-                {(selectedImage || (editingAd && editingAd.contentUrl && !selectedImage)) ? (
+                {selectedImage ||
+                (editingAd && editingAd.contentUrl && !selectedImage) ? (
                   <div className="space-y-2 relative">
                     <button
                       type="button"
@@ -379,20 +388,28 @@ const SlotAds = ({ slotId , type}) => {
                     <div className="flex items-center justify-center">
                       {type === "Video" ? (
                         <video
-                          src={selectedImage ? URL.createObjectURL(selectedImage) : editingAd?.contentUrl}
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
                           className="h-32 w-auto"
                           controls
                         />
                       ) : (
                         <img
-                          src={selectedImage ? URL.createObjectURL(selectedImage) : editingAd?.contentUrl}
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
                           alt="Preview"
                           className="h-32 w-auto object-contain"
                         />
                       )}
                     </div>
                     <p className="text-sm text-emerald-600">
-                      {selectedImage ? selectedImage.name : 'Current File'}
+                      {selectedImage ? selectedImage.name : "Current File"}
                     </p>
                   </div>
                 ) : (
@@ -409,7 +426,9 @@ const SlotAds = ({ slotId , type}) => {
                     </label>
                     <p className="pl-1">or drag and drop</p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {type === "Video" ? "MP4, WebM up to 50MB" : "PNG, JPG up to 10MB"}
+                      {type === "Video"
+                        ? "MP4, WebM up to 50MB"
+                        : "PNG, JPG up to 10MB"}
                     </p>
                   </div>
                 )}
@@ -454,8 +473,10 @@ const SlotAds = ({ slotId , type}) => {
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   <span>Uploading...</span>
                 </>
+              ) : editingAd ? (
+                "Update Ad"
               ) : (
-                editingAd ? 'Update Ad' : 'Create Ad'
+                "Create Ad"
               )}
             </button>
           </div>
@@ -470,7 +491,8 @@ const SlotAds = ({ slotId , type}) => {
       >
         <div className="p-6">
           <p className="text-gray-700 mb-6">
-            Are you sure you want to delete this advertisement? This action cannot be undone.
+            Are you sure you want to delete this advertisement? This action
+            cannot be undone.
           </p>
           <div className="flex justify-end gap-3">
             <button
@@ -488,8 +510,6 @@ const SlotAds = ({ slotId , type}) => {
           </div>
         </div>
       </CustomModal>
-
-
     </div>
   );
 };

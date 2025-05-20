@@ -206,7 +206,7 @@ const VendorPanel = () => {
     1: <VendorDashboard businessData={businessData} />,
     2: <VendorProfile businessData={businessData} />,
     3: <VendorReview businessData={businessData} />,
-    4: <VendorSubcription />,
+    4: <VendorSubcription businessData={businessData} />,
   };
 
   // Get the current component based on selected key
