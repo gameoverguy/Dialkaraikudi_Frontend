@@ -189,7 +189,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[36vh]">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[50vh]">
         <div className="w-full">
           {fetchBanner && fetchBanner.length > 0 && (
             <img
