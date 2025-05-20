@@ -5,17 +5,29 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 export const AdminRoute = ({ children }) => {
-  const [adminData, setAdminData] = useState(undefined);
+  const [isVerified, setIsVerified] = useState(null); // null: loading, true/false: known
 
   useEffect(() => {
-    setAdminData(localStorage.getItem("adminData"));
+    const verifyAdminToken = async () => {
+      try {
+        const response = await axios.get(`${API}/authentication/verifytoken`);
+        setIsVerified(response.data.isTokenValid);
+      } catch (error) {
+        console.error("Admin token verification failed:", error);
+        setIsVerified(false);
+      }
+    };
+
+    verifyAdminToken();
   }, []);
 
-  if (adminData === undefined) {
-    return null; // or a loading spinner while checking sessionStorage
+  if (isVerified === null) {
+    return null; // or a spinner/loading UI
   }
 
-  if (!adminData) {
+  if (!isVerified) {
+    sessionStorage.clear();
+    localStorage.clear();
     return <Navigate to="/adminlogin" replace />;
   }
 
