@@ -3,7 +3,7 @@ import axios from "axios";
 import { API } from "../../../../config/config";
 import { FaClock, FaImage, FaInfoCircle } from "react-icons/fa";
 import LottieLoader from "../../../Components/Loader";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 const VendorSubscription = ({ businessData }) => {
@@ -11,19 +11,19 @@ const VendorSubscription = ({ businessData }) => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get ID from URL params instead of localStorage
 
-  const fetchAdSlots = async () => {
-    try {
-      const response = await axios.get(`${API}/advertslots`);
-      setAdSlots(response.data);
-      console.log(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching ad slots:", error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAdSlots = async () => {
+      try {
+        const response = await axios.get(`${API}/advertslots`);
+        setAdSlots(response.data);
+        console.log(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching ad slots:", error);
+        setLoading(false);
+      }
+    };
+
     fetchAdSlots();
   }, []);
 
@@ -58,7 +58,7 @@ const VendorSubscription = ({ businessData }) => {
 
   if (loading) {
     return (
-      <div className="">
+      <div className="flex items-center justify-center min-h-screen">
         <LottieLoader />
       </div>
     );
@@ -66,7 +66,6 @@ const VendorSubscription = ({ businessData }) => {
 
   return (
     <div className="p-2 h-screen flex flex-col">
-      <ToastContainer />
       <div className="bg-white shadow rounded mb-4 p-4">
         <h1 className="mb-2 text-2xl font-bold">Advertisement Slots</h1>
         <p>
@@ -116,7 +115,7 @@ const VendorSubscription = ({ businessData }) => {
               <button
                 onClick={() => handlePurchaseSlot(slot._id)}
                 disabled={isSlotPurchased(slot)}
-                className={`cursor-pointer mt-6 w-full py-2 px-4 rounded-lg transition-colors
+                className={`mt-6 w-full py-2 px-4 rounded-lg transition-colors
                   ${
                     isSlotPurchased(slot)
                       ? "bg-gray-300 cursor-not-allowed"

@@ -128,7 +128,7 @@ const HomePage = () => {
             <span>←</span> Back to Slots
           </button>
         </div>
-        <SlotAds slotId={selectedSlot._id} />
+        <SlotAds slotId={selectedSlot._id} type={selectedSlot.slotType}/>
       </div>
     );
   }
