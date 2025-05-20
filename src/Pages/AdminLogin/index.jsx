@@ -4,12 +4,11 @@ import axios from "axios";
 import FloatingInput from "../../Components/FloatingInput";
 import img from "../../assets/img.png";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import OTPVerification from "./OTPVerification";
 import ForgotPassword from "./ForgotPasswordLogin";
 import { API } from "../../../config/config";
 import Cookies from "js-cookie";
+import { CiCircleInfo } from "react-icons/ci";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -23,6 +22,7 @@ const AdminLogin = () => {
     password: "",
   });
   const [errorOverall, setErrorOverall] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -55,6 +55,9 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSuccessMessage("");
+    setErrorOverall("");
+
     const newErrors = {
       email: !formData.email
         ? "Email is required"
@@ -74,34 +77,27 @@ const AdminLogin = () => {
         : "",
     };
     setErrors(newErrors);
-    setErrorOverall("");
+
     if (!newErrors.email && !newErrors.password) {
       try {
         const response = await axios.post(`${API}/admin/login`, formData);
 
         if (response.data) {
           const { admin } = response.data;
-          // Cookies.set("adminToken", token, {
-          //   expires: 21,
-          //   secure: true,
-          //   sameSite: "Strict",
-          // });
-          sessionStorage.setItem(
+          localStorage.setItem(
             "adminData",
             JSON.stringify({
               admin_id: admin.id,
               email: admin.email,
             })
           );
-          console.log("Response data:", response.data);
-          toast.success("Login successful!");
+          setSuccessMessage("Login successful!");
           setTimeout(() => {
             navigate("/adminpanel");
           }, 500);
         }
       } catch (error) {
         console.error("Login failed:", error);
-        toast.error("Login failed!");
         setErrorOverall(
           error.response?.data?.message || "Invalid email or password"
         );
@@ -127,11 +123,11 @@ const AdminLogin = () => {
       {/* Right side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-3 bg-white p-8 rounded-2xl shadow-xl">
-          <div className="text-left">
+          <div className="text-center">
             <h2 className="text-lg font-bold text-gray-900">Admin Login</h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+          <form onSubmit={handleSubmit} className="mt-4">
             <div className="space-y-4">
               <FloatingInput
                 type="email"
@@ -168,12 +164,24 @@ const AdminLogin = () => {
                 )}
               </div>
             </div>
-
             <div className="h-2 mb-2">
+              {successMessage && (
+                <>
+                  {/* // <div className="flex items-center bg-green-50 border border-green-200 rounded-md animate-fade-in"> */}
+                  <p className="flex text-green-600 text-[10px] items-center justify-center sm:text-xs">
+                    <CiCircleInfo className=" mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
+                    {successMessage}
+                  </p>
+                </>
+              )}
               {errorOverall && (
-                <p className="text-red-500 text-xs text-center">
-                  {errorOverall}
-                </p>
+                // <div className="flex items-center bg-red-50 border border-red-200 rounded-md animate-fade-in">
+                <>
+                  <p className="flex text-red-500 text-[10px] items-center justify-center sm:text-xs">
+                    <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
+                    {errorOverall}
+                  </p>
+                </>
               )}
             </div>
             <button
@@ -187,11 +195,11 @@ const AdminLogin = () => {
             >
               {isSubmitting ? "LOGGING IN..." : "LOGIN"}
             </button>
-            <div className="flex items-center justify-end">
+            <div className="flex items-center mt-1 justify-end">
               <button
                 type="button"
                 onClick={() => setShowForgotPassword(true)}
-                className="cursor-pointer text-xs blue-link"
+                className="cursor-pointer hover:underline text-xs blue-link"
               >
                 Forgot your password?
               </button>
@@ -215,20 +223,6 @@ const AdminLogin = () => {
           setShowOTPModal(false);
           setOtpEmail("");
         }}
-      />
-
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="z-[9999]"
       />
     </div>
   );

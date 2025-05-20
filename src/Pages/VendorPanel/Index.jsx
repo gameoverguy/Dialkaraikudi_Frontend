@@ -29,6 +29,8 @@ const VendorPanel = () => {
   const [selectedKey, setSelectedKey] = useState("1");
   const [expandedMenu, setExpandedMenu] = useState(null);
 
+  const businessData = JSON.parse(localStorage.getItem("businessData"));
+
   // Add effect to watch for URL changes
   useEffect(() => {
     setSelectedKey("1");
@@ -61,7 +63,7 @@ const VendorPanel = () => {
     {
       key: "2",
       icon: <MdPeople size={20} />,
-      label: "Profile Management",
+      label: "Business Profile",
     },
     {
       key: "3",
@@ -71,7 +73,7 @@ const VendorPanel = () => {
     {
       key: "4",
       icon: <MdBusiness size={20} />,
-      label: "Subscription Management",
+      label: "Advert Addons",
     },
   ];
 
@@ -201,9 +203,9 @@ const VendorPanel = () => {
 
   // Update the component mapping to pass the handler
   const componentMap = {
-    1: <VendorDashboard />,
-    2: <VendorProfile />,
-    3: <VendorReview />,
+    1: <VendorDashboard businessData={businessData} />,
+    2: <VendorProfile businessData={businessData} />,
+    3: <VendorReview businessData={businessData} />,
     4: <VendorSubcription />,
   };
 
@@ -226,7 +228,7 @@ const VendorPanel = () => {
         if (response.data.success) {
           localStorage.removeItem("userData");
           localStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          localStorage.removeItem("adminData");
           localStorage.setItem("selectedMenuItem", "1");
           navigate("/");
         }

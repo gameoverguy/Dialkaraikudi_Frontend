@@ -1,126 +1,169 @@
 import React from "react";
 import Logo from "../assets/logo_01.png";
-import { FaInstagram } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaMapMarkerAlt,
+  FaFacebookF,
+  FaTwitter,
+} from "react-icons/fa";
 import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 
 const Footer = () => {
-  const social = [
-    { icon: <FaInstagram size={25} />, color: "#9F33AE" },
-    { icon: <TiSocialFacebook size={25} />, color: "#395498" },
-    { icon: <IoLogoWhatsapp size={25} />, color: "#17980E" },
-    { icon: <CiYoutube size={25} />, color: "#D62B27" },
-    { icon: <CiLinkedin size={25} />, color: "#0077AF" },
+  const socialLinks = [
+    { icon: FaInstagram, color: "#C13584", href: "https://instagram.com" },
+    { icon: TiSocialFacebook, color: "#3b5998", href: "https://facebook.com" },
+    { icon: IoLogoWhatsapp, color: "#25D366" },
+    { icon: CiYoutube, color: "#FF0000" },
+    { icon: CiLinkedin, color: "#0077b5" },
+    // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
 
   const footText1 = [
     { title: "About us", path: "#" },
     { title: "Contact us", path: "#" },
-    { title: "Terms & conditions", path: "#" },
+    { title: "Terms & Conditions", path: "#" },
     { title: "Advertise on Dialkaraikudi", path: "#" },
   ];
 
   const footText3 = [
     { title: "Digitaly.Live", path: "#" },
-    { title: "Dial puthukotai", path: "#" },
+    { title: "Dial Puthukotai", path: "#" },
     { title: "Gteceducation", path: "#" },
   ];
 
   return (
-    <>
-      <div className="flex flex-col md:flex-col lg:flex-row md:justify-start lg:justify-evenly items-start md:w-full bg-[#F3F4F6] py-10 px-7 gap-6 md:gap-4 lg:gap-10">
-        {/* Left Section */}
-        <div className="w-full lg:w-4/12 flex flex-col gap-5 text-left lg:pr-10">
-          <p className="text-[15px] xl:text-[18px] font-bold">
-            One-Stop for All Local Services
-          </p>
-          <div className="w-[125px] h-[50px]">
-            <img src={Logo} alt="Dialkaraikudi Logo" className="object-contain" />
-          </div>
-          <p className="text-sm text-[#4B5563] text-justify">
-            Dialkaraikudi is a premier digital platform in India that connects
-            users with verified local service professionals. Focused on
-            personalized services across Home, Life, and Self, it leverages
-            technology and domain expertise to understand user needs and deliver
-            tailored solutions.
-          </p>
-        </div>
-
-        {/* Center Section - Quick & Our Links */}
-        <div className="w-full lg:w-3/12 flex flex-col lg:flex-row justify-center md:justify-start gap-6 lg:gap-25 text-left">
-          <div className="flex flex-col gap-3">
-            <p className="text-xl font-bold pb-3">Quick Links</p>
-            {footText1.map((item, i) => (
-              <a
-                key={i}
-                href={item.path}
-                className="text-sm text-[#4B5563] hover:underline cursor-pointer"
-              >
-                {item.title}
-              </a>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            <p className="text-xl font-bold pb-3">Our Links</p>
-            {footText3.map((item, i) => (
-              <a
-                key={i}
-                href={item.path}
-                className="text-sm text-[#4B5563] hover:underline cursor-pointer"
-              >
-                {item.title}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Section - Offices + Social */}
-        <div className="w-full lg:w-3/12 flex flex-col gap-6 text-left">
-          <div className="flex flex-col gap-4">
-            <p className="text-xl font-bold pb-3">Our Offices</p>
-            <div>
-              <h2 className="font-semibold">CHENNAI OFFICE</h2>
-              <p className="text-sm text-[#4B5563]">
-                153, 13th St, Maxworth Nagar, Kovilambakkam, Chennai, Tamil Nadu - 600117
-              </p>
-            </div>
-            <div>
-              <h2 className="font-semibold">DEVELOPMENT OFFICE</h2>
-              <p className="text-sm text-[#4B5563]">
-                8, Muthoorani East, Muthupatinam, Karaikudi - 630001
-              </p>
-            </div>
+    <footer className="bg-gradient-to-t from-blue-300 to-white text-teal-800">
+      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
+        <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
+          {/* Logo and Description */}
+          <div className="w-full flex flex-col items-center md:items-start md:w-4/12 p-3 ">
+            <img
+              src={Logo}
+              alt="Dialkaraikudi"
+              className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+            />
+            <p className="text-base leading-relaxed">
+              Dialkaraikudi is a premier digital platform in India that connects
+              users with verified local service professionals.
+            </p>
           </div>
 
-          <div className="w-full flex flex-col gap-2">
-            <p className="text-sm text-[#4B5563] font-bold">Connect with us</p>
-            <div className="flex gap-2">
-              {social.map((item, i) => (
-                <div
-                  key={i}
-                  className="group rounded-full p-1 cursor-pointer transition-colors"
-                >
-                  <div className="rounded-full p-1 transition-colors">
-                    <div
-                      className="group-hover:text-white rounded-full p-1"
-                      style={{ color: item.color }}
-                    >
-                      {item.icon}
-                    </div>
-                  </div>
-                </div>
+          {/* Quick Links */}
+          <div className="w-full md:w-2/12 p-3">
+            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+              Quick Links
+            </h4>
+            <ul className="space-y-3 text-sm">
+              {footText1.map((item, index) => (
+                <li key={index}>
+                  <a
+                    href={item.path}
+                    className="hover:text-blue-600 hover:pl-1 transition-all duration-300 block"
+                  >
+                    {item.title}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="w-full md:w-2/12 p-3">
+            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+              Contact Us
+            </h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href="tel:+911234567890"
+                  className="hover:text-blue-600 transition"
+                >
+                  +91 1234567890
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:info@dialkaraikudi.com"
+                  className="hover:text-blue-600 transition wrap-break-word"
+                >
+                  info@dialkaraikudi.com
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Office Locations */}
+          <div className="w-full md:w-4/12 p-3">
+            <h4 className="text-lg text-center font-semibold mb-4 text-gray-800">
+              Our Offices
+            </h4>
+            <ul className="space-y-5 text-sm">
+              <li className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-blue-500 mt-1" />
+                <div>
+                  <strong className="block text-gray-700">
+                    Chennai Office
+                  </strong>
+                  153, 13th St, Maxworth Nagar, Kovilambakkam, Chennai, TN -
+                  600117
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <FaMapMarkerAlt className="text-blue-500 mt-1" />
+                <div>
+                  <strong className="block text-gray-700">
+                    Development Office
+                  </strong>
+                  8, Muthoorani East, Muthupatinam, Karaikudi - 630001
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="w-full text-[11px] md:text-sm text-center shadow-inner py-4 text-[#4B5563] bg-[#F3F4F6] md:px-0 px-2">
-        Copyrights @ 2025-26. All Rights Reserved. Digitaly Pvt ltd.
+      {/* Divider */}
+      <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
+        {/* Copyright */}
+        <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
+          © {new Date().getFullYear()} Digitaly AI Technolgy Solutions. All
+          Rights Reserved.
+        </p>
+
+        {/* Links */}
+        <div className="flex gap-4 text-xs sm:text-sm">
+          <a href="#" className="hover:text-blue-600 transition-colors">
+            Privacy Policy
+          </a>
+          <span className="text-gray-400">•</span>
+          <a href="#" className="hover:text-blue-600 transition-colors">
+            Terms of Service
+          </a>
+        </div>
+
+        {/* Social Icons */}
+        <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+          {socialLinks.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={index}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-center rounded-full transition-transform duration-300 hover:scale-110 cursor-pointer"
+                style={{ color: item.color }}
+                aria-label={`Visit our ${Icon.displayName || "social"} page`}
+              >
+                <Icon className="lg:text-3xl transition-transform duration-300 group-hover:scale-125" />
+              </a>
+            );
+          })}
+        </div>
       </div>
-    </>
+    </footer>
   );
 };
 

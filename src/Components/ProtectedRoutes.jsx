@@ -1,18 +1,33 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { API } from "../../config/config";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export const AdminRoute = ({ children }) => {
-  const [adminData, setAdminData] = useState(undefined);
+  const [isVerified, setIsVerified] = useState(null); // null: loading, true/false: known
 
   useEffect(() => {
-    setAdminData(sessionStorage.getItem("adminData"));
+    const verifyAdminToken = async () => {
+      try {
+        const response = await axios.get(`${API}/authentication/verifytoken`);
+        setIsVerified(response.data.isTokenValid);
+      } catch (error) {
+        console.error("Admin token verification failed:", error);
+        setIsVerified(false);
+      }
+    };
+
+    verifyAdminToken();
   }, []);
 
-  if (adminData === undefined) {
-    return null; // or a loading spinner while checking sessionStorage
+  if (isVerified === null) {
+    return null; // or a spinner/loading UI
   }
 
-  if (!adminData) {
+  if (!isVerified) {
+    sessionStorage.clear();
+    localStorage.clear();
     return <Navigate to="/adminlogin" replace />;
   }
 
@@ -20,17 +35,29 @@ export const AdminRoute = ({ children }) => {
 };
 
 export const BusinessRoute = ({ children }) => {
-  const [businessData, setBusinessData] = useState(undefined);
+  const [isVerified, setIsVerified] = useState(null); // null: loading, true/false: known
 
   useEffect(() => {
-    setBusinessData(localStorage.getItem("businessData"));
+    const verifyToken = async () => {
+      try {
+        const response = await axios.get(`${API}/authentication/verifytoken`);
+        setIsVerified(response.data.isTokenValid);
+      } catch (error) {
+        console.error("Token verification failed:", error);
+        setIsVerified(false);
+      }
+    };
+
+    verifyToken();
   }, []);
 
-  if (businessData === undefined) {
-    return null; // or a loading spinner while checking sessionStorage
+  if (isVerified === null) {
+    return null; // or a spinner while verifying
   }
 
-  if (!businessData) {
+  if (!isVerified) {
+    sessionStorage.clear();
+    localStorage.clear();
     return <Navigate to="/" replace />;
   }
 

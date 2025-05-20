@@ -49,7 +49,7 @@ export default function SeasonalProducts() {
 
   return (
     <div className="w-full px-4 bg-white">
-      <h2 className="text-2xl lg:text-3xl font-bold text-center text-green-800 mb-5">
+      <h2 className="text-2xl lg:text-3xl font-bold text-center text-green-800 mb-5 font-['Poppins']">
         🌟 Seasonal Products
       </h2>
 

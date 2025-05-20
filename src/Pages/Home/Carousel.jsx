@@ -1,163 +1,81 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import { API } from "../../../config/config";
-
-// const Carousel = () => {
-//   const [ads, setAds] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 1500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     autoplaySpeed: 2500,
-//     arrows: true,
-//     cssEase: "linear",
-//     lazyLoad: "progressive",
-//     responsive: [
-//       {
-//         breakpoint: 768,
-//         settings: {
-//           arrows: false,
-//           dots: true,
-//         },
-//       },
-//     ],
-//   };
-
-//   useEffect(() => {
-//     const fetchAds = async () => {
-//       try {
-//         const response = await axios.get(`${API}/advertisement/slots/home`);
-//         const activeAds = response.data.filter((ad) => ad.isActive);
-//         setAds(activeAds);
-//         setLoading(false);
-//       } catch (err) {
-//         console.error("Error fetching ads:", err);
-//         setError("Failed to load advertisements");
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchAds();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="overflow-hidden w-10/12 h-[50vh] flex items-center justify-center bg-gray-100 rounded-lg">
-//         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-//       </div>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <div className="overflow-hidden w-10/12 h-[50vh] flex items-center justify-center bg-gray-100 rounded-lg">
-//         <p className="text-red-500">{error}</p>
-//       </div>
-//     );
-//   }
-
-//   if (!ads.length) {
-//     return (
-//       <div className="overflow-hidden w-10/12 h-[50vh] flex items-center justify-center bg-gray-100 rounded-lg">
-//         <p className="text-gray-500">No advertisements available</p>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="overflow-hidden w-11/12">
-//       <Slider {...settings}>
-//         {ads.map((ad, i) => (
-//           <div key={i}>
-//             {ad.type === "image" ? (
-//               <a
-//                 href={ad.link || "#"}
-//                 target="_blank"
-//                 rel="noopener noreferrer"
-//               >
-//                 <img
-//                   src={ad.image}
-//                   alt={ad.title || "Advertisement"}
-//                   className="bg-cover shadow-lg w-full md:h-[50vh] rounded-lg"
-//                   loading="lazy"
-//                 />
-//               </a>
-//             ) : (
-//               <div
-//                 className="w-full md:h-[50vh] rounded-lg"
-//                 dangerouslySetInnerHTML={{ __html: ad.htmlContent }}
-//               />
-//             )}
-//           </div>
-//         ))}
-//       </Slider>
-//     </div>
-//   );
-// };
-
-// export default Carousel;
-
-//new
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import coursal1 from "../../assets/coursal1.jpg";
-import coursal2 from "../../assets/coursal2.webp";
-import coursal3 from "../../assets/coursal3.webp";
+import coursal2 from "../../assets/coursal2.jpg";
+import coursal3 from "../../assets/coursal3.jpg";
+import axios from "axios";
+import { API } from "../../../config/config";
 
 const Carousel = () => {
+  const [heroBanner, setHeroBanner] = useState([]);
+
+  const localFallbacks = [
+    { id: "local-1", contentUrl: coursal1 },
+    { id: "local-2", contentUrl: coursal2 },
+    { id: "local-3", contentUrl: coursal3 },
+  ];
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(`${API}/adverts`);
+        
+        const ads = response.data.filter(
+          (ad) =>
+            ad.slotId?.page === "home" &&
+            ad.slotId?._id === "68272bafa52bbd6718f881f7" &&
+            ad.isActive
+        );
+        console.log(response.data);
+
+        let finalSlides = [];
+
+        if (ads.length === 0) {
+          finalSlides = localFallbacks.slice(0, 3);
+        } else if (ads.length === 1) {
+          finalSlides = [...ads, ...localFallbacks.slice(0, 2)];
+        } else if (ads.length === 2) {
+          finalSlides = [...ads, ...localFallbacks.slice(0, 1)];
+        } else {
+          finalSlides = ads;
+        }
+
+        setHeroBanner(finalSlides);
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        setHeroBanner(localFallbacks.slice(0, 3)); // Fallback if API fails
+      }
+    };
+
+    fetchAds();
+  }, []);
+
   const settings = {
     dots: true,
     infinite: true,
-    speed: 2500, // Increased for smoother effect
+    speed: 2500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
     arrows: true,
-    cssEase: "linear", // Smooth animation
-    lazyLoad: "progressive", // Improves loading performance
-
-    // responsive: [
-    //   {
-    //     breakpoint: 1024, // Screens below 768px (Tablets & Mobile)
-    //     settings: {
-    //       arrows: false, // Hide arrows on small screens
-    //       dots: true,
-    //     },
-    //   },
-    // ],
+    cssEase: "linear",
+    lazyLoad: "progressive",
   };
-
-  const coursal = [
-    { id: 1, image: coursal2 },
-    { id: 2, image: coursal3 },
-    { id: 3, image: coursal1 },
-  ];
 
   return (
     <div className="overflow-hidden w-full h-fit">
       <Slider {...settings}>
-        {coursal.map((item) => (
-          <div key={item.id}>
-            <img
-              src={item.image}
-              alt="Slide"
-              className="bg-cover w-full lg:h-[50vh]"
-              loading="lazy" // Ensures smooth loading
-            />
-          </div>
+        {heroBanner.map((banner, index) => (
+          <img
+            key={index}
+            src={banner.contentUrl}
+            alt={`Slide ${index + 1}`}
+            className="bg-cover w-full lg:h-[60vh]"
+            loading="lazy"
+          />
         ))}
       </Slider>
     </div>

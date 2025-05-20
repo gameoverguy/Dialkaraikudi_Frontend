@@ -24,7 +24,6 @@ import Favorites from "./Pages/Favorites/index.jsx";
 import EditProfile from "./Pages/EditProfile/index.jsx";
 import SlotAds from "./Pages/AdminPanel/Advertisment/SlotAds.jsx";
 
-
 function App() {
   useEffect(() => {
     AOS.init({
@@ -41,7 +40,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
-              
+
               <Route path="/businesslist/:id" element={<Bussiness_List />} />
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
@@ -50,7 +49,6 @@ function App() {
               <Route path="/detailform" element={<BusinessDetailForm />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/profile" element={<EditProfile />} />
-              
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route
@@ -61,7 +59,18 @@ function App() {
                 </AdminRoute>
               }
             />
-            <Route path="/adminpanel/advertisement/slot/:slotId" element={<SlotAds />} />
+            <Route
+              path="/adminpanel/advertisement/slot/:slotId"
+              element={<SlotAds />}
+            />
+            <Route
+              path="/vendorpanel"
+              element={
+                <BusinessRoute>
+                  <VendorPanel />
+                </BusinessRoute>
+              }
+            />
             <Route
               path="/vendorpanel/:id"
               element={
@@ -74,7 +83,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </LoginModalProvider>
-      
     </>
   );
 }

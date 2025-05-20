@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
 
 const VerificationStatus = ({ business }) => {
   return (
@@ -9,13 +9,19 @@ const VerificationStatus = ({ business }) => {
       </div>
       <div className="space-y-4">
         <div className="flex items-center">
-          <FaCheckCircle className={`text-2xl ${business?.verified ? 'text-green-500' : 'text-gray-400'}`} />
-          <span className="ml-2">{business?.verified ? 'Verified Business' : 'Not Verified'}</span>
+          <FaCheckCircle
+            className={`text-2xl ${
+              business?.verified ? "text-green-500" : "text-gray-400"
+            }`}
+          />
+          <span className="ml-2">
+            {business?.verified ? "Verified Business" : "Not Verified"}
+          </span>
         </div>
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <FaCheckCircle className={`text-2xl ${business?.trustBadge ? 'text-green-500' : 'text-gray-400'}`} />
           <span className="ml-2">{business?.trustBadge ? 'Trust Badge Earned' : 'Trust Badge Not Earned'}</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

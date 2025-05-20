@@ -28,6 +28,7 @@ const HomePage = () => {
         const response = await axios.get(
           `${API}/advertslots`
         );
+        console.log(response.data);        
         setAdSlots(response.data);
         setLoading(false);
       } catch (error) {
@@ -87,7 +88,7 @@ const HomePage = () => {
             <span>←</span> Back to Slots
           </button>
         </div>
-        <SlotAds slotId={selectedSlot._id} />
+        <SlotAds slotId={selectedSlot._id} type={selectedSlot.slotType}/>
       </div>
     );
   }
@@ -233,8 +234,8 @@ const HomePage = () => {
                 <input
                   type="radio"
                   name="slotType"
-                  value="video"
-                  checked={formData.slotType === "video"}
+                  value="Video"
+                  checked={formData.slotType === "Video"}
                   onChange={handleChange}
                   className="form-radio text-emerald-500 focus:ring-emerald-500"
                 />

@@ -125,8 +125,8 @@ const UserLogin = ({
           setTimeout(() => {
             setShowLoginModal(false);
             if (role === "business") {
-              const userId = userData.id || userData._id;
-              navigate(`/vendorpanel/${userId}`);
+              //const userId = userData.id || userData._id;
+              navigate(`/vendorpanel`);
             }
           }, 1000);
         } else {

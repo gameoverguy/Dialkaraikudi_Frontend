@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from 'react';
-import { FaEdit, FaPlus } from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
-import { toast } from 'react-toastify';
-import { uploadToCloudinary } from '../../../../utils/cloudinaryUpload';
+import React, { useState, useCallback } from "react";
+import { FaEdit, FaPlus } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
+import { uploadToCloudinary } from "../../../../utils/cloudinaryUpload";
 
 const BusinessImages = ({ business, onEdit, onSubmit }) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -27,18 +27,21 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
 
   const handleFiles = (files) => {
     const validFiles = files.filter(validateImage);
-    const totalImages = (business?.business?.photos?.length || 0) + selectedImages.length + validFiles.length;
-    
+    const totalImages =
+      (business?.business?.photos?.length || 0) +
+      selectedImages.length +
+      validFiles.length;
+
     if (totalImages > 6) {
-      toast.warning('Maximum 6 images allowed');
+      toast.warning("Maximum 6 images allowed");
       return;
     }
 
-    setSelectedImages(prev => [...prev, ...validFiles]);
-    validFiles.forEach(file => {
+    setSelectedImages((prev) => [...prev, ...validFiles]);
+    validFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImages(prev => [...prev, reader.result]);
+        setPreviewImages((prev) => [...prev, reader.result]);
       };
       reader.readAsDataURL(file);
     });
@@ -51,15 +54,17 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
 
   const handleImageDelete = async (imageUrl, isPreview = false, index = -1) => {
     if (isPreview) {
-      setSelectedImages(prev => prev.filter((_, i) => i !== index));
-      setPreviewImages(prev => prev.filter((_, i) => i !== index));
+      setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
     } else {
       try {
-        const updatedPhotos = business.business.photos.filter(photo => photo !== imageUrl);
+        const updatedPhotos = business.business.photos.filter(
+          (photo) => photo !== imageUrl
+        );
         await onSubmit({ photos: updatedPhotos });
-        toast.success('Image deleted successfully');
+        toast.success("Image deleted successfully");
       } catch (error) {
-        toast.error('Failed to delete image');
+        toast.error("Failed to delete image");
       }
     }
   };
@@ -70,18 +75,23 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
 
     try {
       setIsUploading(true);
-      const uploadPromises = selectedImages.map(image => uploadToCloudinary(image));
+      const uploadPromises = selectedImages.map((image) =>
+        uploadToCloudinary(image)
+      );
       const uploadedUrls = await Promise.all(uploadPromises);
-      const updatedPhotos = [...(business?.business?.photos || []), ...uploadedUrls];
+      const updatedPhotos = [
+        ...(business?.business?.photos || []),
+        ...uploadedUrls,
+      ];
       await onSubmit({ photos: updatedPhotos });
-      
+
       setIsEditing(false);
       setSelectedImages([]);
       setPreviewImages([]);
-      toast.success('Images uploaded successfully');
+      toast.success("Images uploaded successfully");
     } catch (error) {
-      toast.error('Failed to upload images');
-      console.error('Upload error:', error);
+      toast.error("Failed to upload images");
+      console.error("Upload error:", error);
     } finally {
       setIsUploading(false);
     }
@@ -114,7 +124,9 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
               className="w-full"
               disabled={isUploading}
             />
-            <p className="text-center text-gray-500 mt-2">Drag and drop images here or click to select</p>
+            <p className="text-center text-gray-500 mt-2">
+              Drag and drop images here or click to select
+            </p>
           </div>
 
           <div className="flex flex-row gap-4 flex-wrap">
@@ -150,7 +162,12 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 </button>
               </div>
             ))}
-            {Array.from({ length: 6 - ((business?.business?.photos?.length || 0) + previewImages.length) }).map((_, index) => (
+            {Array.from({
+              length:
+                6 -
+                ((business?.business?.photos?.length || 0) +
+                  previewImages.length),
+            }).map((_, index) => (
               <div
                 key={`empty-${index}`}
                 className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center"
@@ -162,10 +179,12 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
 
           <button
             type="submit"
-            className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+              isUploading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={isUploading}
           >
-            {isUploading ? 'Uploading...' : 'Upload Images'}
+            {isUploading ? "Uploading..." : "Upload Images"}
           </button>
         </form>
       ) : (

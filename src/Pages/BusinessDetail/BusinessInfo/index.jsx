@@ -60,13 +60,11 @@ const BusinessInfo = ({ formData, businessId }) => {
     }
 
     try {
-      setIsLoading(true);
       if (isBookmarked) {
         const response = await axios.post(`${API}/favourites/remove`, {
           user: userData.user_id,
           business: businessId,
         });
-        console.log(response.data);
 
         if (response.data.success) {
           setIsBookmarked(false);
@@ -78,7 +76,6 @@ const BusinessInfo = ({ formData, businessId }) => {
           user: userData.user_id,
           business: businessId,
         });
-        console.log(response.data);
 
         if (response.data.success) {
           setIsBookmarked(true);
@@ -91,8 +88,6 @@ const BusinessInfo = ({ formData, businessId }) => {
         "Error updating favorite status:",
         error?.response?.data || error.message
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -220,39 +215,20 @@ const BusinessInfo = ({ formData, businessId }) => {
             </h1>
             <button
               onClick={handleBookmarkClick}
-              disabled={isLoading}
               className={`
-                relative group p-2.5 rounded-full transition-all duration-300 transform
-                ${
-                  isLoading
-                    ? "cursor-wait opacity-50"
-                    : "hover:scale-110 active:scale-95"
-                }
-                ${
-                  isLoggedin && isBookmarked
-                    ? "text-red-600 hover:text-red-700 bg-red-50"
-                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-                }
-              `}
+    relative group p-2.5 rounded-full transition-all duration-300 transform
+    hover:scale-110 active:scale-95
+    ${
+      isLoggedin && isBookmarked
+        ? "text-red-600 hover:text-red-700 bg-red-50"
+        : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+    }
+  `}
             >
-              {isLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="animate-spin h-5 w-5 border-2 border-red-600 border-t-transparent rounded-full" />
-                </div>
+              {isLoggedin && isBookmarked ? (
+                <FaHeart className="text-2xl transition-transform" />
               ) : (
-                <>
-                  {isLoggedin && isBookmarked ? (
-                    <FaHeart className="text-2xl transition-transform" />
-                  ) : (
-                    <FaRegHeart className="text-2xl transition-transform" />
-                  )}
-                  {/* {isLoggedin && isBookmarked && (
-                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
-                    </span>
-                  )} */}
-                </>
+                <FaRegHeart className="text-2xl transition-transform" />
               )}
             </button>
           </div>

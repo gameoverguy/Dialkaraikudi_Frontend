@@ -3,7 +3,7 @@ import axios from 'axios';
 import { API } from '../../../../config/config';
 import { FaClock, FaImage, FaInfoCircle } from 'react-icons/fa';
 import LottieLoader from '../../../Components/Loader';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
 const VendorSubscription = () => {
@@ -11,31 +11,33 @@ const VendorSubscription = () => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get ID from URL params instead of localStorage
 
-  const fetchAdSlots = async () => {
-    try {
-      const response = await axios.get(`${API}/advertslots`);
-      setAdSlots(response.data);
-      console.log(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching ad slots:', error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchAdSlots = async () => {
+      try {
+        const response = await axios.get(`${API}/advertslots`);
+        setAdSlots(response.data);
+        console.log(response.data);
+        setLoading(false);
+        
+      } catch (error) {
+        console.error('Error fetching ad slots:', error);
+        setLoading(false);
+      }
+    };
+
     fetchAdSlots();
   }, []);
 
   const handlePurchaseSlot = async (slotId) => {
     try {
       const response = await axios.post(`${API}/advertslots/assignbusiness`, {
-        businessId: id,
+        businessId: id, // Use id from useParams
         slotId
       });
+      console.log(response.data);
+           // Update the local state to reflect the purchase
+   
       toast.success('Slot purchased successfully!');
-      // Fetch updated slots data after successful purchase
-      fetchAdSlots();
     } catch (error) {
       console.error('Error purchasing slot:', error);
       toast.error(error.response?.data?.message || 'Failed to purchase slot');
@@ -49,7 +51,7 @@ const VendorSubscription = () => {
 
   if (loading) {
     return (
-      <div className="">
+      <div className="flex items-center justify-center min-h-screen">
         <LottieLoader/>
       </div>
     );
@@ -57,7 +59,6 @@ const VendorSubscription = () => {
 
   return (
     <div className="p-2 h-screen flex flex-col">
-      <ToastContainer/>
       <div className='bg-white shadow rounded mb-4 p-4'>
         <h1 className='mb-2 text-2xl font-bold'>Advertisement Slots</h1>
         <p>The review section displays customer feedback and ratings, helping vendors understand buyer satisfaction, address issues, and enhance product and service quality.</p>
@@ -98,7 +99,7 @@ const VendorSubscription = () => {
               <button 
                 onClick={() => handlePurchaseSlot(slot._id)}
                 disabled={isSlotPurchased(slot)}
-                className={`cursor-pointer mt-6 w-full py-2 px-4 rounded-lg transition-colors
+                className={`mt-6 w-full py-2 px-4 rounded-lg transition-colors
                   ${isSlotPurchased(slot)
                     ? 'bg-gray-300 cursor-not-allowed'
                     : 'bg-blue-600 hover:bg-blue-700 text-white'}`}

@@ -59,9 +59,7 @@ const AdminPanel = () => {
 
   const organizationItems = [{ key: "categories", label: "Categories" }];
 
-  const advertisementItems = [
-    { key: "home", label: "Ads" },
-     ];
+  const advertisementItems = [{ key: "home", label: "Ads" }];
 
   const menuItems = [
     {
@@ -250,26 +248,20 @@ const AdminPanel = () => {
         console.log(response.data);
 
         if (response.data.success) {
-          sessionStorage.removeItem("userData");
-          sessionStorage.removeItem("businessData");
-          sessionStorage.removeItem("adminData");
+          localStorage.removeItem("userData");
+          localStorage.removeItem("businessData");
+          localStorage.removeItem("adminData");
           localStorage.setItem("selectedMenuItem", "1");
-          navigate("/");
+          navigate("/adminlogin");
         }
       } catch (error) {
         console.log(error);
-        // sessionStorage.clear();
-        // localStorage.clear();
-        // setUserData(null);
-        // setBusinessData(null);
-        // navigate("/");
       }
     };
 
     clearAuthentication();
     localStorage.setItem("selectedMenuItem", "1");
     navigate("/adminlogin");
-    // toast.success('Logout successful');
   };
 
   return (
