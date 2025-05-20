@@ -75,7 +75,7 @@ const localFallbacks  = [
 
 const TopService = () => {
 
-const [topProduct, setTopProduct] = useState([]);
+const [topServices, setTopServices] = useState([]);
 
 
 useEffect(() => {
@@ -86,10 +86,11 @@ useEffect(() => {
         const ads = response.data.filter(
           (ad) =>
             ad.slotId?.page === "home" &&
-            ad.slotId?._id === "682c49b912b9ecff83baf9c6" &&
+            ad.slotId?._id === "682c6c6a892d318a662b2222" &&
             ad.isActive
         );
-        console.log("topProduct", response.data);
+        console.log("topServices", response.data);
+        
         
 
         let finalSlides = [];
@@ -110,10 +111,10 @@ useEffect(() => {
         else {
           finalSlides = ads;
         }
-        setTopProduct(finalSlides);
+        setTopServices(finalSlides);
       } catch (error) {
         console.error("Error fetching ads:", error);
-        setTopProduct(localFallbacks.slice(0, 5)); // Fallback if API fails
+        setTopServices(localFallbacks.slice(0, 5)); // Fallback if API fails
       }
     };
 
@@ -151,7 +152,7 @@ useEffect(() => {
             modules={[Autoplay, FreeMode]}
             className="px-2 flex justify-center"
           >
-            {topProduct.map((deal) => (
+            {topServices.map((deal) => (
               <SwiperSlide key={deal.id}>
                 <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-fit bg-white rounded-md justify-between items-center">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
