@@ -276,7 +276,7 @@ const SlotAds = ({ slotId, type }) => {
                 key={ad._id}
                 className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow relative group"
               >
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2 z-50">
                   <button
                     onClick={() => openEditModal(ad)}
                     className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"

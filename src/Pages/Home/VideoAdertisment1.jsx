@@ -31,7 +31,7 @@ function VideoAdertisment1({ videos }) {
   }
 
   return (
-    <div className="w-full lg:w-11/12 mx-auto lg:h-[60vh] relative overflow-hidden group">
+    <div className="w-full lg:w-11/12 mx-auto h-full md:h-[50vh] relative overflow-hidden group">
       {/* Video Background */}
       <video
         id="video1"
