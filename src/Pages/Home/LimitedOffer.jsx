@@ -1,80 +1,116 @@
 import React, { useEffect, useState } from "react";
 import limited from "../../assets/limited.png";
-import limited3 from "../../assets/limited3.jpeg";
+import limited3 from "../../assets/limited3.jpg";
 import axios from "axios";
 import { API } from "../../../config/config";
 
 const LimitedOffer = () => {
-  const [heroOfferBanner, setHeroOfferBanner] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [fadeIn, setFadeIn] = useState(true);
-
-  const localImages = [
+  const localFallbacks = [
     { id: 1001, contentUrl: limited },
     { id: 1002, contentUrl: limited3 },
   ];
 
+  const offerImage1 = [
+    { id: 1003, contentUrl: limited },
+    { id: 1004, contentUrl: limited3 },
+  ];
+
+  const [leftIndex, setLeftIndex] = useState(0);
+  const [rightIndex, setRightIndex] = useState(0);
+  const [fadeLeft, setFadeLeft] = useState(true);
+  const [fadeRight, setFadeRight] = useState(true);
+  const [offerLeftBanner, setOfferLeftBanner] = useState([]);
+
   useEffect(() => {
-    const fetchAds = async () => {
-      try {
-        const response = await axios.get(`${API}/adverts`);
-        const ads = response.data.filter(
-          (ad) => ad.slotId?.page === "home" && ad.slotId?._id === "682b12797e0c060d62669940"
-        );
-        let combinedAds = [];
+    const interval = setInterval(() => {
+      setFadeLeft(false); // Start fade out
+      setTimeout(() => {
+        setLeftIndex((prev) => (prev + 1) % localFallbacks.length);
+        setFadeLeft(true); // Start fade in
+      }, 500); // wait for fade out before switching
+    }, 8000); // every 5 seconds
 
-        if (ads.length >= 4) {
-          combinedAds = ads.slice(0, 4);
-        } else if (ads.length === 3 || ads.length === 1) {
-          combinedAds = [...ads, localImages[0]];
-        } else if (ads.length === 2 || ads.length === 0) {
-          combinedAds = [...ads, ...localImages.slice(0, 2)];
-        }
-
-        setHeroOfferBanner(combinedAds);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAds();
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (heroOfferBanner.length > 0) {
-      const interval = setInterval(() => {
-        setFadeIn(false);
-        setTimeout(() => {
-          setCurrentImageIndex(
-            (prevIndex) => (prevIndex + 1) % heroOfferBanner.length
-          );
-          setFadeIn(true);
-        }, 1000);
-      }, 5000);
+    const interval = setInterval(() => {
+      setFadeRight(false);
+      setTimeout(() => {
+        setRightIndex((prev) => (prev + 1) % offerImage1.length);
+        setFadeRight(true);
+      }, 500);
+    }, 8000);
 
-      return () => clearInterval(interval);
-    }
-  }, [heroOfferBanner]);
+    return () => clearInterval(interval);
+  }, []);
+
+
+useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(`${API}/adverts`);
+        
+        const ads = response.data.filter(
+          (ad) =>
+            ad.slotId?.page === "home" &&
+            ad.slotId?._id === "682b12797e0c060d62669940" &&
+            ad.isActive
+        );
+        console.log("limited", response.data);
+
+        let finalSlides = [];
+
+        if (ads.length === 0) {
+          finalSlides = localFallbacks.slice(0, 2);
+        } else if (ads.length === 1) {
+          finalSlides = [...ads, ...localFallbacks.slice(0, 1)];
+        }  else {
+          finalSlides = ads;
+        }
+
+        setOfferLeftBanner(finalSlides);
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        setOfferLeftBanner(localFallbacks.slice(0, 2)); // Fallback if API fails
+      }
+    };
+
+    fetchAds();
+  }, []);
+
+
 
   return (
     <>
       <div className="w-11/12 mx-auto flex justify-center items-center text-2xl lg:text-3xl font-bold text-green-800">
         Limited Offers
       </div>
+
       <div className="w-11/12 mx-auto flex flex-col md:flex-row justify-center items-center gap-3 lg:gap-5 lg:mb-6">
-        {heroOfferBanner.map((banner, i) => (
-          <div
-            key={i}
-            className="w-full lg:w-6/12 h-[20vh] lg:h-[36vh] flex justify-center items-center rounded-lg overflow-hidden"
-          >
-            <img
-              src={banner.contentUrl}
-              alt=""
-              className={`object-cover w-full h-full transition-opacity duration-1000 ${
-                fadeIn ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          </div>
-        ))}
+
+        {/* Left Slide */}
+        <div className="w-full lg:w-6/12 h-[20vh] lg:h-fit flex justify-center items-center rounded-lg overflow-hidden">
+          <img
+            src={offerLeftBanner[leftIndex]?.contentUrl || localFallbacks[0].contentUrl}
+            alt=""
+            className={`object-scale-down w-full h-full transition-opacity duration-1000 ease-in-out ${
+              fadeLeft ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </div>
+
+        {/* Right Slide */}
+        <div className="w-full lg:w-6/12 h-[20vh] lg:h-fit flex justify-center items-center rounded-lg overflow-hidden">
+          <img
+            src={offerImage1[rightIndex].contentUrl}
+            alt=""
+            className={`object-scale-down w-full h-full transition-opacity duration-1000 ease-in-out ${
+              fadeRight ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </div>
+
       </div>
     </>
   );
