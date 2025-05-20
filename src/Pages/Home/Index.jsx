@@ -25,6 +25,8 @@ axios.defaults.withCredentials = true;
 const Index = () => {
   const [productCategories, setProductCategories] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
+  const [fetchVideo1, setFetchVideo1] = useState([]);
+  const [fetchVideo2, setFetchVideo2] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -47,6 +49,25 @@ const Index = () => {
       }
     };
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(`${API}/adverts`);
+        const ads = response.data.filter(ad => ad.slotId?.page === "home");
+        if (ads.length > 0) {
+          // Filter videos for Advertisement1 (1st and 3rd videos)
+          const allVideos = ads.filter(ad => ad.slotId?._id === "682af722344e51b185a45062");
+          setFetchVideo1(allVideos.filter((_, index) => index % 2 === 0)); // Get odd indexed videos (0, 2)
+          setFetchVideo2(allVideos.filter((_, index) => index % 2 === 1)); // Get even indexed videos (1, 3)
+        }
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+    fetchAds();
   }, []);
 
   return (
@@ -81,13 +102,13 @@ const Index = () => {
 
         <Offers />
 
-        <VideoAdertisment1 />
+        <VideoAdertisment1 videos={fetchVideo1} />
 
         <Category2
           productCategories={productCategories}
           serviceCategories={serviceCategories}
         />
-        <VideoAdertisment2 />
+        <VideoAdertisment2 videos={fetchVideo2} />
 
         {/* <Category3 /> */}
 

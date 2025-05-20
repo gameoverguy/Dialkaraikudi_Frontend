@@ -135,7 +135,7 @@ const Header = () => {
               />
               <button
                 type="submit"
-                className="absolute top-1/2 -translate-y-1/2 right-1 
+                className="absolute top-1/2 -translate-y-1/2 right-0 
              bg-green-600 p-2 rounded-lg text-white 
              transition-all duration-200 cursor-pointer
              hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none"
