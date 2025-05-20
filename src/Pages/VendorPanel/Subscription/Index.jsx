@@ -6,7 +6,7 @@ import LottieLoader from '../../../Components/Loader';
 import { toast, ToastContainer } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
-const VendorSubscription = () => {
+const VendorSubscription = ({businessData}) => {
   const [adSlots, setAdSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get ID from URL params instead of localStorage
@@ -30,7 +30,7 @@ const VendorSubscription = () => {
   const handlePurchaseSlot = async (slotId) => {
     try {
       const response = await axios.post(`${API}/advertslots/assignbusiness`, {
-        businessId: id,
+        businessId: businessData.user_id,
         slotId
       });
       toast.success('Slot purchased successfully!');
