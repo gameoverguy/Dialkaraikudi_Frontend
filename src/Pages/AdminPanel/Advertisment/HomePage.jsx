@@ -19,10 +19,10 @@ const HomePage = () => {
     name: "",
     description: "",
     adDurationInDays: "",
-    slotType: "Image",
+    slotType: "",
     maxAds: "",
-    page: "home",
-    interval: 5000,
+    page: "",
+    interval: "",
     isActive: true,
   });
 
@@ -59,8 +59,75 @@ const HomePage = () => {
     setSelectedSlot(slot);
   };
 
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    adDurationInDays: "",
+    maxAds: "",
+    interval: ""
+  });
+
+  const validateForm = () => {
+    let tempErrors = {
+      name: "",
+      description: "",
+      adDurationInDays: "",
+      maxAds: "",
+      interval: ""
+    };
+    let isValid = true;
+
+    // Name validation
+    if (!formData.name.trim()) {
+      tempErrors.name = "Slot name is required";
+      isValid = false;
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      tempErrors.description = "Description is required";
+      isValid = false;
+    }
+
+    // Duration validation
+    if (!formData.adDurationInDays) {
+      tempErrors.adDurationInDays = "Duration is required";
+      isValid = false;
+    } else if (formData.adDurationInDays <= 0) {
+      tempErrors.adDurationInDays = "Duration must be greater than 0";
+      isValid = false;
+    }
+
+    // Max Ads validation
+    if (!formData.maxAds) {
+      tempErrors.maxAds = "Maximum ads is required";
+      isValid = false;
+    } else if (formData.maxAds <= 0) {
+      tempErrors.maxAds = "Maximum ads must be greater than 0";
+      isValid = false;
+    }
+
+    // Interval validation
+    if (!formData.interval) {
+      tempErrors.interval = "Interval is required";
+      isValid = false;
+    } else if (formData.interval < 1000) {
+      tempErrors.interval = "Interval must be at least 1000ms";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
     try {
       if (isEditing && selectedSlot) {
         const response = await axios.put(
@@ -84,10 +151,10 @@ const HomePage = () => {
         name: "",
         description: "",
         adDurationInDays: "",
-        slotType: "Image",
+        slotType: "",
         maxAds: "",
-        page: "home",
-        interval: 5000,
+        page: "",
+        interval: "",
         isActive: true,
       });
       setSelectedSlot(null);
@@ -267,14 +334,14 @@ const HomePage = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Slot Name"
-              required
+              error={errors.name}
             />
             <FloatingTextarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Slot Description"
-              required
+              error={errors.description}
             />
             <FloatingInput
               type="number"
@@ -282,7 +349,7 @@ const HomePage = () => {
               value={formData.adDurationInDays}
               onChange={handleChange}
               placeholder="Duration (in days)"
-              required
+              error={errors.adDurationInDays}
             />
 
             {/* Slot Type Radio Buttons */}
@@ -353,7 +420,7 @@ const HomePage = () => {
               value={formData.maxAds}
               onChange={handleChange}
               placeholder="Maximum Ads"
-              required
+              error={errors.maxAds}
             />
 
             <FloatingInput
@@ -362,7 +429,7 @@ const HomePage = () => {
               value={formData.interval}
               onChange={handleChange}
               placeholder="Interval (in milliseconds)"
-              required
+              error={errors.interval}
             />
 
             <div className="flex justify-end gap-2">
@@ -377,7 +444,7 @@ const HomePage = () => {
                 type="submit"
                 className="px-4 py-2 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600"
               >
-                Create Slot
+                {isEditing ? "Update Slot" : "Create Slot"}
               </button>
             </div>
           </form>
