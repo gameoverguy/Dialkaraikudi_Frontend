@@ -5,8 +5,17 @@ import CustomModal from "../../Components/modal";
 import axios from "axios";
 import { API } from "../../../config/config";
 import { CiCircleInfo } from "react-icons/ci";
+import OTP from "../UserLogin/OTP";
 
-const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
+const SignupModal = ({
+  isOpen,
+  onClose,
+  onLoginClick,
+  setShowLoginModal,
+  setOtpEmail,
+  setShowOTPModal,
+  showOTPModal
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,6 +37,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
   const [errorOverall, setErrorOverall] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [showOTPModal, setShowOTPModal] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -167,13 +177,15 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
         });
 
         if (response.data) {
-          setSuccessMessage("Registration successful! Redirecting to login...");
+          setSuccessMessage(
+            "Registration successful! Please verify your email."
+          );
           console.log("Registration successful:", response.data);
+          localStorage.setItem("tempEmail", formData.email);
+          setOtpEmail(formData.email);
           setTimeout(() => {
             onClose();
-            if (setShowLoginModal) {
-              setShowLoginModal(true);
-            }
+            setShowOTPModal(true);
           }, 1500);
         }
       } catch (error) {
@@ -384,6 +396,14 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, setShowLoginModal }) => {
           </div>
         </div>
       </CustomModal>
+      <OTP
+        isOpen={showOTPModal}
+        onClose={() => setShowOTPModal(false)}
+        email={formData.email}
+        setShowLoginModal={setShowLoginModal}
+        role="user"
+        isSignupFlow={true}
+      />
     </>
   );
 };

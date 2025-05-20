@@ -19,10 +19,10 @@ const HomePage = () => {
     name: "",
     description: "",
     adDurationInDays: "",
-    slotType: "Image",
+    slotType: "",
     maxAds: "",
-    page: "home",
-    interval: 5000,
+    page: "",
+    interval: "",
     isActive: true,
   });
 
@@ -45,6 +45,13 @@ const HomePage = () => {
 
   const handleEdit = (slot) => {
     setIsEditing(true);
+    setErrors({
+      name: "",
+      description: "",
+      adDurationInDays: "",
+      maxAds: "",
+      interval: "",
+    });
     setFormData({
       name: slot.name,
       description: slot.description,
@@ -59,8 +66,101 @@ const HomePage = () => {
     setSelectedSlot(slot);
   };
 
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    adDurationInDays: "",
+    maxAds: "",
+    interval: "",
+  });
+
+  const validateForm = () => {
+    let tempErrors = {
+      name: "",
+      description: "",
+      adDurationInDays: "",
+      maxAds: "",
+      interval: "",
+    };
+    let isValid = true;
+
+    // Name validation
+    if (!formData.name.trim()) {
+      tempErrors.name = "Slot name is required";
+      isValid = false;
+    } else if (formData.name.length < 5) {
+      tempErrors.name = "Name must be at least 5 characters";
+      isValid = false;
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(formData.name)) {
+      tempErrors.name = "Name can only contain letters, numbers and spaces";
+      isValid = false;
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      tempErrors.description = "Description is required";
+      isValid = false;
+    } else if (
+      formData.description.length < 25 ||
+      formData.description.length > 50
+    ) {
+      tempErrors.description =
+        "Description must be between 25 and 50 characters";
+      isValid = false;
+    }
+
+    // Duration validation
+    if (!formData.adDurationInDays) {
+      tempErrors.adDurationInDays = "Duration is required";
+      isValid = false;
+    } else if (formData.adDurationInDays <= 0) {
+      tempErrors.adDurationInDays = "Duration must be greater than 0";
+      isValid = false;
+    } else if (formData.adDurationInDays > 30) {
+      tempErrors.adDurationInDays = "Duration cannot exceed 30 days";
+      isValid = false;
+    }
+
+    // Max Ads validation
+    if (!formData.maxAds) {
+      tempErrors.maxAds = "Maximum ads is required";
+      isValid = false;
+    } else if (formData.maxAds < 1) {
+      tempErrors.maxAds = "Maximum ads must be at least 1";
+      isValid = false;
+    }
+
+    // Interval validation
+    if (!formData.interval) {
+      tempErrors.interval = "Interval is required";
+      isValid = false;
+    } else if (formData.interval < 1000) {
+      tempErrors.interval = "Interval must be at least 1000ms";
+      isValid = false;
+    }
+    // Slot Type validation
+    if (!formData.slotType) {
+      tempErrors.slotType = "Please select a slot type";
+      isValid = false;
+    }
+
+    // Page validation
+    if (!formData.page) {
+      tempErrors.page = "Please select a page";
+      isValid = false;
+    }
+    setErrors(tempErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
     try {
       if (isEditing && selectedSlot) {
         const response = await axios.put(
@@ -84,10 +184,10 @@ const HomePage = () => {
         name: "",
         description: "",
         adDurationInDays: "",
-        slotType: "Image",
+        slotType: "",
         maxAds: "",
-        page: "home",
-        interval: 5000,
+        page: "",
+        interval: "",
         isActive: true,
       });
       setSelectedSlot(null);
@@ -101,9 +201,77 @@ const HomePage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "name") {
+      const sanitizedValue = value.replace(/[^a-zA-Z0-9\s]/g, "");
+      setFormData((prev) => ({
+        ...prev,
+        [name]: sanitizedValue,
+      }));
+      let error = "";
+      if (sanitizedValue.trim().length < 5) {
+        error = "Name must be at least 5 characters";
+      } else if (sanitizedValue.trim().length > 30) {
+        error = "Name cannot exceed 30 characters";
+      }
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+
+    // Real-time validation
+    let error = "";
+    switch (name) {
+      case "name":
+        if (value.trim().length > 30) {
+          error = "Name cannot exceed 30 characters";
+        } else if (!/^[a-zA-Z0-9\s]+$/.test(value)) {
+          error = "Name can only contain letters, numbers and spaces";
+        }
+        break;
+
+      case "description":
+        if (value.trim().length < 25) {
+          error = "Description must be at least 25 characters";
+        } else if (value.trim().length > 50) {
+          error = "Description cannot exceed 50 characters";
+        }
+        break;
+
+      case "adDurationInDays":
+        if (value && Number(value) <= 0) {
+          error = "Duration must be greater than 0";
+        } else if (value && Number(value) > 30) {
+          error = "Duration cannot exceed 30 days";
+        }
+        break;
+
+      case "maxAds":
+        if (value && Number(value) < 1) {
+          error = "Maximum ads must be at least 1";
+        } else if (value && Number(value) > 30) {
+          error = "Maximum ads cannot exceed 30";
+        }
+        break;
+
+      case "interval":
+        if (value && Number(value) < 1000) {
+          error = "Interval must be at least 1000ms";
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
     }));
   };
 
@@ -128,7 +296,7 @@ const HomePage = () => {
             <span>←</span> Back to Slots
           </button>
         </div>
-        <SlotAds slotId={selectedSlot._id} type={selectedSlot.slotType}/>
+        <SlotAds slotId={selectedSlot._id} type={selectedSlot.slotType} />
       </div>
     );
   }
@@ -141,7 +309,26 @@ const HomePage = () => {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold">Advertisement Management</h1>
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                setShowModal(true);
+                setErrors({
+                  name: "",
+                  description: "",
+                  adDurationInDays: "",
+                  maxAds: "",
+                  interval: "",
+                });
+                setFormData({
+                  name: "",
+                  description: "",
+                  adDurationInDays: "",
+                  slotType: "",
+                  maxAds: "",
+                  page: "",
+                  interval: "",
+                  isActive: true,
+                });
+              }}
               className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
             >
               Add New Slot
@@ -249,15 +436,15 @@ const HomePage = () => {
               name: "",
               description: "",
               adDurationInDays: "",
-              slotType: "Image",
+              slotType: "",
               maxAds: "",
-              page: "home",
-              interval: 5000,
+              page: "",
+              interval: "",
               isActive: true,
             });
           }}
           title={
-            isEditing ? "Edit Advertisement Slot" : "Add New Advertisement Slot"
+            isEditing ? "Edit Advertisement" : "Add New Advertisement"
           }
         >
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -267,14 +454,16 @@ const HomePage = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Slot Name"
-              required
+              error={errors.name}
+              maxLength={30}
             />
             <FloatingTextarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Slot Description"
-              required
+              error={errors.description}
+              maxLength={50}
             />
             <FloatingInput
               type="number"
@@ -282,7 +471,8 @@ const HomePage = () => {
               value={formData.adDurationInDays}
               onChange={handleChange}
               placeholder="Duration (in days)"
-              required
+              error={errors.adDurationInDays}
+              maxLength={30}
             />
 
             {/* Slot Type Radio Buttons */}
@@ -313,6 +503,13 @@ const HomePage = () => {
                   />
                   <span className="ml-2">Video</span>
                 </label>
+              </div>
+              <div className="h-2">
+                {errors.slotType && (
+                  <p className="text-red-500 text-[12px] text-right text-sm mt-1">
+                    {errors.slotType}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -345,6 +542,13 @@ const HomePage = () => {
                   <span className="ml-2">Business List</span>
                 </label>
               </div>
+              <div className="h-2">
+                {errors.page && (
+                  <p className="text-red-500 text-right text-[12px] text-sm mt-1">
+                    {errors.page}
+                  </p>
+                )}
+              </div>
             </div>
 
             <FloatingInput
@@ -353,7 +557,8 @@ const HomePage = () => {
               value={formData.maxAds}
               onChange={handleChange}
               placeholder="Maximum Ads"
-              required
+              error={errors.maxAds}
+              maxLength={30}
             />
 
             <FloatingInput
@@ -362,7 +567,7 @@ const HomePage = () => {
               value={formData.interval}
               onChange={handleChange}
               placeholder="Interval (in milliseconds)"
-              required
+              error={errors.interval}
             />
 
             <div className="flex justify-end gap-2">
@@ -377,7 +582,7 @@ const HomePage = () => {
                 type="submit"
                 className="px-4 py-2 text-white bg-emerald-500 rounded-lg hover:bg-emerald-600"
               >
-                Create Slot
+                {isEditing ? "Update Slot" : "Create Slot"}
               </button>
             </div>
           </form>

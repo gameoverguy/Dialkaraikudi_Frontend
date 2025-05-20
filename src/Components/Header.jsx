@@ -338,7 +338,10 @@ const Header = () => {
           setShowLoginModal(true);
         }}
         setShowLoginModal={setShowLoginModal}
+        setShowOTPModal={setShowOTPModal} // Add this prop
+        setOtpEmail={setOtpEmail}
         role={loginRole}
+        showOTPModal={showOTPModal}
       />
       <ForgotPassword
         isOpen={isForgotPasswordOpen}
@@ -352,7 +355,9 @@ const Header = () => {
         onClose={() => setShowOTPModal(false)}
         email={otpEmail}
         setShowResetPasswordModal={setShowResetPasswordModal}
+        setShowLoginModal={setShowLoginModal}
         role={loginRole}
+        isSignupFlow={true}
       />
       <ResetPassword
         isOpen={showResetPasswordModal}

@@ -4,7 +4,15 @@ import axios from "axios";
 import { API } from "../../../../config/config";
 import { CiCircleInfo } from "react-icons/ci";
 
-const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
+const OTP = ({
+  email,
+  isOpen,
+  onClose,
+  setShowResetPasswordModal,
+  setShowLoginModal,
+  role,
+  isSignupFlow,
+}) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
   const [timer, setTimer] = useState(60);
@@ -75,10 +83,11 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
     }
 
     try {
-      const endpoint =
-        role === "business"
-          ? `${API}/business/verifyOtp`
-          : `${API}/user/verifyotp`;
+      const endpoint = isSignupFlow
+        ? `${API}/user/verifyOtpAndCreateAccount`
+        : role === "business"
+        ? `${API}/business/verifyOtp`
+        : `${API}/user/verifyotp`;
       const response = await axios.post(endpoint, {
         email: email,
         otp: otpValue,
@@ -88,14 +97,30 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
 
       if (response.data) {
         console.log("OTP Verified:", otpValue);
-        setSuccessMessage("OTP verified successfully!");
+        setSuccessMessage(
+          isSignupFlow
+            ? "Account verified successfully!"
+            : "OTP verified successfully!"
+        );
         sessionStorage.setItem("resetPasswordOtp", otpValue);
         setTimeout(() => {
           setOtp(["", "", "", ""]);
           setError("");
           setErrorOverall("");
           onClose();
-          setShowResetPasswordModal(true);
+          // setShowResetPasswordModal(true);
+          if (isSignupFlow) {
+            // For signup flow, redirect to login
+            if (setShowLoginModal) {
+              setShowLoginModal(true);
+            }
+          } else {
+            // For password reset flow
+            if (setShowResetPasswordModal) {
+              sessionStorage.setItem("resetPasswordOtp", otpValue);
+              setShowResetPasswordModal(true);
+            }
+          }
         }, 1500);
       }
     } catch (error) {
@@ -110,10 +135,11 @@ const OTP = ({ email, isOpen, onClose, setShowResetPasswordModal, role }) => {
 
   const handleResendOTP = async () => {
     try {
-      const endpoint =
-        role === "business"
-          ? `${API}/business/forgotPassword`
-          : `${API}/user/forgotpassword`;
+      const endpoint = isSignupFlow
+        ? `${API}/user/resendSignupOtp` // You'll need to create this endpoint
+        : role === "business"
+        ? `${API}/business/forgotPassword`
+        : `${API}/user/forgotpassword`;
       const response = await axios.post(endpoint, {
         email: email,
       });
