@@ -29,7 +29,7 @@ const LimitedOffer = () => {
         setLeftIndex((prev) => (prev + 1) % localFallbacksLeft.length);
         setFadeLeft(true); // Start fade in
       }, 500); // wait for fade out before switching
-    }, 8000); // every 5 seconds
+    }, 7000); // every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -90,7 +90,7 @@ useEffect(() => {
         const ads = response.data.filter(
           (ad) =>
             ad.slotId?.page === "home" &&
-            ad.slotId?._id === "682b12797e0c060d62669940" &&
+            ad.slotId?._id === "682c1a7b0c32012c369edade" &&
             ad.isActive
         );
         console.log("limited1", response.data);
