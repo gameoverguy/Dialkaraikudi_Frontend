@@ -46,12 +46,14 @@ const SlotAds = ({ slotId, type }) => {
           axios.get(`${API}/adverts?slotId=${slotId}`),
           axios.get(`${API}/advertslots/${slotId}`),
         ]);
-        console.log(adsResponse.data);
-        console.log(slotResponse.data.allowedBusinesses);
 
         setAds(adsResponse.data);
         setSelectedSlot(slotResponse.data);
-        setAllowedBusinesses(slotResponse.data.allowedBusinesses || []);
+        // Fix the filter logic to exclude businesses that already have ads
+        const existingBusinessIds = adsResponse.data.map(ad => ad.businessId._id);
+        setAllowedBusinesses(slotResponse.data.allowedBusinesses.filter(
+          business => !existingBusinessIds.includes(business._id)
+        ));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,6 +63,9 @@ const SlotAds = ({ slotId, type }) => {
 
     fetchData();
   }, [slotId]);
+
+  console.log(allowedBusinesses, "12421421421");
+  
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -98,38 +103,15 @@ const SlotAds = ({ slotId, type }) => {
     } else if (formData.description.length < 10) {
       tempErrors.description = "Description must be at least 10 characters";
       isValid = false;
-    } else if (formData.description.length > 100) {
-      tempErrors.description = "Description cannot exceed 100 characters";
-      isValid = false;
     }
 
     // Priority validation
     if (!formData.priority) {
       tempErrors.priority = "Priority is required";
       isValid = false;
-    } else if (formData.priority < 1 || formData.priority > 10) {
-      tempErrors.priority = "Priority must be between 1 and 10";
+    } else if (isNaN(formData.priority) || formData.priority < 1 || formData.priority > 20) {
+      tempErrors.priority = "Priority must be a number between 1 and 20";
       isValid = false;
-    }
-
-    // Date validation
-    if (!formData.startDate) {
-      tempErrors.startDate = "Start date is required";
-      isValid = false;
-    }
-
-    if (!formData.endDate) {
-      tempErrors.endDate = "End date is required";
-      isValid = false;
-    }
-
-    if (formData.startDate && formData.endDate) {
-      const start = new Date(formData.startDate);
-      const end = new Date(formData.endDate);
-      if (end <= start) {
-        tempErrors.endDate = "End date must be after start date";
-        isValid = false;
-      }
     }
 
     setErrors(tempErrors);
@@ -357,7 +339,7 @@ const SlotAds = ({ slotId, type }) => {
                 key={ad._id}
                 className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-shadow relative group"
               >
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2 z-50">
                   <button
                     onClick={() => openEditModal(ad)}
                     className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
@@ -427,6 +409,12 @@ const SlotAds = ({ slotId, type }) => {
             endDate: "",
           });
           setSelectedImage(null);
+        setErrors({
+          businessId: "",
+          contentUrl: "",
+          description: "",
+          priority: ""
+        })
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
@@ -476,7 +464,6 @@ const SlotAds = ({ slotId, type }) => {
                               : editingAd?.contentUrl
                           }
                           className="h-32 w-auto"
-                          controls
                         />
                       ) : (
                         <img
@@ -512,21 +499,26 @@ const SlotAds = ({ slotId, type }) => {
                         ? "MP4, WebM up to 50MB"
                         : "PNG, JPG up to 10MB"}
                     </p>
-                    {errors.contentUrl && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.contentUrl}
-                      </p>
-                    )}
+                   
                   </div>
                 )}
               </div>
+              
             </div>
+            <p className="h-2">
+                    {errors.contentUrl && (
+                      <p className="text-red-500 text-xs text-right mt-1">
+                        {errors.contentUrl}
+                      </p>
+                    )}
+                    </p>
           </div>
           <FloatingTextarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             placeholder="Description"
+            error={errors.description}
           />
           <FloatingInput
             type="number"
@@ -534,8 +526,11 @@ const SlotAds = ({ slotId, type }) => {
             value={formData.priority}
             onChange={handleChange}
             placeholder="Priority"
+            error={errors.priority}
+            min="1"
+            max="20"
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 mt-2">
             <button
               type="button"
               onClick={() => {

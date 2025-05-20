@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { FaSort, FaSortUp, FaSortDown, FaSearch, FaArrowAltCircleLeft, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { FaSort, FaSortUp, FaSortDown, FaSearch, FaArrowLeft, FaArrowRight, FaFileExport } from 'react-icons/fa';
+import * as XLSX from 'xlsx';
 
 const CustomTable = ({
   columns,
@@ -59,6 +60,42 @@ const CustomTable = ({
     return sortConfig.direction === 'ascending' ? <FaSortUp /> : <FaSortDown />;
   };
 
+  const handleExportToExcel = () => {
+    // Create worksheet from the filtered data
+    const ws = XLSX.utils.json_to_sheet(
+      sortedData.map((item, index) => {
+        const row = {};
+        // Add S.No. as first column
+        row['S.No.'] = ((currentPage - 1) * itemsPerPage) + index + 1;
+        
+        columns.forEach(column => {
+          if (column.render) {
+            // For rendered columns, get the actual data
+            if (item[column.key] && typeof item[column.key] === 'object') {
+              // Safely handle nested objects
+              const nestedValues = Object.values(item[column.key] || {});
+              row[column.label] = nestedValues.length > 0 ? nestedValues.join(' - ') : '';
+            } else {
+              // Handle other rendered values with null check
+              row[column.label] = item[column.key] ? item[column.key].toString() : '';
+            }
+          } else {
+            // Handle direct values with null check
+            row[column.label] = item[column.key] || '';
+          }
+        });
+        return row;
+      })
+    );
+  
+    // Create workbook and add the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Data');
+  
+    // Save to file
+    XLSX.writeFile(wb, 'table-data.xlsx');
+  };
+
   return (
     <div className="w-full p-6 bg-white mt-4 shadow rounded-lg">
       {/* Header Section */}
@@ -73,14 +110,22 @@ const CustomTable = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {addButton && (
+        <div className="flex gap-2">
           <button
-            onClick={onAddClick}
-            className="bg-[#0A8A3D] text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-[#0A8A3D]/80 transition-colors"
+            onClick={handleExportToExcel}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
           >
-            {addButton}
+            <FaFileExport /> Export to Excel
           </button>
-        )}
+          {addButton && (
+            <button
+              onClick={onAddClick}
+              className="bg-[#0A8A3D] text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-[#0A8A3D]/80 transition-colors"
+            >
+              {addButton}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Table */}

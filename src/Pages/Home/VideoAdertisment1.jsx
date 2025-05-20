@@ -1,41 +1,57 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
-function VideoAdertisment1() {
+function VideoAdertisment1({ videos }) {
+
+  console.log(videos, "qwrwtt");
+  
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+  useEffect(() => {
+    if (!videos || videos.length === 0) return;
+
+    const videoElement = document.getElementById('video1');
+    
+    const handleVideoEnd = () => {
+      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length);
+    };
+
+    if (videoElement) {
+      videoElement.addEventListener('ended', handleVideoEnd);
+    }
+
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener('ended', handleVideoEnd);
+      }
+    };
+  }, [videos, currentVideoIndex]);
+
+  if (!videos || videos.length === 0) {
+    return null;
+  }
+
   return (
+    <div className="w-full lg:w-11/12 mx-auto h-full md:h-[50vh] relative overflow-hidden group">
+      {/* Video Background */}
+      <video
+        id="video1"
+        className="w-full h-full object-cover"
+        src={videos[currentVideoIndex]?.contentUrl}
+        autoPlay
+        muted
+        loop={videos.length === 1} // Only loop if there's a single video
+        playsInline
+      />
+      <div className="absolute inset-0 bg-black/20"></div>
 
-    <div className="w-full lg:w-11/12 mx-auto lg:h-[60vh] relative overflow-hidden group">
-        {/* Video Background */}
-        <video
-          className="w-full h-full object-cover"
-          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746611951/banner3_uebtno.mov" // Replace with your actual video path
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        <div className="absolute inset-0 bg-black/20"></div>
-        {/* Overlay */}
-
-        {/* Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6 z-10">
-          <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-lg animate-fade-up">
-            Welcome to Shree Jewellery
-          </h1>
-          {/* <p className="mt-4 text-sm md:text-lg text-gray-100 max-w-xl animate-fade-up delay-300">
-            Your one-stop hub for services, shopping, and entertainment in
-            Karaikudi.
-          </p>
-          <a
-            href="#services"
-            className="md:mt-6 px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md transition duration-300 border border-white/30"
-          >
-            Explore Now
-          </a> */}
-        </div>
-
-        {/* Glow Border (optional animation) */}
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6 z-10">
+        <h1 className="text-3xl md:text-5xl font-extrabold drop-shadow-lg animate-fade-up">
+          {videos[currentVideoIndex]?.description || 'Welcome to Dial Karaikudi'}
+        </h1>
       </div>
-  )
+    </div>
+  );
 }
 
-export default VideoAdertisment1
+export default VideoAdertisment1;
