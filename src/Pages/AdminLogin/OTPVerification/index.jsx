@@ -211,13 +211,13 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
             {/* // In the render section, make sure the success message is displayed: */}
             <div className="h-2 mb-3">
               {otpSuccessMessage && (
-                <p className="flex justify-center items-center text-green-600 text-xs">
+                <p className="flex justify-center text-[10px] items-center text-green-600 text-xs">
                   <CiCircleInfo className="mr-2 w-4 h-4 flex-shrink-0" />
                   {otpSuccessMessage}
                 </p>
               )}
               {error && (
-                <p className="flex justify-center items-center text-red-500 text-xs">
+                <p className="flex justify-center text-[10px] items-center text-red-500 text-xs">
                   <CiCircleInfo className="mr-2 w-4 h-4 flex-shrink-0" />
                   {error}
                 </p>
