@@ -26,6 +26,14 @@ const SlotAds = ({ slotId, type }) => {
     startDate: "",
     endDate: "",
   });
+  const [errors, setErrors] = useState({
+    businessId: "",
+    contentUrl: "",
+    description: "",
+    priority: "",
+    startDate: "",
+    endDate: "",
+  });
   console.log(formData.type);
 
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -38,12 +46,14 @@ const SlotAds = ({ slotId, type }) => {
           axios.get(`${API}/adverts?slotId=${slotId}`),
           axios.get(`${API}/advertslots/${slotId}`),
         ]);
-        console.log(adsResponse.data);
-        console.log(slotResponse.data.allowedBusinesses);
 
         setAds(adsResponse.data);
         setSelectedSlot(slotResponse.data);
-        setAllowedBusinesses(slotResponse.data.allowedBusinesses || []);
+        // Fix the filter logic to exclude businesses that already have ads
+        const existingBusinessIds = adsResponse.data.map(ad => ad.businessId._id);
+        setAllowedBusinesses(slotResponse.data.allowedBusinesses.filter(
+          business => !existingBusinessIds.includes(business._id)
+        ));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -54,14 +64,64 @@ const SlotAds = ({ slotId, type }) => {
     fetchData();
   }, [slotId]);
 
+  console.log(allowedBusinesses, "12421421421");
+  
+
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
     }
   };
 
+  const validateForm = () => {
+    let tempErrors = {
+      businessId: "",
+      contentUrl: "",
+      description: "",
+      priority: "",
+      startDate: "",
+      endDate: "",
+    };
+    let isValid = true;
+
+    // Business validation
+    if (!formData.businessId) {
+      tempErrors.businessId = "Please select a business";
+      isValid = false;
+    }
+
+    // Content validation
+    if (!selectedImage && !editingAd?.contentUrl) {
+      tempErrors.contentUrl = `Please upload a ${type.toLowerCase()}`;
+      isValid = false;
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      tempErrors.description = "Description is required";
+      isValid = false;
+    } else if (formData.description.length < 10) {
+      tempErrors.description = "Description must be at least 10 characters";
+      isValid = false;
+    }
+
+    // Priority validation
+    if (!formData.priority) {
+      tempErrors.priority = "Priority is required";
+      isValid = false;
+    } else if (isNaN(formData.priority) || formData.priority < 1 || formData.priority > 20) {
+      tempErrors.priority = "Priority must be a number between 1 and 20";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setUploadLoading(true);
     try {
       let contentUrl = "";
@@ -81,7 +141,7 @@ const SlotAds = ({ slotId, type }) => {
         businessId: "",
         type: "Image",
         description: "",
-        priority: 1,
+        priority: null,
         startDate: "",
         endDate: "",
       });
@@ -135,6 +195,9 @@ const SlotAds = ({ slotId, type }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setUploadLoading(true);
     try {
       let contentUrl = editingAd.contentUrl;
@@ -155,7 +218,7 @@ const SlotAds = ({ slotId, type }) => {
         businessId: "",
         type: "Image",
         description: "",
-        priority: 1,
+        priority: "",
         startDate: "",
         endDate: "",
       });
@@ -341,11 +404,17 @@ const SlotAds = ({ slotId, type }) => {
             businessId: "",
             type: "Image",
             description: "",
-            priority: 1,
+            priority: "",
             startDate: "",
             endDate: "",
           });
           setSelectedImage(null);
+        setErrors({
+          businessId: "",
+          contentUrl: "",
+          description: "",
+          priority: ""
+        })
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
@@ -362,8 +431,9 @@ const SlotAds = ({ slotId, type }) => {
               label: business.businessName,
             }))}
             placeholder="Select Business"
-            required
+            error={errors.businessId}
           />
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Upload {type}
@@ -394,7 +464,6 @@ const SlotAds = ({ slotId, type }) => {
                               : editingAd?.contentUrl
                           }
                           className="h-32 w-auto"
-                          controls
                         />
                       ) : (
                         <img
@@ -421,7 +490,7 @@ const SlotAds = ({ slotId, type }) => {
                         className="sr-only"
                         accept={type === "Video" ? "video/*" : "image/*"}
                         onChange={handleFileChange}
-                        required={!editingAd}
+                        // required={!editingAd}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -430,17 +499,26 @@ const SlotAds = ({ slotId, type }) => {
                         ? "MP4, WebM up to 50MB"
                         : "PNG, JPG up to 10MB"}
                     </p>
+                   
                   </div>
                 )}
               </div>
+              
             </div>
+            <p className="h-2">
+                    {errors.contentUrl && (
+                      <p className="text-red-500 text-xs text-right mt-1">
+                        {errors.contentUrl}
+                      </p>
+                    )}
+                    </p>
           </div>
           <FloatingTextarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             placeholder="Description"
-            required
+            error={errors.description}
           />
           <FloatingInput
             type="number"
@@ -448,9 +526,11 @@ const SlotAds = ({ slotId, type }) => {
             value={formData.priority}
             onChange={handleChange}
             placeholder="Priority"
-            required
+            error={errors.priority}
+            min="1"
+            max="20"
           />
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 mt-2">
             <button
               type="button"
               onClick={() => {
