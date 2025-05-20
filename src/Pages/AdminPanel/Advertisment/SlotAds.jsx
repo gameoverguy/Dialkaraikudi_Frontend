@@ -10,7 +10,7 @@ import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 
-const SlotAds = ({ slotId , type}) => {
+const SlotAds = ({ slotId, type }) => {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -28,7 +28,7 @@ const SlotAds = ({ slotId , type}) => {
     endDate: "",
   });
   console.log(formData.type);
-  
+
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [allowedBusinesses, setAllowedBusinesses] = useState([]);
 
@@ -210,8 +210,10 @@ const SlotAds = ({ slotId , type}) => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if ((type === "Image" && file.type.startsWith('image/')) || 
-          (type === "Video" && file.type.startsWith('video/'))) {
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
         setSelectedImage(file);
       } else {
         alert(`Please upload a ${type.toLowerCase()} file`);
@@ -239,8 +241,10 @@ const SlotAds = ({ slotId , type}) => {
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       const file = files[0];
-      if ((type === "Image" && file.type.startsWith('image/')) || 
-          (type === "Video" && file.type.startsWith('video/'))) {
+      if (
+        (type === "Image" && file.type.startsWith("image/")) ||
+        (type === "Video" && file.type.startsWith("video/"))
+      ) {
         setSelectedImage(file);
       } else {
         alert(`Please upload a ${type.toLowerCase()} file`);
@@ -378,44 +382,31 @@ const SlotAds = ({ slotId , type}) => {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
               >
-                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                  <button
-                    onClick={() => openEditModal(ad)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
-                  >
-                    <FaRegEdit className="text-blue-600" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(ad._id)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
-                  >
-                    <MdDeleteOutline className="text-red-500" />
-                  </button>
-                </div>
-                <div className="aspect-video bg-gray-100">
-                {type === "Video" ? (
-                  <video
-                    src={ad.contentUrl}
-                    className="w-full h-full object-cover"
-                    controls
-                  />
-                ) : (
-                  <img
-                    src={ad.contentUrl}
-                    alt={ad.description}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-800 mb-1">
-                    {ad.businessId.businessName}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">{ad.description}</p>
-                  <div className="space-y-1 text-xs text-gray-500">
-                    <div className="flex justify-between">
-                      <span>Start Date:</span>
-                      <span>{formatDate(ad.startDate)}</span>
+                <div className="space-y-1 text-center w-full">
+                  {selectedImage ||
+                  (editingAd && editingAd.contentUrl && !selectedImage) ? (
+                    <div className="space-y-2 relative">
+                      <button
+                        type="button"
+                        onClick={handleImageRemove}
+                        className="absolute -top-2 -right-2 bg-white p-1.5 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <MdDeleteOutline className="text-red-500 text-lg" />
+                      </button>
+                      <div className="flex items-center justify-center">
+                        <img
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
+                          alt="Preview"
+                          className="h-32 w-auto object-contain"
+                        />
+                      </div>
+                      <p className="text-sm text-emerald-600">
+                        {selectedImage ? selectedImage.name : "Current Image"}
+                      </p>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center text-sm text-gray-600">
@@ -674,7 +665,10 @@ const SlotAds = ({ slotId , type}) => {
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
-        <form onSubmit={editingAd ? handleEdit : handleSubmit} className="space-y-4">
+        <form
+          onSubmit={editingAd ? handleEdit : handleSubmit}
+          className="space-y-4"
+        >
           <FloatingSelect
             name="businessId"
             value={formData.businessId}
@@ -686,18 +680,19 @@ const SlotAds = ({ slotId , type}) => {
             placeholder="Select Business"
             required
           />
-           <div className="space-y-2">
+          <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Upload {type}
             </label>
-            <div 
+            <div
               className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-emerald-500 transition-colors"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <div className="space-y-1 text-center w-full">
-                {(selectedImage || (editingAd && editingAd.contentUrl && !selectedImage)) ? (
+                {selectedImage ||
+                (editingAd && editingAd.contentUrl && !selectedImage) ? (
                   <div className="space-y-2 relative">
                     <button
                       type="button"
@@ -709,20 +704,28 @@ const SlotAds = ({ slotId , type}) => {
                     <div className="flex items-center justify-center">
                       {type === "Video" ? (
                         <video
-                          src={selectedImage ? URL.createObjectURL(selectedImage) : editingAd?.contentUrl}
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
                           className="h-32 w-auto"
                           controls
                         />
                       ) : (
                         <img
-                          src={selectedImage ? URL.createObjectURL(selectedImage) : editingAd?.contentUrl}
+                          src={
+                            selectedImage
+                              ? URL.createObjectURL(selectedImage)
+                              : editingAd?.contentUrl
+                          }
                           alt="Preview"
                           className="h-32 w-auto object-contain"
                         />
                       )}
                     </div>
                     <p className="text-sm text-emerald-600">
-                      {selectedImage ? selectedImage.name : 'Current File'}
+                      {selectedImage ? selectedImage.name : "Current File"}
                     </p>
                   </div>
                 ) : (
@@ -739,7 +742,9 @@ const SlotAds = ({ slotId , type}) => {
                     </label>
                     <p className="pl-1">or drag and drop</p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {type === "Video" ? "MP4, WebM up to 50MB" : "PNG, JPG up to 10MB"}
+                      {type === "Video"
+                        ? "MP4, WebM up to 50MB"
+                        : "PNG, JPG up to 10MB"}
                     </p>
                   </div>
                 )}
@@ -784,8 +789,10 @@ const SlotAds = ({ slotId , type}) => {
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   <span>Uploading...</span>
                 </>
+              ) : editingAd ? (
+                "Update Ad"
               ) : (
-                editingAd ? 'Update Ad' : 'Create Ad'
+                "Create Ad"
               )}
             </button>
           </div>
@@ -800,7 +807,8 @@ const SlotAds = ({ slotId , type}) => {
       >
         <div className="p-6">
           <p className="text-gray-700 mb-6">
-            Are you sure you want to delete this advertisement? This action cannot be undone.
+            Are you sure you want to delete this advertisement? This action
+            cannot be undone.
           </p>
           <div className="flex justify-end gap-3">
             <button
@@ -818,9 +826,19 @@ const SlotAds = ({ slotId , type}) => {
           </div>
         </div>
       </CustomModal>
-
-
-    </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 };
 
