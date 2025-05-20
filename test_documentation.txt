@@ -1,0 +1,103 @@
+ADMIN LOGIN MODULE - TEST DOCUMENTATION
+=================================
+
+1. AUTHENTICATION FLOW
+---------------------
+1.1 Standard Login
+    - Test valid email and password combination
+    - Verify successful redirection to admin panel
+    - Check token storage in localStorage
+    - Verify error messages for invalid credentials
+
+1.2 Password Reset Flow
+    - Test forgot password functionality
+    - Verify OTP delivery to registered email
+    - Test OTP verification (4-digit code)
+    - Validate new password reset process
+
+2. INPUT VALIDATION RULES
+------------------------
+2.1 Email Validation
+    - Required field
+    - Must be 10-50 characters long
+    - Must follow email format (example@domain.com)
+    - Special characters not allowed except @ and .
+    - Auto-converts to lowercase
+    - Spaces are automatically removed
+
+2.2 Password Validation
+    - Required field
+    - Length: 8-20 characters
+    - No spaces allowed
+    - Password visibility toggle functionality
+
+3. ERROR HANDLING SCENARIOS
+--------------------------
+3.1 Login Errors
+    - Empty field validation
+    - Invalid email format
+    - Invalid credentials
+    - Server connection errors
+
+3.2 Password Reset Errors
+    - Invalid OTP
+    - OTP expiration
+    - Password mismatch during reset
+    - Invalid password format
+
+4. SECURITY FEATURES
+-------------------
+4.1 Password Security
+    - Password masking by default
+    - Toggle password visibility option
+    - Secure password reset flow
+
+4.2 OTP Security
+    - 4-digit numeric code
+    - Time-based expiration (60 seconds)
+    - Resend OTP functionality
+    - Rate limiting on resend
+
+5. UI/UX VALIDATION
+------------------
+5.1 Form Elements
+    - Floating labels for input fields
+    - Real-time validation feedback
+    - Clear error messages
+    - Loading states during submission
+
+5.2 Responsive Design
+    - Desktop view with split layout (image + form)
+    - Mobile-friendly responsive design
+    - Proper element spacing and alignment
+    - Consistent styling across devices
+
+6. SUCCESS SCENARIOS
+-------------------
+6.1 Login Success
+    - Proper success message display
+    - Smooth transition to admin panel
+    - Correct user data storage
+    - Session management
+
+6.2 Password Reset Success
+    - OTP verification confirmation
+    - Password reset confirmation
+    - Redirect to login page
+    - Clear form state
+
+7. TEST ENVIRONMENT SETUP
+------------------------
+- Base URL: Check API configuration
+- Test admin credentials required
+- Clean browser cache before testing
+- Test across different browsers
+
+8. KNOWN LIMITATIONS
+-------------------
+- Maximum 3 OTP resend attempts
+- 60-second cooldown between OTP resends
+- Session timeout after inactivity
+- Password complexity requirements
+
+Note: This test documentation covers the core functionality of the admin login module. Please report any additional edge cases or issues discovered during testing.
