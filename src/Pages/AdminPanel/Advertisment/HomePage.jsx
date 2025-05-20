@@ -138,7 +138,17 @@ const HomePage = () => {
       tempErrors.interval = "Interval must be at least 1000ms";
       isValid = false;
     }
+    // Slot Type validation
+    if (!formData.slotType) {
+      tempErrors.slotType = "Please select a slot type";
+      isValid = false;
+    }
 
+    // Page validation
+    if (!formData.page) {
+      tempErrors.page = "Please select a page";
+      isValid = false;
+    }
     setErrors(tempErrors);
     return isValid;
   };
@@ -191,6 +201,24 @@ const HomePage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "name") {
+      const sanitizedValue = value.replace(/[^a-zA-Z0-9\s]/g, "");
+      setFormData((prev) => ({
+        ...prev,
+        [name]: sanitizedValue,
+      }));
+      let error = "";
+      if (sanitizedValue.trim().length < 5) {
+        error = "Name must be at least 5 characters";
+      } else if (sanitizedValue.trim().length > 30) {
+        error = "Name cannot exceed 30 characters";
+      }
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -226,6 +254,8 @@ const HomePage = () => {
       case "maxAds":
         if (value && Number(value) < 1) {
           error = "Maximum ads must be at least 1";
+        } else if (value && Number(value) > 30) {
+          error = "Maximum ads cannot exceed 30";
         }
         break;
 
@@ -292,9 +322,9 @@ const HomePage = () => {
                   name: "",
                   description: "",
                   adDurationInDays: "",
-                  slotType: "Image",
+                  slotType: "",
                   maxAds: "",
-                  page: "home",
+                  page: "",
                   interval: "",
                   isActive: true,
                 });
@@ -414,7 +444,7 @@ const HomePage = () => {
             });
           }}
           title={
-            isEditing ? "Edit Advertisement Slot" : "Add New Advertisement Slot"
+            isEditing ? "Edit Advertisement" : "Add New Advertisement"
           }
         >
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -433,6 +463,7 @@ const HomePage = () => {
               onChange={handleChange}
               placeholder="Slot Description"
               error={errors.description}
+              maxLength={50}
             />
             <FloatingInput
               type="number"
@@ -441,6 +472,7 @@ const HomePage = () => {
               onChange={handleChange}
               placeholder="Duration (in days)"
               error={errors.adDurationInDays}
+              maxLength={30}
             />
 
             {/* Slot Type Radio Buttons */}
@@ -471,6 +503,13 @@ const HomePage = () => {
                   />
                   <span className="ml-2">Video</span>
                 </label>
+              </div>
+              <div className="h-2">
+                {errors.slotType && (
+                  <p className="text-red-500 text-[12px] text-right text-sm mt-1">
+                    {errors.slotType}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -503,6 +542,13 @@ const HomePage = () => {
                   <span className="ml-2">Business List</span>
                 </label>
               </div>
+              <div className="h-2">
+                {errors.page && (
+                  <p className="text-red-500 text-right text-[12px] text-sm mt-1">
+                    {errors.page}
+                  </p>
+                )}
+              </div>
             </div>
 
             <FloatingInput
@@ -512,6 +558,7 @@ const HomePage = () => {
               onChange={handleChange}
               placeholder="Maximum Ads"
               error={errors.maxAds}
+              maxLength={30}
             />
 
             <FloatingInput

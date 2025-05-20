@@ -26,6 +26,14 @@ const SlotAds = ({ slotId, type }) => {
     startDate: "",
     endDate: "",
   });
+  const [errors, setErrors] = useState({
+    businessId: "",
+    contentUrl: "",
+    description: "",
+    priority: "",
+    startDate: "",
+    endDate: "",
+  });
   console.log(formData.type);
 
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -60,8 +68,78 @@ const SlotAds = ({ slotId, type }) => {
     }
   };
 
+  const validateForm = () => {
+    let tempErrors = {
+      businessId: "",
+      contentUrl: "",
+      description: "",
+      priority: "",
+      startDate: "",
+      endDate: "",
+    };
+    let isValid = true;
+
+    // Business validation
+    if (!formData.businessId) {
+      tempErrors.businessId = "Please select a business";
+      isValid = false;
+    }
+
+    // Content validation
+    if (!selectedImage && !editingAd?.contentUrl) {
+      tempErrors.contentUrl = `Please upload a ${type.toLowerCase()}`;
+      isValid = false;
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      tempErrors.description = "Description is required";
+      isValid = false;
+    } else if (formData.description.length < 10) {
+      tempErrors.description = "Description must be at least 10 characters";
+      isValid = false;
+    } else if (formData.description.length > 100) {
+      tempErrors.description = "Description cannot exceed 100 characters";
+      isValid = false;
+    }
+
+    // Priority validation
+    if (!formData.priority) {
+      tempErrors.priority = "Priority is required";
+      isValid = false;
+    } else if (formData.priority < 1 || formData.priority > 10) {
+      tempErrors.priority = "Priority must be between 1 and 10";
+      isValid = false;
+    }
+
+    // Date validation
+    if (!formData.startDate) {
+      tempErrors.startDate = "Start date is required";
+      isValid = false;
+    }
+
+    if (!formData.endDate) {
+      tempErrors.endDate = "End date is required";
+      isValid = false;
+    }
+
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      if (end <= start) {
+        tempErrors.endDate = "End date must be after start date";
+        isValid = false;
+      }
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setUploadLoading(true);
     try {
       let contentUrl = "";
@@ -81,7 +159,7 @@ const SlotAds = ({ slotId, type }) => {
         businessId: "",
         type: "Image",
         description: "",
-        priority: 1,
+        priority: null,
         startDate: "",
         endDate: "",
       });
@@ -135,6 +213,9 @@ const SlotAds = ({ slotId, type }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setUploadLoading(true);
     try {
       let contentUrl = editingAd.contentUrl;
@@ -155,7 +236,7 @@ const SlotAds = ({ slotId, type }) => {
         businessId: "",
         type: "Image",
         description: "",
-        priority: 1,
+        priority: "",
         startDate: "",
         endDate: "",
       });
@@ -341,7 +422,7 @@ const SlotAds = ({ slotId, type }) => {
             businessId: "",
             type: "Image",
             description: "",
-            priority: 1,
+            priority: "",
             startDate: "",
             endDate: "",
           });
@@ -362,8 +443,9 @@ const SlotAds = ({ slotId, type }) => {
               label: business.businessName,
             }))}
             placeholder="Select Business"
-            required
+            error={errors.businessId}
           />
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Upload {type}
@@ -421,7 +503,7 @@ const SlotAds = ({ slotId, type }) => {
                         className="sr-only"
                         accept={type === "Video" ? "video/*" : "image/*"}
                         onChange={handleFileChange}
-                        required={!editingAd}
+                        // required={!editingAd}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -430,6 +512,11 @@ const SlotAds = ({ slotId, type }) => {
                         ? "MP4, WebM up to 50MB"
                         : "PNG, JPG up to 10MB"}
                     </p>
+                    {errors.contentUrl && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.contentUrl}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -440,7 +527,6 @@ const SlotAds = ({ slotId, type }) => {
             value={formData.description}
             onChange={handleChange}
             placeholder="Description"
-            required
           />
           <FloatingInput
             type="number"
@@ -448,7 +534,6 @@ const SlotAds = ({ slotId, type }) => {
             value={formData.priority}
             onChange={handleChange}
             placeholder="Priority"
-            required
           />
           <div className="flex justify-end gap-2">
             <button
