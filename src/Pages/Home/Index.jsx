@@ -60,14 +60,14 @@ const Index = () => {
           serviceCategories={serviceCategories}
         />
 
-        <div className="flex flex-col items-center justify-center md:gap-4">
+        <div className="flex flex-col items-center justify-center md:gap-4 gap-4">
           <h1 className="text-2xl lg:text-3xl font-semibold text-green-800">
             Top Products
           </h1>
           <TopProducts />
         </div>
 
-        <div className="flex flex-col items-center justify-center md:gap-4">
+        <div className="flex flex-col items-center justify-center gap-4 lg:mb-3">
           <h1 className="text-2xl lg:text-3xl font-semibold text-cyan-700">
             Top Services
           </h1>
