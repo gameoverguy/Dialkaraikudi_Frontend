@@ -122,7 +122,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="w-11/12 mx-auto flex justify-center items-center text-2xl lg:text-3xl font-bold text-green-800">
+      <div className="w-11/12 mx-auto flex justify-center items-center text-2xl lg:text-3xl font-bold text-green-800" id="offer">
         Limited Offers
       </div>
 

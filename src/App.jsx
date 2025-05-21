@@ -23,6 +23,10 @@ import VendorPanel from "./Pages/VendorPanel/Index.jsx";
 import Favorites from "./Pages/Favorites/index.jsx";
 import EditProfile from "./Pages/EditProfile/index.jsx";
 import SlotAds from "./Pages/AdminPanel/Advertisment/SlotAds.jsx";
+import TermsAndConditions from "./Pages/Policy/TermsandConditions.jsx";
+import PrivacyPolicy from "./Pages/Policy/PrivacyPolicy.jsx";
+import CancellationPolicy from "./Pages/Policy/CancelPolicy.jsx";
+import ShippingPolicy from "./Pages/Policy/ShippingPolicy.jsx";
 
 function App() {
   useEffect(() => {
@@ -49,6 +53,11 @@ function App() {
               <Route path="/detailform" element={<BusinessDetailForm />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/profile" element={<EditProfile />} />
+            <Route path="/terms" element={<TermsAndConditions />} />  
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />  
+            <Route path="/cancellationpolicy" element={<CancellationPolicy />} />  
+            <Route path="/shippingpolicy" element={<ShippingPolicy />} />  
+
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route
