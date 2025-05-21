@@ -48,12 +48,20 @@ const SlotAds = ({ slotId, type }) => {
         ]);
 
         setAds(adsResponse.data);
+        console.log(adsResponse.data);
+        console.log(slotResponse.data);
+
         setSelectedSlot(slotResponse.data);
         // Fix the filter logic to exclude businesses that already have ads
-        const existingBusinessIds = adsResponse.data.map(ad => ad.businessId._id);
-        setAllowedBusinesses(slotResponse.data.allowedBusinesses.filter(
-          business => !existingBusinessIds.includes(business._id)
-        ));
+        const existingBusinessIds = adsResponse.data.map(
+          (ad) => ad.businessId._id
+        );
+
+        setAllowedBusinesses(
+          slotResponse.data.allowedBusinesses.filter(
+            (business) => !existingBusinessIds.includes(business._id)
+          )
+        );
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -65,7 +73,6 @@ const SlotAds = ({ slotId, type }) => {
   }, [slotId]);
 
   console.log(allowedBusinesses, "12421421421");
-  
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -109,7 +116,11 @@ const SlotAds = ({ slotId, type }) => {
     if (!formData.priority) {
       tempErrors.priority = "Priority is required";
       isValid = false;
-    } else if (isNaN(formData.priority) || formData.priority < 1 || formData.priority > 20) {
+    } else if (
+      isNaN(formData.priority) ||
+      formData.priority < 1 ||
+      formData.priority > 20
+    ) {
       tempErrors.priority = "Priority must be a number between 1 and 20";
       isValid = false;
     }
@@ -409,12 +420,12 @@ const SlotAds = ({ slotId, type }) => {
             endDate: "",
           });
           setSelectedImage(null);
-        setErrors({
-          businessId: "",
-          contentUrl: "",
-          description: "",
-          priority: ""
-        })
+          setErrors({
+            businessId: "",
+            contentUrl: "",
+            description: "",
+            priority: "",
+          });
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
       >
@@ -499,19 +510,17 @@ const SlotAds = ({ slotId, type }) => {
                         ? "MP4, WebM up to 50MB"
                         : "PNG, JPG up to 10MB"}
                     </p>
-                   
                   </div>
                 )}
               </div>
-              
             </div>
             <p className="h-2">
-                    {errors.contentUrl && (
-                      <p className="text-red-500 text-xs text-right mt-1">
-                        {errors.contentUrl}
-                      </p>
-                    )}
-                    </p>
+              {errors.contentUrl && (
+                <p className="text-red-500 text-xs text-right mt-1">
+                  {errors.contentUrl}
+                </p>
+              )}
+            </p>
           </div>
           <FloatingTextarea
             name="description"
