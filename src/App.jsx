@@ -27,6 +27,7 @@ import TermsAndConditions from "./Pages/Policy/TermsandConditions.jsx";
 import PrivacyPolicy from "./Pages/Policy/PrivacyPolicy.jsx";
 import CancellationPolicy from "./Pages/Policy/CancelPolicy.jsx";
 import ShippingPolicy from "./Pages/Policy/ShippingPolicy.jsx";
+import AiChatbox from "./Components/AiChatbox.jsx";
 
 function App() {
   useEffect(() => {
@@ -44,7 +45,6 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
-
               <Route path="/businesslist/:id" element={<Bussiness_List />} />
               <Route path="/businesslist" element={<Bussiness_List />} />
               <Route path="/business/:id" element={<BusinessDetails />} />
@@ -56,8 +56,7 @@ function App() {
             <Route path="/terms" element={<TermsAndConditions />} />  
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />  
             <Route path="/cancellationpolicy" element={<CancellationPolicy />} />  
-            <Route path="/shippingpolicy" element={<ShippingPolicy />} />  
-
+            <Route path="/shippingpolicy" element={<ShippingPolicy />} />   
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route

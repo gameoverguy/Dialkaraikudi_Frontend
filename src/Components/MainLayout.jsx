@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import Loader from "./Loader";
 import axios from "axios";
 import { API } from "../../config/config";
+import AiChatbox from "./AiChatbox";
 axios.defaults.withCredentials = true;
 
 const MainLayout = () => {
@@ -49,6 +50,7 @@ const MainLayout = () => {
       <Header />
       <div className="min-h-127 mx-auto">
         <Outlet />
+        <AiChatbox />
       </div>
       <Footer />
     </div>
