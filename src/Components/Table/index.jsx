@@ -61,39 +61,60 @@ const CustomTable = ({
   };
 
   const handleExportToExcel = () => {
-    // Create worksheet from the filtered data
+    // Create worksheet from all data (not just filtered)
     const ws = XLSX.utils.json_to_sheet(
-      sortedData.map((item, index) => {
+      data.map((item, index) => {
         const row = {};
         // Add S.No. as first column
-        row['S.No.'] = ((currentPage - 1) * itemsPerPage) + index + 1;
+        row['S.No.'] = index + 1;
         
         columns.forEach(column => {
-          if (column.render) {
-            // For rendered columns, get the actual data
-            if (item[column.key] && typeof item[column.key] === 'object') {
-              // Safely handle nested objects
-              const nestedValues = Object.values(item[column.key] || {});
-              row[column.label] = nestedValues.length > 0 ? nestedValues.join(' - ') : '';
+          try {
+            if (column.render) {
+              // For rendered columns, get the actual data
+              if (item[column.key] && typeof item[column.key] === 'object') {
+                // Handle nested objects (like category, business details etc)
+                if (item[column.key].name) {
+                  row[column.label] = item[column.key].name;
+                } else if (item[column.key].businessName) {
+                  row[column.label] = item[column.key].businessName;
+                } else {
+                  const nestedValues = Object.values(item[column.key] || {})
+                    .filter(value => value !== null && value !== undefined);
+                  row[column.label] = nestedValues.length > 0 ? nestedValues.join(' - ') : '';
+                }
+              } else {
+                // Handle other rendered values with null check
+                row[column.label] = item[column.key] ? item[column.key].toString() : '';
+              }
             } else {
-              // Handle other rendered values with null check
-              row[column.label] = item[column.key] ? item[column.key].toString() : '';
+              // Handle direct values with null check
+              row[column.label] = item[column.key] || '';
             }
-          } else {
-            // Handle direct values with null check
-            row[column.label] = item[column.key] || '';
+          } catch (error) {
+            // If any error occurs while processing a field, set it to empty string
+            row[column.label] = '';
           }
         });
         return row;
       })
     );
   
+    // Set column widths
+    const colWidths = columns.map(col => ({
+      wch: Math.max(col.label.length, 15)
+    }));
+    ws['!cols'] = colWidths;
+  
     // Create workbook and add the worksheet
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Data');
   
-    // Save to file
-    XLSX.writeFile(wb, 'table-data.xlsx');
+    // Generate timestamp for filename
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    
+    // Save to file with timestamp
+    XLSX.writeFile(wb, `data-export-${timestamp}.xlsx`);
   };
 
   return (
