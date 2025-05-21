@@ -39,7 +39,7 @@ const SlotAds = ({ slotId, type }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [allowedBusinesses, setAllowedBusinesses] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
     const fetchData = async () => {
       try {
         const [adsResponse, slotResponse] = await Promise.all([
@@ -61,8 +61,8 @@ const SlotAds = ({ slotId, type }) => {
       }
     };
 
-    fetchData();
-  }, [slotId]);
+  //   fetchData();
+  // }, [slotId]);
 
   console.log(allowedBusinesses, "12421421421");
   
@@ -146,6 +146,7 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
+      fetchData();
     } catch (error) {
       console.error("Error creating ad:", error);
     } finally {
@@ -186,6 +187,7 @@ const SlotAds = ({ slotId, type }) => {
       await axios.delete(`${API}/adverts/${deleteConfirmation.adId}`);
       setAds(ads.filter((ad) => ad._id !== deleteConfirmation.adId));
       setDeleteConfirmation({ show: false, adId: null });
+      fetchData();
     } catch (error) {
       console.error("Error deleting ad:", error);
     }
@@ -223,6 +225,7 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
+      fetchData();
     } catch (error) {
       console.error("Error updating ad:", error);
     } finally {
