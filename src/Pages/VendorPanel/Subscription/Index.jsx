@@ -11,21 +11,19 @@ const VendorSubscription = ({ businessData }) => {
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get ID from URL params instead of localStorage
 
-   const fetchAdSlots = async () => {
-      try {
-        const response = await axios.get(`${API}/advertslots`);
-        setAdSlots(response.data);
-        console.log(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching ad slots:", error);
-        setLoading(false);
-      }
-    };
+  const fetchAdSlots = async () => {
+    try {
+      const response = await axios.get(`${API}/advertslots`);
+      setAdSlots(response.data);
+      console.log(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching ad slots:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-   
-
     fetchAdSlots();
   }, []);
 
@@ -53,7 +51,7 @@ const VendorSubscription = ({ businessData }) => {
     return (
       slot.allowedBusinesses &&
       slot.allowedBusinesses.some(
-        (business) => business._id === businessData.user_id
+        (businessId) => businessId === businessData.user_id
       )
     );
   };
