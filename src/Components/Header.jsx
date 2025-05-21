@@ -31,6 +31,7 @@ const Header = () => {
   const [showUserBusinessModal, setShowUserBusinessModal] = useState(false);
   const [showBusinessDetailForm, setShowBusinessDetailForm] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSignupFlow, setIsSignupFlow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -332,32 +333,48 @@ const Header = () => {
       />
       <SignupModal
         isOpen={isSignupOpen}
-        onClose={() => setIsSignupOpen(false)}
+        onClose={() => {
+          setIsSignupOpen(false);
+          setIsSignupFlow(false); // Reset signup flow when closing
+        }}
         onLoginClick={() => {
           setIsSignupOpen(false);
           setShowLoginModal(true);
+          setIsSignupFlow(false); // Reset signup flow when switching to login
         }}
         setShowLoginModal={setShowLoginModal}
-        setShowOTPModal={setShowOTPModal} // Add this prop
+        setShowOTPModal={(value) => {
+          setShowOTPModal(value);
+          setIsSignupFlow(true); // Set signup flow when opening OTP from signup
+        }}
         setOtpEmail={setOtpEmail}
         role={loginRole}
         showOTPModal={showOTPModal}
       />
       <ForgotPassword
         isOpen={isForgotPasswordOpen}
-        onClose={() => setIsForgotPasswordOpen(false)}
-        setShowOTPModal={setShowOTPModal}
+        onClose={() => {
+          setIsForgotPasswordOpen(false);
+          setIsSignupFlow(false); // Ensure signup flow is false for forgot password
+        }}
+        setShowOTPModal={(value) => {
+          setShowOTPModal(value);
+          setIsSignupFlow(false); // Ensure signup flow is false when opening OTP
+        }}
         setOtpEmail={setOtpEmail}
         role={loginRole}
       />
       <OTP
         isOpen={showOTPModal}
-        onClose={() => setShowOTPModal(false)}
+        onClose={() => {
+          setShowOTPModal(false);
+          setIsSignupFlow(false); // Reset signup flow when closing OTP
+        }}
         email={otpEmail}
         setShowResetPasswordModal={setShowResetPasswordModal}
         setShowLoginModal={setShowLoginModal}
         role={loginRole}
-        isSignupFlow={true}
+        isSignupFlow={isSignupFlow} // Use the state variable here
       />
       <ResetPassword
         isOpen={showResetPasswordModal}
