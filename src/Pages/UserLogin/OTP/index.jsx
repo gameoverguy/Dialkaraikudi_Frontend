@@ -84,7 +84,9 @@ const OTP = ({
 
     try {
       const endpoint = isSignupFlow
-        ? `${API}/user/verifyOtpAndCreateAccount`
+        ? role === "business"
+          ? `${API}/business/verifyOtpAndCreateBusiness`
+          : `${API}/user/verifyOtpAndCreateAccount`
         : role === "business"
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
@@ -136,7 +138,9 @@ const OTP = ({
   const handleResendOTP = async () => {
     try {
       const endpoint = isSignupFlow
-        ? `${API}/user/resendregisterotp` // You'll need to create this endpoint
+        ? role === "business"
+          ? `${API}/business/resendBusinessOtp`
+          : `${API}/user/resendregisterotp`
         : role === "business"
         ? `${API}/business/forgotPassword`
         : `${API}/user/forgotpassword`;

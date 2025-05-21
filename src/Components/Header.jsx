@@ -35,6 +35,12 @@ const Header = () => {
 
   const navigate = useNavigate();
 
+  const handleSignupFlow = (role) => {
+    setShowUserBusinessModal(false);
+    setLoginRole(role);
+    setIsSignupOpen(true);
+  };
+
   useEffect(() => {
     let isMounted = true;
 
@@ -313,6 +319,7 @@ const Header = () => {
         <LoginModal
           isOpen={showUserBusinessModal}
           onClose={() => setShowUserBusinessModal(false)}
+          onSignupClick={handleSignupFlow}
         />
       )}
       <UserLogin
@@ -330,6 +337,11 @@ const Header = () => {
         onClose={() => setShowBusinessDetailForm(false)}
         setShowLoginModal={setShowLoginModal}
         setShowBusinessDetailForm={setShowBusinessDetailForm}
+        setShowOTPModal={setShowOTPModal} // Add this prop
+        setOtpEmail={setOtpEmail} // Add this prop
+        role={loginRole}
+        isSignupFlow={true}
+        showOTPModal={showOTPModal}
       />
       <SignupModal
         isOpen={isSignupOpen}

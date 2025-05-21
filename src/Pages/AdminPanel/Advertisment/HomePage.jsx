@@ -24,6 +24,7 @@ const HomePage = () => {
     page: "",
     interval: "",
     isActive: true,
+    price: "",
   });
 
   useEffect(() => {
@@ -61,6 +62,7 @@ const HomePage = () => {
       page: slot.page,
       interval: slot.interval,
       isActive: slot.isActive,
+      price: slot.price,
     });
     setShowModal(true);
     setSelectedSlot(slot);
@@ -72,6 +74,7 @@ const HomePage = () => {
     adDurationInDays: "",
     maxAds: "",
     interval: "",
+    price: "",
   });
 
   const validateForm = () => {
@@ -81,6 +84,7 @@ const HomePage = () => {
       adDurationInDays: "",
       maxAds: "",
       interval: "",
+      price: "",
     };
     let isValid = true;
 
@@ -149,6 +153,14 @@ const HomePage = () => {
       tempErrors.page = "Please select a page";
       isValid = false;
     }
+
+    if (!formData.price) {
+      tempErrors.price = "Price is required";
+      isValid = false;
+    } else if (formData.price <= 0) {
+      tempErrors.price = "Price must be greater than 0";
+      isValid = false;
+    }
     setErrors(tempErrors);
     return isValid;
   };
@@ -189,6 +201,7 @@ const HomePage = () => {
         page: "",
         interval: "",
         isActive: true,
+        price: "",
       });
       setSelectedSlot(null);
     } catch (error) {
@@ -441,12 +454,11 @@ const HomePage = () => {
               page: "",
               interval: "",
               isActive: true,
+              price: "",
             });
           }}
-          title={
-            isEditing ? "Edit Advertisement" : "Add New Slot "
-          }
-          classname='w-[25%]'
+          title={isEditing ? "Edit Advertisement" : "Add New Slot "}
+          classname="w-[25%]"
         >
           <form onSubmit={handleSubmit} className="space-y-4">
             <FloatingInput
@@ -458,14 +470,16 @@ const HomePage = () => {
               error={errors.name}
               maxLength={30}
             />
-            <FloatingTextarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Slot Description"
-              error={errors.description}
-              maxLength={50}
-            />
+            <div className="mb-3">
+              <FloatingTextarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Slot Description"
+                error={errors.description}
+                maxLength={50}
+              />
+            </div>
             <FloatingInput
               type="number"
               name="adDurationInDays"
@@ -569,6 +583,15 @@ const HomePage = () => {
               onChange={handleChange}
               placeholder="Interval (in milliseconds)"
               error={errors.interval}
+            />
+
+            <FloatingInput
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="Price"
+              error={errors.price}
             />
 
             <div className="flex justify-end gap-2">
