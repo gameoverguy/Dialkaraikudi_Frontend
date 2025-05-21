@@ -4,6 +4,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { BsRobot } from "react-icons/bs";
 import { IoClose } from 'react-icons/io5';
 import { FiSend } from 'react-icons/fi';
+const VITE_GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
 
 const AiChatbox = () => {
   const [messages, setMessages] = useState([{
@@ -17,7 +19,7 @@ const AiChatbox = () => {
   const messagesEndRef = useRef(null);
   
   // Initialize Gemini API
-  const genAI = new GoogleGenerativeAI('AIzaSyD9PjA3l4asi_T6GlbVAnQkRhXRYvXyfSo');
+  const genAI = new GoogleGenerativeAI(VITE_GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
   const scrollToBottom = () => {
@@ -87,7 +89,8 @@ const AiChatbox = () => {
         <h2 className="text-white text-lg font-semibold">DK AI</h2>
         <button
           onClick={() => setIsOpen(false)}
-          className="text-white hover:text-gray-200 transition-colors"
+          className="text-white cursor-pointer
+           hover:text-gray-200 transition-colors"
         >
           <IoClose className="w-5 h-5" />
         </button>
@@ -147,7 +150,7 @@ const AiChatbox = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="hidden  md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="hidden cursor-pointer md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
             Send
           </button>
