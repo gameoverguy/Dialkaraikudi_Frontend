@@ -22,11 +22,13 @@ import SeasonalProducts from "./SeasonalProducts";
 import SeasonalServices from "./SeasonalServices";
 axios.defaults.withCredentials = true;
 
+
 const Index = () => {
   const [productCategories, setProductCategories] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [fetchVideo1, setFetchVideo1] = useState([]);
   const [fetchVideo2, setFetchVideo2] = useState([]);
+  
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -69,6 +71,9 @@ const Index = () => {
     }
     fetchAds();
   }, []);
+
+
+
 
   return (
     <>

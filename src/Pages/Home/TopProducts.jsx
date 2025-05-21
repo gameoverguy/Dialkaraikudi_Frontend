@@ -168,7 +168,7 @@ useEffect(() => {
                   <img
                     src={deal.contentUrl}
                     alt={deal.title}
-                    className="h-32 object-contain mb-7 w-full"
+                    className="h-32 object-contain mb-10 w-full"
                   />
                   <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">{deal.description}</h3>
                   <p className="text-sm text-gray-500 mb-1 text-start px-3">{deal.businessId.businessName}</p>
