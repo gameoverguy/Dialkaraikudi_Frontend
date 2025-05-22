@@ -155,7 +155,7 @@ const ResetPassword = ({
       >
         <div className="p-2">
           <h1 className="text-lg font-bold text-gray-800 mb-4">
-            Reset Password
+            RESET PASSWORD
           </h1>
           <p className="text-gray-600 text-xs mb-6">
             Please enter your new password.

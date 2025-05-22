@@ -58,7 +58,7 @@ const UserLogin = ({
     }
 
     if (name === "password") {
-      const passwordValue = value.replace(/\s/g, "");
+      const passwordValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
       setFormData((prev) => ({ ...prev, password: passwordValue }));
 
       const errorMessage =
@@ -172,12 +172,12 @@ const UserLogin = ({
       >
         <div className="p-2 sm:p-3">
           <h1 className="text-base sm:text-lg text-center font-bold text-gray-800 mb-8 sm:mb-6">
-            {role === "business" ? "Business Login" : "Member Login"}
+            {role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
               <FloatingInput
-                type="email"
+                type="text"
                 placeholder="Email Address"
                 name="email"
                 value={formData.email}
