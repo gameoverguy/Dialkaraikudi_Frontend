@@ -47,7 +47,7 @@ const BusinessManagement = () => {
   const fetchBusinesses = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${API}/business`);
+      const response = await axios.get(`${API}/business/allbusiness`);
       const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,

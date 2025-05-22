@@ -66,6 +66,10 @@ const VendorSubscription = ({ businessData }) => {
     );
   };
 
+  const isSlotFull = (slot) => {
+    return slot.allowedBusinesses && slot.allowedBusinesses.length >= slot.maxAds;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -134,9 +138,8 @@ const VendorSubscription = ({ businessData }) => {
             <div
               key={index}
               className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300
-              ${
-                isSlotPurchased(slot) ? "bg-green-50 ring-2 ring-green-500" : ""
-              }`}
+                ${isSlotPurchased(slot) ? "bg-green-50 ring-2 ring-green-500" : ""}
+                ${isSlotFull(slot) && !isSlotPurchased(slot) ? "bg-red-50 ring-2 ring-red-500" : ""}`}
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -151,7 +154,7 @@ const VendorSubscription = ({ businessData }) => {
                       : "bg-blue-100 text-blue-800"
                   }`}
                   >
-                    {isSlotPurchased(slot) ? "Purchased" : slot.page}
+                    {slot.page}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4">{slot.description}</p>
@@ -171,16 +174,19 @@ const VendorSubscription = ({ businessData }) => {
                 </div>
                 <button
                   onClick={() => handlePurchaseSlot(slot._id)}
-                  disabled={isSlotPurchased(slot)}
+                  disabled={isSlotPurchased(slot) || isSlotFull(slot)}
                   className={`mt-6 w-full py-2 px-4 rounded-lg transition-colors
-                  ${
-                    isSlotPurchased(slot)
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700 text-white"
+                  ${isSlotPurchased(slot)
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : isSlotFull(slot)
+                    ? "bg-red-300 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
                   }`}
                 >
                   {isSlotPurchased(slot)
                     ? "Already Purchased"
+                    : isSlotFull(slot)
+                    ? "Slot Full"
                     : "Purchase Slot"}
                 </button>
               </div>
