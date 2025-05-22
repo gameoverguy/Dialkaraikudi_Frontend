@@ -11,12 +11,16 @@ import { uploadToCloudinary } from "../utils/cloudinaryUpload";
 import CustomModal from "../Components/modal";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { CiCircleInfo } from "react-icons/ci";
+import OTP from "../Pages/UserLogin/OTP";
 
 const BusinessDetailForm = ({
   isOpen,
   onClose,
   setShowLoginModal,
   setShowBusinessDetailForm,
+  setShowOTPModal,
+  isSignupFlow,
+  showOTPModal
 }) => {
   const [errorOverall, setErrorOverall] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -340,7 +344,8 @@ const BusinessDetailForm = ({
       console.log(response.data);
 
       if (response.data.message) {
-        setSuccessMessage("Business registered successfully!");
+        setSuccessMessage("Registration successful! Please verify your email.");
+        sessionStorage.setItem("verificationEmail", formData.email);
         setFormData({
           businessName: "",
           ownerName: "",
@@ -359,14 +364,15 @@ const BusinessDetailForm = ({
         setPhotosPreviews([]);
 
         setTimeout(() => {
-          setShowBusinessDetailForm(false);
-          setShowLoginModal(true);
-        }, 1000);
+          onClose();
+          setShowOTPModal(true);
+        }, 1500);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setErrorOverall(
-        error.response?.data?.message || "Error registering business"
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
       );
       // toast.error(error.response?.data?.message || 'Error registering business');
     } finally {
@@ -375,283 +381,292 @@ const BusinessDetailForm = ({
   };
 
   return (
-    <CustomModal
-      isOpen={isOpen}
-      onClose={onClose}
-      classname="w-[95%] sm:w-full max-w-md mx-auto"
-    >
-      <form onSubmit={handleSubmit} className="p-2 sm:p-4">
-        <div className="space-y-4 sm:space-y-4">
-          {/* Business Information Section */}
-          <div className="rounded-lg space-y-2 sm:space-y-3 mb-0">
-            <h3 className="text-lg text-center font-bold text-gray-700">
-              Register
-            </h3>
-            <FloatingInput
-              name="businessName"
-              value={formData.businessName}
-              onChange={handleChange}
-              placeholder="Business Name"
-              error={errors.businessName}
-            />
-            <FloatingInput
-              name="ownerName"
-              value={formData.ownerName}
-              onChange={handleChange}
-              placeholder="Owner Name"
-              error={errors.ownerName}
-            />
-            <FloatingSelect
-              id="category"
-              name="categoryId"
-              value={formData.categoryId}
-              onChange={handleChange}
-              placeholder="Select Category"
-              error={errors.categoryId}
-              options={categories.map((category) => ({
-                value: category._id,
-                label: category.displayName,
-              }))}
-            />
-            <FloatingTextarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Business Description"
-              error={errors.description}
-              rows={4}
-            />
-          </div>
-
-          {/* Contact Information Section */}
-          <div className="mb-0">
-            {/* <h3 className="text-lg font-bold text-gray-700">Contact Information</h3> */}
-            <FloatingInput
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Phone Number"
-              type="text"
-              error={errors.phone}
-            />
-            <FloatingInput
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email Address"
-              type="text"
-              error={errors.email}
-            />
-          </div>
-
-          {/* Address Section */}
-          <div className="mb-0">
-            {/* <h3 className="text-lg font-semibold text-gray-700">Business Address</h3> */}
-            <FloatingInput
-              name="address1"
-              value={formData.address1}
-              onChange={handleChange}
-              placeholder="Address Line 1"
-              error={errors.address1}
-            />
-            <FloatingInput
-              name="address2"
-              value={formData.address2}
-              onChange={handleChange}
-              placeholder="Address Line 2 (Optional)"
-            />
-            <div className="grid grid-cols-2 gap-2">
+    <>
+      <CustomModal
+        isOpen={isOpen}
+        onClose={onClose}
+        classname="w-[95%] sm:w-full max-w-md mx-auto"
+      >
+        <form onSubmit={handleSubmit} className="p-2 sm:p-4">
+          <div className="space-y-4 sm:space-y-4">
+            {/* Business Information Section */}
+            <div className="rounded-lg space-y-2 sm:space-y-3 mb-0">
+              <h3 className="text-lg text-center font-bold text-gray-700">
+                Register
+              </h3>
               <FloatingInput
-                name="city"
-                value={formData.city}
+                name="businessName"
+                value={formData.businessName}
                 onChange={handleChange}
-                placeholder="City"
-                error={errors.city}
+                placeholder="Business Name"
+                error={errors.businessName}
               />
               <FloatingInput
-                name="pincode"
-                value={formData.pincode}
+                name="ownerName"
+                value={formData.ownerName}
                 onChange={handleChange}
-                placeholder="Pincode"
-                maxLength={6}
-                error={errors.pincode}
+                placeholder="Owner Name"
+                error={errors.ownerName}
+              />
+              <FloatingSelect
+                id="category"
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                placeholder="Select Category"
+                error={errors.categoryId}
+                options={categories.map((category) => ({
+                  value: category._id,
+                  label: category.displayName,
+                }))}
+              />
+              <FloatingTextarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Business Description"
+                error={errors.description}
+                rows={4}
               />
             </div>
-          </div>
 
-          {/* Account Security Section */}
-          <div className="mb-0">
-            <div className="relative">
+            {/* Contact Information Section */}
+            <div className="mb-0">
+              {/* <h3 className="text-lg font-bold text-gray-700">Contact Information</h3> */}
               <FloatingInput
-                name="password"
-                value={formData.password}
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
-                placeholder="Password"
-                type={showPassword ? "text" : "password"}
-                error={errors.password}
+                placeholder="Phone Number"
+                type="text"
+                error={errors.phone}
               />
-              {formData.password && (
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  title={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <AiOutlineEye className="w-5 h-5" />
-                  ) : (
-                    <AiOutlineEyeInvisible className="w-5 h-5" />
-                  )}
-                </button>
-              )}
-            </div>
-            <div className="relative">
               <FloatingInput
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="Confirm Password"
-                type={showConfirmPassword ? "text" : "password"}
-                error={errors.confirmPassword}
+                placeholder="Email Address"
+                type="text"
+                error={errors.email}
               />
-              {formData.confirmPassword && (
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  title={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
-                >
-                  {showConfirmPassword ? (
-                    <AiOutlineEye className="w-5 h-5" />
-                  ) : (
-                    <AiOutlineEyeInvisible className="w-5 h-5" />
-                  )}
-                </button>
-              )}
             </div>
-          </div>
 
-          {/* Photos Section */}
-          <div className="">
-            {/* <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3> */}
-            <p className="text-xs mb-2 text-gray-500">
-              Upload 1-6 photos of your business
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3">
-              {photosPreviews.map((photo, index) => (
-                <div key={index} className="relative aspect-square">
-                  <img
-                    src={photo.preview}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+            {/* Address Section */}
+            <div className="mb-0">
+              {/* <h3 className="text-lg font-semibold text-gray-700">Business Address</h3> */}
+              <FloatingInput
+                name="address1"
+                value={formData.address1}
+                onChange={handleChange}
+                placeholder="Address Line 1"
+                error={errors.address1}
+              />
+              <FloatingInput
+                name="address2"
+                value={formData.address2}
+                onChange={handleChange}
+                placeholder="Address Line 2 (Optional)"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <FloatingInput
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="City"
+                  error={errors.city}
+                />
+                <FloatingInput
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  placeholder="Pincode"
+                  maxLength={6}
+                  error={errors.pincode}
+                />
+              </div>
+            </div>
+
+            {/* Account Security Section */}
+            <div className="mb-0">
+              <div className="relative">
+                <FloatingInput
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
+                  error={errors.password}
+                />
+                {formData.password && (
                   <button
                     type="button"
-                    onClick={() => removePhoto(index)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    title={showPassword ? "Hide password" : "Show password"}
                   >
-                    <MdCancel className="text-lg" />
+                    {showPassword ? (
+                      <AiOutlineEye className="w-5 h-5" />
+                    ) : (
+                      <AiOutlineEyeInvisible className="w-5 h-5" />
+                    )}
                   </button>
-                </div>
-              ))}
-              {photosPreviews.length < 6 && (
-                <div className="w-full">
-                <div
-                  {...getPhotosRootProps()}
-                  className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${
-                    errors.photos ? "border-red-500" : "border-gray-300"
-                  } hover:border-blue-500 transition-colors`}
-                >
-                  <input {...getPhotosInputProps()} />
-                  <FaCloudUploadAlt className="h-8 w-8 text-gray-400" />
-                  <p className="mt-2 text-sm text-gray-500">Add Photo</p>
-                </div>
-                
-                </div>
-              )}
+                )}
+              </div>
+              <div className="relative">
+                <FloatingInput
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm Password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  error={errors.confirmPassword}
+                />
+                {formData.confirmPassword && (
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-6 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    title={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showConfirmPassword ? (
+                      <AiOutlineEye className="w-5 h-5" />
+                    ) : (
+                      <AiOutlineEyeInvisible className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="h-5 ">
+
+            {/* Photos Section */}
+            <div className="">
+              {/* <h3 className="text-lg font-semibold text-gray-700">Business Photos</h3> */}
+              <p className="text-xs mb-2 text-gray-500">
+                Upload 1-6 photos of your business
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3">
+                {photosPreviews.map((photo, index) => (
+                  <div key={index} className="relative aspect-square">
+                    <img
+                      src={photo.preview}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-colors"
+                    >
+                      <MdCancel className="text-lg" />
+                    </button>
+                  </div>
+                ))}
+                {photosPreviews.length < 6 && (
+                  <div className="w-full">
+                    <div
+                      {...getPhotosRootProps()}
+                      className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${
+                        errors.photos ? "border-red-500" : "border-gray-300"
+                      } hover:border-blue-500 transition-colors`}
+                    >
+                      <input {...getPhotosInputProps()} />
+                      <FaCloudUploadAlt className="h-8 w-8 text-gray-400" />
+                      <p className="mt-2 text-sm text-gray-500">Add Photo</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="h-5 ">
                 {errors.photos && (
                   <p className="text-red-500 text-xs mt-1">{errors.photos}</p>
                 )}
-                </div>
-          </div>
-          <div className="">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    agreeToTerms: e.target.checked,
-                  }))
-                }
-                className="mr-2"
-              />
-              <label htmlFor="agreeToTerms" className="text-xs text-gray-600">
-                I agree to the{" "}
-                <a href="/terms" className="blue-link">
-                  Terms and Conditions
-                </a>
-              </label>
+              </div>
             </div>
-            <div className="h-2">
-              {errors.agreeToTerms && (
-                <p className="text-red-500 text-[10px] sm:text-xs mt-0.5">
-                  {errors.agreeToTerms}
-                </p>
-              )}
-            </div>
-            <div className="h-2 mb-2">
-              {successMessage && (
-                <>
-                  <p className="flex justify-center items-center text-green-600 text-[10px] sm:text-xs">
-                    <CiCircleInfo className="mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
-                    {successMessage}
+            <div className="">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="agreeToTerms"
+                  checked={formData.agreeToTerms}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      agreeToTerms: e.target.checked,
+                    }))
+                  }
+                  className="mr-2"
+                />
+                <label htmlFor="agreeToTerms" className="text-xs text-gray-600">
+                  I agree to the{" "}
+                  <a href="/terms" className="blue-link">
+                    Terms and Conditions
+                  </a>
+                </label>
+              </div>
+              <div className="h-2">
+                {errors.agreeToTerms && (
+                  <p className="text-red-500 text-[10px] sm:text-xs mt-0.5">
+                    {errors.agreeToTerms}
                   </p>
-                </>
-              )}
-              {errorOverall && (
-                <>
-                  <p className="flex justify-center items-center text-red-500 text-[10px] sm:text-xs">
-                    <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
-                    {errorOverall}
-                  </p>
-                </>
-              )}
+                )}
+              </div>
+              <div className="h-2 mb-2">
+                {successMessage && (
+                  <>
+                    <p className="flex justify-center items-center text-green-600 text-[10px] sm:text-xs">
+                      <CiCircleInfo className="mr-2 text-green-600 w-3 h-3 flex-shrink-0" />
+                      {successMessage}
+                    </p>
+                  </>
+                )}
+                {errorOverall && (
+                  <>
+                    <p className="flex justify-center items-center text-red-500 text-[10px] sm:text-xs">
+                      <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
+                      {errorOverall}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full text-[11px] sm:text-xs font-semibold py-2.5 sm:py-3 rounded-lg transition-all duration-200 ${
-            isSubmitting
-              ? "bg-gray-300 cursor-not-allowed text-gray-500"
-              : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
-          }`}
-        >
-          {isSubmitting ? "REGISTERING..." : "REGISTER"}
-        </button>
-        <div className="text-center mt-4 text-xs text-gray-600">
-          Already have an account?{" "}
           <button
-            type="button"
-            onClick={() => {
-              onClose();
-              setShowLoginModal(true);
-            }}
-            className="text-purple-600 hover:text-purple-700 font-medium cursor-pointer"
+            type="submit"
+            disabled={isSubmitting}
+            className={`w-full text-[11px] sm:text-xs font-semibold py-2.5 sm:py-3 rounded-lg transition-all duration-200 ${
+              isSubmitting
+                ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
+            }`}
           >
-            Login
+            {isSubmitting ? "REGISTERING..." : "REGISTER"}
           </button>
-        </div>
-      </form>
-    </CustomModal>
+          <div className="text-center mt-4 text-xs text-gray-600">
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                setShowLoginModal(true);
+              }}
+              className="text-purple-600 hover:text-purple-700 font-medium cursor-pointer"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </CustomModal>
+      <OTP
+        isOpen={showOTPModal}
+        onClose={() => setShowOTPModal(false)}
+        email={formData.email}
+        setShowLoginModal={setShowLoginModal}
+        role="business"
+        isSignupFlow={true}
+      />
+    </>
   );
 };
 
