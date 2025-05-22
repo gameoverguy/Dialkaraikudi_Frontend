@@ -38,6 +38,14 @@ const VendorSubscription = ({ businessData }) => {
       });
       console.log(response.data);
 
+      if (response.data.success) {
+        const res = await axios.post(`${API}/slotPurchases`, {
+          businessId: businessData.user_id,
+          slotId,
+        });
+        console.log(res.data);
+      }
+
       toast.success("Slot purchased successfully!");
       // Fetch updated slots data after successful purchase
       fetchAdSlots();
