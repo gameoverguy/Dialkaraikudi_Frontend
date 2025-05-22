@@ -131,7 +131,7 @@ useEffect(() => {
 
       {/* Right Section - Products Slider */}
       <div className="w-full md:w-8/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
-        <div className="w-full px-2 md:px-8 md:h-[24vh] lg:h-[32vh] flex justify-center items-center">
+        <div className="w-full md:px-8 h-[230px] md:h-[230px] lg:h-[230px] flex justify-center items-center">
           <Swiper
             spaceBetween={10}
             freeMode={true}
@@ -154,14 +154,14 @@ useEffect(() => {
           >
             {topServices.map((deal) => (
               <SwiperSlide key={deal.id}>
-                <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-fit bg-white rounded-md justify-between items-center">
+                <div className="border border-gray-200  shadow-md flex flex-col h-[230px] md:h-[230px] lg:h-[230px] bg-white rounded-md justify-start items-center">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                     {deal.label}
                   </div> */}
                   <img
                     src={deal.contentUrl}
                     alt={deal.title}
-                    className="h-32 object-contain mb-7 w-full"
+                    className="h-32 object-cover mb-10 w-full"
                   />
                   <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">{deal.description}</h3>
                   <p className="text-sm text-gray-500 mb-1 text-start px-3">{deal.businessId.businessName}</p>
