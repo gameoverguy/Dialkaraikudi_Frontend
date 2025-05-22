@@ -7,9 +7,11 @@ import coursal2 from "../../assets/coursal2.jpg";
 import coursal3 from "../../assets/coursal3.jpg";
 import axios from "axios";
 import { API } from "../../../config/config";
+import { useNavigate } from "react-router-dom";
 
 const Carousel = () => {
   const [heroBanner, setHeroBanner] = useState([]);
+  const navigate = useNavigate();
 
   const localFallbacks = [
     { id: "local-1", contentUrl: coursal1 },
@@ -52,6 +54,10 @@ const Carousel = () => {
     fetchAds();
   }, []);
 
+const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -66,15 +72,15 @@ const Carousel = () => {
   };
 
   return (
-    <div className="overflow-hidden w-full h-fit">
+    <div className="overflow-hidden w-full h-fit cursor-pointer relative">
       <Slider {...settings}>
         {heroBanner.map((banner, index) => (
           <img
             key={index}
             src={banner.contentUrl}
             alt={`Slide ${index + 1}`}
-            className="bg-cover w-full lg:h-[60vh]"
-            loading="lazy"
+            className="bg-cover w-full lg:h-[60vh] relative z-0"
+            loading="lazy" onClick={() => handleCategoryClick(banner.businessId?._id)}
           />
         ))}
       </Slider>

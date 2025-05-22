@@ -20,6 +20,7 @@ import Loader from "../../Components/Loader";
 import { FaFilter } from "react-icons/fa6";
 import FloatingAdBalloon from "../../Components/FloatAd";
 
+
 const Bussiness_List = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,6 +44,11 @@ const Bussiness_List = () => {
 
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  
+
+  const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
 
 
   useEffect(() => {
@@ -207,16 +213,18 @@ const Bussiness_List = () => {
     );
   }
 
+  
+
   return (
     <>
-      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[50vh]">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[50vh] cursor-pointer">
         <div className="w-full">
           {fetchBanner && fetchBanner.length > 0 && (
             <img
               src={fetchBanner[currentImageIndex]?.contentUrl}
               alt="Banner"
               className={`w-full h-full object-cover transition-opacity duration-500 ${fadeIn ? "opacity-100" : "opacity-0"
-                }`}
+                }`} onClick={() => handleCategoryClick(fetchBanner[currentImageIndex]?.businessId?._id)}
             />
           )}
         </div>
@@ -407,14 +415,14 @@ const Bussiness_List = () => {
           </div>
         </div>
         {/* // Replace the side banner div with this: */}
-        <div className="hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5">
+        <div className="hidden lg:w-3/12 h-fit lg:flex flex-col gap-6 mt-16 sticky top-[16vh] mb-5 cursor-pointer">
           {sideBanner &&
             sideBanner.map((banner, index) => (
               <div key={index} className="h-[300px] w-full bg-black">
                 <img
                   src={banner.contentUrl}
                   alt={`Side Banner ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover" onClick={() => handleCategoryClick(banner.businessId?._id)}
                 />
               </div>
             ))}

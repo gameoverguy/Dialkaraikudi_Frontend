@@ -3,11 +3,13 @@ import { IoMdClose } from "react-icons/io";
 import popup from "../../assets/popup.jpg";
 import axios from "axios";
 import { API } from "../../../config/config";
+import { useNavigate } from "react-router-dom";
 
 const AdPopup = () => {
   const [showAd, setShowAd] = useState(false);
   const [showCloseIcon, setShowCloseIcon] = useState(false);
   const [adPopup, setAdPopup] = useState([]);
+  const navigate = useNavigate();
 
   const localFallbacks = [{image: popup}];
 
@@ -69,18 +71,22 @@ const AdPopup = () => {
     fetchAds();
   }, []);
 
+  const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
+
   return (
     <>
       {showAd && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60">
-          <div className="relative h-[30vh] w-10/12 md:w-9/12 md:h-[40vh] lg:w-5/12 lg:h-[50vh] overflow-hidden shadow-lg">
+          <div className="relative h-[30vh] w-10/12 md:w-9/12 md:h-[40vh] lg:w-5/12 lg:h-[50vh] overflow-hidden shadow-lg cursor-pointer">
             {/* Background Image */}
             {
               adPopup.map((item, i) => (
                 <img key={i}
               src={item.contentUrl || item.image}
               alt="Ad"
-              className="absolute inset-0 w-full h-full z-0"
+              className="absolute inset-0 w-full h-full z-0" onClick={() => handleCategoryClick(item.businessId?._id)}
             />
               ))
             }
