@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import popup from "../../assets/popup.jpg";
+import axios from "axios";
+import { API } from "../../../config/config";
 
 const AdPopup = () => {
   const [showAd, setShowAd] = useState(false);
   const [showCloseIcon, setShowCloseIcon] = useState(false);
+  const [adPopup, setAdPopup] = useState([]);
 
+  const localFallbacks = [{image: popup}];
+
+  
   useEffect(() => {
     const adTimer = setTimeout(() => {
       setShowAd(true);
@@ -29,18 +35,56 @@ const AdPopup = () => {
     return () => clearTimeout(adTimer);
   }, []);
 
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        const response = await axios.get(`${API}/adverts`);
+        
+        const ads = response.data.filter(
+          (ad) =>
+            ad.slotId?.page === "home" &&
+            ad.slotId?._id === "682eb7267ba840d99e3e37d7" &&
+            ad.isActive
+        );
+        console.log("adPopup", response.data);
+        
+        
+
+        let finalSlides = [];
+
+        if (ads.length === 0) {
+          finalSlides = localFallbacks.slice(0, 1);
+        } 
+        else {
+          finalSlides = ads;
+        }
+        setAdPopup(finalSlides);
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        setAdPopup(localFallbacks.slice(0, 1)); // Fallback if API fails
+      }
+    };
+
+    fetchAds();
+  }, []);
+
   return (
     <>
       {showAd && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/60">
           <div className="relative h-[30vh] w-10/12 md:w-9/12 md:h-[40vh] lg:w-5/12 lg:h-[50vh] overflow-hidden shadow-lg">
             {/* Background Image */}
-            <img
-              src={popup}
+            {
+              adPopup.map((item, i) => (
+                <img key={i}
+              src={item.contentUrl || item.image}
               alt="Ad"
               className="absolute inset-0 w-full h-full z-0"
             />
-
+              ))
+            }
+            
             {/* Close Icon */}
             {showCloseIcon && (
               <button
