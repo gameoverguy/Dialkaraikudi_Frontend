@@ -107,7 +107,7 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
         </p>
         <form onSubmit={handleSubmit} className="">
           <FloatingInput
-            type="email"
+            type="text"
             placeholder="Email Address"
             name="email"
             value={email}

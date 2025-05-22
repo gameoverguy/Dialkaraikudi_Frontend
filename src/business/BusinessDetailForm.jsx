@@ -19,7 +19,7 @@ const BusinessDetailForm = ({
   setShowLoginModal,
   setShowBusinessDetailForm,
   setShowOTPModal,
-  isSignupFlow,
+  // isSignupFlow,
   showOTPModal
 }) => {
   const [errorOverall, setErrorOverall] = useState("");
@@ -46,6 +46,7 @@ const BusinessDetailForm = ({
   const [photosPreviews, setPhotosPreviews] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isBusinessRegistration, setIsBusinessRegistration] = useState(true);
   // Update the validateForm function with new regex and rules
   const validateForm = () => {
     const newErrors = {};
@@ -346,6 +347,7 @@ const BusinessDetailForm = ({
       if (response.data.message) {
         setSuccessMessage("Registration successful! Please verify your email.");
         sessionStorage.setItem("verificationEmail", formData.email);
+        sessionStorage.setItem("isBusinessRegistration", "true");
         setFormData({
           businessName: "",
           ownerName: "",
@@ -660,11 +662,16 @@ const BusinessDetailForm = ({
       </CustomModal>
       <OTP
         isOpen={showOTPModal}
-        onClose={() => setShowOTPModal(false)}
+        onClose={() => {
+          setShowOTPModal(false);
+          setShowLoginModal(true);
+          sessionStorage.removeItem("isBusinessRegistration");
+        }}
         email={formData.email}
+        setShowResetPasswordModal={null}
         setShowLoginModal={setShowLoginModal}
         role="business"
-        isSignupFlow={true}
+        isSignupFlow={isBusinessRegistration}
       />
     </>
   );

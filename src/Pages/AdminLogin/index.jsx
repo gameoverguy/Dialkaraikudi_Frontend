@@ -43,7 +43,7 @@ const AdminLogin = () => {
       }
       setErrors((prev) => ({ ...prev, email: errorMessage }));
     } else if (name === "password") {
-      const passwordValue = value.replace(/\s/g, "");
+      const passwordValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
       setFormData((prev) => ({ ...prev, [name]: passwordValue }));
       if (passwordValue.length > 20) {
       } else if (value !== passwordValue) {
@@ -132,7 +132,7 @@ const AdminLogin = () => {
           <form onSubmit={handleSubmit} className="mt-4">
             <div className="space-y-4">
               <FloatingInput
-                type="email"
+                type="text"
                 name="email"
                 placeholder="Email Address"
                 value={formData.email}
@@ -150,6 +150,7 @@ const AdminLogin = () => {
                   onChange={handleChange}
                   error={errors.password}
                   maxLength={20}
+                  className="mt-1"
                 />
                 {formData.password && (
                   <button
@@ -203,7 +204,7 @@ const AdminLogin = () => {
                 onClick={() => setShowForgotPassword(true)}
                 className="cursor-pointer hover:underline text-xs blue-link"
               >
-                Forgot your password?
+                Forgot password?
               </button>
             </div>
           </form>
