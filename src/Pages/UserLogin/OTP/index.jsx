@@ -15,7 +15,7 @@ const OTP = ({
 }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(120);
   const [errorOverall, setErrorOverall] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -84,7 +84,9 @@ const OTP = ({
 
     try {
       const endpoint = isSignupFlow
-        ? `${API}/user/verifyOtpAndCreateAccount`
+        ? role === "business"
+          ? `${API}/business/verifyOtpAndCreateBusiness`
+          : `${API}/user/verifyOtpAndCreateAccount`
         : role === "business"
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
@@ -93,7 +95,7 @@ const OTP = ({
         otp: otpValue,
       });
       console.log(role);
-      console.log(response.data);
+      console.log(endpoint, response.data, "with endpoint");
 
       if (response.data) {
         console.log("OTP Verified:", otpValue);
@@ -136,7 +138,9 @@ const OTP = ({
   const handleResendOTP = async () => {
     try {
       const endpoint = isSignupFlow
-        ? `${API}/user/resendSignupOtp` // You'll need to create this endpoint
+        ? role === "business"
+          ? `${API}/business/resendBusinessOtp`
+          : `${API}/user/resendregisterotp`
         : role === "business"
         ? `${API}/business/forgotPassword`
         : `${API}/user/forgotpassword`;
@@ -148,7 +152,7 @@ const OTP = ({
         setOtp(["", "", "", ""]);
         setError("");
         setErrorOverall("");
-        setTimer(60);
+        setTimer(120);
         setSuccessMessage("OTP resent successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
       }

@@ -39,6 +39,32 @@ const SlotAds = ({ slotId, type }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [allowedBusinesses, setAllowedBusinesses] = useState([]);
 
+  // useEffect(() => {
+  // const fetchData = async () => {
+  //   try {
+  //     const [adsResponse, slotResponse] = await Promise.all([
+  //       axios.get(`${API}/adverts?slotId=${slotId}`),
+  //       axios.get(`${API}/advertslots/${slotId}`),
+  //     ]);
+  //     console.log(adsResponse.data);
+
+  //     setAds(adsResponse.data);
+  //     setSelectedSlot(slotResponse.data);
+  //     // Fix the filter logic to exclude businesses that already have ads
+  //     const existingBusinessIds = adsResponse.data.map(
+  //       (ad) => ad.businessId._id
+  //     );
+  //     setAllowedBusinesses(
+  //       slotResponse.data.allowedBusinesses.filter(
+  //         (business) => !existingBusinessIds.includes(business._id)
+  //       )
+  //     );
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setLoading(false);
+  //   }
+  // };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -157,6 +183,7 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
+      fetchData();
     } catch (error) {
       console.error("Error creating ad:", error);
     } finally {
@@ -197,6 +224,7 @@ const SlotAds = ({ slotId, type }) => {
       await axios.delete(`${API}/adverts/${deleteConfirmation.adId}`);
       setAds(ads.filter((ad) => ad._id !== deleteConfirmation.adId));
       setDeleteConfirmation({ show: false, adId: null });
+      fetchData();
     } catch (error) {
       console.error("Error deleting ad:", error);
     }
@@ -234,6 +262,7 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
+      fetchData();
     } catch (error) {
       console.error("Error updating ad:", error);
     } finally {
