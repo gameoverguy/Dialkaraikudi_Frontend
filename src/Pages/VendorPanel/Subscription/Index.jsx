@@ -10,6 +10,8 @@ const VendorSubscription = ({ businessData }) => {
   const [adSlots, setAdSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Get ID from URL params instead of localStorage
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showMediaPopup, setShowMediaPopup] = useState(true);
 
   const fetchAdSlots = async () => {
     try {
@@ -64,9 +66,33 @@ const VendorSubscription = ({ businessData }) => {
     );
   }
 
+  const MediaRequirementsPopup = () => (
+    <div className="fixed inset-0 bg-black/70  flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">Important Notice</h3>
+        <div className="text-gray-600 space-y-3">
+          <p>Please note the following regarding media content:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>After payment, we will upload your provided videos/images to the website</li>
+            <li>If you have media content ready, please provide it to us</li>
+            <li>If you don't have media content, our team will create high-quality images and videos</li>
+            <li>The media content created by our team will be final and cannot be changed</li>
+          </ul>
+        </div>
+        <button
+          onClick={() => setShowMediaPopup(false)}
+          className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          I Understand
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <>
-      <div className="p-2 h-screen flex flex-col">
+      <div className="p-2 h-screen flex flex-col ">
+      {showMediaPopup && <MediaRequirementsPopup />}
         <div className="bg-white shadow rounded mb-4 p-4">
           <h1 className="mb-2 text-2xl font-bold">Advertisement Slots</h1>
           <p>
@@ -74,7 +100,27 @@ const VendorSubscription = ({ businessData }) => {
             vendors understand buyer satisfaction, address issues, and enhance
             product and service quality.
           </p>
+          <button
+            onClick={() => setShowDisclaimer(!showDisclaimer)}
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <FaInfoCircle />
+            View Advertising Guidelines
+          </button>
         </div>
+        {showDisclaimer && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+            <h3 className="font-semibold text-blue-900 mb-2">Important Information:</h3>
+            <ul className="list-disc list-inside space-y-1 text-blue-800">
+              <li>All advertisements are subject to review and approval</li>
+              <li>Pricing is per advertisement slot for the specified duration</li>
+              <li>Content must comply with our advertising policies</li>
+              <li>Placement is subject to availability</li>
+              <li>Refunds are not available for active advertisements</li>
+              <li>For further queries Conatct Us @: xxxxx xxxxx</li>
+            </ul>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {adSlots.map((slot, index) => (
             <div

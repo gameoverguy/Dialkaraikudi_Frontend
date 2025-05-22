@@ -9,6 +9,7 @@ import Loader from '../../../Components/Loader';
 import BusinessForm from './components/BusinessForm';
 import BusinessDetails from './components/BusinessDetails';
 import BusinessTable from './components/BusinessTable';
+import ConfirmationModal from '../../../Components/ConfirmationModal'
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
