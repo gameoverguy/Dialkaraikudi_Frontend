@@ -6,7 +6,7 @@ import { LuCircleUserRound } from "react-icons/lu";
 import { useLoginModal } from "../context/LoginContext";
 import Cookies from "js-cookie";
 import { CiLogout } from "react-icons/ci";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Links, useNavigate } from "react-router-dom";
 import LocationTracker from "./LocationTracker";
 import UserLogin from "../Pages/UserLogin";
 import SignupModal from "../Pages/SignUp";
@@ -118,7 +118,7 @@ const Header = () => {
   return (
     <>
       <div className="sticky top-0 bg-[#e0d8ff] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
-        <div className="px-4 py-3 md:w-11/12 mx-auto flex justify-between items-center">
+        <div className="px-4 py-3 lg:w-11/12 mx-auto flex justify-between items-center">
           <div className="flex space-x-6 items-center">
             <Link to="/">
               <img
@@ -152,12 +152,29 @@ const Header = () => {
             </form>
           </div>
 
+        
+
           <div className="flex items-center gap-6">
             {/* <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
               <span>
                 <LocationTracker onLocationSelect={handleLocationSelect} />
               </span>
             </button> */}
+
+          <div className="hidden md:block">
+              <button className="cursor-pointer text-xs rounded bg-linear-to-r/oklab from-indigo-500 to-teal-400 p-1 text-white">
+               <Link to="/#offer" onClick={(e) => {
+                 e.preventDefault();
+                 const element = document.getElementById('offer');
+                 if (element) {
+                   element.scrollIntoView({ behavior: 'smooth' });
+                 }
+               }}>
+                Limited <br/>
+                 Time Offer
+               </Link>
+              </button>
+          </div>
 
             {userData || businessData ? (
               <div className=" md:flex items-center gap-4">
@@ -187,7 +204,7 @@ const Header = () => {
                       />
                     </svg>
                   </button>
-
+                  
                   {showDropdown && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
                       {businessData?.user_id ? (
@@ -241,7 +258,7 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => setShowUserBusinessModal(true)}
-                className="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-green-800 hover:scale-110 text-white px-3 py-2 rounded transition-normal duration-300 cursor-pointer"
+                className="hidden text-sm md:flex items-center gap-2 bg-blue-600 hover:bg-green-800 hover:scale-110 text-white px-3 py-2 rounded transition-normal duration-300 cursor-pointer"
               >
                 <LuCircleUserRound className="text-xl" />
                 <span>Login / Signup</span>

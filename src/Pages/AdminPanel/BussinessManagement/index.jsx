@@ -1,19 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import CustomTable from '../../../Components/Table';
 import CustomModal from '../../../Components/modal';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
-import { FaCloudUploadAlt, FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import ConfirmationModal from '../../../Components/ConfirmationModal';
 import axios from 'axios';
-import { API } from '../../../../config/config'
-import FloatingInput from '../../../Components/FloatingInput';
-import FloatingSelect from '../../../Components/FloatingInput/DropDown';
+import { API } from '../../../../config/config';
 import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
-import { MdCancel } from 'react-icons/md';
-import FloatingTextarea from '../../../Components/FloatingInput/FloatingTextarea';
 import Loader from '../../../Components/Loader';
+import BusinessForm from './components/BusinessForm';
+import BusinessDetails from './components/BusinessDetails';
+import BusinessTable from './components/BusinessTable';
+import ConfirmationModal from '../../../Components/ConfirmationModal';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -26,7 +22,8 @@ const BusinessManagement = () => {
     phone: '',
     email: '',
     address: '',  // Changed to simple string
-    photos: []
+    photos: [],
+    verified: ''
   });
 
   // Add API endpoints
@@ -50,7 +47,7 @@ const BusinessManagement = () => {
   const fetchBusinesses = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${API}/business`);
+      const response = await axios.get(`${API}/business/allbusiness`);
       const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,
@@ -59,7 +56,8 @@ const BusinessManagement = () => {
         phone: business.contactDetails?.phone,
         email: business.email,
         address: business.address?.formattedAddress || business.address?.addressArea,
-        photos: business.photos
+        photos: business.photos,
+        verified: business.verified
       }));
 
       console.log(transformedData, "Geteddd");
@@ -87,7 +85,8 @@ const BusinessManagement = () => {
       phone: '',
       email: '',
       address: '',
-      photos: []
+      photos: [],
+      verified: ''
     });
     setImagePreview([]);
     setErrors({});
@@ -131,6 +130,23 @@ const BusinessManagement = () => {
       label: 'Email'
     },
 
+    {
+      key: 'verified',
+      label: 'Verified',
+      render: (row) => (
+        <div className="flex justify-center">
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={row.verified}
+              onChange={() => handleVerifiedToggle(row)}
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+      )
+    },
 
     {
       key: 'actions',
@@ -162,6 +178,30 @@ const BusinessManagement = () => {
       )
     }
   ];
+
+  const handleVerifiedToggle = async (business) => {
+    try {
+      setIsLoading(true);
+      await axios.put(`${API}/business/${business.id}`, {
+        verified: !business.verified
+      });
+
+      // Update the local state
+      setBusinesses(prev => prev.map(b => {
+        if (b.id === business.id) {
+          return { ...b, verified: !b.verified };
+        }
+        return b;
+      }));
+
+      toast.success(`Business ${!business.verified ? 'verified' : 'unverified'} successfully`);
+    } catch (error) {
+      console.error('Error updating verification status:', error);
+      toast.error('Failed to update verification status');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -307,7 +347,8 @@ const BusinessManagement = () => {
       phone: business.phone,
       email: business.email,
       address: business.address,
-      photos: [...business.photos]
+      photos: [...business.photos],
+      verified: business.verified
     });
     setImagePreview([...business.photos]);
     setShowModal(true);
@@ -332,7 +373,8 @@ const BusinessManagement = () => {
           address: {
             formattedAddress: formData.address
           },
-          photos: uploadedUrls
+          photos: uploadedUrls,
+          verified: formData.verified
         };
 
         if (selectedBusiness) {
@@ -390,20 +432,17 @@ const BusinessManagement = () => {
   return (
     <div className="p-6 relative">
       {isLoading && <Loader />}
+      <ToastContainer />
       <div className='shadow bg-white p-6 rounded-lg'>
         <h1 className="text-2xl font-bold mb-6">Business Management</h1>
         <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
       </div>
-      <CustomTable
-        columns={columns}
-        data={businesses}
-        itemsPerPage={10}
-        // addButton="Add"
-        onAddClick={() => {
-          setSelectedBusiness(null);
-          setShowModal(true);
-        }}
-        searchPlaceholder="Search by business detail"
+      <BusinessTable
+        businesses={businesses}
+        handleView={handleView}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleVerifiedToggle={handleVerifiedToggle}
       />
 
       {/* Edit/Add Modal */}
@@ -411,165 +450,29 @@ const BusinessManagement = () => {
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
-          setFormData({ name: '', description: '', category: '', phone: '', email: '', address: '', photos: [] });
-          setImagePreview([]);
-          setErrors({});
+          resetForm();
           setSelectedBusiness(null);
         }}
         title={selectedBusiness ? "Edit Business" : "Add Business"}
       >
-        <form onSubmit={handleSubmit} className="">
-
-          <div className="flex gap-2">
-            <div>
-              <FloatingInput
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Business Name"
-                maxLength={30}
-                error={errors.name}
-              />
-            </div>
-
-            <div>
-              <FloatingSelect
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                placeholder="Select Category"
-                error={errors.category}
-                options={categories.map(category => ({
-                  value: category._id,
-                  label: category.displayName
-                }))}
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <div>
-              <FloatingInput
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone Number"
-                maxLength={10}
-                error={errors.phone}
-              />
-
-            </div>
-
-            <div>
-              <FloatingInput
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="Email Address"
-                error={errors.email}
-              />
-            </div>
-          </div>
-
-          <div className='mt-4'>
-
-            <FloatingTextarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              placeholder="Business Description"
-              error={errors.description}
-              rows={4}
-            />
-          </div>
-
-          <div className='mt-4'>
-            <FloatingTextarea
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              placeholder="Business Address"
-              error={errors.address}
-              rows={4}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Business Photos (Max 6)
-            </label>
-            {imagePreview.length < 6 && (
-              <div
-                {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition duration-200 ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-500'
-                  }`}
-              >
-                <input {...getInputProps()} />
-                <FaCloudUploadAlt className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="mt-2 text-sm text-gray-600">
-                  {isDragActive
-                    ? "Drop the images here"
-                    : "Drag 'n' drop images here, or click to select"}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Supported formats: JPG, PNG (Max size: 2MB)
-                </p>
-              </div>
-            )}
-            {imagePreview.length > 0 && (
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                {imagePreview.map((preview, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={preview}
-                      alt={`Preview ${index + 1}`}
-                      className="h-20 w-20 object-cover rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removePhoto(index)}
-                      className="absolute cursor-pointer -top-2 right-5 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200"
-                    >
-                      <MdCancel />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className='mt-1 h-4'>
-              {errors.photos && (
-                <p className="text-xs text-red-500 text-right">{errors.photos}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={() => {
-                setShowModal(false);
-                setFormData({ name: '', description: '', category: '', phone: '', email: '', address: '', photos: [] });
-                setImagePreview([]);
-                setErrors({});
-                setSelectedBusiness(null);
-              }}
-              className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
-            >
-              {selectedBusiness ? "Update Business" : "Add Business"}
-            </button>
-          </div>
-        </form>
-
+        <BusinessForm 
+          formData={formData}
+          errors={errors}
+          handleInputChange={handleInputChange}
+          handleSubmit={handleSubmit}
+          categories={categories}
+          imagePreview={imagePreview}
+          getRootProps={getRootProps}
+          getInputProps={getInputProps}
+          isDragActive={isDragActive}
+          removePhoto={removePhoto}
+          setShowModal={setShowModal}
+          setFormData={setFormData}
+          setImagePreview={setImagePreview}
+          setErrors={setErrors}
+          setSelectedBusiness={setSelectedBusiness}
+          selectedBusiness={selectedBusiness}
+        />
       </CustomModal>
 
       {/* View Modal */}
@@ -581,85 +484,21 @@ const BusinessManagement = () => {
         }}
         title="Business Details"
       >
-        {selectedBusiness && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">Business Name</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.name}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">Category</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.category?.displayName || 'N/A'}</p>
-              </div>
-              <div className="col-span-2">
-                <h3 className="text-lg font-medium text-gray-900">Description</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.description}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">Phone</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.phone}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">Email</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.email}</p>
-              </div>
-              <div className="col-span-2">
-                <h3 className="text-lg font-medium text-gray-900">Address</h3>
-                <p className="mt-1 text-gray-600">{selectedBusiness.address}</p>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Photos</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {selectedBusiness.photos.map((photo, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={photo}
-                      alt={`${selectedBusiness.name} photo ${index + 1}`}
-                      className="h-32 w-32  object-cover rounded-lg transition-transform duration-200 hover:scale-105"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs py-1 px-2 rounded-b-lg">
-                      Photo {index + 1}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex justify-end pt-4">
-              <button
-                type="button"
-                onClick={() => {
-                  setViewModalOpen(false);
-                  setSelectedBusiness(null);
-                }}
-                className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+        {selectedBusiness &&
+         <BusinessDetails
+         selectedBusiness={selectedBusiness}
+         setSelectedBusiness={setSelectedBusiness}
+          setViewModalOpen={setViewModalOpen}
+                    />}
       </CustomModal>
-      <ToastContainer
-        position="top-right"
-        autoClose={7000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        style={{ zIndex: 9999 }}
-      />
+
+      {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={confirmDelete}
         title="Delete Business"
-        message="Are you sure you want to delete this business?"
+        message="Are you sure you want to delete this business? This action cannot be undone."
       />
     </div>
   );

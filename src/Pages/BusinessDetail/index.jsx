@@ -166,7 +166,7 @@ const BusinessDetails = () => {
 
             <motion.div
               variants={fadeIn}
-              className="mx-4 space-y-8 pb-10 mb-4"
+              className="mx-4 space-y-8 pb-10 mb-4 z-10"
             >
               <motion.div
                 id="overview"
