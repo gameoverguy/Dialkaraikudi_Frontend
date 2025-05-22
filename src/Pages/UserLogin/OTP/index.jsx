@@ -20,7 +20,7 @@ const OTP = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   // const navigate = useNavigate();
-
+  const otpemail = sessionStorage.getItem("verificationEmail");
   const otpRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const OTP = ({
     }
 
     try {
-      const otpemail = sessionStorage.getItem("verificationEmail");
+      // const otpemail = sessionStorage.getItem("verificationEmail");
       const isBusinessRegistration =
         sessionStorage.getItem("isBusinessRegistration") === "true";
       console.log(isBusinessRegistration);
@@ -105,7 +105,7 @@ const OTP = ({
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
       const response = await axios.post(endpoint, {
-        email: otpemail,
+        email: otpemail || email,
         otp: otpValue,
       });
       console.log(role);
@@ -153,6 +153,7 @@ const OTP = ({
 
   const handleResendOTP = async () => {
     try {
+      
       const isBusinessRegistration =
         sessionStorage.getItem("isBusinessRegistration") === "true";
 
@@ -164,7 +165,7 @@ const OTP = ({
         ? `${API}/business/forgotPassword`
         : `${API}/user/forgotpassword`;
       const response = await axios.post(endpoint, {
-        email: email,
+        email: otpemail || email,
       });
 
       if (response.data) {
@@ -231,7 +232,7 @@ const OTP = ({
           </h1>
           <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             We have sent a verification code to{" "}
-            <span className="font-medium">{email}</span>
+            <span className="font-medium">{otpemail || email}</span>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
