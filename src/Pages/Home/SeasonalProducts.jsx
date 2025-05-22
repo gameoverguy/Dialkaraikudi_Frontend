@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { API } from "../../../config/config";
+import { useNavigate } from "react-router-dom";
+
 
 const localFallbacks = Array.from({ length: 20 }, (_, i) => ({
   id: `local-${i + 1}`,
@@ -20,6 +22,7 @@ export default function SeasonalProducts() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [sesonalProducts, setSesonalProducts] = useState(getRandomProducts(localFallbacks, 5));
   const [animationKey, setAnimationKey] = useState(Date.now());
+  const navigate = useNavigate();
 
   // Handle responsive items
   useEffect(() => {
@@ -76,6 +79,10 @@ export default function SeasonalProducts() {
     return () => clearInterval(interval);
   }, [itemsPerPage]);
 
+  const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
+
   return (
     <div className="w-full px-4 bg-white">
       <h2 className="text-2xl lg:text-3xl font-bold text-center text-green-700 mb-5 font-['Poppins']">
@@ -94,12 +101,12 @@ export default function SeasonalProducts() {
           {sesonalProducts.map((product) => (
             <div
               key={product.id}
-              className="relative bg-white shadow-md rounded-xl p-4 flex flex-col justify-center items-center text-center transition duration-300 hover:shadow-lg"
+              className="relative bg-white shadow-md rounded-xl p-4 flex flex-col justify-center items-center text-center transition duration-300 hover:shadow-lg cursor-pointer"
             >
               <img
                 src={product.contentUrl || product.image}
                 alt={product.title || product.description}
-                className="w-24 h-24 object-cover mb-4"
+                className="w-24 h-24 object-cover mb-4" onClick={() => handleCategoryClick(product.businessId?._id)}
               />
               <h3 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
                 {product.description || product.title}

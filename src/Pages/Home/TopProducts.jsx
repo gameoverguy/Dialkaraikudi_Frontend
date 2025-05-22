@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import axios from "axios";
 import { API } from "../../../config/config";
+import { useNavigate } from "react-router-dom";
 
 const localFallbacks  = [
   {
@@ -73,7 +74,8 @@ const localFallbacks  = [
 
 
 
-const TopService = () => {
+function TopProducts  () {
+  const navigate = useNavigate();
 
 const [topProduct, setTopProduct] = useState([]);
 
@@ -121,7 +123,9 @@ useEffect(() => {
   }, []);
 
 
-
+const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
 
   return (
     <div className="w-11/12 flex md:border md:h-[24vh] lg:h-[32vh] md:border-gray-200 justify-between">
@@ -161,7 +165,7 @@ useEffect(() => {
           >
             {topProduct.map((deal) => (
               <SwiperSlide key={deal.id}>
-                <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-fit bg-white rounded-md justify-between items-center">
+                <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-fit bg-white rounded-md justify-between items-center cursor-pointer">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                     {deal.label}
                   </div> */}
@@ -169,6 +173,7 @@ useEffect(() => {
                     src={deal.contentUrl}
                     alt={deal.title}
                     className="h-32 object-contain mb-10 w-full"
+                                onClick={() => handleCategoryClick(deal.businessId?._id)}
                   />
                   <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">{deal.description}</h3>
                   <p className="text-sm text-gray-500 mb-1 text-start px-3">{deal.businessId.businessName}</p>
@@ -182,4 +187,4 @@ useEffect(() => {
   );
 };
 
-export default TopService;
+export default TopProducts;
