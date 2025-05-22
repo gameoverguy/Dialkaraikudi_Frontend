@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CustomModal from '../../../Components/modal';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { API } from '../../../../config/config';
@@ -9,7 +9,6 @@ import Loader from '../../../Components/Loader';
 import BusinessForm from './components/BusinessForm';
 import BusinessDetails from './components/BusinessDetails';
 import BusinessTable from './components/BusinessTable';
-import ConfirmationModal from '../../../Components/ConfirmationModal';
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -47,7 +46,7 @@ const BusinessManagement = () => {
   const fetchBusinesses = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${API}/business/allbusiness`);
+      const response = await axios.get(`${API}/business`);
       const transformedData = response.data.data.map(business => ({
         id: business._id,
         name: business.businessName,
@@ -432,7 +431,6 @@ const BusinessManagement = () => {
   return (
     <div className="p-6 relative">
       {isLoading && <Loader />}
-      <ToastContainer />
       <div className='shadow bg-white p-6 rounded-lg'>
         <h1 className="text-2xl font-bold mb-6">Business Management</h1>
         <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
@@ -484,12 +482,7 @@ const BusinessManagement = () => {
         }}
         title="Business Details"
       >
-        {selectedBusiness &&
-         <BusinessDetails
-         selectedBusiness={selectedBusiness}
-         setSelectedBusiness={setSelectedBusiness}
-          setViewModalOpen={setViewModalOpen}
-                    />}
+        {selectedBusiness && <BusinessDetails business={selectedBusiness} />}
       </CustomModal>
 
       {/* Confirmation Modal */}
