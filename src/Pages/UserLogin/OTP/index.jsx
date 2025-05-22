@@ -93,9 +93,10 @@ const OTP = ({
     }
 
     try {
+      const otpemail = sessionStorage.getItem("verificationEmail");
       const isBusinessRegistration =
         sessionStorage.getItem("isBusinessRegistration") === "true";
-        console.log(isBusinessRegistration);
+      console.log(isBusinessRegistration);
       const endpoint = isBusinessRegistration
         ? `${API}/business/verifyOtpAndCreateBusiness`
         : isSignupFlow && role === "user"
@@ -104,12 +105,12 @@ const OTP = ({
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
       const response = await axios.post(endpoint, {
-        email: email,
+        email: otpemail,
         otp: otpValue,
       });
       console.log(role);
       console.log(endpoint, response.data, "with endpoint");
-      
+
       if (response.data) {
         setSuccessMessage(
           isBusinessRegistration || isSignupFlow
@@ -154,9 +155,8 @@ const OTP = ({
     try {
       const isBusinessRegistration =
         sessionStorage.getItem("isBusinessRegistration") === "true";
-        
-        
-        const endpoint = isBusinessRegistration
+
+      const endpoint = isBusinessRegistration
         ? `${API}/business/resendBusinessOtp`
         : isSignupFlow && role === "user"
         ? `${API}/user/resendregisterotp`
