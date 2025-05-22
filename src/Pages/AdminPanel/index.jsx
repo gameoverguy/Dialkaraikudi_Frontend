@@ -10,6 +10,7 @@ import {
   MdChevronLeft,
   MdChevronRight,
   MdLogout,
+  MdNotificationAdd,
 } from "react-icons/md";
 import UserManagement from "./UserMangement";
 import CategoryManagement from "./OrganizationMaterial/Category";
@@ -22,6 +23,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../../config/config";
+import Notification from "./Advertisment/Notification";
 
 // Placeholder components - Replace these with your actual components
 const PlatformInfo = () => <div>Platform Info Content</div>;
@@ -59,7 +61,11 @@ const AdminPanel = () => {
 
   const organizationItems = [{ key: "categories", label: "Categories" }];
 
-  const advertisementItems = [{ key: "home", label: "Ads" }];
+  const advertisementItems = [{ key: "ads", label: "Ads" },
+    {key: "notification", label: "Notification"}
+  ];
+
+  
 
   const menuItems = [
     {
@@ -95,6 +101,7 @@ const AdminPanel = () => {
       label: "Advertisement",
       children: advertisementItems,
     },
+   
   ];
 
   const handleMenuClick = (key) => {
@@ -228,7 +235,8 @@ const AdminPanel = () => {
     platform: <PlatformInfo />,
     gateway: <GatewayConfig />,
     categories: <CategoryManagement />,
-    home: <HomePage />,
+    ads: <HomePage />,
+    notification: <Notification />,
   };
 
   // Get the current component based on selected key
