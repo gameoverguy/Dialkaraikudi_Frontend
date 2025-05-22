@@ -241,7 +241,7 @@ const VendorPanel = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
+    <div className="flex min-h-screen bg-gray-50 overflow-x-scroll scrollbar-hide">
       {/* Sidebar - Fixed position */}
       <div
         className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
@@ -317,7 +317,7 @@ const VendorPanel = () => {
         ></header>
 
         {/* Scrollable main content */}
-        <main className="flex-1 p-6 mt-16 relative h-[calc(100vh-4rem)]">
+        <main className="flex-1 p-6 mt-16 relative h-[calc(100vh-4rem)] ">
           <div className="">{getCurrentComponent()}</div>
         </main>
       </div>

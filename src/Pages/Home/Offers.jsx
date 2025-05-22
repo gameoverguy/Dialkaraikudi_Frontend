@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import axios from "axios";
 import { API } from "../../../config/config";
+import { useNavigate } from "react-router-dom";
 
 const localFallbacksProducts = [
   {
@@ -74,6 +75,7 @@ const localFallbacksProducts = [
 export default function Offers() {
 const [productOffers, setProductOffers] = useState([]);
 const [serviceOffer, setServiceOffers] = useState([]);
+const navigate = useNavigate();
 
 // Product offers
 useEffect(() => {
@@ -163,7 +165,9 @@ useEffect(() => {
     fetchAds();
   }, []);
 
-
+const handleCategoryClick = (category) => {
+        navigate(`/business/${category}`);
+    };
 
 
   return (
@@ -194,14 +198,14 @@ useEffect(() => {
                   >
                     {productOffers.map((deal) => (
                       <SwiperSlide key={deal.id}>
-                        <div className="border border-gray-200 p-4 shadow-md flex flex-col justify-start items-center text-start md:h-[230px] lg:h-[250px] bg-white rounded-md">
+                        <div className="border border-gray-200 p-4 shadow-md flex flex-col justify-start items-center text-start md:h-[230px] lg:h-[250px] bg-white rounded-md cursor-pointer">
                           {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                             {deal.label}
                           </div> */}
                           <img
                             src={deal.contentUrl}
                             alt={deal.title}
-                            className="h-32 object-cover mb-5 lg:mb-10 w-full"
+                            className="h-32 object-cover mb-5 lg:mb-10 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
                           />
                           <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1">{deal.description}</h3>
                           <p className="text-sm text-gray-500 mb-1 text-start">{deal.businessId.businessName}</p>
@@ -238,14 +242,14 @@ useEffect(() => {
                   >
                     {serviceOffer.map((deal) => (
                       <SwiperSlide key={deal.id}>
-                        <div className="border border-gray-200  shadow-md flex flex-col h-[230px] md:h-[230px] lg:h-[250px] bg-white rounded-md justify-start items-center">
+                        <div className="border border-gray-200  shadow-md flex flex-col h-[230px] md:h-[230px] lg:h-[250px] bg-white rounded-md justify-start items-center cursor-pointer">
                           {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                             {deal.label}
                           </div> */}
                           <img
                             src={deal.contentUrl}
                             alt={deal.title}
-                            className="h-32 object-cover mb-13 w-full"
+                            className="h-32 object-cover mb-13 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
                           />
                           <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">{deal.description}</h3>
                           <p className="text-sm text-gray-500 mb-1 text-start">{deal.businessId.businessName}</p>
