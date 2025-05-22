@@ -22,6 +22,16 @@ const OTP = ({
   // const navigate = useNavigate();
 
   const otpRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  useEffect(() => {
+    // Check for business registration flow
+    const isBusinessRegistration =
+      sessionStorage.getItem("isBusinessRegistration") === "true";
+    if (isBusinessRegistration) {
+      console.log("Business registration flow detected");
+    }
+  }, []);
+
   useEffect(() => {
     if (!isOpen) {
       setOtp(["", "", "", ""]);
@@ -83,10 +93,13 @@ const OTP = ({
     }
 
     try {
-      const endpoint = isSignupFlow
-        ? role === "business"
-          ? `${API}/business/verifyOtpAndCreateBusiness`
-          : `${API}/user/verifyOtpAndCreateAccount`
+      const isBusinessRegistration =
+        sessionStorage.getItem("isBusinessRegistration") === "true";
+        console.log(isBusinessRegistration);
+      const endpoint = isBusinessRegistration
+        ? `${API}/business/verifyOtpAndCreateBusiness`
+        : isSignupFlow && role === "user"
+        ? `${API}/user/verifyOtpAndCreateAccount`
         : role === "business"
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
@@ -96,11 +109,10 @@ const OTP = ({
       });
       console.log(role);
       console.log(endpoint, response.data, "with endpoint");
-
+      
       if (response.data) {
-        console.log("OTP Verified:", otpValue);
         setSuccessMessage(
-          isSignupFlow
+          isBusinessRegistration || isSignupFlow
             ? "Account verified successfully!"
             : "OTP verified successfully!"
         );
@@ -111,13 +123,16 @@ const OTP = ({
           setErrorOverall("");
           onClose();
           // setShowResetPasswordModal(true);
-          if (isSignupFlow) {
-            // For signup flow, redirect to login
+          if (isBusinessRegistration) {
+            sessionStorage.removeItem("isBusinessRegistration");
+            sessionStorage.removeItem("verificationEmail");
+          }
+
+          if (isBusinessRegistration || isSignupFlow) {
             if (setShowLoginModal) {
               setShowLoginModal(true);
             }
           } else {
-            // For password reset flow
             if (setShowResetPasswordModal) {
               sessionStorage.setItem("resetPasswordOtp", otpValue);
               setShowResetPasswordModal(true);
@@ -137,10 +152,14 @@ const OTP = ({
 
   const handleResendOTP = async () => {
     try {
-      const endpoint = isSignupFlow
-        ? role === "business"
-          ? `${API}/business/resendBusinessOtp`
-          : `${API}/user/resendregisterotp`
+      const isBusinessRegistration =
+        sessionStorage.getItem("isBusinessRegistration") === "true";
+        
+        
+        const endpoint = isBusinessRegistration
+        ? `${API}/business/resendBusinessOtp`
+        : isSignupFlow && role === "user"
+        ? `${API}/user/resendregisterotp`
         : role === "business"
         ? `${API}/business/forgotPassword`
         : `${API}/user/forgotpassword`;
