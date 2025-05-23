@@ -261,7 +261,7 @@ const Header = () => {
                 className="hidden text-sm md:flex items-center gap-2 bg-blue-600 hover:bg-green-800 hover:scale-110 text-white px-3 py-2 rounded transition-normal duration-300 cursor-pointer"
               >
                 <LuCircleUserRound className="text-xl" />
-                <span>Login / Signup</span>
+                <span>Login</span>
               </button>
             )}
 

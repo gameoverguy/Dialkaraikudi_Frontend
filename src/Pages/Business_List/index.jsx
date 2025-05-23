@@ -397,15 +397,15 @@ const Bussiness_List = () => {
                       </div>
 
                       {/* Show side banner after every 2 items in mobile view */}
-                      {(i + 1) % 2 === 0 && sideBanner && sideBanner.length > 0 && (
-                        <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
-                          <img
-                            src={sideBanner[Math.floor(i / 2) % sideBanner.length]?.contentUrl}
-                            alt={`Mobile Side Banner ${Math.floor(i / 2) + 1}`}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        </div>
-                      )}
+                      {(i + 1 === 2 || i + 1 === 4) && sideBanner && sideBanner.length > 0 && (
+      <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
+        <img
+          src={sideBanner[Math.floor(i / 2) % sideBanner.length]?.contentUrl}
+          alt={`Mobile Side Banner ${Math.floor(i / 2) + 1}`}
+          className="w-full h-full object-cover rounded-lg"
+        />
+      </div>
+    )}
                     </React.Fragment>
                   ))}
                 </>

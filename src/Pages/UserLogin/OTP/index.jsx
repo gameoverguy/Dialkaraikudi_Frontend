@@ -20,8 +20,18 @@ const OTP = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   // const navigate = useNavigate();
-
+  const otpemail = sessionStorage.getItem("verificationEmail");
   const otpRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+  useEffect(() => {
+    // Check for business registration flow
+    const isBusinessRegistration =
+      sessionStorage.getItem("isBusinessRegistration") === "true";
+    if (isBusinessRegistration) {
+      console.log("Business registration flow detected");
+    }
+  }, []);
+
   useEffect(() => {
     if (!isOpen) {
       setOtp(["", "", "", ""]);
@@ -83,24 +93,27 @@ const OTP = ({
     }
 
     try {
-      const endpoint = isSignupFlow
-        ? role === "business"
-          ? `${API}/business/verifyOtpAndCreateBusiness`
-          : `${API}/user/verifyOtpAndCreateAccount`
+      // const otpemail = sessionStorage.getItem("verificationEmail");
+      const isBusinessRegistration =
+        sessionStorage.getItem("isBusinessRegistration") === "true";
+      console.log(isBusinessRegistration);
+      const endpoint = isBusinessRegistration
+        ? `${API}/business/verifyOtpAndCreateBusiness`
+        : isSignupFlow && role === "user"
+        ? `${API}/user/verifyOtpAndCreateAccount`
         : role === "business"
         ? `${API}/business/verifyOtp`
         : `${API}/user/verifyotp`;
       const response = await axios.post(endpoint, {
-        email: email,
+        email: otpemail || email,
         otp: otpValue,
       });
       console.log(role);
       console.log(endpoint, response.data, "with endpoint");
 
       if (response.data) {
-        console.log("OTP Verified:", otpValue);
         setSuccessMessage(
-          isSignupFlow
+          isBusinessRegistration || isSignupFlow
             ? "Account verified successfully!"
             : "OTP verified successfully!"
         );
@@ -111,13 +124,16 @@ const OTP = ({
           setErrorOverall("");
           onClose();
           // setShowResetPasswordModal(true);
-          if (isSignupFlow) {
-            // For signup flow, redirect to login
+          if (isBusinessRegistration) {
+            sessionStorage.removeItem("isBusinessRegistration");
+            sessionStorage.removeItem("verificationEmail");
+          }
+
+          if (isBusinessRegistration || isSignupFlow) {
             if (setShowLoginModal) {
               setShowLoginModal(true);
             }
           } else {
-            // For password reset flow
             if (setShowResetPasswordModal) {
               sessionStorage.setItem("resetPasswordOtp", otpValue);
               setShowResetPasswordModal(true);
@@ -137,15 +153,19 @@ const OTP = ({
 
   const handleResendOTP = async () => {
     try {
-      const endpoint = isSignupFlow
-        ? role === "business"
-          ? `${API}/business/resendBusinessOtp`
-          : `${API}/user/resendregisterotp`
+      
+      const isBusinessRegistration =
+        sessionStorage.getItem("isBusinessRegistration") === "true";
+
+      const endpoint = isBusinessRegistration
+        ? `${API}/business/resendBusinessOtp`
+        : isSignupFlow && role === "user"
+        ? `${API}/user/resendregisterotp`
         : role === "business"
         ? `${API}/business/forgotPassword`
         : `${API}/user/forgotpassword`;
       const response = await axios.post(endpoint, {
-        email: email,
+        email: otpemail || email,
       });
 
       if (response.data) {
@@ -212,7 +232,7 @@ const OTP = ({
           </h1>
           <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             We have sent a verification code to{" "}
-            <span className="font-medium">{email}</span>
+            <span className="font-medium">{otpemail || email}</span>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">

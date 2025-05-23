@@ -19,8 +19,8 @@ const BusinessDetailForm = ({
   setShowLoginModal,
   setShowBusinessDetailForm,
   setShowOTPModal,
-  isSignupFlow,
-  showOTPModal
+  // isSignupFlow,
+  showOTPModal,
 }) => {
   const [errorOverall, setErrorOverall] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -46,6 +46,7 @@ const BusinessDetailForm = ({
   const [photosPreviews, setPhotosPreviews] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isBusinessRegistration, setIsBusinessRegistration] = useState(true);
   // Update the validateForm function with new regex and rules
   const validateForm = () => {
     const newErrors = {};
@@ -346,6 +347,7 @@ const BusinessDetailForm = ({
       if (response.data.message) {
         setSuccessMessage("Registration successful! Please verify your email.");
         sessionStorage.setItem("verificationEmail", formData.email);
+        sessionStorage.setItem("isBusinessRegistration", "true");
         setFormData({
           businessName: "",
           ownerName: "",
@@ -388,9 +390,9 @@ const BusinessDetailForm = ({
         classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
         <form onSubmit={handleSubmit} className="p-2 sm:p-4">
-          <div className="space-y-4 sm:space-y-4">
+          <div className="space-y-2 sm:space-y-2">
             {/* Business Information Section */}
-            <div className="rounded-lg space-y-2 sm:space-y-3 mb-0">
+            <div className="rounded-lg space-y-2 sm:space-y-2 mb-0">
               <h3 className="text-lg text-center font-bold text-gray-700">
                 Register
               </h3>
@@ -407,19 +409,23 @@ const BusinessDetailForm = ({
                 onChange={handleChange}
                 placeholder="Owner Name"
                 error={errors.ownerName}
+                className="mt-2"
               />
-              <FloatingSelect
-                id="category"
-                name="categoryId"
-                value={formData.categoryId}
-                onChange={handleChange}
-                placeholder="Select Category"
-                error={errors.categoryId}
-                options={categories.map((category) => ({
-                  value: category._id,
-                  label: category.displayName,
-                }))}
-              />
+              <div className="mt-2">
+                <FloatingSelect
+                  id="category"
+                  name="categoryId"
+                  value={formData.categoryId}
+                  onChange={handleChange}
+                  placeholder="Select Category"
+                  error={errors.categoryId}
+                  options={categories.map((category) => ({
+                    value: category._id,
+                    label: category.displayName,
+                  }))}
+                />
+              </div>
+              <div className="mb-4 md:mb-2">
               <FloatingTextarea
                 name="description"
                 value={formData.description}
@@ -428,6 +434,7 @@ const BusinessDetailForm = ({
                 error={errors.description}
                 rows={4}
               />
+              </div>
             </div>
 
             {/* Contact Information Section */}
@@ -440,6 +447,7 @@ const BusinessDetailForm = ({
                 placeholder="Phone Number"
                 type="text"
                 error={errors.phone}
+                className="mt-1"
               />
               <FloatingInput
                 name="email"
@@ -448,6 +456,7 @@ const BusinessDetailForm = ({
                 placeholder="Email Address"
                 type="text"
                 error={errors.email}
+                className="mt-2"
               />
             </div>
 
@@ -460,14 +469,16 @@ const BusinessDetailForm = ({
                 onChange={handleChange}
                 placeholder="Address Line 1"
                 error={errors.address1}
+                className="mt-1"
               />
               <FloatingInput
                 name="address2"
                 value={formData.address2}
                 onChange={handleChange}
                 placeholder="Address Line 2 (Optional)"
+                className="mt-1"
               />
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-2">
                 <FloatingInput
                   name="city"
                   value={formData.city}
@@ -520,6 +531,7 @@ const BusinessDetailForm = ({
                   placeholder="Confirm Password"
                   type={showConfirmPassword ? "text" : "password"}
                   error={errors.confirmPassword}
+                  className="mt-1"
                 />
                 {formData.confirmPassword && (
                   <button
@@ -660,11 +672,16 @@ const BusinessDetailForm = ({
       </CustomModal>
       <OTP
         isOpen={showOTPModal}
-        onClose={() => setShowOTPModal(false)}
+        onClose={() => {
+          setShowOTPModal(false);
+          setShowLoginModal(true);
+          sessionStorage.removeItem("isBusinessRegistration");
+        }}
         email={formData.email}
+        setShowResetPasswordModal={null}
         setShowLoginModal={setShowLoginModal}
         role="business"
-        isSignupFlow={true}
+        isSignupFlow={isBusinessRegistration}
       />
     </>
   );

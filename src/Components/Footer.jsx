@@ -10,7 +10,7 @@ import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png"
-import play from "../assets/play.webp";
+import play from "../assets/play.png";
 
 const Footer = () => {
   const socialLinks = [
@@ -36,16 +36,18 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-t from-blue-300 to-white text-teal-800">
+    <footer className="bg-gradient-to-r from-blue-400 via-indigo-650 to-blue-200">
       <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
         <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
-          <div className="w-full flex flex-col items-center lg:items-start md:w-4/12 p-3 ">
+          <div className="w-full flex flex-col items-center justify-center md:w-4/12 p-3 ">
+          <div className="flex gap-3 md:gap-0 lg:gap-10 md:flex-col lg:flex-row">
             <img
               src={Logo}
               alt="Dialkaraikudi"
-              className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+              className="w-40 h-auto mb-4 hover:scale-105 transition-transform duration-300"
             />
+            <div className="flex flex-col justify-center items-center">
             <p>a Product by</p>
             <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
               <img
@@ -53,6 +55,8 @@ const Footer = () => {
               alt="Dialkaraikudi"
               className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
             />
+            </div>
+            </div>
 
             </div>
             <p className="text-base leading-relaxed">
@@ -132,8 +136,7 @@ const Footer = () => {
               </li>
             </ul>
             <div className="mt-4 flex justify-start items-center gap-5">
-            <img src={play} alt="" className="w-25 h-10" />
-            <p>Coming Soon!</p>
+            <img src={play} alt="" className="w-25 h-8 rounded-lg cursor-pointer" />
           </div>
           </div>
           

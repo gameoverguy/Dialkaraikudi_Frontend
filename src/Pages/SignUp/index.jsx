@@ -223,7 +223,7 @@ const SignupModal = ({
       >
         <div className="p-2 sm:p-3">
           <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
-            Register
+            REGISTER
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">

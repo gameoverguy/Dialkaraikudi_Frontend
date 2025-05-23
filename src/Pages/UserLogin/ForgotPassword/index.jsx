@@ -108,14 +108,14 @@ const ForgotPassword = ({
       >
         <div className="p-2 sm:p-4">
           <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
-            Forgot Password
+            FORGOT PASSWORD
           </h1>
           <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             Enter your email address to reset your password.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <FloatingInput
-              type="email"
+              type="text"
               placeholder="Email Address"
               name="email"
               value={email}

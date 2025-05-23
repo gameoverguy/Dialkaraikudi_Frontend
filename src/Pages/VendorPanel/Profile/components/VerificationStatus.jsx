@@ -11,11 +11,11 @@ const VerificationStatus = ({ business }) => {
         <div className="flex items-center">
           <FaCheckCircle
             className={`text-2xl ${
-              business?.verified ? "text-green-500" : "text-gray-400"
+              business?.business?.verified == true ? "text-green-500" : "text-gray-400"
             }`}
           />
           <span className="ml-2">
-            {business?.verified ? "Verified Business" : "Not Verified"}
+            {business?.business?.verified === true ? "Verified Business" : "Not Verified"}
           </span>
         </div>
         {/* <div className="flex items-center">
