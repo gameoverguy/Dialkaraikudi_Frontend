@@ -15,7 +15,7 @@ function Category1({ serviceCategories }) {
     if (!serviceCategories) return [];
 
     const shuffled = [...serviceCategories].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 8);
+    return shuffled.slice(0, 10);
   }, [serviceCategories]);
 
   const handleCategoryClick = (category) => {
@@ -24,10 +24,10 @@ function Category1({ serviceCategories }) {
 
   return (
     <div
-      className="w-full px-2 md:px-0 md:w-11/12 md:mx-auto"
+      className="w-full px-2 md:px-0 md:w-11/12 md:mx-auto bg-[#E9EEF6] lg:px-5 lg:py-5 rounded"
       data-aos="fade-up"
     >
-      <div className="grid gap-3 md:gap-5 grid-cols-1 md:grid-cols-4">
+      <div className="grid gap-3 md:gap-5 grid-cols-1 md:grid-cols-4 lg:grid-cols-5">
         {shuffledCategories?.map((item, index) => (
           <div
             key={item._id}

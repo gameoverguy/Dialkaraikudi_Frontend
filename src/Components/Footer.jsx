@@ -36,8 +36,8 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-r from-blue-400 via-indigo-650 to-blue-200">
-      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
+    <footer className="bg-gradient-to-r from-blue-200 via-indigo-650 to-blue-400">
+      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-4">
         <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
           <div className="w-full flex flex-col items-center justify-center md:w-4/12 p-3 ">
@@ -61,7 +61,7 @@ const Footer = () => {
             </div>
 
             </div>
-            <p className="text-base leading-relaxed">
+            <p className="text-base leading-relaxed font-['Poppins']">
               Dialkaraikudi is a premier digital platform in India that connects
               users with verified local service professionals.
             </p>
@@ -69,7 +69,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="w-full md:w-2/12 p-3">
-            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg font-semibold mb-4 text-gray-800">
               Quick Links
             </h4>
             <ul className="space-y-3 text-sm">
@@ -88,7 +88,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="w-full md:w-2/12 p-3">
-            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg font-semibold mb-4 text-gray-800">
               Contact Us
             </h4>
             <ul className="space-y-3 text-sm">
@@ -113,7 +113,7 @@ const Footer = () => {
 
           {/* Office Locations */}
           <div className="w-full md:w-4/12 p-3">
-            <h4 className="text-lg text-center font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg md:text-left lg:text-center font-semibold mb-4 text-gray-800">
               Our Offices
             </h4>
             <ul className="space-y-5 text-sm">
@@ -146,7 +146,7 @@ const Footer = () => {
       </div>
 
       {/* Divider */}
-      <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
+      <div className="border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-col lg:flex-row justify-between items-center gap-2 lg:gap-4">
         {/* Copyright */}
         <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
           © {new Date().getFullYear()} Sunglasschettinad Retail Private Limited. All
