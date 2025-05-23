@@ -18,6 +18,7 @@ import BusinessDetailForm from "../business/BusinessDetailForm";
 import axios from "axios";
 import { API } from "../../config/config";
 import { AiOutlineHeart } from "react-icons/ai";
+import AiChatbox from "./AiChatbox";
 
 const Header = () => {
   const { showLoginModal, setShowLoginModal, loginRole } = useLoginModal();
@@ -152,7 +153,7 @@ const Header = () => {
             </form>
           </div>
 
-        
+
 
           <div className="flex items-center gap-6">
             {/* <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
@@ -161,7 +162,7 @@ const Header = () => {
               </span>
             </button> */}
 
-          <div className="hidden md:block">
+            {/* <div className="hidden md:block">
               <button className="cursor-pointer text-xs rounded bg-linear-to-r/oklab from-indigo-500 to-teal-400 p-1 text-white">
                <Link to="/#offer" onClick={(e) => {
                  e.preventDefault();
@@ -174,7 +175,12 @@ const Header = () => {
                  Time Offer
                </Link>
               </button>
-          </div>
+          </div> */}
+            <div className="hidden md:block w-20 h-10">
+              <AiChatbox />
+            </div>
+
+
 
             {userData || businessData ? (
               <div className=" md:flex items-center gap-4">
@@ -189,9 +195,8 @@ const Header = () => {
                         .toUpperCase()}
                     </div>
                     <svg
-                      className={`w-4 h-4 text-gray-600 transition-transform ${
-                        showDropdown ? "rotate-180" : ""
-                      }`}
+                      className={`w-4 h-4 text-gray-600 transition-transform ${showDropdown ? "rotate-180" : ""
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -204,7 +209,7 @@ const Header = () => {
                       />
                     </svg>
                   </button>
-                  
+
                   {showDropdown && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
                       {businessData?.user_id ? (

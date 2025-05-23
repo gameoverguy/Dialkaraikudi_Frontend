@@ -75,7 +75,7 @@ const AiChatbox = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="cursor-pointer fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all animate-bounce z-50"
+        className="cursor-pointer  bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition-all animate-bounce z-50"
       >
         <BsRobot className="w-6 h-6" />
       </button>
