@@ -1,4 +1,14 @@
 body {
   font-family: 'Poppins', sans-serif;
+  
+}
+.slick-prev,
+.slick-next {
+  z-index: 20 !important;
+}
+
+.slick-dots {
+  bottom: 20px !important;
+  z-index: 20 !important;
 }
 
