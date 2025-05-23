@@ -48,7 +48,7 @@ const CustomModal = ({
       >
         {/* Header */}
         {header && (
-          <div className="w-full py-4 px-6 border-b border-gray-300 flex justify-between items-center">
+          <div className="w-full py-2 px-3 border-b border-gray-300 flex justify-between items-center">
             <h4 className="text-[20px] font-bold text-title uppercase">
               {header}
             </h4>
@@ -61,13 +61,13 @@ const CustomModal = ({
 
         {/* Title & Close Button */}
         {title && (
-          <div className="w-full p-4 bg-white flex justify-between items-center">
+          <div className="w-full p-1 bg-white flex justify-between items-center">
             <h4 className="text-[20px] font-bold text-title uppercase">
               {title}
             </h4>
             <span
               onClick={onClose}
-              className="cursor-pointer text-red-400 font-bold text-3xl  duration-500 hover:text-red-700"
+              className="cursor-pointer text-red-400 font-bold text-2xl  duration-500 hover:text-red-700"
             >
               <IoClose />
             </span>
@@ -75,7 +75,7 @@ const CustomModal = ({
         )}
 
         {/* Modal Content */}
-        <div className="p-6 w-full h-full overflow-y-auto scrollbar-hide">
+        <div className="p-3 w-full h-full overflow-y-auto scrollbar-hide">
           {children}
         </div>
       </div>

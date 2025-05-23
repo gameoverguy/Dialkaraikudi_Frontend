@@ -388,11 +388,12 @@ const BusinessDetailForm = ({
   return (
     <>
       <CustomModal
+        title={" "}
         isOpen={isOpen}
         onClose={onClose}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <form onSubmit={handleSubmit} className="p-2 sm:p-4">
+        <form onSubmit={handleSubmit} className="p-1 sm:p-1">
           <div className="space-y-2 sm:space-y-2">
             {/* Business Information Section */}
             <div className="rounded-lg space-y-2 sm:space-y-2 mb-0">

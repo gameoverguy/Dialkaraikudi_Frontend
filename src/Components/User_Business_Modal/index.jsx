@@ -19,7 +19,7 @@ const LoginModal = ({ isOpen, onClose }) => {
       title={" "}
       isOpen={isOpen}
       onClose={onClose}
-      classname="w-[95%] sm:w-[85%] md:w-[80%] lg:w-[75%] xl:w-[70%] max-w-6xl mx-auto px-3 sm:px-4 pb-8 sm:pb-12"
+      classname="w-[95%] sm:w-[85%] md:w-[80%] lg:w-[75%] xl:w-[70%] max-w-6xl mx-auto px-2 sm:px-4 pb-4 sm:pb-6"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Business Owner Section */}

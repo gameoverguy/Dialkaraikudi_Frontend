@@ -150,14 +150,14 @@ const ResetPassword = ({
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        // title="Reset Password"
+        title=" "
         classname="w-full max-w-md"
       >
-        <div className="p-2">
-          <h1 className="text-lg font-bold text-gray-800 mb-4">
+        <div className="p-1 sm:p-2">
+          <h1 className="text-lg text-center font-bold text-gray-800 mb-4">
             RESET PASSWORD
           </h1>
-          <p className="text-gray-600 text-xs mb-6">
+          <p className="text-gray-600 text-center text-xs mb-6">
             Please enter your new password.
           </p>
 
