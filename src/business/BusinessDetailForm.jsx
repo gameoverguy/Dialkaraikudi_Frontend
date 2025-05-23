@@ -192,9 +192,10 @@ const BusinessDetailForm = ({
         break;
 
       case "phone":
-        if (!/^[6-9]\d{0,9}$/.test(value)) {
-          // error = 'Phone number must start with 6-9 and have 10 digits';
-          newValue = formData.phone; // Keep old value
+        if (value === '' || /^[6-9]\d{0,9}$/.test(value)) {
+          newValue = value;
+        } else {
+          newValue = formData.phone;
         }
         break;
 
@@ -240,12 +241,12 @@ const BusinessDetailForm = ({
           // error = "Password must be at least 8 characters";
         }
         break;
-        case "confirmPassword":
-          newValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
-          if (formData.password && newValue && formData.password !== newValue) {
-            error = "Passwords do not match";
-          }
-          break;
+      case "confirmPassword":
+        newValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
+        if (formData.password && newValue && formData.password !== newValue) {
+          error = "Passwords do not match";
+        }
+        break;
 
       default:
         break;
@@ -427,14 +428,14 @@ const BusinessDetailForm = ({
                 />
               </div>
               <div className="mb-4 md:mb-2">
-              <FloatingTextarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Business Description"
-                error={errors.description}
-                rows={4}
-              />
+                <FloatingTextarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Business Description"
+                  error={errors.description}
+                  rows={4}
+                />
               </div>
             </div>
 
@@ -561,28 +562,30 @@ const BusinessDetailForm = ({
               <p className="text-xs mb-2 text-gray-500">
                 Upload 1-6 photos of your business
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {photosPreviews.map((photo, index) => (
-                  <div key={index} className="relative aspect-square">
-                    <img
-                      src={photo.preview}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removePhoto(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-colors"
-                    >
-                      <MdCancel className="text-lg" />
-                    </button>
+                  <div key={index} className="relative aspect-square p-1">
+                    <div className="relative w-full h-full">
+                      <img
+                        src={photo.preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(index)}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-colors z-10"
+                      >
+                        <MdCancel className="text-lg" />
+                      </button>
+                    </div>
                   </div>
                 ))}
                 {photosPreviews.length < 6 && (
-                  <div className="w-full">
+                  <div className="aspect-square p-1">
                     <div
                       {...getPhotosRootProps()}
-                      className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${
+                      className={`h-full w-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer ${
                         errors.photos ? "border-red-500" : "border-gray-300"
                       } hover:border-blue-500 transition-colors`}
                     >

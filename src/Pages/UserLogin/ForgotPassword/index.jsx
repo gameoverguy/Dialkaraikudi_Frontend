@@ -135,7 +135,7 @@ const ForgotPassword = ({
               )}
               {errorOverall && (
                 <>
-                  <p className="flex justify-center items-center text-red-500 text-[10px] sm:text-xs">
+                  <p className="flex justify-center items-center text-red-500 text-[10px] sm:text-xs max-w-full break-words">
                     <CiCircleInfo className="mr-2 text-red-600 w-3 h-3 flex-shrink-0" />
                     {errorOverall}
                   </p>
