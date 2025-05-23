@@ -155,32 +155,31 @@ const Header = () => {
 
 
 
-          <div className="flex items-center gap-6">
-            {/* <button className="md:hidden text-xl text-gray-700 hover:text-emerald-500 transition-colors">
-              <span>
-                <LocationTracker onLocationSelect={handleLocationSelect} />
-              </span>
-            </button> */}
+          <div className="flex items-center gap-10">
+            {/* <div className="hidden md:flex items-center gap-8">
+              <Link
+                to="/aboutus"
+                className="relative group text-gray-700 hover:text-blue-600 transition-colors duration-200 flex items-center"
+              >
+                <span className="relative">
+                  About Us
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </span>
+              </Link>
+              <Link
+                to="/contactus"
+                className="relative group text-gray-700 hover:text-blue-600 transition-colors duration-200 flex items-center"
+              >
+                <span className="relative">
+                  Contact Us
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                </span>
+              </Link>
+            </div> */}
 
-            {/* <div className="hidden md:block">
-              <button className="cursor-pointer text-xs rounded bg-linear-to-r/oklab from-indigo-500 to-teal-400 p-1 text-white">
-               <Link to="/#offer" onClick={(e) => {
-                 e.preventDefault();
-                 const element = document.getElementById('offer');
-                 if (element) {
-                   element.scrollIntoView({ behavior: 'smooth' });
-                 }
-               }}>
-                Limited <br/>
-                 Time Offer
-               </Link>
-              </button>
-          </div> */}
             <div className="hidden md:block w-20 h-10">
               <AiChatbox />
             </div>
-
-
 
             {userData || businessData ? (
               <div className=" md:flex items-center gap-4">
@@ -309,6 +308,10 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full right-0 left-0 bg-white shadow-md border-b border-gray-200 z-50">
             <div className="px-4 py-3">
+              <div className="hidden md:block w-20 h-10">
+                <AiChatbox />
+              </div>
+
               {businessData?.user_id && (
                 <Link
                   to={`/vendorpanel/${businessData.user_id}`}

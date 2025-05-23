@@ -47,6 +47,7 @@ const BusinessDetailForm = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isBusinessRegistration, setIsBusinessRegistration] = useState(true);
+  const [showTerms, setShowTerms] = useState(false);
   // Update the validateForm function with new regex and rules
   const validateForm = () => {
     const newErrors = {};
@@ -192,7 +193,7 @@ const BusinessDetailForm = ({
         break;
 
       case "phone":
-        if (value === '' || /^[6-9]\d{0,9}$/.test(value)) {
+        if (value === "" || /^[6-9]\d{0,9}$/.test(value)) {
           newValue = value;
         } else {
           newValue = formData.phone;
@@ -618,7 +619,12 @@ const BusinessDetailForm = ({
                 />
                 <label htmlFor="agreeToTerms" className="text-xs text-gray-600">
                   I agree to the{" "}
-                  <a href="/terms" className="blue-link">
+                  <a
+                    href="/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="blue-link"
+                  >
                     Terms and Conditions
                   </a>
                 </label>
@@ -630,6 +636,7 @@ const BusinessDetailForm = ({
                   </p>
                 )}
               </div>
+
               <div className="h-2 mb-2">
                 {successMessage && (
                   <>

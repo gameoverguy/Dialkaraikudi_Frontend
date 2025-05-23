@@ -14,7 +14,7 @@ const SignupModal = ({
   setShowLoginModal,
   setOtpEmail,
   setShowOTPModal,
-  showOTPModal
+  showOTPModal,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -337,7 +337,12 @@ const SignupModal = ({
                 className="text-[11px] sm:text-xs text-gray-600"
               >
                 I agree to the{" "}
-                <a href="/terms" className="blue-link">
+                <a
+                  href="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="blue-link"
+                >
                   Terms and Conditions
                 </a>
               </label>

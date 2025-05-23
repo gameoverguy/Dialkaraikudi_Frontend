@@ -9,8 +9,9 @@ import {
 import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
-import digitaly from "../assets/digitaly.png"
+import digitaly from "../assets/digitaly.png";
 import play from "../assets/play.webp";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const socialLinks = [
@@ -21,11 +22,11 @@ const Footer = () => {
     { icon: CiLinkedin, color: "#0077b5" },
     // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
-
+  const navigate = useNavigate();
   const footText1 = [
-    { title: "About us", path: "#" },
-    { title: "Contact us", path: "#" },
-    { title: "Terms & Conditions", path: "#" },
+    { title: "About us", path: "/aboutus" },
+    { title: "Contact us", path: "/contactus" },
+    { title: "Terms & Conditions", path: "/terms" },
     { title: "Advertise on Dialkaraikudi", path: "#" },
   ];
 
@@ -49,11 +50,10 @@ const Footer = () => {
             <p>a Product by</p>
             <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
               <img
-              src={digitaly}
-              alt="Dialkaraikudi"
-              className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
-            />
-
+                src={digitaly}
+                alt="Dialkaraikudi"
+                className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <p className="text-base leading-relaxed">
               Dialkaraikudi is a premier digital platform in India that connects
@@ -69,12 +69,12 @@ const Footer = () => {
             <ul className="space-y-3 text-sm">
               {footText1.map((item, index) => (
                 <li key={index}>
-                  <a
-                    href={item.path}
+                  <Link
+                    to={item.path}
                     className="hover:text-blue-600 hover:pl-1 transition-all duration-300 block"
                   >
                     {item.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -132,11 +132,10 @@ const Footer = () => {
               </li>
             </ul>
             <div className="mt-4 flex justify-start items-center gap-5">
-            <img src={play} alt="" className="w-25 h-10" />
-            <p>Coming Soon!</p>
+              <img src={play} alt="" className="w-25 h-10" />
+              <p>Coming Soon!</p>
+            </div>
           </div>
-          </div>
-          
         </div>
       </div>
 
@@ -144,8 +143,8 @@ const Footer = () => {
       <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
         {/* Copyright */}
         <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
-          © {new Date().getFullYear()} Sunglasschettinad Retail Private Limited. All
-          Rights Reserved.
+          © {new Date().getFullYear()} Sunglasschettinad Retail Private Limited.
+          All Rights Reserved.
         </p>
 
         {/* Links */}
