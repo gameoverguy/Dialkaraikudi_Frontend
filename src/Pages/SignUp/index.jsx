@@ -111,7 +111,7 @@ const SignupModal = ({
 
       case "password":
       case "confirmPassword":
-        const passwordValue = value.replace(/\s/g, "");
+        const passwordValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
         setFormData((prev) => ({ ...prev, [name]: passwordValue }));
         if (value !== passwordValue) {
         } else if (passwordValue.length > 20) {
@@ -239,7 +239,7 @@ const SignupModal = ({
               />
 
               <FloatingInput
-                type="email"
+                type="text"
                 placeholder="Email Address"
                 name="email"
                 value={formData.email}
