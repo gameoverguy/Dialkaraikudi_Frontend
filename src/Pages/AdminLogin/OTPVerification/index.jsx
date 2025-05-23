@@ -184,7 +184,7 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
     <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md">
       <div className=" text-center p-2">
         <h2 className="text-lg font-bold mb-4">
-          {step === "otp" ? "Enter Verification Code" : "Reset Password"}
+          {step === "otp" ? "Enter Verification Code" : "RESET PASSWORD"}
         </h2>
         <p className="text-gray-600 text-xs mb-4">
           We have sent a verification code to{" "}

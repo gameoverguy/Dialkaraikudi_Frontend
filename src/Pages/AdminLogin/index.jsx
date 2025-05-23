@@ -126,7 +126,7 @@ const AdminLogin = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-3 bg-white p-8 rounded-2xl shadow-xl">
           <div className="text-center">
-            <h2 className="text-lg font-bold text-gray-900">Admin Login</h2>
+            <h2 className="text-lg font-bold text-gray-900">ADMIN LOGIN</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="mt-4">

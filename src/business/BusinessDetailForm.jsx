@@ -396,7 +396,7 @@ const BusinessDetailForm = ({
             {/* Business Information Section */}
             <div className="rounded-lg space-y-2 sm:space-y-2 mb-0">
               <h3 className="text-lg text-center font-bold text-gray-700">
-                Register
+                REGISTER
               </h3>
               <FloatingInput
                 name="businessName"
