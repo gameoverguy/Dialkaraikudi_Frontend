@@ -83,7 +83,7 @@ const AiChatbox = () => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 w-70 md:w-96 h-[50vh] md:h-[600px] bg-white rounded-lg shadow-xl flex flex-col z-50">
+    <div className="fixed bottom-4 right-4 w-70 md:w-96 h-[50vh] bg-white rounded-lg shadow-xl flex flex-col z-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 rounded-t-lg flex justify-between items-center">
         <h2 className="text-white text-lg font-semibold">DK AI</h2>
