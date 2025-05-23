@@ -34,21 +34,6 @@ ChartJS.register(
 const VendorDashboard = ({ businessData }) => {
   console.log(businessData);
 
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${API}/reviews/business/${businessData.user_id}`
-  //       );
-
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching review data:", error);
-  //     }
-  //   };
-  //   fetchReviews();
-  // }, [businessData.user_id]);
-
   // Mock data for views
   const viewsData = {
     weekly: {
