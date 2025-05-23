@@ -11,7 +11,7 @@ import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png";
 import play from "../assets/play.webp";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const socialLinks = [
@@ -22,7 +22,6 @@ const Footer = () => {
     { icon: CiLinkedin, color: "#0077b5" },
     // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
-  const navigate = useNavigate();
   const footText1 = [
     { title: "About us", path: "/aboutus" },
     { title: "Contact us", path: "/contactus" },
@@ -30,11 +29,11 @@ const Footer = () => {
     { title: "Advertise on Dialkaraikudi", path: "#" },
   ];
 
-  const footText3 = [
-    { title: "Digitaly.Live", path: "#" },
-    { title: "Dial Puthukotai", path: "#" },
-    { title: "Gteceducation", path: "#" },
-  ];
+  // const footText3 = [
+  //   { title: "Digitaly.Live", path: "#" },
+  //   { title: "Dial Puthukotai", path: "#" },
+  //   { title: "Gteceducation", path: "#" },
+  // ];
 
   return (
     <footer className="bg-gradient-to-r from-blue-400 via-indigo-650 to-blue-200">
@@ -42,22 +41,24 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
           <div className="w-full flex flex-col items-center justify-center md:w-4/12 p-3 ">
-          <div className="flex gap-3 md:gap-0 lg:gap-10 md:flex-col lg:flex-row">
-            <div className="w-35 flex justify-center items-center">
-            <img
-              src={Logo}
-              alt="Dialkaraikudi"
-              className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300"
-            />
-            </div>
-            <div className="flex flex-col justify-center items-center">
-            <p>a Product by</p>
-            <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
-              <img
-                src={digitaly}
-                alt="Dialkaraikudi"
-                className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
-              />
+            <div className="flex gap-3 md:gap-0 lg:gap-10 md:flex-col lg:flex-row">
+              <div className="w-35 flex justify-center items-center">
+                <img
+                  src={Logo}
+                  alt="Dialkaraikudi"
+                  className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center">
+                <p>a Product by</p>
+                <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
+                  <img
+                    src={digitaly}
+                    alt="Dialkaraikudi"
+                    className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
             </div>
             <p className="text-base leading-relaxed">
               Dialkaraikudi is a premier digital platform in India that connects
