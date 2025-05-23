@@ -42,11 +42,13 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="w-full flex flex-col items-center justify-center md:w-4/12 p-3 ">
           <div className="flex gap-3 md:gap-0 lg:gap-10 md:flex-col lg:flex-row">
+            <div className="w-35 flex justify-center items-center">
             <img
               src={Logo}
               alt="Dialkaraikudi"
-              className="w-40 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+              className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300"
             />
+            </div>
             <div className="flex flex-col justify-center items-center">
             <p>a Product by</p>
             <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
