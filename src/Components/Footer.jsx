@@ -10,7 +10,7 @@ import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png";
-import play from "../assets/play.webp";
+import play from "../assets/play.png";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
