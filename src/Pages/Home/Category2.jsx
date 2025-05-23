@@ -17,7 +17,7 @@ function Category2({productCategories}) {
     if (!productCategories) return [];
 
     const shuffled = [...productCategories].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 6);
+    return shuffled.slice(0, 8);
   }, [productCategories]);
 
   const handleCategoryClick = (category) => {
@@ -26,12 +26,12 @@ function Category2({productCategories}) {
 
   return (
     <div
-        className="w-full px-2 md:px-0 md:w-11/12 mx-auto"
+        className="w-full px-2 md:px-0 md:w-11/12 mx-auto bg-[#E9EEF6] lg:px-5 lg:py-5 rounded"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
       >
-        <div className="grid gap-3 md:gap-8 grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-3 md:gap-8 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           {shuffledCategories?.map((item, index) => (
             <div
             key={item._id}
