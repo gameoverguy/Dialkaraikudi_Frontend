@@ -91,6 +91,8 @@ body {
   }
 }
 
+
+
 .animate-slow-spin {
   animation: slow-spin 20s linear infinite;
 }

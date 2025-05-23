@@ -75,7 +75,7 @@ const AiChatbox = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="cursor-pointer fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all animate-bounce z-50"
+        className="cursor-pointer  bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition-all animate-bounce z-50"
       >
         <BsRobot className="w-6 h-6" />
       </button>
@@ -83,7 +83,7 @@ const AiChatbox = () => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 w-70 md:w-96 h-[50vh] md:h-[600px] bg-white rounded-lg shadow-xl flex flex-col z-50">
+    <div className="fixed bottom-4 right-4 w-70 md:w-96 h-[50vh] bg-white rounded-lg shadow-xl flex flex-col z-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 rounded-t-lg flex justify-between items-center">
         <h2 className="text-white text-lg font-semibold">DK AI</h2>

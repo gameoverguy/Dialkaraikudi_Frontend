@@ -28,6 +28,8 @@ import PrivacyPolicy from "./Pages/Policy/PrivacyPolicy.jsx";
 import CancellationPolicy from "./Pages/Policy/CancelPolicy.jsx";
 import ShippingPolicy from "./Pages/Policy/ShippingPolicy.jsx";
 import AiChatbox from "./Components/AiChatbox.jsx";
+import AboutUs from "./Pages/AboutUs/index.jsx";
+import ContactUs from "./Pages/ContactUs/index.jsx";
 
 function App() {
   useEffect(() => {
@@ -53,10 +55,15 @@ function App() {
               <Route path="/detailform" element={<BusinessDetailForm />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/profile" element={<EditProfile />} />
-            <Route path="/terms" element={<TermsAndConditions />} />  
-            <Route path="/privacypolicy" element={<PrivacyPolicy />} />  
-            <Route path="/cancellationpolicy" element={<CancellationPolicy />} />  
-            <Route path="/shippingpolicy" element={<ShippingPolicy />} />   
+              <Route path="/terms" element={<TermsAndConditions />} />
+              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+              <Route
+                path="/cancellationpolicy"
+                element={<CancellationPolicy />}
+              />
+              <Route path="/shippingpolicy" element={<ShippingPolicy />} />
+              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/contactus" element={<ContactUs />} />
             </Route>
             <Route path="/adminlogin" element={<AdminLogin />} />
             <Route

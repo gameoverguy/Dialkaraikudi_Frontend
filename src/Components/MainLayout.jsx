@@ -76,7 +76,9 @@ const handleGoTop = () => {
       <Header />
       <div className="min-h-127 mx-auto">
         <Outlet />
+        <div className="md:hidden fixed bottom-4 right-4">
         <AiChatbox />
+        </div>
       </div>
       <Footer />
     </div>
