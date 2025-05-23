@@ -1,37 +1,37 @@
-import React, { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
+import React, { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useScreenWidth } from "./hooks/useScreenWidth"; // update path accordingly
 function Category2({productCategories}) {
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    AOS.init({ once: false });
-    AOS.refresh();
-  }, [productCategories]);
-
-
-  const shuffledCategories = useMemo(() => {
-    if (!productCategories) return [];
-
-    const shuffled = [...productCategories].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 8);
-  }, [productCategories]);
-
-  const handleCategoryClick = (category) => {
-    navigate(`/businesslist/${category}`);
-  };
-
+    const screenWidth = useScreenWidth();
+  
+    useEffect(() => {
+      AOS.init({ once: false });
+      AOS.refresh();
+    }, [productCategories]);
+  
+    const shuffledCategories = useMemo(() => {
+      if (!productCategories) return [];
+  
+      const shuffled = [...productCategories].sort(() => Math.random() - 0.5);
+      const sliceCount = screenWidth >= 1024 ? 8 : 6; // 1024px is Tailwind's lg breakpoint
+      return shuffled.slice(0, sliceCount);
+    }, [productCategories, screenWidth]);
+  
+    const handleCategoryClick = (category) => {
+      navigate(`/businesslist/${category}`);
+    };
   return (
     <div
-        className="w-full px-2 md:px-0 md:w-11/12 mx-auto bg-[#E9EEF6] lg:px-5 lg:py-5 rounded"
+        className="w-full md:w-11/12 mx-auto bg-[#E9EEF6] px-5 py-5 md:px-5 md:py-5 lg:px-5 lg:py-5 rounded"
         data-aos="fade-up"
         data-aos-delay="100"
         data-aos-duration="800"
       >
-        <div className="grid gap-3 md:gap-8 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {shuffledCategories?.map((item, index) => (
             <div
             key={item._id}

@@ -65,7 +65,7 @@ function VideoAdertisment1({ videos }) {
       {/* Video Background */}
       <video
         id="video1"
-        className="w-full h-full object-cover"
+        className="w-full h-[230px] md:h-full object-cover"
         src={videos[currentVideoIndex]?.contentUrl}
         autoPlay
         playsInline

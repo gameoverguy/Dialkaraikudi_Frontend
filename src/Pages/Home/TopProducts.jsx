@@ -127,7 +127,7 @@ function TopProducts() {
   return (
     <div className="w-11/12 flex md:border md:h-[24vh] lg:h-[32vh] md:border-gray-200 justify-between">
       {/* Left Section - Video and Promo */}
-      <div className="hidden md:block text-white w-full md:w-4/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
+      <div className="hidden md:block text-white w-full md:w-6/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
         <video
           className="w-full h-full object-cover"
           src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
@@ -138,7 +138,7 @@ function TopProducts() {
       </div>
 
       {/* Right Section - Products Slider */}
-      <div className="w-full md:w-8/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
+      <div className="w-full md:w-6/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
         <div className="w-full px-2 md:px-8 md:h-[24vh] lg:h-[32vh] flex justify-center items-center">
           <Swiper
             spaceBetween={15}
@@ -153,7 +153,7 @@ function TopProducts() {
               0: { slidesPerView: 2 },
               480: { slidesPerView: 1.5 },
               640: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
+              768: { slidesPerView: 2 },
               1024: { slidesPerView: 5 },
             }}
             modules={[Autoplay, FreeMode]}
@@ -161,14 +161,14 @@ function TopProducts() {
           >
             {topProduct.map((deal) => (
               <SwiperSlide key={deal.id}>
-                <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-fit bg-white rounded-md justify-between items-center cursor-pointer">
+                <div className="border border-gray-200 py-3 shadow-md flex flex-col text-start md:h-[22vh] lg:h-[28vh] bg-white rounded-md justify-between items-center cursor-pointer">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                     {deal.label}
                   </div> */}
                   <img
                     src={deal.contentUrl}
                     alt={deal.title}
-                    className="h-32 object-contain mb-10 w-full"
+                    className="h-32 object-contain lg:mb-10 w-full"
                     onClick={() => handleCategoryClick(deal.businessId?._id)}
                   />
                   <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">
