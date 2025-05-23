@@ -235,16 +235,17 @@ const BusinessDetailForm = ({
         break;
 
       case "password":
-        if (value && value.length < 8) {
-          // error = 'Password must be at least 8 characters';
+        newValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
+        if (newValue.length < 8) {
+          // error = "Password must be at least 8 characters";
         }
         break;
-
-      case "confirmPassword":
-        if (formData.password && value && formData.password !== value) {
-          error = "Passwords do not match";
-        }
-        break;
+        case "confirmPassword":
+          newValue = value.replace(/[^a-zA-Z0-9@$!%*?&]/g, "");
+          if (formData.password && newValue && formData.password !== newValue) {
+            error = "Passwords do not match";
+          }
+          break;
 
       default:
         break;
@@ -507,6 +508,7 @@ const BusinessDetailForm = ({
                   placeholder="Password"
                   type={showPassword ? "text" : "password"}
                   error={errors.password}
+                  maxLength={20}
                 />
                 {formData.password && (
                   <button
@@ -532,6 +534,7 @@ const BusinessDetailForm = ({
                   type={showConfirmPassword ? "text" : "password"}
                   error={errors.confirmPassword}
                   className="mt-1"
+                  maxLength={20}
                 />
                 {formData.confirmPassword && (
                   <button

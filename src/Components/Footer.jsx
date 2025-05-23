@@ -9,6 +9,8 @@ import {
 import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
+import digitaly from "../assets/digitaly.png"
+import play from "../assets/play.webp";
 
 const Footer = () => {
   const socialLinks = [
@@ -38,12 +40,21 @@ const Footer = () => {
       <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
         <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
-          <div className="w-full flex flex-col items-center md:items-start md:w-4/12 p-3 ">
+          <div className="w-full flex flex-col items-center lg:items-start md:w-4/12 p-3 ">
             <img
               src={Logo}
               alt="Dialkaraikudi"
               className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
             />
+            <p>a Product by</p>
+            <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
+              <img
+              src={digitaly}
+              alt="Dialkaraikudi"
+              className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+            />
+
+            </div>
             <p className="text-base leading-relaxed">
               Dialkaraikudi is a premier digital platform in India that connects
               users with verified local service professionals.
@@ -120,7 +131,12 @@ const Footer = () => {
                 </div>
               </li>
             </ul>
+            <div className="mt-4 flex justify-start items-center gap-5">
+            <img src={play} alt="" className="w-25 h-10" />
+            <p>Coming Soon!</p>
           </div>
+          </div>
+          
         </div>
       </div>
 
@@ -128,7 +144,7 @@ const Footer = () => {
       <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
         {/* Copyright */}
         <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
-          © {new Date().getFullYear()} Digitaly AI Technolgy Solutions. All
+          © {new Date().getFullYear()} Sunglasschettinad Retail Private Limited. All
           Rights Reserved.
         </p>
 
