@@ -13,22 +13,21 @@ const VendorReview = ({ businessData }) => {
   const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/business/${businessData.user_id}`
+        );
+        setReviews(response.data.data.reviews || []);
+        calculateAverageRating(response.data.data.reviews);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        setLoading(false);
+      }
+    };
     fetchReviews();
-  }, [id]);
-
-  const fetchReviews = async () => {
-    try {
-      const response = await axios.get(
-        `${API}/business/${businessData.user_id}`
-      );
-      setReviews(response.data.data.reviews || []);
-      calculateAverageRating(response.data.data.reviews);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-      setLoading(false);
-    }
-  };
+  }, [businessData.user_id]);
 
   const calculateAverageRating = (reviews) => {
     if (!reviews || reviews.length === 0) {

@@ -32,9 +32,22 @@ ChartJS.register(
 );
 
 const VendorDashboard = ({ businessData }) => {
-  // ... existing code ...
-
   console.log(businessData);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/reviews/business/${businessData.user_id}`
+        );
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching review data:", error);
+      }
+    };
+    fetchReviews();
+  }, [businessData.user_id]);
 
   // Mock data for views
   const viewsData = {
@@ -121,22 +134,25 @@ const VendorDashboard = ({ businessData }) => {
     <div className="flex gap-2 mb-4">
       <button
         onClick={() => setPeriod("weekly")}
-        className={`px-3 py-1 rounded ${period === "weekly" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
+        className={`px-3 py-1 rounded ${
+          period === "weekly" ? "bg-blue-600 text-white" : "bg-gray-200"
+        }`}
       >
         Weekly
       </button>
       <button
         onClick={() => setPeriod("monthly")}
-        className={`px-3 py-1 rounded ${period === "monthly" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
+        className={`px-3 py-1 rounded ${
+          period === "monthly" ? "bg-blue-600 text-white" : "bg-gray-200"
+        }`}
       >
         Monthly
       </button>
       <button
         onClick={() => setPeriod("yearly")}
-        className={`px-3 py-1 rounded ${period === "yearly" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
+        className={`px-3 py-1 rounded ${
+          period === "yearly" ? "bg-blue-600 text-white" : "bg-gray-200"
+        }`}
       >
         Yearly
       </button>
@@ -169,8 +185,9 @@ const VendorDashboard = ({ businessData }) => {
                 },
                 title: {
                   display: true,
-                  text: `${viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)
-                    } Views`,
+                  text: `${
+                    viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)
+                  } Views`,
                 },
               },
             }}
@@ -191,9 +208,10 @@ const VendorDashboard = ({ businessData }) => {
                 },
                 title: {
                   display: true,
-                  text: `${reviewsPeriod.charAt(0).toUpperCase() +
+                  text: `${
+                    reviewsPeriod.charAt(0).toUpperCase() +
                     reviewsPeriod.slice(1)
-                    } Reviews`,
+                  } Reviews`,
                 },
               },
             }}
