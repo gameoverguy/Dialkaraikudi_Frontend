@@ -171,7 +171,7 @@ const handleCategoryClick = (category) => {
 
 
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center w-full md:w-11/12 mx-auto gap-5 h-fit">
+    <div className="flex flex-col md:flex-row justify-center items-center w-full md:w-11/12 mx-auto h-fit">
       {/* Product Offers */}
       <div className="flex flex-col justify-center items-center w-11/12 md:w-6/12 lg:w-6/12">
         <p className="text-2xl lg:text-3xl font-semibold text-green-800 mb-3 md:mb-0">Product Offers</p>
