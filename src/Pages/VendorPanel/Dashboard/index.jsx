@@ -59,19 +59,35 @@ const VendorDashboard = ({ businessData }) => {
           setBusiness(data.business);
 
           // Transform views data to show daily stats
-          const transformViewsData = (viewsSummary) => {
+          const transformViewsData = (viewsSummary, period) => {
             const breakdown = viewsSummary?.breakdown || [];
-            const today = new Date();
-            
             let labels = [];
             let viewData = [];
             
-            // Process breakdown data
             if (breakdown.length > 0) {
               breakdown.forEach((entry) => {
                 const date = new Date(entry.date);
-                labels.push(date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' }));
-                viewData.push(entry.views || 0);
+                let label = '';
+                
+                switch(period) {
+                  case 'weekly':
+                    // Format as "Mon, 24" for weekly view
+                    label = date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
+                    break;
+                  case 'monthly':
+                    // Format as "May 24" for monthly view
+                    label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    break;
+                  case 'yearly':
+                    // Format as "May 2025" for yearly view
+                    label = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    break;
+                  default:
+                    label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
+                
+                labels.push(label);
+                viewData.push(entry.totalViews || 0);
               });
             }
             
