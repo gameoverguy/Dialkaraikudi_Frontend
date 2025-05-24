@@ -30,7 +30,7 @@ const Carousel = () => {
             ad.slotId?._id === "68272bafa52bbd6718f881f7" &&
             ad.isActive
         );
-        console.log(response.data);
+        
 
         let finalSlides = [];
 

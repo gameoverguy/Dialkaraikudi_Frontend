@@ -11,6 +11,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     businessName: business?.business?.businessName || '',
     description: business?.business?.description || '',
     phone: business?.business?.contactDetails?.phone || '',
+    gst: business?.business?.gst || '',
     whatsapp: business?.business?.contactDetails?.whatsapp || '',
     email: business?.business?.email || '',
     website: business?.business?.contactDetails?.website || ''
@@ -22,6 +23,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     const phoneRegex = /^[6-9]\d{9}$/;
     const nameRegex = /^[a-zA-Z\s]+$/;
     const websiteRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
     switch (name) {
       case 'businessName':
@@ -45,6 +47,9 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         return '';
       case 'website':
         if (value && !websiteRegex.test(value)) return 'Enter valid website URL';
+        return '';
+      case 'gst':
+        if (value && !gstRegex.test(value)) return 'Enter valid GST number';
         return '';
       default:
         return '';
@@ -99,7 +104,8 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           phone: formData.phone,
           whatsapp: formData.whatsapp,
           website: formData.website
-        }
+        },
+        gst: formData.gst
       };
 
       try {
@@ -129,6 +135,10 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         <div className="flex items-center">
           <span className="font-medium">Category:</span>
           <span className="ml-2">{business?.business?.category?.displayName}</span>
+        </div>
+        <div className="flex items-center">
+          <span className="font-medium">Gst No:</span>
+          <span className="ml-2">{business?.business.gst}</span>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center">
@@ -189,12 +199,12 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
             />
 
             <FloatingInput
-              id="whatsapp"
-              name="whatsapp"
-              value={formData.whatsapp}
+              id="gst"
+              name="gst"
+              value={formData.gst}
               onChange={handleChange}
               placeholder="GST Number (Optional)"
-              error={errors.whatsapp}
+              error={errors.gst}
             />
 
             <FloatingInput
