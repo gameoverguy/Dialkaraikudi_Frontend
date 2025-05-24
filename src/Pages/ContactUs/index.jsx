@@ -41,19 +41,19 @@ const ContactUs = () => {
     {
       icon: <FaPhone className="w-6 h-6" />,
       title: "Phone",
-      content: "+91 123-456-7890",
-      link: "tel:+911234567890",
+      content: "+919442338670",
+      link: "tel:+919442338670",
     },
     {
       icon: <FaEnvelope className="w-6 h-6" />,
       title: "Email",
-      content: "info@dialkaraikudi.com",
-      link: "mailto:info@dialkaraikudi.com",
+      content: "admin@dialkaraikudi.com",
+      link: "mailto:admin@dialkaraikudi.com",
     },
     {
       icon: <FaMapMarkerAlt className="w-6 h-6" />,
       title: "Location",
-      content: "Karaikudi, Tamil Nadu",
+      content: "No.8, Dial Karaikudi, Muthoorani East, Muthupattinam, Karaikudi – 630001",
       link: "https://maps.google.com",
     },
   ];
@@ -68,35 +68,22 @@ const ContactUs = () => {
     let error = "";
     switch (name) {
       case "name":
-        if (!value) {
-          error = "Name is required";
-        } else if (value.length < 3) {
-          error = "Name must be at least 3 characters";
-        } else if (value.length > 25) {
-          error = "Name must not exceed 25 characters";
-        }
+        if (!value) error = "Name is required";
+        else if (value.length < 3) error = "Name must be at least 3 characters";
+        else if (value.length > 25) error = "Name must not exceed 25 characters";
         break;
       case "email":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!value) {
-          error = "Email is required";
-        } else if (value.length < 10) {
-          error = "Email must be at least 10 characters";
-        } else if (value.length > 50) {
-          error = "Email must not exceed 50 characters";
-        } else if (!emailRegex.test(value)) {
-          error = "Please enter a valid email address";
-        }
+        if (!value) error = "Email is required";
+        else if (value.length < 10) error = "Email must be at least 10 characters";
+        else if (value.length > 50) error = "Email must not exceed 50 characters";
+        else if (!emailRegex.test(value)) error = "Please enter a valid email address";
         break;
       case "subject":
-        if (!value) {
-          error = "Subject is required";
-        }
+        if (!value) error = "Subject is required";
         break;
       case "message":
-        if (!value) {
-          error = "Message is required";
-        }
+        if (!value) error = "Message is required";
         break;
       default:
         break;
@@ -106,22 +93,13 @@ const ContactUs = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    const error = validateField(name, value);
-    setErrors((prev) => ({
-      ...prev,
-      [name]: error,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields
     const newErrors = {};
     let hasErrors = false;
 
@@ -141,8 +119,6 @@ const ContactUs = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(`${API}/contact`, formData);
-      console.log(response.data);
-      
       if (response.data) {
         setSubmitStatus({ type: "success", message: "Message sent successfully!" });
         setFormData({ name: "", email: "", subject: "", message: "" });
@@ -151,7 +127,7 @@ const ContactUs = () => {
     } catch (error) {
       setSubmitStatus({
         type: "error",
-        message: error.response?.data?.message || "Failed to send message. Please try again."
+        message: error.response?.data?.message || "Failed to send message. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -172,8 +148,8 @@ const ContactUs = () => {
             Contact <span className="text-purple-600">Us</span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have questions or need assistance? We're here to help! Reach out to
-            us through any of the following channels.
+            We’d love to hear from you! Whether you have questions, feedback, or need support,
+            our team is ready to assist you. Here’s how you can get in touch with us:
           </p>
         </motion.div>
 
@@ -228,9 +204,7 @@ const ContactUs = () => {
                 type="submit"
                 disabled={isSubmitting}
                 className={`w-full bg-purple-600 text-white py-3 rounded-lg font-semibold ${
-                  isSubmitting
-                    ? "opacity-70 cursor-not-allowed"
-                    : "hover:bg-purple-700"
+                  isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-700"
                 }`}
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
@@ -243,9 +217,7 @@ const ContactUs = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`text-center text-sm ${
-                    submitStatus.type === "success"
-                      ? "text-green-600"
-                      : "text-red-600"
+                    submitStatus.type === "success" ? "text-green-600" : "text-red-600"
                   }`}
                 >
                   {submitStatus.message}
@@ -254,14 +226,13 @@ const ContactUs = () => {
             </form>
           </motion.div>
 
-          {/* Contact Information */}
+          {/* Contact Info Section */}
           <motion.div
             className="space-y-6"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {/* Contact Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
               {contactInfo.map((info, index) => (
                 <motion.a
@@ -287,11 +258,18 @@ const ContactUs = () => {
               ))}
             </div>
 
-            {/* Map Section */}
             <div className="bg-white p-6 rounded-xl shadow-md">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Find Us
+                Business Inquiries
               </h3>
+              <p className="text-gray-700">
+                For partnership opportunities or other business-related queries, please email:
+              </p>
+              <p className="text-purple-600 mt-2 font-medium">business@dialkaraikudi.com</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-md">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Find Us</h3>
               <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62863.95814818316!2d78.74391571889245!3d10.927358651546392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baab7bef0eaa1ad%3A0xeaf72ea253407547!2sKaraikudi%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1689612345678!5m2!1sen!2sin"
@@ -307,11 +285,8 @@ const ContactUs = () => {
               </div>
             </div>
 
-            {/* Social Links */}
             <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Follow Us
-              </h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Follow Us</h3>
               <div className="flex justify-center space-x-6">
                 {socialLinks.map((social, index) => (
                   <motion.a
