@@ -9,10 +9,12 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../../config/config";
 import BusinessHours from "./Time/Index";
+import LottieLoader from "../../Components/Loader";
 
 const BusinessDetails = () => {
   const [formData, setFormData] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const location = useLocation();
   const selectedBusiness = location.state;
@@ -31,6 +33,7 @@ const BusinessDetails = () => {
       }
 
       try {
+        setLoading(true);
         const response = await axios.get(`${API}/business/${id}`);
         setFormData(response.data.data);
         console.log(response.data.data);
@@ -40,7 +43,8 @@ const BusinessDetails = () => {
         });
       } catch (error) {
         console.error("Error fetching business details:", error);
-
+      }finally {
+        setLoading(false);
       }
     };
 
@@ -99,6 +103,17 @@ const BusinessDetails = () => {
       }
     }
   };
+
+
+if(loading){
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <LottieLoader/>
+    </div>
+  );
+}
+
+
   return (
     <React.Fragment>
       <motion.div
