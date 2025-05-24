@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { MdOutlineStar } from "react-icons/md";
+import { MdAccessTimeFilled, MdOutlineStar } from "react-icons/md";
 import { SlLocationPin } from "react-icons/sl";
-import { FaPhone } from "react-icons/fa6";
+import { FaPhone, FaTimeline, FaWhatsapp } from "react-icons/fa6";
 import StarRating from "../ReviewStar";
 import { useLoginModal } from "../../../context/LoginContext";
 import CustomModal from "../../../Components/modal";
@@ -10,6 +10,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import axios from "axios";
 import { API } from "../../../../config/config";
+import { toast, ToastContainer } from "react-toastify";
 
 const BusinessInfo = ({ formData, businessId }) => {
   const [showContact, setShowContact] = useState(false);
@@ -90,9 +91,24 @@ const BusinessInfo = ({ formData, businessId }) => {
       );
     }
   };
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const handleWhatsAppClick = (whatsappNumber) => {
+    if (user) {
+      // Format the WhatsApp number and create the chat URL
+      const formattedNumber = whatsappNumber?.replace(/\D/g, "");
+      const whatsappUrl = `https://wa.me/${formattedNumber}`;
+      window.open(whatsappUrl, "_blank");
+    } else {
+      toast.warning("Please Login to contact via WhatsApp");
+      setTimeout(() => {
+        handleOpenLoginModal();
+      }, 100);
+    }
+  };
 
   return (
     <>
+    <ToastContainer/>
       <div className="rounded-md mx-4 bg-white">
         <div className="md:hidden mb-6 overflow-hidden">
           {formData?.business.photos?.length > 0 ? (
@@ -218,11 +234,10 @@ const BusinessInfo = ({ formData, businessId }) => {
               className={`
     relative group p-2.5 rounded-full transition-all duration-300 transform
     hover:scale-110 active:scale-95
-    ${
-      isLoggedin && isBookmarked
-        ? "text-red-600 hover:text-red-700 bg-red-50"
-        : "text-gray-400 hover:text-red-500 hover:bg-red-50"
-    }
+    ${isLoggedin && isBookmarked
+                  ? "text-red-600 hover:text-red-700 bg-red-50"
+                  : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                }
   `}
             >
               {isLoggedin && isBookmarked ? (
@@ -232,6 +247,7 @@ const BusinessInfo = ({ formData, businessId }) => {
               )}
             </button>
           </div>
+
           <div className="flex items-center gap-2 mt-2 text-sm md:text-base">
             <div className="flex items-center bg-green-600 text-white px-2 py-1 rounded">
               {formData?.business.ratings}
@@ -240,7 +256,58 @@ const BusinessInfo = ({ formData, businessId }) => {
             <span className="text-gray-600">
               {formData?.business.reviewCount} Ratings
             </span>
+            <div className="hidden md:flex text-sm md:text-base  gap-2">
+              <p><MdAccessTimeFilled className="text-lg"/></p>
+            <p>Today</p>
+            {(() => {
+              const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+              const today = days[new Date().getDay()];
+              const timings = formData?.business?.businessTimings?.[today];
+              
+              if (timings) {
+                return (
+                  <>
+                    {/* <p>{timings.isOpen ? 'Open' : 'Closed'}</p> */}
+                    {timings.isOpen && (
+                      <>
+                        <p>{timings.openTime} -</p>
+                        <p>{timings.closeTime}</p>
+                      </>
+                    )}
+                  </>
+                );
+              }
+              return <p>No timing information available</p>;
+            })()}
+             </div>
           </div>
+          <div className="flex text-sm md:text-base mt-2 gap-2">
+              <p><MdAccessTimeFilled className="text-lg"/></p>
+            <p>Today</p>
+            {(() => {
+              const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+              const today = days[new Date().getDay()];
+              const timings = formData?.business?.businessTimings?.[today];
+              
+              if (timings) {
+                return (
+                  <>
+                    {/* <p>{timings.isOpen ? 'Open' : 'Closed'}</p> */}
+                    {timings.isOpen ? (
+                      <>
+                        <p>{timings.openTime} -</p>
+                        <p>{timings.closeTime}</p>
+                      </>
+                    ) : (
+                      <p>No time slots</p>
+                    )
+                  }
+                  </>
+                );
+              }
+              return <p>No timing information available</p>;
+            })()}
+             </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">
             <p className="flex items-center font-semibold text-gray-700">
@@ -252,7 +319,7 @@ const BusinessInfo = ({ formData, businessId }) => {
             </p>
           </div>
           <div className="flex justify-between">
-            <div className="md:flex flex-wrap gap-2 mt-4 text-sm">
+            <div className="md:flex truncate gap-2 mt-4 text-sm">
               <div
                 className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2 cursor-pointer hover:bg-green-700"
                 onClick={handleShowContact}
@@ -265,19 +332,48 @@ const BusinessInfo = ({ formData, businessId }) => {
                   ? formData?.business.contactDetails?.phone
                   : "Show Number"}
               </div>
-              <div className="md:hidden flex justify-around text-center">
+              <button
+                  onClick={() =>
+                    handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)
+                  }
+                  className={`hidden md:flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                // disabled={!data?.contactDetails?.whatsapp}
+                >
+                  <span className="text-xl px-1 text-white">
+                    <FaWhatsapp size={16} className="text-white" />
+                  </span>
+                  {/* {showContact === data._id
+                                ? data?.contactDetails?.whatsapp
+                                : "WhatsApp"} */}
+                  Whatsapp
+                </button>
+              
+              <div className="md:hidden flex justify-around text-center gap-6 pl-2">
                 <a
                   href={`tel:${formData?.business.contactDetails?.phone}`}
                   className="flex flex-col items-center w-20"
                 >
-                  <div className="bg-blue-600 text-white rounded flex items-center justify-center p-2">
+                  <div className="bg-blue-600 text-white rounded flex items-center justify-center p-2 truncate">
                     <FaPhone
-                      className="animate-bounce text-xl"
-                      style={{ animationDuration: "0.7s" }}
-                    />
+                      className="text-base mr-1"
+                    /> Call Now
                   </div>
-                  <p className="mt-1 text-sm">Call Now</p>
                 </a>
+                <button
+                  onClick={() =>
+                    handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)
+                  }
+                  className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                // disabled={!data?.contactDetails?.whatsapp}
+                >
+                  <span className="text-xl px-1 text-white">
+                    <FaWhatsapp size={16} className="text-white" />
+                  </span>
+                  {/* {showContact === data._id
+                                ? data?.contactDetails?.whatsapp
+                                : "WhatsApp"} */}
+                  Whatsapp
+                </button>
               </div>
             </div>
             <div className="hidden md:block">

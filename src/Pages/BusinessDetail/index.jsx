@@ -8,6 +8,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API } from "../../../config/config";
+import BusinessHours from "./Time/Index";
 
 const BusinessDetails = () => {
   const [formData, setFormData] = useState(null);
@@ -81,6 +82,7 @@ const BusinessDetails = () => {
     { name: "Overview", id: "overview", key: "overview" },
     { name: "Description", id: "description", key: "description" },
     { name: "Photos", id: "photos", key: "photos" },
+    { name: "Time", id: "time", key: "time" },
     { name: "Reviews", id: "reviews", key: "reviews" },
   ];
 
@@ -108,7 +110,7 @@ const BusinessDetails = () => {
       >
         <motion.div
           variants={fadeIn}
-          className="flex p-4"
+          className="flex p-4 overflow-x-scroll truncate scrollbar-hide"
         >
           <Link
             to="/"
@@ -145,7 +147,7 @@ const BusinessDetails = () => {
 
             <motion.div
               variants={fadeIn}
-              className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white z-10 border-b border-gray-200 scrollbar-hide"
+              className="flex overflow-x-auto whitespace-nowrap mx-4 p-2 sticky top-0 bg-white  border-b border-gray-200 scrollbar-hide"
             >
               {tabs.map((tab) => (
                 <motion.div
@@ -154,8 +156,8 @@ const BusinessDetails = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className={`px-4 py-2 font-medium text-sm md:text-md cursor-pointer shrink-0 ${activeTab === tab.key
-                      ? "border-b-4 border-blue-500 text-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
+                    ? "border-b-4 border-blue-500 text-blue-500"
+                    : "text-gray-500 hover:text-gray-700"
                     }`}
                   onClick={() => handleTabClick(tab.key, tab.id)}
                 >
@@ -166,7 +168,7 @@ const BusinessDetails = () => {
 
             <motion.div
               variants={fadeIn}
-              className="mx-4 space-y-8 pb-10 mb-4 z-10"
+              className="mx-4 space-y-8 pb-10 mb-4"
             >
               <motion.div
                 id="overview"
@@ -185,11 +187,18 @@ const BusinessDetails = () => {
                   <Photos formData={formData} />
                 </motion.div>
                 <motion.div
+                  id="time"
+                  variants={fadeIn}
+                >
+                  <BusinessHours formData={formData} />
+                </motion.div>
+                <motion.div
                   id="reviews"
                   variants={fadeIn}
                 >
                   <Reviews formData={formData} />
                 </motion.div>
+
               </motion.div>
             </motion.div>
           </motion.div>

@@ -85,9 +85,9 @@ const handleGoTop = () => {
     {showGoTop && (
   <button
     onClick={handleGoTop}
-    className="fixed bottom-25 right-6 z-30 bg-orange-500 hover:bg-orange-300 hover:scale-105 text-white p-4 rounded-full shadow-lg transition duration-300 cursor-pointer"
+    className="fixed bottom-20 right-4 z-30 bg-orange-500 hover:bg-orange-300 hover:scale-105 text-white p-3 rounded-full shadow-lg transition duration-300 cursor-pointer"
   >
-    <FaArrowUp className="text-lg" />
+    <FaArrowUp className="text-base" />
   </button>
 )}
     </>
