@@ -20,7 +20,6 @@ import Loader from "../../Components/Loader";
 import { FaFilter } from "react-icons/fa6";
 import FloatingAdBalloon from "../../Components/FloatAd";
 
-
 const Bussiness_List = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,28 +44,29 @@ const Bussiness_List = () => {
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
 
-
   const handleCategoryClick = (category) => {
     navigate(`/business/${category}`);
   };
-
 
   useEffect(() => {
     const fetchAds = async () => {
       try {
         const response = await axios.get(`${API}/adverts`);
-        const ads = response.data.filter(ad => ad.slotId?.page === "businesslisting");
+        const ads = response.data.filter(
+          (ad) => ad.slotId?.page === "businesslisting"
+        );
         if (ads.length > 0) {
-          setFetchBanner(ads.filter(ad => ad.slotId?._id === "68283ba4158ec22d9c5bae48"));
+          setFetchBanner(
+            ads.filter((ad) => ad.slotId?._id === "68283ba4158ec22d9c5bae48")
+          );
           console.log("fetchAds", ads);
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
-    }
+    };
     fetchAds();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -199,8 +199,6 @@ const Bussiness_List = () => {
   //   setExpandedBusinessId(expandedBusinessId === id ? null : id);
   // };
 
-
-
   const handleBusinessClick = (businessId) => {
     navigate(`/business/${businessId}`, { state: { businessId } });
   };
@@ -213,8 +211,6 @@ const Bussiness_List = () => {
     );
   }
 
-
-
   return (
     <>
       <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[50vh] cursor-pointer">
@@ -223,8 +219,14 @@ const Bussiness_List = () => {
             <img
               src={fetchBanner[currentImageIndex]?.contentUrl}
               alt="Banner"
-              className={`w-full h-full object-cover transition-opacity duration-500 ${fadeIn ? "opacity-100" : "opacity-0"
-                }`} onClick={() => handleCategoryClick(fetchBanner[currentImageIndex]?.businessId?._id)}
+              className={`w-full h-full object-cover transition-opacity duration-500 ${
+                fadeIn ? "opacity-100" : "opacity-0"
+              }`}
+              onClick={() =>
+                handleCategoryClick(
+                  fetchBanner[currentImageIndex]?.businessId?._id
+                )
+              }
             />
           )}
         </div>
@@ -266,40 +268,44 @@ const Bussiness_List = () => {
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 5
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-gray-100"
-                      }`}
+            ${
+              activeFilter === 5
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(5)}
                   >
                     5 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 4
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-gray-100"
-                      }`}
+            ${
+              activeFilter === 4
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(4)}
                   >
                     4 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === 3
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-gray-100"
-                      }`}
+            ${
+              activeFilter === 3
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter(3)}
                   >
                     3 <IoMdStar className="text-lg m-1 text-yellow-400" />
                   </button>
                   <button
                     className={`border flex border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${activeFilter === "top"
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-gray-100"
-                      }`}
+            ${
+              activeFilter === "top"
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
                     onClick={() => handleFilter("top")}
                   >
                     Top Rating
@@ -323,11 +329,11 @@ const Bussiness_List = () => {
                 <>
                   {filteredData.map((data, i) => (
                     <React.Fragment key={i}>
-                      <div className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2"                      
-                      >
+                      <div className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2">
                         {/* Business card content */}
-                        <div className="w-full md:w-[25%]"
-                        onClick={() => handleBusinessClick(data._id)}
+                        <div
+                          className="w-full md:w-[25%]"
+                          onClick={() => handleBusinessClick(data._id)}
                         >
                           <img
                             src={data.photos[0]}
@@ -337,12 +343,11 @@ const Bussiness_List = () => {
                         </div>
 
                         <div className="w-full flex flex-col md:flex-row justify-between p-1 md:p-3 md:pr-6">
-                          <div className="space-y-4 mt-1 md:mt-0 w-full p-2"
-                          onClick={() => handleBusinessClick(data._id)}
+                          <div
+                            className="space-y-4 mt-1 md:mt-0 w-full p-2"
+                            onClick={() => handleBusinessClick(data._id)}
                           >
-                            <h2
-                              className="text-xl font-semibold"
-                                                          >
+                            <h2 className="text-xl font-semibold">
                               {data.businessName}
                             </h2>
                             <div className="flex items-center gap-2">
@@ -384,9 +389,15 @@ const Bussiness_List = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleWhatsAppClick(data?.contactDetails?.whatsapp)
+                                handleWhatsAppClick(
+                                  data?.contactDetails?.whatsapp
+                                )
                               }
-                              className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!data?.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                              className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${
+                                !data?.contactDetails?.whatsapp
+                                  ? "opacity-50 cursor-not-allowed"
+                                  : "cursor-pointer"
+                              }`}
                               disabled={!data?.contactDetails?.whatsapp}
                             >
                               <span className="text-xl px-1 text-white">
@@ -402,21 +413,28 @@ const Bussiness_List = () => {
                       </div>
 
                       {/* Show side banner after every 2 items in mobile view */}
-                      {(i + 1 === 2 || i + 1 === 4) && sideBanner && sideBanner.length > 0 && (
-                        <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
-                          <img
-                            src={sideBanner[Math.floor(i / 2) % sideBanner.length]?.contentUrl}
-                            alt={`Mobile Side Banner ${Math.floor(i / 2) + 1}`}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        </div>
-                      )}
+                      {(i + 1 === 2 || i + 1 === 4) &&
+                        sideBanner &&
+                        sideBanner.length > 0 && (
+                          <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
+                            <img
+                              src={
+                                sideBanner[
+                                  Math.floor(i / 2) % sideBanner.length
+                                ]?.contentUrl
+                              }
+                              alt={`Mobile Side Banner ${
+                                Math.floor(i / 2) + 1
+                              }`}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        )}
                     </React.Fragment>
                   ))}
                 </>
               )}
             </div>
-
           </div>
         </div>
         {/* // Replace the side banner div with this: */}
@@ -427,7 +445,8 @@ const Bussiness_List = () => {
                 <img
                   src={banner.contentUrl}
                   alt={`Side Banner ${index + 1}`}
-                  className="w-full h-full object-cover" onClick={() => handleCategoryClick(banner.businessId?._id)}
+                  className="w-full h-full object-cover"
+                  onClick={() => handleCategoryClick(banner.businessId?._id)}
                 />
               </div>
             ))}
