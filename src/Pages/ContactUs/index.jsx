@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa";
 import FloatingInput from "../../Components/FloatingInput";
 import FloatingTextarea from "../../Components/FloatingInput/FloatingTextarea";
+import axios from 'axios';
+import { API } from "../../../config/config";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -116,7 +118,7 @@ const ContactUs = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate all fields
@@ -137,11 +139,23 @@ const ContactUs = () => {
     }
 
     setIsSubmitting(true);
-    console.log("Form Data:", formData);
-    setSubmitStatus({ type: "success", message: "Message sent successfully!" });
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    setErrors({ name: "", email: "", subject: "", message: "" });
-    setIsSubmitting(false);
+    try {
+      const response = await axios.post(`${API}/contact`, formData);
+      console.log(response.data);
+      
+      if (response.data) {
+        setSubmitStatus({ type: "success", message: "Message sent successfully!" });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setErrors({ name: "", email: "", subject: "", message: "" });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: error.response?.data?.message || "Failed to send message. Please try again."
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

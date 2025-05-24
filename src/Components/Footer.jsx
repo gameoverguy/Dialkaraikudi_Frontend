@@ -11,11 +11,12 @@ import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png";
 import play from "../assets/play.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   const socialLinks = [
-    { icon: FaInstagram, color: "#C13584", href: "https://instagram.com" },
+    { icon: FaInstagram, color: "#C13584", href: "https://www.instagram.com/digitaly.live/?hl=en" },
     { icon: TiSocialFacebook, color: "#3b5998", href: "https://facebook.com" },
     { icon: IoLogoWhatsapp, color: "#25D366" },
     { icon: CiYoutube, color: "#FF0000" },
@@ -25,8 +26,10 @@ const Footer = () => {
   const footText1 = [
     { title: "About us", path: "/aboutus" },
     { title: "Contact us", path: "/contactus" },
-    { title: "Terms & Conditions", path: "/terms" },
-    { title: "Advertise on Dialkaraikudi", path: "#" },
+    // { title: "Terms & Conditions", path: "/terms" },
+    // { title: "Privacy Policy", path: "/privacypolicy" },
+    { title: "Shipping Policy", path: "/shippingpolicy" },
+    { title: "Refund and Cancellation Policy", path: "/cancellationpolicy" },
   ];
 
   // const footText3 = [
@@ -45,8 +48,9 @@ const Footer = () => {
               <div className="w-35 flex justify-center items-center">
                 <img
                   src={Logo}
+                  onClick={() => navigate("/")}
                   alt="Dialkaraikudi"
-                  className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                  className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
@@ -54,8 +58,11 @@ const Footer = () => {
                 <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
                   <img
                     src={digitaly}
-                    alt="Dialkaraikudi"
-                    className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                    onClick={() =>
+                      window.open("https://www.digitaly.live/", "_blank")
+                    }
+                    alt="Digitaly"
+                    className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
                   />
                 </div>
               </div>
@@ -93,18 +100,18 @@ const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li>
                 <a
-                  href="tel:+911234567890"
+                  // href="tel:+919442338670"
                   className="hover:text-blue-600 transition"
                 >
-                  +91 1234567890
+                  +91 9442338670
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@dialkaraikudi.com"
+                  // href="mailto:admin@dialkaraikudi.com"
                   className="hover:text-blue-600 transition wrap-break-word"
                 >
-                  info@dialkaraikudi.com
+                  admin@dialkaraikudi.com
                 </a>
               </li>
             </ul>

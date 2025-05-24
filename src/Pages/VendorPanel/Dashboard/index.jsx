@@ -201,7 +201,7 @@ const VendorDashboard = ({ businessData }) => {
         </div>
       </div>
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold text-gray-700">Total Views</h3>
           <p className="text-3xl font-bold text-blue-600">
@@ -230,6 +230,12 @@ const VendorDashboard = ({ businessData }) => {
             </p>
             <FaStar className="text-yellow-400 ml-2 text-2xl" />
           </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">Favorites</h3>
+          <p className="text-3xl font-bold text-red-600">
+            {business?.favoritesCount || 0}
+          </p>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
