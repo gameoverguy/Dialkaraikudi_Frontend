@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-import FloatingInput from '../../Components/FloatingInput';
-import FloatingTextarea from '../../Components/FloatingInput/FloatingTextarea';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+} from "react-icons/fa";
+import FloatingInput from "../../Components/FloatingInput";
+import FloatingTextarea from "../../Components/FloatingInput/FloatingTextarea";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +32,7 @@ const ContactUs = () => {
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
+    transition: { duration: 0.6 },
   };
 
   const contactInfo = [
@@ -33,60 +40,60 @@ const ContactUs = () => {
       icon: <FaPhone className="w-6 h-6" />,
       title: "Phone",
       content: "+91 123-456-7890",
-      link: "tel:+911234567890"
+      link: "tel:+911234567890",
     },
     {
       icon: <FaEnvelope className="w-6 h-6" />,
       title: "Email",
       content: "info@dialkaraikudi.com",
-      link: "mailto:info@dialkaraikudi.com"
+      link: "mailto:info@dialkaraikudi.com",
     },
     {
       icon: <FaMapMarkerAlt className="w-6 h-6" />,
       title: "Location",
       content: "Karaikudi, Tamil Nadu",
-      link: "https://maps.google.com"
-    }
+      link: "https://maps.google.com",
+    },
   ];
 
   const socialLinks = [
     { icon: <FaFacebook />, link: "#", label: "Facebook" },
     { icon: <FaTwitter />, link: "#", label: "Twitter" },
-    { icon: <FaInstagram />, link: "#", label: "Instagram" }
+    { icon: <FaInstagram />, link: "#", label: "Instagram" },
   ];
 
   const validateField = (name, value) => {
-    let error = '';
+    let error = "";
     switch (name) {
-      case 'name':
+      case "name":
         if (!value) {
-          error = 'Name is required';
+          error = "Name is required";
         } else if (value.length < 3) {
-          error = 'Name must be at least 3 characters';
+          error = "Name must be at least 3 characters";
         } else if (value.length > 25) {
-          error = 'Name must not exceed 25 characters';
+          error = "Name must not exceed 25 characters";
         }
         break;
-      case 'email':
+      case "email":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!value) {
-          error = 'Email is required';
+          error = "Email is required";
         } else if (value.length < 10) {
-          error = 'Email must be at least 10 characters';
+          error = "Email must be at least 10 characters";
         } else if (value.length > 50) {
-          error = 'Email must not exceed 50 characters';
+          error = "Email must not exceed 50 characters";
         } else if (!emailRegex.test(value)) {
-          error = 'Please enter a valid email address';
+          error = "Please enter a valid email address";
         }
         break;
-      case 'subject':
+      case "subject":
         if (!value) {
-          error = 'Subject is required';
+          error = "Subject is required";
         }
         break;
-      case 'message':
+      case "message":
         if (!value) {
-          error = 'Message is required';
+          error = "Message is required";
         }
         break;
       default:
@@ -97,26 +104,26 @@ const ContactUs = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     const error = validateField(name, value);
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validate all fields
     const newErrors = {};
     let hasErrors = false;
-    
-    Object.keys(formData).forEach(key => {
+
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) {
         hasErrors = true;
@@ -130,10 +137,10 @@ const ContactUs = () => {
     }
 
     setIsSubmitting(true);
-    console.log('Form Data:', formData);
-    setSubmitStatus({ type: 'success', message: 'Message sent successfully!' });
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setErrors({ name: '', email: '', subject: '', message: '' });
+    console.log("Form Data:", formData);
+    setSubmitStatus({ type: "success", message: "Message sent successfully!" });
+    setFormData({ name: "", email: "", subject: "", message: "" });
+    setErrors({ name: "", email: "", subject: "", message: "" });
     setIsSubmitting(false);
   };
 
@@ -141,7 +148,7 @@ const ContactUs = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={fadeIn.initial}
           animate={fadeIn.animate}
@@ -151,7 +158,8 @@ const ContactUs = () => {
             Contact <span className="text-purple-600">Us</span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have questions or need assistance? We're here to help! Reach out to us through any of the following channels.
+            Have questions or need assistance? We're here to help! Reach out to
+            us through any of the following channels.
           </p>
         </motion.div>
 
@@ -163,7 +171,9 @@ const ContactUs = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Send us a Message
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <FloatingInput
                 id="name"
@@ -204,20 +214,24 @@ const ContactUs = () => {
                 type="submit"
                 disabled={isSubmitting}
                 className={`w-full bg-purple-600 text-white py-3 rounded-lg font-semibold ${
-                  isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-purple-700'
+                  isSubmitting
+                    ? "opacity-70 cursor-not-allowed"
+                    : "hover:bg-purple-700"
                 }`}
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                {isSubmitting ? "Sending..." : "Send Message"}
               </motion.button>
-              
+
               {submitStatus && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`text-center text-sm ${
-                    submitStatus.type === 'success' ? 'text-green-600' : 'text-red-600'
+                    submitStatus.type === "success"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
                   {submitStatus.message}
@@ -249,7 +263,9 @@ const ContactUs = () => {
                       {info.icon}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{info.title}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {info.title}
+                      </h3>
                       <p className="text-gray-600">{info.content}</p>
                     </div>
                   </div>
@@ -259,18 +275,29 @@ const ContactUs = () => {
 
             {/* Map Section */}
             <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Find Us</h3>
-              <div className="aspect-video rounded-lg overflow-hidden bg-gray-200">
-                {/* Add your map component or iframe here */}
-                <div className="w-full h-full flex items-center justify-center text-gray-500">
-                  Map placeholder
-                </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Find Us
+              </h3>
+              <div className="aspect-video rounded-lg overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62863.95814818316!2d78.74391571889245!3d10.927358651546392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baab7bef0eaa1ad%3A0xeaf72ea253407547!2sKaraikudi%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1689612345678!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Karaikudi Map"
+                  className="w-full h-full"
+                />
               </div>
             </div>
 
             {/* Social Links */}
             <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Follow Us</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Follow Us
+              </h3>
               <div className="flex justify-center space-x-6">
                 {socialLinks.map((social, index) => (
                   <motion.a
