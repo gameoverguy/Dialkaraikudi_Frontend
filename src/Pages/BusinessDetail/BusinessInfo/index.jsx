@@ -10,7 +10,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import axios from "axios";
 import { API } from "../../../../config/config";
-import { toast, ToastContainer } from "react-toastify";
+// import { toast, ToastContainer } from "react-toastify";
 
 const BusinessInfo = ({ formData, businessId }) => {
   const [showContact, setShowContact] = useState(false);
@@ -99,7 +99,7 @@ const BusinessInfo = ({ formData, businessId }) => {
       const whatsappUrl = `https://wa.me/${formattedNumber}`;
       window.open(whatsappUrl, "_blank");
     } else {
-      toast.warning("Please Login to contact via WhatsApp");
+      // toast.warning("Please Login to contact via WhatsApp");
       setTimeout(() => {
         handleOpenLoginModal();
       }, 100);
@@ -108,7 +108,7 @@ const BusinessInfo = ({ formData, businessId }) => {
 
   return (
     <>
-    <ToastContainer/>
+    {/* <ToastContainer/> */}
       <div className="rounded-md mx-4 bg-white">
         <div className="md:hidden mb-6 overflow-hidden">
           {formData?.business.photos?.length > 0 ? (
