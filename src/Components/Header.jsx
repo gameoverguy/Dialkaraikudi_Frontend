@@ -118,7 +118,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-[#e0d8ff] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
+      <div className="sticky top-0 bg-[#fff6f6] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
         <div className="px-4 py-3 lg:w-11/12 mx-auto flex justify-between items-center">
           <div className="flex space-x-6 items-center">
             <Link to="/">
@@ -143,17 +143,15 @@ const Header = () => {
               />
               <button
                 type="submit"
-                className="absolute top-1/2 -translate-y-1/2 right-0 
-             bg-green-600 p-2 lg:p-2.5 rounded-lg text-white 
+                className="absolute top-1/2 -translate-y-1/2 
+             bg-green-600 p-2 rounded-lg text-white 
              transition-all duration-200 cursor-pointer
-             hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none"
+             hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none right-1"
               >
                 <IoSearchOutline className="w-5 h-5" />
               </button>
             </form>
           </div>
-
-
 
           <div className="flex items-center gap-10">
             {/* <div className="hidden md:flex items-center gap-8">
@@ -194,8 +192,9 @@ const Header = () => {
                         .toUpperCase()}
                     </div>
                     <svg
-                      className={`w-4 h-4 text-gray-600 transition-transform ${showDropdown ? "rotate-180" : ""
-                        }`}
+                      className={`w-4 h-4 text-gray-600 transition-transform ${
+                        showDropdown ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
