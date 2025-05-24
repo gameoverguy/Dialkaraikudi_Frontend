@@ -77,6 +77,8 @@ const localFallbacks  = [
 function TopService () {
 const navigate = useNavigate();
 const [topServices, setTopServices] = useState([]);
+const [topServicesVideo, setTopServicesVideo] = useState([]);
+
 
 
 useEffect(() => {
@@ -91,8 +93,13 @@ useEffect(() => {
             ad.isActive
         );
         
-        
-        
+        const videoAd = response.data.find(
+        (ad) =>
+          ad.slotId?.page === "home" &&
+          ad.slotId?._id === "6831a1e0b4e71c503c7929d3" &&
+          ad.isActive// Optional: if your ad type defines this
+      );
+        console.log("Top services", response.data)
 
         let finalSlides = [];
 
@@ -113,6 +120,11 @@ useEffect(() => {
           finalSlides = ads;
         }
         setTopServices(finalSlides);
+
+        
+      if (videoAd) {
+        setTopServicesVideo(videoAd.contentUrl); // Set video URL
+      }
       } catch (error) {
         console.error("Error fetching ads:", error);
         setTopServices(localFallbacks.slice(0, 5)); // Fallback if API fails
@@ -179,7 +191,10 @@ const handleCategoryClick = (category) => {
       <div className="hidden md:block text-white w-full md:w-6/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
         <video
           className="w-full h-full object-cover"
-          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
+          src={
+    topServicesVideo ||
+    "https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
+  }
           autoPlay
           muted
           loop
