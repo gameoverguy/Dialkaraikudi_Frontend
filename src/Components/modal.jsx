@@ -10,6 +10,7 @@ const CustomModal = ({
   isOpen,
   onClose,
   classname,
+  titleAlignment = 'left', // Add new prop with default value
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -48,26 +49,22 @@ const CustomModal = ({
       >
         {/* Header */}
         {header && (
-          <div className="w-full py-2 px-3 border-b border-gray-300 flex justify-between items-center">
-            <h4 className="text-[20px] font-bold text-title uppercase">
+          <div className="w-full py-4 px-6 border-b border-gray-300 flex justify-between items-center">
+            <h4 className={`text-[20px] font-bold text-title uppercase text-${titleAlignment}`}>
               {header}
             </h4>
-            {/* <IoClose
-              className="cursor-pointer text-xl"
-              onClick={onClose}
-            /> */}
           </div>
         )}
 
         {/* Title & Close Button */}
         {title && (
-          <div className="w-full p-1 bg-white flex justify-between items-center">
-            <h4 className="text-[20px] font-bold text-title uppercase">
+          <div className="relative w-full p-4 bg-white flex justify-between items-center">
+            <h4 className={`text-[20px] font-bold text-title uppercase flex-1 text-${titleAlignment}`}>
               {title}
             </h4>
             <span
               onClick={onClose}
-              className="cursor-pointer text-red-400 font-bold text-2xl  duration-500 hover:text-red-700"
+              className="absolute right-3 top-3 cursor-pointer text-red-400 font-bold text-3xl duration-500 hover:text-red-700"
             >
               <IoClose />
             </span>
@@ -75,7 +72,7 @@ const CustomModal = ({
         )}
 
         {/* Modal Content */}
-        <div className="p-3 w-full h-full overflow-y-auto scrollbar-hide">
+        <div className="p-6 pt-4 w-full h-full overflow-y-auto scrollbar-hide">
           {children}
         </div>
       </div>

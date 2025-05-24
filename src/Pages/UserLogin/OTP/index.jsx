@@ -221,15 +221,16 @@ const OTP = ({
   return (
     <>
       <CustomModal
-        title={" "}
+        title={"Enter Verification Code "}
         isOpen={isOpen}
         onClose={onClose}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
+        titleAlignment="center"
       >
-        <div className="p-1 sm:p-2">
-          <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
+        <div className="p-1 sm:p-2 sm:pt-0">
+          {/* <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
             Enter Verification Code
-          </h1>
+          </h1> */}
           <p className="text-gray-600 text-[11px] sm:text-xs mb-4 sm:mb-6 text-center">
             We have sent a verification code to{" "}
             <span className="font-medium">{otpemail || email}</span>

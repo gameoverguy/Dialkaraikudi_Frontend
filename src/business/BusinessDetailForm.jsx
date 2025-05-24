@@ -388,18 +388,19 @@ const BusinessDetailForm = ({
   return (
     <>
       <CustomModal
-        title={" "}
+        title={"REGISTER"}
         isOpen={isOpen}
         onClose={onClose}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
+        titleAlignment="center"
       >
-        <form onSubmit={handleSubmit} className="p-1 sm:p-1">
+        <form onSubmit={handleSubmit} className="p-1 pt-0 sm:p-1 sm:pt-0">
           <div className="space-y-2 sm:space-y-2">
             {/* Business Information Section */}
             <div className="rounded-lg space-y-2 sm:space-y-2 mb-0">
-              <h3 className="text-lg text-center font-bold text-gray-700">
+              {/* <h3 className="text-lg text-center font-bold text-gray-700">
                 REGISTER
-              </h3>
+              </h3> */}
               <FloatingInput
                 name="businessName"
                 value={formData.businessName}

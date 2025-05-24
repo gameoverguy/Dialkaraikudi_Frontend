@@ -167,13 +167,14 @@ const UserLogin = ({
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        title={" "}
+        title={`${role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}` }
         classname="w-[95%] sm:w-full max-w-md mx-auto"
+        titleAlignment="center"
       >
-        <div className="p-1 sm:p-2">
-          <h1 className="text-base sm:text-lg text-center font-bold text-gray-800 mb-8 sm:mb-6">
+        <div className="p-1 sm:p-2 sm:pt-0">
+          {/* <h1 className="text-base sm:text-lg text-center font-bold text-gray-800 mb-8 sm:mb-6">
             {role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}
-          </h1>
+          </h1> */}
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
               <FloatingInput

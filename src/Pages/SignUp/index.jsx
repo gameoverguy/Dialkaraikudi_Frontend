@@ -217,15 +217,16 @@ const SignupModal = ({
   return (
     <>
       <CustomModal
-        title={" "}
+        title={"REGISTER"}
         isOpen={isOpen}
         onClose={onClose}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
+        titleAlignment="center"
       >
-        <div className="p-1 sm:p-2">
-          <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
+        <div className="p-1 pt-0 sm:p-2 sm:pt-0">
+          {/* <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
             REGISTER
-          </h1>
+          </h1> */}
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
               <FloatingInput

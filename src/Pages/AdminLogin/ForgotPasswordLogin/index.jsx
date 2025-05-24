@@ -97,11 +97,11 @@ const ForgotPassword = ({ isOpen, onClose, setShowOTPModal, setOtpEmail }) => {
   };
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md" title={" "}>
-      <div className="p-1 sm:p-2 text-center">
-        <h1 className="text-lg font-bold text-gray-800 mb-4">
+    <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md" title={"FORGOT PASSWORD "} titleAlignment="center">
+      <div className="p-1 sm:pt-0 sm:p-2 text-center">
+        {/* <h1 className="text-lg font-bold text-gray-800 mb-4">
           FORGOT PASSWORD
-        </h1>
+        </h1> */}
         <p className="text-gray-600 text-xs mb-6">
           Enter your email address to receive OTP.
         </p>
