@@ -59,35 +59,56 @@ const VendorDashboard = ({ businessData }) => {
           setBusiness(data.business);
 
           // Transform views data to show daily stats
-          const transformViewsData = (viewsSummary) => ({
-            labels: ["Total Views", "Unique Views"],
-            data: [
-              viewsSummary.totalViews || 0,
-              viewsSummary.totalUniqueViews || 0,
-            ],
-            totalViews: viewsSummary.totalViews || 0,
-            totalUniqueViews: viewsSummary.totalUniqueViews || 0,
-          });
+          const transformViewsData = (viewsSummary) => {
+            const breakdown = viewsSummary?.breakdown || [];
+            const today = new Date();
+            
+            let labels = [];
+            let viewData = [];
+            
+            // Process breakdown data
+            if (breakdown.length > 0) {
+              breakdown.forEach((entry) => {
+                const date = new Date(entry.date);
+                labels.push(date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' }));
+                viewData.push(entry.views || 0);
+              });
+            }
+            
+            return {
+              labels: labels,
+              data: viewData,
+              totalViews: viewsSummary?.totalViews || 0,
+              totalUniqueViews: viewsSummary?.uniqueViews || 0
+            };
+          };
 
           // Transform reviews data to show rating distribution
           const transformReviewsData = (reviewStats) => ({
             labels: ["5★", "4★", "3★", "2★", "1★"],
-            data: [reviewStats.totalReviews || 0, 0, 0, 0, 0], // Adjust based on actual rating distribution
-            totalReviews: reviewStats.totalReviews || 0,
-            averageRating: reviewStats.averageRating || "0.0",
+            data: [
+              reviewStats?.ratingBreakdown?.[5] || 0,
+              reviewStats?.ratingBreakdown?.[4] || 0,
+              reviewStats?.ratingBreakdown?.[3] || 0,
+              reviewStats?.ratingBreakdown?.[2] || 0,
+              reviewStats?.ratingBreakdown?.[1] || 0
+            ],
+            totalReviews: reviewStats?.totalReviews || 0,
+            averageRating: Number(reviewStats?.averageRating || 0).toFixed(1)
           });
 
           setDashboardData({
             views: {
-              weekly: transformViewsData(data.views.viewsweeklySummary),
-              monthly: transformViewsData(data.views.viewsmonthlySummary),
-              yearly: transformViewsData(data.views.viewsyearlySummary),
+              weekly: transformViewsData(data.views.weekly),
+              monthly: transformViewsData(data.views.monthly),
+              yearly: transformViewsData(data.views.yearly),
+              alltime: transformViewsData(data.views.alltime)
             },
             reviews: {
               weekly: transformReviewsData(data.reviews.reviewStatsWeekly),
               monthly: transformReviewsData(data.reviews.reviewStatsMonthly),
-              yearly: transformReviewsData(data.reviews.reviewStatsYearly),
-            },
+              yearly: transformReviewsData(data.reviews.reviewStatsYearly)
+            }
           });
         }
       } catch (error) {
@@ -104,13 +125,13 @@ const VendorDashboard = ({ businessData }) => {
     labels: dashboardData.views[viewsPeriod]?.labels || [],
     datasets: [
       {
-        label: "Views Statistics",
+        label: "Daily Views",
         data: dashboardData.views[viewsPeriod]?.data || [],
-        backgroundColor: ["rgba(53, 162, 235, 0.8)", "rgba(75, 192, 192, 0.8)"],
-        borderColor: ["rgb(53, 162, 235)", "rgb(75, 192, 192)"],
+        backgroundColor: "rgba(53, 162, 235, 0.8)",
+        borderColor: "rgb(53, 162, 235)",
         borderWidth: 1,
         borderRadius: 5,
-        hoverOffset: 4,
+        barThickness: 20,
       },
     ],
   };
@@ -165,10 +186,6 @@ const VendorDashboard = ({ businessData }) => {
           {business?.businessName} Dashboard
         </h1>
         <div className="flex flex-wrap gap-4 text-gray-600">
-          {/* <div className="flex items-center gap-2">
-            <FaMapMarkerAlt className="text-blue-500" />
-            <span>{business?.address?.formattedAddress}</span>
-          </div> */}
           <div className="flex items-center gap-2">
             <FaClock className="text-green-500" />
             <span>
@@ -201,7 +218,7 @@ const VendorDashboard = ({ businessData }) => {
         </div>
       </div>
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold text-gray-700">Total Views</h3>
           <p className="text-3xl font-bold text-blue-600">
@@ -231,6 +248,12 @@ const VendorDashboard = ({ businessData }) => {
             <FaStar className="text-yellow-400 ml-2 text-2xl" />
           </div>
         </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">Favorites</h3>
+          <p className="text-3xl font-bold text-red-600">
+            {business?.favoritesCount || 0}
+          </p>
+        </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Views Chart */}
@@ -254,9 +277,7 @@ const VendorDashboard = ({ businessData }) => {
                   },
                   title: {
                     display: true,
-                    text: `${
-                      viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)
-                    } Views Breakdown`,
+                    text: `${viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)} Views Breakdown`,
                     font: {
                       size: 16,
                     },
@@ -328,10 +349,7 @@ const VendorDashboard = ({ businessData }) => {
                     },
                     title: {
                       display: true,
-                      text: `${
-                        reviewsPeriod.charAt(0).toUpperCase() +
-                        reviewsPeriod.slice(1)
-                      } Rating Distribution`,
+                      text: `${reviewsPeriod.charAt(0).toUpperCase() + reviewsPeriod.slice(1)} Rating Distribution`,
                       font: {
                         size: 16,
                       },
