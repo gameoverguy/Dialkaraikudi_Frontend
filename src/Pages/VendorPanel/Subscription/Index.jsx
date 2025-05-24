@@ -103,7 +103,7 @@ const VendorSubscription = ({ businessData }) => {
 
   return (
     <>
-      <div className="p-2 h-screen flex flex-col ">
+      <div className="p-2 h-screen flex flex-col pb-4">
       {showMediaPopup && <MediaRequirementsPopup />}
         <div className="bg-white shadow rounded mb-4 p-4">
           <h1 className="mb-2 text-2xl font-bold">Advertisement Slots</h1>
@@ -137,11 +137,11 @@ const VendorSubscription = ({ businessData }) => {
           {adSlots.map((slot, index) => (
             <div
               key={index}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300
+              className={`bg-white mb-1 flex flex-col justify-between rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300
                 ${isSlotPurchased(slot) ? "bg-green-50 ring-2 ring-green-500" : ""}
                 ${isSlotFull(slot) && !isSlotPurchased(slot) ? "bg-red-50 ring-2 ring-red-500" : ""}`}
             >
-              <div className="p-6">
+              <div className="p-6 pb-0">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-bold text-gray-900">
                     {slot.name}
@@ -172,15 +172,18 @@ const VendorSubscription = ({ businessData }) => {
                     <span>Max Ads: {slot.maxAds}</span>
                   </div>
                 </div>
-                <button
+                
+              </div>
+              <div className="p-6 pt-0">
+              <button
                   onClick={() => handlePurchaseSlot(slot._id)}
                   disabled={isSlotPurchased(slot) || isSlotFull(slot)}
-                  className={`mt-6 w-full py-2 px-4 rounded-lg transition-colors
+                  className={`mt-6 w-full  py-2 px-4 rounded-lg transition-colors
                   ${isSlotPurchased(slot)
                     ? "bg-gray-300 cursor-not-allowed"
                     : isSlotFull(slot)
                     ? "bg-red-300 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                    : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer" 
                   }`}
                 >
                   {isSlotPurchased(slot)
@@ -189,7 +192,7 @@ const VendorSubscription = ({ businessData }) => {
                     ? "Slot Full"
                     : "Purchase Slot"}
                 </button>
-              </div>
+                </div>
             </div>
           ))}
         </div>

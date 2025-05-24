@@ -144,7 +144,7 @@ const Header = () => {
               <button
                 type="submit"
                 className="absolute top-1/2 -translate-y-1/2 right-0 
-             bg-green-600 p-2 rounded-lg text-white 
+             bg-green-600 p-2 lg:p-2.5 rounded-lg text-white 
              transition-all duration-200 cursor-pointer
              hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none"
               >
@@ -177,7 +177,7 @@ const Header = () => {
               </Link>
             </div> */}
 
-            <div className="hidden md:block w-20 h-10">
+            <div className="hidden md:block w-10 h-10">
               <AiChatbox />
             </div>
 
@@ -297,7 +297,7 @@ const Header = () => {
             />
             <button
               type="submit"
-              className="absolute top-1/2 -translate-y-1/2 right-1 md:right-1 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg text-white transition-colors duration-200"
+              className="absolute top-1/2 -translate-y-1/2 right-0.5 md:right-1 bg-emerald-500 hover:bg-emerald-600 p-2.5 rounded-lg text-white transition-colors duration-200"
             >
               <IoSearchOutline className="text-base" />
             </button>

@@ -3,79 +3,75 @@ import { FaEdit } from 'react-icons/fa';
 import CustomModal from '../../../../Components/modal';
 import FloatingInput from '../../../../Components/FloatingInput';
 
-const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => {
+const BusinessHours = ({ business, fetchBusinessDetails, onSubmit }) => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
   useEffect(() => {
-    // Initialize form data with existing business timings
     if (business?.business?.businessTimings) {
-      setFormData(business.business.businessTimings);
+      const initialData = {};
+      days.forEach(day => {
+        const timing = business.business.businessTimings[day] || {};
+        initialData[day] = {
+          isOpen: timing.isOpen || false,
+          openTime: timing.openTime || '',
+          closeTime: timing.closeTime || ''
+        };
+      });
+      setFormData(initialData);
     }
   }, [business]);
 
-  const convertTo12Hour = (time24) => {
-    if (!time24) return '';
-    const [hours, minutes] = time24.split(':');
-    let period = 'AM';
-    let hour = parseInt(hours);
-
-    if (hour >= 12) {
-      period = 'PM';
-      if (hour > 12) hour -= 12;
-    }
-    if (hour === 0) hour = 12;
-
-    return `${hour}:${minutes} ${period}`;
-  };
-
   const handleChange = (day, field, value) => {
-    if (field === 'openTime' || field === 'closeTime') {
-      const time12Hour = convertTo12Hour(value);
-      setFormData(prev => ({
-        ...prev,
-        [day]: {
-          ...prev[day],
-          [field]: time12Hour
+    setFormData(prev => {
+      const updatedDay = {
+        ...prev[day],
+        [field]: value
+      };
+
+      // Handle checkbox change
+      if (field === 'isOpen') {
+        if (!value) {
+          updatedDay.openTime = '';
+          updatedDay.closeTime = '';
+        } else if (!updatedDay.openTime && !updatedDay.closeTime) {
+          updatedDay.openTime = '09:00';
+          updatedDay.closeTime = '17:00';
         }
-      }));
-    } else {
-      setFormData(prev => ({
+      }
+
+      return {
         ...prev,
-        [day]: {
-          ...prev[day],
-          [field]: value,
-          openTime: value ? prev[day]?.openTime || '10:00 AM' : '',
-          closeTime: value ? prev[day]?.closeTime || '8:00 PM' : ''
-        }
-      }));
-    }
-  };
-
-  const convertTo24Hour = (time12h) => {
-    if (!time12h) return '';
-    const [timeStr, period] = time12h.split(' ');
-    let [hours, minutes] = timeStr.split(':');
-    hours = parseInt(hours);
-
-    if (period === 'PM' && hours !== 12) hours += 12;
-    if (period === 'AM' && hours === 12) hours = 0;
-
-    return `${hours.toString().padStart(2, '0')}:${minutes}`;
+        [day]: updatedDay
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updatedData = {
-        businessTimings: formData
-      };
-      await onSubmit(updatedData);
+      await onSubmit({ businessTimings: formData });
       setShowModal(false);
     } catch (error) {
       console.error('Error updating business hours:', error);
+    }
+  };
+
+  const formatTimeForDisplay = (time) => {
+    if (!time) return '';
+    try {
+      const [hours, minutes] = time.split(':');
+      const date = new Date();
+      date.setHours(parseInt(hours), parseInt(minutes));
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch (error) {
+      return time;
     }
   };
 
@@ -99,7 +95,7 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
               <span className="capitalize font-medium">{day}</span>
               <span className="text-gray-600">
                 {timing?.isOpen ? (
-                  `${timing.openTime} - ${timing.closeTime}`
+                  `${formatTimeForDisplay(timing.openTime)} - ${formatTimeForDisplay(timing.closeTime)}`
                 ) : (
                   <span className="text-red-500">Closed</span>
                 )}
@@ -124,7 +120,7 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
                     <input
                       type="checkbox"
                       id={`isOpen-${day}`}
-                      checked={formData[day]?.isOpen}
+                      checked={formData[day]?.isOpen || false}
                       onChange={(e) => handleChange(day, 'isOpen', e.target.checked)}
                       className="mr-2"
                     />
@@ -137,14 +133,14 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
                     <FloatingInput
                       type="time"
                       id={`openTime-${day}`}
-                      value={convertTo24Hour(formData[day]?.openTime)}
+                      value={formData[day]?.openTime || ''}
                       onChange={(e) => handleChange(day, 'openTime', e.target.value)}
                       placeholder="Opening Time"
                     />
                     <FloatingInput
                       type="time"
                       id={`closeTime-${day}`}
-                      value={convertTo24Hour(formData[day]?.closeTime)}
+                      value={formData[day]?.closeTime || ''}
                       onChange={(e) => handleChange(day, 'closeTime', e.target.value)}
                       placeholder="Closing Time"
                     />

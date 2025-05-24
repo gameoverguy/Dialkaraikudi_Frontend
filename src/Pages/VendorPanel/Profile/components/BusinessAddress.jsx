@@ -103,6 +103,9 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     }
   };
 
+console.log(business);
+
+
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-between items-center mb-4">
@@ -131,8 +134,7 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
             </p>
             <p className="">
             <span className='font-medium'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
-            </p>
-          
+            </p>         
           </div>
         </div>
       </div>
