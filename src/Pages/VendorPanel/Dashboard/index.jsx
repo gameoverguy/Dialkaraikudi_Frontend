@@ -165,15 +165,31 @@ const VendorDashboard = ({ businessData }) => {
           {business?.businessName} Dashboard
         </h1>
         <div className="flex flex-wrap gap-4 text-gray-600">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <FaMapMarkerAlt className="text-blue-500" />
             <span>{business?.address?.formattedAddress}</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-2">
             <FaClock className="text-green-500" />
             <span>
-              Open {business?.businessTimings?.monday?.openTime} -{" "}
-              {business?.businessTimings?.monday?.closeTime}
+              {(() => {
+                const days = [
+                  "sunday",
+                  "monday",
+                  "tuesday",
+                  "wednesday",
+                  "thursday",
+                  "friday",
+                  "saturday",
+                ];
+                const currentDay = days[new Date().getDay()];
+                const timing = business?.businessTimings?.[currentDay];
+                const formattedDay =
+                  currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
+                return timing
+                  ? `${formattedDay}: Open ${timing.openTime} - ${timing.closeTime}`
+                  : `${formattedDay}: Timing not available`;
+              })()}
             </span>
           </div>
           {business?.verified && (
@@ -184,7 +200,38 @@ const VendorDashboard = ({ businessData }) => {
           )}
         </div>
       </div>
-
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">Total Views</h3>
+          <p className="text-3xl font-bold text-blue-600">
+            {dashboardData.views[viewsPeriod]?.totalViews || 0}
+          </p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">Unique Views</h3>
+          <p className="text-3xl font-bold text-green-600">
+            {dashboardData.views[viewsPeriod]?.totalUniqueViews || 0}
+          </p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">Total Reviews</h3>
+          <p className="text-3xl font-bold text-purple-600">
+            {business?.reviewCount || 0}
+          </p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold text-gray-700">
+            Average Rating
+          </h3>
+          <div className="flex items-center">
+            <p className="text-3xl font-bold text-yellow-600">
+              {Number(business?.ratings || 0).toFixed(1)}
+            </p>
+            <FaStar className="text-yellow-400 ml-2 text-2xl" />
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Views Chart */}
         <div className="bg-white rounded-lg shadow-lg p-6">
@@ -254,88 +301,61 @@ const VendorDashboard = ({ businessData }) => {
         </div>
 
         {/* Reviews Chart */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">
-            Reviews Distribution
-          </h2>
-          <PeriodSelector period={reviewsPeriod} setPeriod={setReviewsPeriod} />
-          <div className="h-[400px]">
-            <Pie
-              data={reviewsChartData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: "top",
-                    labels: {
+        {(dashboardData.reviews[reviewsPeriod]?.totalReviews > 0 ||
+          business?.reviewCount > 0) && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              Reviews Distribution
+            </h2>
+            <PeriodSelector
+              period={reviewsPeriod}
+              setPeriod={setReviewsPeriod}
+            />
+            <div className="h-[400px]">
+              <Pie
+                data={reviewsChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: "top",
+                      labels: {
+                        font: {
+                          size: 12,
+                        },
+                      },
+                    },
+                    title: {
+                      display: true,
+                      text: `${
+                        reviewsPeriod.charAt(0).toUpperCase() +
+                        reviewsPeriod.slice(1)
+                      } Rating Distribution`,
                       font: {
-                        size: 12,
+                        size: 16,
+                      },
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: (context) =>
+                          `${context.label}: ${context.raw} reviews`,
                       },
                     },
                   },
-                  title: {
-                    display: true,
-                    text: `${
-                      reviewsPeriod.charAt(0).toUpperCase() +
-                      reviewsPeriod.slice(1)
-                    } Rating Distribution`,
-                    font: {
-                      size: 16,
-                    },
+                  animation: {
+                    duration: 1000,
+                    easing: "easeInOutQuart",
                   },
-                  tooltip: {
-                    callbacks: {
-                      label: (context) =>
-                        `${context.label}: ${context.raw} reviews`,
-                    },
+                  hover: {
+                    mode: "nearest",
+                    intersect: true,
                   },
-                },
-                animation: {
-                  duration: 1000,
-                  easing: "easeInOutQuart",
-                },
-                hover: {
-                  mode: "nearest",
-                  intersect: true,
-                },
-              }}
-            />
+                }}
+              />
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold text-gray-700">Total Views</h3>
-          <p className="text-3xl font-bold text-blue-600">
-            {dashboardData.views[viewsPeriod]?.totalViews || 0}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold text-gray-700">Unique Views</h3>
-          <p className="text-3xl font-bold text-green-600">
-            {dashboardData.views[viewsPeriod]?.totalUniqueViews || 0}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold text-gray-700">Total Reviews</h3>
-          <p className="text-3xl font-bold text-purple-600">
-            {business?.reviewCount || 0}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Average Rating
-          </h3>
-          <div className="flex items-center">
-            <p className="text-3xl font-bold text-yellow-600">
-              {Number(business?.ratings || 0).toFixed(1)}
-            </p>
-            <FaStar className="text-yellow-400 ml-2 text-2xl" />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
