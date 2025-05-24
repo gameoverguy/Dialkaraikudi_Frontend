@@ -133,8 +133,8 @@ const handleCategoryClick = (category) => {
       
 
       {/* Right Section - Products Slider */}
-      <div className="w-full md:w-8/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
-        <div className="w-full md:px-8 h-[230px] md:h-[230px] lg:h-[230px] flex justify-center items-center">
+      <div className="w-full md:w-6/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
+        <div className="w-full md:px-4 h-[230px] md:h-[225px] lg:h-[230px] flex justify-center items-center">
           <Swiper
             spaceBetween={10}
             freeMode={true}
@@ -157,7 +157,7 @@ const handleCategoryClick = (category) => {
           >
             {topServices.map((deal) => (
               <SwiperSlide key={deal.id}>
-                <div className="border border-gray-200  shadow-md flex flex-col h-[230px] md:h-[230px] lg:h-[230px] bg-white rounded-md justify-start items-center cursor-pointer">
+                <div className="border border-gray-200  shadow-md flex flex-col h-[230px] md:h-[225px] lg:h-[230px] bg-white rounded-md justify-start items-center cursor-pointer">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                     {deal.label}
                   </div> */}
@@ -176,7 +176,7 @@ const handleCategoryClick = (category) => {
       </div>
 
       {/* Left Section - Video and Promo */}
-      <div className="hidden md:block text-white w-full md:w-4/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
+      <div className="hidden md:block text-white w-full md:w-6/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
         <video
           className="w-full h-full object-cover"
           src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"

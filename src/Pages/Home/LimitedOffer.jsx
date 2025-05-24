@@ -128,7 +128,7 @@ useEffect(() => {
         Limited Offers
       </div>
 
-      <div className="px-3 w-full lg:w-11/12 mx-auto flex flex-col lg:flex-row justify-center items-center gap-3 lg:gap-3 lg:mb-6">
+      <div className="px-5 w-full lg:w-11/12 mx-auto flex flex-col lg:flex-row justify-center items-center md:px-0 gap-3 lg:gap-3 mb-6">
         {/* Left Slide */}
         <div className="w-full lg:w-6/12 h-[25vh] md:h-[30vh] lg:h-[40vh] relative rounded-lg overflow-hidden cursor-pointer">
           {offerLeftBanner.length > 0 &&

@@ -2,9 +2,11 @@ import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useScreenWidth } from "./hooks/useScreenWidth"; // update path accordingly
 
 function Category1({ serviceCategories }) {
   const navigate = useNavigate();
+  const screenWidth = useScreenWidth();
 
   useEffect(() => {
     AOS.init({ once: false });
@@ -15,8 +17,9 @@ function Category1({ serviceCategories }) {
     if (!serviceCategories) return [];
 
     const shuffled = [...serviceCategories].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 8);
-  }, [serviceCategories]);
+    const sliceCount = screenWidth >= 1024 ? 10 : 6; // 1024px is Tailwind's lg breakpoint
+    return shuffled.slice(0, sliceCount);
+  }, [serviceCategories, screenWidth]);
 
   const handleCategoryClick = (category) => {
     navigate(`/businesslist/${category}`);
@@ -24,11 +27,11 @@ function Category1({ serviceCategories }) {
 
   return (
     <div
-      className="w-full px-2 md:px-0 md:w-11/12 md:mx-auto"
+      className="w-full px-5 py-5 md:w-11/12 md:mx-auto bg-[#E9EEF6]  md:px-5 md:py-5 lg:px-5 lg:py-5 rounded"
       data-aos="fade-up"
     >
-      <div className="grid gap-3 md:gap-5 grid-cols-1 md:grid-cols-4">
-        {shuffledCategories?.map((item, index) => (
+      <div className="grid gap-3 md:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        {shuffledCategories.map((item, index) => (
           <div
             key={item._id}
             onClick={() => handleCategoryClick(item._id)}

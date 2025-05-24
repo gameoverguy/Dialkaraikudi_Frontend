@@ -44,11 +44,11 @@ const Bussiness_List = () => {
 
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
-  
+
 
   const handleCategoryClick = (category) => {
-        navigate(`/business/${category}`);
-    };
+    navigate(`/business/${category}`);
+  };
 
 
   useEffect(() => {
@@ -213,7 +213,7 @@ const Bussiness_List = () => {
     );
   }
 
-  
+
 
   return (
     <>
@@ -323,9 +323,12 @@ const Bussiness_List = () => {
                 <>
                   {filteredData.map((data, i) => (
                     <React.Fragment key={i}>
-                      <div className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2">
+                      <div className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2"                      
+                      >
                         {/* Business card content */}
-                        <div className="w-full md:w-[25%]">
+                        <div className="w-full md:w-[25%]"
+                        onClick={() => handleBusinessClick(data._id)}
+                        >
                           <img
                             src={data.photos[0]}
                             alt="Business"
@@ -334,11 +337,12 @@ const Bussiness_List = () => {
                         </div>
 
                         <div className="w-full flex flex-col md:flex-row justify-between p-1 md:p-3 md:pr-6">
-                          <div className="space-y-4 mt-1 md:mt-0 w-full p-2">
+                          <div className="space-y-4 mt-1 md:mt-0 w-full p-2"
+                          onClick={() => handleBusinessClick(data._id)}
+                          >
                             <h2
                               className="text-xl font-semibold"
-                              onClick={() => handleBusinessClick(data._id)}
-                            >
+                                                          >
                               {data.businessName}
                             </h2>
                             <div className="flex items-center gap-2">
@@ -382,7 +386,8 @@ const Bussiness_List = () => {
                               onClick={() =>
                                 handleWhatsAppClick(data?.contactDetails?.whatsapp)
                               }
-                              className="flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white cursor-pointer md:w-full w-6/12 justify-center md:justify-start"
+                              className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!data?.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                              disabled={!data?.contactDetails?.whatsapp}
                             >
                               <span className="text-xl px-1 text-white">
                                 <FaWhatsapp size={16} className="text-white" />
@@ -398,14 +403,14 @@ const Bussiness_List = () => {
 
                       {/* Show side banner after every 2 items in mobile view */}
                       {(i + 1 === 2 || i + 1 === 4) && sideBanner && sideBanner.length > 0 && (
-      <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
-        <img
-          src={sideBanner[Math.floor(i / 2) % sideBanner.length]?.contentUrl}
-          alt={`Mobile Side Banner ${Math.floor(i / 2) + 1}`}
-          className="w-full h-full object-cover rounded-lg"
-        />
-      </div>
-    )}
+                        <div className="lg:hidden md:w-[50%] h-full my-4 mx-auto">
+                          <img
+                            src={sideBanner[Math.floor(i / 2) % sideBanner.length]?.contentUrl}
+                            alt={`Mobile Side Banner ${Math.floor(i / 2) + 1}`}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                      )}
                     </React.Fragment>
                   ))}
                 </>

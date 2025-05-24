@@ -10,8 +10,8 @@ import { TiSocialFacebook } from "react-icons/ti";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png";
-import play from "../assets/play.webp";
-import { Link, useNavigate } from "react-router-dom";
+import play from "../assets/play.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const socialLinks = [
@@ -22,7 +22,6 @@ const Footer = () => {
     { icon: CiLinkedin, color: "#0077b5" },
     // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
-  const navigate = useNavigate();
   const footText1 = [
     { title: "About us", path: "/aboutus" },
     { title: "Contact us", path: "/contactus" },
@@ -30,32 +29,38 @@ const Footer = () => {
     { title: "Advertise on Dialkaraikudi", path: "#" },
   ];
 
-  const footText3 = [
-    { title: "Digitaly.Live", path: "#" },
-    { title: "Dial Puthukotai", path: "#" },
-    { title: "Gteceducation", path: "#" },
-  ];
+  // const footText3 = [
+  //   { title: "Digitaly.Live", path: "#" },
+  //   { title: "Dial Puthukotai", path: "#" },
+  //   { title: "Gteceducation", path: "#" },
+  // ];
 
   return (
-    <footer className="bg-gradient-to-t from-blue-300 to-white text-teal-800">
-      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-8 md:pt-18">
+    <footer className="bg-gradient-to-r from-blue-200 via-indigo-650 to-blue-400">
+      <div className="w-11/12 mx-auto lg:px-6 md: px-2 pt-4">
         <div className="flex flex-col md:flex-row md:gap-2 w-full justify-between items-start">
           {/* Logo and Description */}
-          <div className="w-full flex flex-col items-center lg:items-start md:w-4/12 p-3 ">
-            <img
-              src={Logo}
-              alt="Dialkaraikudi"
-              className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
-            />
-            <p>a Product by</p>
-            <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
-              <img
-                src={digitaly}
-                alt="Dialkaraikudi"
-                className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
-              />
+          <div className="w-full flex flex-col items-center justify-center md:w-4/12 p-3 ">
+            <div className="flex gap-3 md:gap-0 lg:gap-10 md:flex-col lg:flex-row">
+              <div className="w-35 flex justify-center items-center">
+                <img
+                  src={Logo}
+                  alt="Dialkaraikudi"
+                  className="w-full h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center">
+                <p>a Product by</p>
+                <div className="flex justify-start items-start gap-5 py-3 w-15 h-15 mb-5">
+                  <img
+                    src={digitaly}
+                    alt="Dialkaraikudi"
+                    className="w-36 h-auto mb-4 hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              </div>
             </div>
-            <p className="text-base leading-relaxed">
+            <p className="text-base leading-relaxed font-['Poppins']">
               Dialkaraikudi is a premier digital platform in India that connects
               users with verified local service professionals.
             </p>
@@ -63,7 +68,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="w-full md:w-2/12 p-3">
-            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg font-semibold mb-4 text-gray-800">
               Quick Links
             </h4>
             <ul className="space-y-3 text-sm">
@@ -82,7 +87,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="w-full md:w-2/12 p-3">
-            <h4 className="text-lg font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg font-semibold mb-4 text-gray-800">
               Contact Us
             </h4>
             <ul className="space-y-3 text-sm">
@@ -107,7 +112,7 @@ const Footer = () => {
 
           {/* Office Locations */}
           <div className="w-full md:w-4/12 p-3">
-            <h4 className="text-lg text-center font-semibold mb-4 text-gray-800">
+            <h4 className="lg:text-lg md:text-left lg:text-center font-semibold mb-4 text-gray-800">
               Our Offices
             </h4>
             <ul className="space-y-5 text-sm">
@@ -140,7 +145,7 @@ const Footer = () => {
       </div>
 
       {/* Divider */}
-      <div className="mt-3 lg:mt-10 border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-row justify-between items-center gap-2 lg:gap-4">
+      <div className="border-t border-gray-400 py-4 px-6 flex flex-col-reverse md:flex-col lg:flex-row justify-between items-center gap-2 lg:gap-4">
         {/* Copyright */}
         <p className="text-xs sm:text-sm text-gray-600 text-center md:text-left">
           © {new Date().getFullYear()} Sunglasschettinad Retail Private Limited.
