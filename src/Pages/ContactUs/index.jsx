@@ -68,12 +68,22 @@ const ContactUs = () => {
       case "name":
         if (!value) {
           error = "Name is required";
+        } else if (value.length < 3) {
+          error = "Name must be at least 3 characters";
+        } else if (value.length > 25) {
+          error = "Name must not exceed 25 characters";
         }
         break;
       case "email":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!value) {
           error = "Email is required";
+        } else if (value.length < 10) {
+          error = "Email must be at least 10 characters";
+        } else if (value.length > 50) {
+          error = "Email must not exceed 50 characters";
+        } else if (!emailRegex.test(value)) {
+          error = "Please enter a valid email address";
         }
         break;
       case "subject":
@@ -109,44 +119,15 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate all fields with minimum length requirements
+    // Validate all fields
     const newErrors = {};
     let hasErrors = false;
 
-    // Name validation (min 3, max 25)
-    if (formData.name.length < 3) {
-      newErrors.name = "Name must be at least 3 characters";
-      hasErrors = true;
-    }
-
-    // Email validation (min 10, max 50)
-    if (formData.email.length < 10) {
-      newErrors.email = "Email must be at least 10 characters";
-      hasErrors = true;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-      hasErrors = true;
-    }
-
-    // Subject validation (min 5)
-    if (formData.subject.length < 5) {
-      newErrors.subject = "Subject must be at least 20 characters";
-      hasErrors = true;
-    }
-
-    // Message validation (min 10)
-    if (formData.message.length < 10) {
-      newErrors.message = "Message must be at least 20 characters";
-      hasErrors = true;
-    }
-
-    // Check for empty fields
     Object.keys(formData).forEach((key) => {
-      if (!formData[key]) {
-        newErrors[key] = `${
-          key.charAt(0).toUpperCase() + key.slice(1)
-        } is required`;
+      const error = validateField(key, formData[key]);
+      if (error) {
         hasErrors = true;
+        newErrors[key] = error;
       }
     });
 
@@ -206,7 +187,7 @@ const ContactUs = () => {
               <FloatingInput
                 id="email"
                 name="email"
-                type="text"
+                type="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email Address"
@@ -299,16 +280,16 @@ const ContactUs = () => {
               </h3>
               <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31443.61544722554!2d78.75673621346575!3d10.074657808945617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0070588e59a6f9%3A0x1c8b5b1e49c5ef89!2sKaraikudi%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1701835146412!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62863.95814818316!2d78.74391571889245!3d10.927358651546392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baab7bef0eaa1ad%3A0xeaf72ea253407547!2sKaraikudi%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1689612345678!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-lg"
-                  title="Karaikudi Map Location"
-                ></iframe>
+                  title="Karaikudi Map"
+                  className="w-full h-full"
+                />
               </div>
             </div>
 

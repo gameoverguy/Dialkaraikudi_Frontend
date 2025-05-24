@@ -50,7 +50,7 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682b12797e0c060d62669940" &&
             ad.isActive
         );
-        console.log("limited", response.data);
+        
 
         let finalSlides = [];
 
@@ -88,7 +88,7 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682c1a7b0c32012c369edade" &&
             ad.isActive
         );
-        console.log("limited1", response.data);
+        
 
         let finalSlides = [];
 
@@ -139,7 +139,7 @@ useEffect(() => {
                   key={item.id || idx}
                   src={item.contentUrl}
                   alt=""
-                  className={`absolute inset-0 lg:object-cover w-full h-full transition-opacity duration-1000 ease-in-out ${
+                  className={`absolute inset-0 lg:object-fit-contain w-full h-full transition-opacity duration-1000 ease-in-out ${
                     leftIndex === idx ? "opacity-100 z-20" : "opacity-0 z-0"
                   } ${
   isInitialLeftLoad ? "opacity-100" : "transition-opacity duration-1000 ease-in-out"
@@ -159,7 +159,7 @@ useEffect(() => {
                   key={item.id || idx}
                   src={item.contentUrl}
                   alt=""
-                  className={`absolute inset-0 lg:object-cover w-full h-full transition-opacity duration-1000 ease-in-out ${
+                  className={`absolute inset-0 lg:object-fit-contain w-full h-full transition-opacity duration-1000 ease-in-out ${
                     rightIndex === idx ? "opacity-100 z-20" : "opacity-0 z-0"
                   } ${
   isInitialRightLoad ? "opacity-100" : "transition-opacity duration-1000 ease-in-out"

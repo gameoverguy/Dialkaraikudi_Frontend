@@ -48,7 +48,7 @@ export default function SeasonalProducts() {
             ad.slotId?._id === "682d863ca38e20fc35a70541" &&
             ad.isActive
         );
-        console.log("SeasonalServices", response.data)
+        
         
 
         let finalSlides = [];
