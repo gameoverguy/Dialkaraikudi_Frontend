@@ -181,8 +181,8 @@ const OTPVerification = ({ isOpen, onClose, email, onVerificationSuccess }) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md">
-      <div className=" text-center p-2">
+    <CustomModal isOpen={isOpen} onClose={onClose} classname="w-full max-w-md" title={" "}>
+      <div className=" text-center p-1 sm:p-2">
         <h2 className="text-lg font-bold mb-4">
           {step === "otp" ? "Enter Verification Code" : "RESET PASSWORD"}
         </h2>

@@ -15,7 +15,7 @@ import coursal11 from "../../assets/coursal11.jpg";
 import { API } from "../../../config/config";
 import Cookies from "js-cookie";
 import { useLoginModal } from "../../context/LoginContext";
-import { toast, ToastContainer } from "react-toastify";
+// import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../Components/Loader";
 import { FaFilter } from "react-icons/fa6";
 import FloatingAdBalloon from "../../Components/FloatAd";
@@ -158,7 +158,7 @@ const Bussiness_List = () => {
     if (user) {
       setShowContact((prev) => (prev === id ? null : id)); // Toggle specific contact
     } else {
-      toast.warning("Please Login to show contact number");
+      // toast.warning("Please Login to show contact number");
       setTimeout(() => {
         handleOpenLoginModal();
       }, 100);
@@ -172,7 +172,7 @@ const Bussiness_List = () => {
       const whatsappUrl = `https://wa.me/${formattedNumber}`;
       window.open(whatsappUrl, "_blank");
     } else {
-      toast.warning("Please Login to contact via WhatsApp");
+      // toast.warning("Please Login to contact via WhatsApp");
       setTimeout(() => {
         handleOpenLoginModal();
       }, 100);
@@ -432,7 +432,7 @@ const Bussiness_List = () => {
               </div>
             ))}
         </div>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
       </div>
       <FloatingAdBalloon />
     </>

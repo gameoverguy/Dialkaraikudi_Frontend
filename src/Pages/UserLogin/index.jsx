@@ -167,10 +167,10 @@ const UserLogin = ({
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        title=""
+        title={" "}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <div className="p-2 sm:p-3">
+        <div className="p-1 sm:p-2">
           <h1 className="text-base sm:text-lg text-center font-bold text-gray-800 mb-8 sm:mb-6">
             {role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}
           </h1>

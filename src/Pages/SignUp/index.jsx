@@ -217,11 +217,12 @@ const SignupModal = ({
   return (
     <>
       <CustomModal
+        title={" "}
         isOpen={isOpen}
         onClose={onClose}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
       >
-        <div className="p-2 sm:p-3">
+        <div className="p-1 sm:p-2">
           <h1 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center">
             REGISTER
           </h1>
