@@ -58,13 +58,13 @@ const CustomModal = ({
 
         {/* Title & Close Button */}
         {title && (
-          <div className="relative w-full p-4 bg-white flex justify-between items-center">
+          <div className="w-full p-4 bg-white flex justify-between items-center">
             <h4 className={`text-[20px] font-bold text-title uppercase flex-1 text-${titleAlignment}`}>
               {title}
             </h4>
             <span
               onClick={onClose}
-              className="absolute right-3 top-3 cursor-pointer text-red-400 font-bold text-3xl duration-500 hover:text-red-700"
+              className="cursor-pointer text-red-400 font-bold text-3xl duration-500 hover:text-red-700"
             >
               <IoClose />
             </span>

@@ -458,7 +458,7 @@ const HomePage = () => {
             });
           }}
           title={isEditing ? "Edit Advertisement" : "Add New Slot "}
-          classname="w-[25%]"
+          classname={"w-[50%] md:w-[50%] lg:w-[30%]"}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
             <FloatingInput

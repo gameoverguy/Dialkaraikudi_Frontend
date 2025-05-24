@@ -142,47 +142,35 @@ const AdminPanel = () => {
     const hasSelectedChild = item.children?.some(
       (child) => child.key === selectedKey
     );
-
+  
     return (
       <div key={item.key}>
         <div
           className={`flex items-center px-4 py-3 cursor-pointer rounded-lg transition-all duration-500 ease-in-out 
-            ${
-              isSelected
-                ? "bg-[#0A8A3D]/10 text-[#0A8A3D]"
-                : hasSelectedChild
-                ? ""
-                : "hover:bg-[#9effc5]"
-            }`}
+            ${isSelected ? "bg-[#0A8A3D]/10 text-[#0A8A3D]" : hasSelectedChild ? "" : "hover:bg-[#9effc5]"}`}
           onClick={() =>
             item.children ? toggleSubmenu(item.key) : handleMenuClick(item.key)
           }
         >
           <span
-            className={`flex items-center ${
-              isSelected ? "text-[#0A8A3D]" : "text-[#F7941D]"
-            }`}
+            className={`flex items-center ${isSelected ? "text-[#0A8A3D]" : "text-[#F7941D]"}`}
           >
             {item.icon}
           </span>
-          {!collapsed && (
-            <>
-              <span className="ml-3 flex-1">{item.label}</span>
-              {item.children && (
-                <span
-                  className={`flex items-center transition-transform duration-1000 ease-in-out transform ${
-                    isExpanded ? "rotate-180" : ""
-                  }`}
-                >
-                  <MdExpandMore size={20} />
-                </span>
-              )}
-            </>
+          <span className={`ml-3 flex-1 ${collapsed ? "hidden group-hover:block" : "block"}`}>
+            {item.label}
+          </span>
+          {item.children && (
+            <span
+              className={`flex items-center transition-transform duration-1000 ease-in-out transform ${isExpanded ? "rotate-180" : ""} ${collapsed ? "hidden group-hover:block" : "block"}`}
+            >
+              <MdExpandMore size={20} />
+            </span>
           )}
         </div>
-        {!collapsed && item.children && (isExpanded || hasSelectedChild) && (
+        {item.children && (isExpanded || hasSelectedChild) && (
           <div
-            className="mt-1 overflow-hidden transition-all duration-1000 ease-in-out transform origin-top"
+            className={`mt-1 overflow-hidden transition-all duration-1000 ease-in-out transform origin-top ${collapsed ? "hidden group-hover:block" : "block"}`}
             style={{
               maxHeight: isExpanded ? "500px" : "0",
               opacity: isExpanded ? 1 : 0,
@@ -193,11 +181,7 @@ const AdminPanel = () => {
               <div
                 key={subItem.key}
                 className={`py-2 px-12 rounded-md cursor-pointer text-sm transition-all duration-1000 ease-in-out
-                  ${
-                    selectedKey === subItem.key
-                      ? "bg-[#0A8A3D]/10 text-[#0A8A3D]"
-                      : "hover:bg-gray-100"
-                  }
+                  ${selectedKey === subItem.key ? "bg-[#0A8A3D]/10 text-[#0A8A3D]" : "hover:bg-gray-100"}
                   transform hover:translate-x-2`}
                 onClick={() => handleMenuClick(subItem.key)}
               >
@@ -276,25 +260,28 @@ const AdminPanel = () => {
     <div className="flex min-h-screen bg-gray-50 overflow-x-scroll">
       {/* Sidebar - Fixed position */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-10
-        ${collapsed ? "w-20 hover:${!collapsed} absoulute" : "w-64"} `}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 z-20
+        ${collapsed ? "w-20 group hover:w-64" : "w-64"} `}
       >
         <div
-          className={`p-4 flex  ${
-            collapsed
-              ? "flex-col gap-5 items-center"
-              : "justify-between items-center"
-          }`}
+          className={`p-4 flex ${collapsed ? "flex-col gap-5 items-center group-hover:flex-row group-hover:justify-between" : "justify-between items-center"}`}
         >
           <div>
             {!collapsed ? (
               <img src={logo1} className="h-14" />
             ) : (
-              <img src={logo} className="h-14" />
+              <div className="group-hover:hidden">
+                <img src={logo} className="h-14" />
+              </div>
+            )}
+            {collapsed && (
+              <div className="hidden group-hover:block">
+                <img src={logo1} className="h-14" />
+              </div>
             )}
           </div>
           <div
-            className="transition-all duration-200 "
+            className="transition-all duration-200"
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? (
@@ -311,7 +298,7 @@ const AdminPanel = () => {
           </div>
         </div>
 
-        <div className=" space-y-1 px-2 h-[calc(100vh-170px)] overflow-y-auto">
+        <div className="space-y-1 px-2 h-[calc(100vh-170px)] overflow-y-auto">
           {menuItems.map(renderMenuItem)}
         </div>
 
@@ -320,12 +307,10 @@ const AdminPanel = () => {
         >
           <button
             onClick={handleLogout}
-            className={`w-full cursor-pointer flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 ${
-              collapsed ? "justify-center" : ""
-            }`}
+            className={`w-full cursor-pointer flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 ${collapsed ? "justify-center group-hover:justify-start" : ""}`}
           >
             <MdLogout size={20} />
-            {!collapsed && <span className="ml-3">Logout</span>}
+            {(!collapsed || (collapsed && "group-hover:block")) && <span className="ml-3"></span>}
           </button>
         </div>
       </div>
@@ -337,7 +322,7 @@ const AdminPanel = () => {
       >
         {/* Fixed header */}
         <header
-          className="fixed top-0 right-0 h-16 bg-white shadow-sm z-10 transition-all duration-300"
+          className="fixed top-0 right-0 z-10 h-16 bg-white shadow-sm z-0 transition-all duration-300"
           style={{
             left: collapsed ? "80px" : "256px",
           }}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API } from '../../../../config/config';
 import { IoNotifications } from 'react-icons/io5';
 import SlotAds from './SlotAds';
+import LottieLoader from '../../../Components/Loader';
 
 const Notification = () => {
   const [pendingAds, setPendingAds] = useState([]);
@@ -31,7 +32,7 @@ const Notification = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <LottieLoader/>
       </div>
     );
   }

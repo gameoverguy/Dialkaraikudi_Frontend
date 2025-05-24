@@ -121,12 +121,12 @@ const CustomTable = ({
     <div className="w-full p-6 bg-white mt-4 shadow rounded-lg">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
-        <div className="relative">
+        <div className="relative w-[50%]">
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder={searchPlaceholder}
-            className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none inline-block"
+            className="pl-10 pr-4 py-2 border w-75 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-none inline-block"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

@@ -69,7 +69,7 @@ const BusinessForm = ({
 
       </div>
 
-      <div>
+      <div className='w-[50%]'>
         <FloatingInput
           type="email"
           name="email"
@@ -133,12 +133,12 @@ const BusinessForm = ({
               <img
                 src={preview}
                 alt={`Preview ${index + 1}`}
-                className="h-20 w-20 object-cover rounded-lg"
+                className="h-25 w-25 object-cover rounded-lg"
               />
               <button
                 type="button"
                 onClick={() => removePhoto(index)}
-                className="absolute cursor-pointer -top-2 right-5 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200"
+                className="absolute cursor-pointer -top-1 right-4 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200"
               >
                 <MdCancel />
               </button>
