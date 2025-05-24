@@ -50,7 +50,7 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682b12797e0c060d62669940" &&
             ad.isActive
         );
-        console.log("limited", response.data);
+        
 
         let finalSlides = [];
 
@@ -88,7 +88,7 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682c1a7b0c32012c369edade" &&
             ad.isActive
         );
-        console.log("limited1", response.data);
+        
 
         let finalSlides = [];
 

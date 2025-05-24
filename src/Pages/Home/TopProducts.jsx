@@ -93,7 +93,7 @@ function TopProducts() {
             ad.slotId?._id === "682c49b912b9ecff83baf9c6" &&
             ad.isActive
         );
-        console.log("topProduct", response.data);
+        
 
         let finalSlides = [];
 

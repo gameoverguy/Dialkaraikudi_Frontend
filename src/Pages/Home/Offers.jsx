@@ -89,7 +89,7 @@ useEffect(() => {
             ad.slotId?._id === "682c6cd2892d318a662b2226" &&
             ad.isActive
         );
-        console.log("productOffers", response.data);
+        
         
         
 
@@ -133,7 +133,7 @@ useEffect(() => {
             ad.slotId?._id === "682c6cae892d318a662b2224" &&
             ad.isActive
         );
-        console.log("serviceOffers", response.data);
+        
         
         
 

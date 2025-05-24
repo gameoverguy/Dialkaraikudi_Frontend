@@ -90,7 +90,7 @@ useEffect(() => {
             ad.slotId?._id === "682c6c6a892d318a662b2222" &&
             ad.isActive
         );
-        console.log("topServices", response.data);
+        
         
         
 
@@ -134,7 +134,7 @@ const handleCategoryClick = (category) => {
 
       {/* Right Section - Products Slider */}
       <div className="w-full md:w-6/12 lg:w-8/12 flex justify-center items-center lg:h-[32vh] md:h-[24vh]">
-        <div className="w-full md:px-4 h-[230px] md:h-[225px] lg:h-[230px] flex justify-center items-center">
+        <div className="w-full md:px-4 md:h-[24vh] lg:h-[32vh] flex justify-center items-center">
           <Swiper
             spaceBetween={10}
             freeMode={true}
@@ -157,7 +157,7 @@ const handleCategoryClick = (category) => {
           >
             {topServices.map((deal) => (
               <SwiperSlide key={deal.id}>
-                <div className="border border-gray-200 shadow-md flex flex-col h-[230px] md:h-[210px] lg:h-[245px] bg-white rounded-md justify-start items-center cursor-pointer">
+                <div className="border border-gray-200 shadow-md flex flex-col h-[30vh] md:h-[20vh] lg:h-[28vh] bg-white rounded-md justify-start items-center cursor-pointer">
                   {/* <div className="text-xs bg-orange-400 text-white px-2 py-1 rounded mb-2">
                     {deal.label}
                   </div> */}
