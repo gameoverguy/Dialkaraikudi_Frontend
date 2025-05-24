@@ -19,6 +19,7 @@ import {
   Title,
 } from "chart.js";
 import { Pie, Bar } from "react-chartjs-2";
+import LottieLoader from "../../../Components/Loader";
 
 ChartJS.register(
   ArcElement,
@@ -46,7 +47,7 @@ const VendorDashboard = ({ businessData }) => {
       yearly: { labels: [], data: [], totalReviews: 0, averageRating: "0.0" },
     },
   });
-
+  const [loading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -63,39 +64,52 @@ const VendorDashboard = ({ businessData }) => {
             const breakdown = viewsSummary?.breakdown || [];
             let labels = [];
             let viewData = [];
-            
+
             if (breakdown.length > 0) {
               breakdown.forEach((entry) => {
                 const date = new Date(entry.date);
-                let label = '';
-                
-                switch(period) {
-                  case 'weekly':
+                let label = "";
+
+                switch (period) {
+                  case "weekly":
                     // Format as "Mon, 24" for weekly view
-                    label = date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
+                    label = date.toLocaleDateString("en-US", {
+                      weekday: "short",
+                      day: "numeric",
+                    });
                     break;
-                  case 'monthly':
+                  case "monthly":
                     // Format as "May 24" for monthly view
-                    label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    label = date.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    });
                     break;
-                  case 'yearly':
+                  case "yearly":
                     // Format as "May 2025" for yearly view
-                    label = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    label = date.toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
+                    });
                     break;
                   default:
-                    label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    label = date.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    });
                 }
-                
+
                 labels.push(label);
                 viewData.push(entry.totalViews || 0);
               });
             }
-            
+
             return {
               labels: labels,
               data: viewData,
               totalViews: viewsSummary?.totalViews || 0,
-              totalUniqueViews: viewsSummary?.uniqueViews || 0
+              totalUniqueViews: viewsSummary?.uniqueViews || 0,
             };
           };
 
@@ -107,10 +121,10 @@ const VendorDashboard = ({ businessData }) => {
               reviewStats?.ratingBreakdown?.[4] || 0,
               reviewStats?.ratingBreakdown?.[3] || 0,
               reviewStats?.ratingBreakdown?.[2] || 0,
-              reviewStats?.ratingBreakdown?.[1] || 0
+              reviewStats?.ratingBreakdown?.[1] || 0,
             ],
             totalReviews: reviewStats?.totalReviews || 0,
-            averageRating: Number(reviewStats?.averageRating || 0).toFixed(1)
+            averageRating: Number(reviewStats?.averageRating || 0).toFixed(1),
           });
 
           setDashboardData({
@@ -118,17 +132,19 @@ const VendorDashboard = ({ businessData }) => {
               weekly: transformViewsData(data.views.weekly),
               monthly: transformViewsData(data.views.monthly),
               yearly: transformViewsData(data.views.yearly),
-              alltime: transformViewsData(data.views.alltime)
+              alltime: transformViewsData(data.views.alltime),
             },
             reviews: {
               weekly: transformReviewsData(data.reviews.reviewStatsWeekly),
               monthly: transformReviewsData(data.reviews.reviewStatsMonthly),
-              yearly: transformReviewsData(data.reviews.reviewStatsYearly)
-            }
+              yearly: transformReviewsData(data.reviews.reviewStatsYearly),
+            },
           });
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+      }finally {
+        setIsLoading(false);
       }
     };
 
@@ -194,7 +210,9 @@ const VendorDashboard = ({ businessData }) => {
       ))}
     </div>
   );
-
+if (loading) {
+    return <div><LottieLoader /></div>;
+  }
   return (
     <div className="p-4 bg-gray-50">
       <div className="bg-white shadow rounded-lg mb-6 p-4">
@@ -293,7 +311,9 @@ const VendorDashboard = ({ businessData }) => {
                   },
                   title: {
                     display: true,
-                    text: `${viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)} Views Breakdown`,
+                    text: `${
+                      viewsPeriod.charAt(0).toUpperCase() + viewsPeriod.slice(1)
+                    } Views Breakdown`,
                     font: {
                       size: 16,
                     },
@@ -365,7 +385,10 @@ const VendorDashboard = ({ businessData }) => {
                     },
                     title: {
                       display: true,
-                      text: `${reviewsPeriod.charAt(0).toUpperCase() + reviewsPeriod.slice(1)} Rating Distribution`,
+                      text: `${
+                        reviewsPeriod.charAt(0).toUpperCase() +
+                        reviewsPeriod.slice(1)
+                      } Rating Distribution`,
                       font: {
                         size: 16,
                       },
