@@ -92,6 +92,7 @@ const BusinessInfo = ({ formData, businessId }) => {
     }
   };
   const user = JSON.parse(localStorage.getItem("userData"));
+
   const handleWhatsAppClick = (whatsappNumber) => {
     if (user) {
       // Format the WhatsApp number and create the chat URL
@@ -336,8 +337,8 @@ const BusinessInfo = ({ formData, businessId }) => {
                   onClick={() =>
                     handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)
                   }
-                  className={`hidden md:flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                // disabled={!data?.contactDetails?.whatsapp}
+                  className={`hidden md:flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed " : "cursor-pointer"}`}
+                disabled={!formData?.business?.contactDetails?.whatsapp}
                 >
                   <span className="text-xl px-1 text-white">
                     <FaWhatsapp size={16} className="text-white" />
@@ -364,7 +365,7 @@ const BusinessInfo = ({ formData, businessId }) => {
                     handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)
                   }
                   className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                // disabled={!data?.contactDetails?.whatsapp}
+                disabled={!formData?.business?.contactDetails?.whatsapp}
                 >
                   <span className="text-xl px-1 text-white">
                     <FaWhatsapp size={16} className="text-white" />

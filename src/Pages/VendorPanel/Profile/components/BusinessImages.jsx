@@ -111,22 +111,35 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
 
       {isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div
-            className="border-2 border-dashed border-gray-300 p-4 rounded-lg"
+           <div
+            className="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer bg-gray-50 hover:bg-blue-50"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
+            onClick={() => document.getElementById('file-input').click()}
           >
             <input
+              id="file-input"
               type="file"
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full"
+              className="hidden"
               disabled={isUploading}
             />
-            <p className="text-center text-gray-500 mt-2">
-              Drag and drop images here or click to select
-            </p>
+            <div className="space-y-4">
+              <div className="flex justify-center">
+                <FaPlus className="text-gray-400 text-4xl hover:text-blue-500 transition-colors" />
+              </div>
+              <div className="text-lg font-medium text-gray-700">
+                Drop your images here
+              </div>
+              <div className="text-sm text-gray-500">
+                or <span className="text-blue-500 hover:text-blue-600 font-medium">click to select</span>
+              </div>
+              <div className="text-xs text-gray-400">
+                Maximum 6 images, 2MB each
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-row gap-4 flex-wrap">
@@ -162,7 +175,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 </button>
               </div>
             ))}
-            {Array.from({
+            {/* {Array.from({
               length:
                 6 -
                 ((business?.business?.photos?.length || 0) +
@@ -174,7 +187,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
               >
                 <FaPlus className="text-gray-400 text-3xl" />
               </div>
-            ))}
+            ))} */}
           </div>
 
           <button
