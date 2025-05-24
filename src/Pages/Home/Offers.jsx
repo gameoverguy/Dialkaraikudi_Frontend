@@ -171,7 +171,7 @@ const handleCategoryClick = (category) => {
 
 
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center w-full md:w-11/12 mx-auto h-fit">
+    <div className="flex flex-col md:flex-row justify-center items-center w-full md:w-11/12 mx-auto h-fit lg:px-0">
       {/* Product Offers */}
       <div className="flex flex-col justify-center items-center w-11/12 md:w-6/12 lg:w-6/12">
         <p className="text-2xl lg:text-3xl font-semibold text-green-800 mb-3 md:mb-0">Product Offers</p>
@@ -205,7 +205,7 @@ const handleCategoryClick = (category) => {
                           <img
                             src={deal.contentUrl}
                             alt={deal.title}
-                            className="h-32 object-cover mb-5 lg:mb-10 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
+                            className="h-32 object-cover md:mb-3 lg:mb-10 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
                           />
                           <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1">{deal.description}</h3>
                           <p className="text-sm text-gray-500 mb-1 text-start">{deal.businessId.businessName}</p>
@@ -218,7 +218,7 @@ const handleCategoryClick = (category) => {
 
       {/* Service Offers */}
       <div className="flex flex-col justify-center items-center w-11/12 md:w-6/12 lg:w-6/12">
-        <p className="text-2xl lg:text-3xl font-semibold text-cyan-800 mt-5 mb-3 md:mb-0">Service Offers</p>
+        <p className="text-2xl lg:text-3xl font-semibold text-cyan-800 mt-7 md:mt-0 mb-3 md:mb-0">Service Offers</p>
         <div className="w-full md:px-4 md:h-[270px] lg:h-[280px] flex justify-center items-center">
                   <Swiper
                     spaceBetween={15}
@@ -249,7 +249,7 @@ const handleCategoryClick = (category) => {
                           <img
                             src={deal.contentUrl}
                             alt={deal.title}
-                            className="h-32 object-cover mb-13 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
+                            className="h-32 object-cover mb-9 md:mb-7 lg:mb-13 w-full" onClick={() => handleCategoryClick(deal.businessId?._id)}
                           />
                           <h3 className="font-semibold text-sm mb-1 text-start line-clamp-1 px-3">{deal.description}</h3>
                           <p className="text-sm text-gray-500 mb-1 text-start">{deal.businessId.businessName}</p>
