@@ -81,6 +81,7 @@ function TopProducts() {
   const navigate = useNavigate();
 
   const [topProduct, setTopProduct] = useState([]);
+  const [topProductVideo, setTopProductVoideo] = useState([]);
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -93,7 +94,14 @@ function TopProducts() {
             ad.slotId?._id === "682c49b912b9ecff83baf9c6" &&
             ad.isActive
         );
-        
+
+        const videoAd = response.data.find(
+          (ad) =>
+            ad.slotId?.page === "home" &&
+            ad.slotId?._id === "6831a161b4e71c503c792958" &&
+            ad.isActive
+        );
+        console.log("Topvideo", response.data);
 
         let finalSlides = [];
 
@@ -110,7 +118,14 @@ function TopProducts() {
         } else {
           finalSlides = ads;
         }
+
         setTopProduct(finalSlides);
+
+        if (videoAd) {
+  setTopProductVoideo(videoAd.contentUrl);
+} // Set video URL
+
+        
       } catch (error) {
         console.error("Error fetching ads:", error);
         setTopProduct(localFallbacks.slice(0, 5)); // Fallback if API fails
@@ -130,10 +145,14 @@ function TopProducts() {
       <div className="hidden md:block text-white w-full md:w-6/12 lg:w-4/12 lg:h-[32vh] md:h-[24vh]">
         <video
           className="w-full h-full object-cover"
-          src="https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
+          src={
+            topProductVideo ||
+            "https://res.cloudinary.com/dstm2ouer/video/upload/v1746612083/store_nh16ay.mp4"
+          }
           autoPlay
           muted
           loop
+          
         ></video>
       </div>
 

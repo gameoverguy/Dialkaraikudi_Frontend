@@ -63,7 +63,7 @@ function Category2({productCategories}) {
                 <h3 className="text-xl font-black text-gray-800 tracking-wide transition-colors duration-500 group-hover:text-blue-700 group-hover:translate-y-[-1px]">
                   {item.displayName}
                 </h3>
-                <p className="mt-2 text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-300">
+                <p className="hidden md:hidden lg:block mt-2 text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-300">
                   Discover amazing {item.displayName.toLowerCase()} services around
                   you.
                 </p>

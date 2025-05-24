@@ -24,9 +24,9 @@ const AdPopup = () => {
       }, 5000);
 
       // Auto-close popup after 10 seconds
-      // const autoCloseTimer = setTimeout(() => {
-      //   setShowAd(false);
-      // }, 10000);
+      const autoCloseTimer = setTimeout(() => {
+        setShowAd(false);
+      }, 10000);
 
       return () => {
         clearTimeout(closeIconTimer);
