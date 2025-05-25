@@ -369,6 +369,7 @@ const Header = () => {
       />
       <SignupModal
         isOpen={isSignupOpen}
+        setIsSignupOpen={setIsSignupOpen}
         onClose={() => {
           setIsSignupOpen(false);
           setIsSignupFlow(false); // Reset signup flow when closing

@@ -6,6 +6,7 @@ import axios from "axios";
 import { API } from "../../../config/config";
 import { CiCircleInfo } from "react-icons/ci";
 import OTP from "../UserLogin/OTP";
+import GoogleAuthSection from "../../utils/GoogleAuth";
 
 const SignupModal = ({
   isOpen,
@@ -15,6 +16,7 @@ const SignupModal = ({
   setOtpEmail,
   setShowOTPModal,
   showOTPModal,
+  setIsSignupOpen,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -402,7 +404,13 @@ const SignupModal = ({
             </button>
           </div>
         </div>
+        <GoogleAuthSection
+          setSuccessMessage={setSuccessMessage}
+          setIsSignupOpen={setIsSignupOpen}
+          onClose={onClose}
+        />
       </CustomModal>
+
       <OTP
         isOpen={showOTPModal}
         onClose={() => setShowOTPModal(false)}

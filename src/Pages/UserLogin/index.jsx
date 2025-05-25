@@ -7,9 +7,9 @@ import CustomModal from "../../Components/modal";
 // import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { API } from "../../../config/config";
-import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { CiCircleInfo } from "react-icons/ci";
+import GoogleAuthSection from "../../utils/GoogleAuth";
 
 const UserLogin = ({
   isOpen,
@@ -167,7 +167,7 @@ const UserLogin = ({
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
-        title={`${role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}` }
+        title={`${role === "business" ? "BUSINESS LOGIN" : "MEMBER LOGIN"}`}
         classname="w-[95%] sm:w-full max-w-md mx-auto"
         titleAlignment="center"
       >
@@ -247,7 +247,6 @@ const UserLogin = ({
               {loading ? "LOGGING IN..." : "LOGIN"}
             </button>
           </form>
-
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 mt-3 sm:mt-4 text-[12px] sm:text-xs">
             <div>
               <span className="text-gray-600">Don't have an account? </span>
@@ -265,38 +264,14 @@ const UserLogin = ({
               Forgot Password?
             </a>
           </div>
-          {/* <div className="flex items-center justify-center text-center gap-3 my-6">
-            <div className="flex-1 h-px bg-gray-400"></div>
-            <p className="text-md text-gray-500 px-3 bg-white">or</p>
-            <div className="flex-1 h-px bg-gray-400"></div>
-          </div> */}
 
-          {/* <div className="mt-2"> */}
-          {/* <div className="relative group cursor-pointer overflow-hidden rounded-lg"> */}
-          {/* <div className="absolute inset-0 w-full h-full transition duration-300"></div> */}
-          {/* <div className="border border-gray-300 rounded-lg p-0.5 transition duration-300 group-hover:border-gray-400"> */}
-          {/* <GoogleLogin
-                onSuccess={credentialResponse => {
-                  const credentialResponsedecoded = jwtDecode(credentialResponse.credential);
-                  console.log(credentialResponsedecoded);
-                }}
-                onError={() => {
-                  console.log('Login Failed');
-                }}
-                useOneTap
-                theme="outline"
-                size="large"
-                shape="rectangular"
-                width="100%"
-                text="signin_with"
-                locale="en"
-                containerProps={{
-                  className: "flex items-center justify-center w-full py-2.5 px-4"
-                }}
-              /> */}
-          {/* </div> */}
-          {/* </div> */}
-          {/* </div> */}
+          {role === "user" && (
+            <GoogleAuthSection
+              role={role}
+              setSuccessMessage={setSuccessMessage}
+              setShowLoginModal={setShowLoginModal}
+            />
+          )}
         </div>
       </CustomModal>
     </>
