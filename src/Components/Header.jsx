@@ -118,9 +118,9 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 bg-[#fff6f6] z-40 w-full px-4 py-2 md:px-0 md:py-0 items-center shadow-lg border-gray-200">
-        <div className="px-4 py-3 lg:w-11/12 mx-auto flex justify-between items-center">
-          <div className="flex space-x-6 items-center">
+      <div className="sticky top-0 bg-[#fff6f6] z-40 w-full py-2 md:py-0 items-center shadow-lg border-gray-200">
+        <div className="w-11/12 lg:w-[96%] mx-auto md:py-4 flex justify-between items-center">
+          <div className="flex pr-3 items-center">
             <Link to="/">
               <img
                 src={Logo}
@@ -132,23 +132,23 @@ const Header = () => {
               <LocationTracker onLocationSelect={handleLocationSelect} />
             </div> */}
           </div>
-          <div className="hidden md:block relative w-6/12 xl:w-4/12">
+          <div className="hidden md:block relative w-6/12 lg:w-4/12">
             <form onSubmit={handleSearch}>
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for services, products, brands..."
-                className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 bg-gray-200 border border-gray-400 rounded-lg text-gray-800 focus:outline-none focus:border-green-400 focus:ring-3 focus:ring-green-300 transition-all"
+                className="w-full md:text-sm xl:text-base pl-3 pr-14 py-2 md:py-3 bg-gray-200 border border-gray-400 rounded-lg text-gray-800 focus:outline-none focus:border-green-400 focus:ring-3 focus:ring-green-300 transition-all"
               />
               <button
                 type="submit"
                 className="absolute top-1/2 -translate-y-1/2 
              bg-green-600 p-2 rounded-lg text-white 
              transition-all duration-200 cursor-pointer
-             hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none right-1"
+             hover:bg-green-700 active:scale-95 focus:ring-2 focus:ring-green-400 focus:outline-none md:right-1 lg:p-2"
               >
-                <IoSearchOutline className="w-5 h-5" />
+                <IoSearchOutline className="w-5 md:w-6 h-5 md:h-5" />
               </button>
             </form>
           </div>
@@ -175,7 +175,7 @@ const Header = () => {
               </Link>
             </div> */}
 
-            <div className="hidden md:block w-10 h-10">
+            <div className="hidden md:block px-3 w-10 h-10 z-50">
               <AiChatbox />
             </div>
 
@@ -186,26 +186,47 @@ const Header = () => {
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="flex items-center gap-2 cursor-pointer"
                   >
-                    <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
-                      {(businessData?.name || userData?.name || "U")
-                        .charAt(0)
-                        .toUpperCase()}
+                    <div className="md:hidden flex justify-between items-center gap-2 w-fit h-fit">
+                      <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
+                        {(businessData?.name || userData?.name || "U")
+                          .charAt(0)
+                          .toUpperCase()}
+                      </div>
+                      <svg
+                        className={`w-4 h-4 text-gray-600 transition-transform ${
+                          showDropdown ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
                     </div>
-                    <svg
-                      className={`w-4 h-4 text-gray-600 transition-transform ${
-                        showDropdown ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
+
+                    <div className="hidden w-fit h-fit px-3 py-1 gap-2 rounded-full bg-emerald-600 md:flex items-center justify-center text-white font-bold shadow-md">
+                      {businessData?.name || userData?.name || "U"}
+                      <svg
+                        className={`w-6 h-8 text-white transition-transform ${
+                          showDropdown ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
                   </button>
 
                   {showDropdown && (
@@ -285,8 +306,8 @@ const Header = () => {
         </div>
 
         {/* Mobile Search */}
-        <div className="md:hidden relative w-full md:w-11/12 mx-auto mt-3">
-          <form onSubmit={handleSearch}>
+        <div className="md:hidden relative pt-2 w-11/12 mx-auto">
+          <form onSubmit={handleSearch} className="relative w-full">
             <input
               type="search"
               value={searchQuery}
@@ -296,7 +317,8 @@ const Header = () => {
             />
             <button
               type="submit"
-              className="absolute top-1/2 -translate-y-1/2 right-0.5 md:right-1 bg-emerald-500 hover:bg-emerald-600 p-2.5 rounded-lg text-white transition-colors duration-200"
+              className="absolute top-1/2 -translate-y-1/2 right-1 bg-emerald-500 hover:bg-emerald-600 
+    p-2 rounded-lg text-white transition-colors duration-200"
             >
               <IoSearchOutline className="text-base" />
             </button>
