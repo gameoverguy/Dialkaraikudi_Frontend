@@ -11,7 +11,7 @@ import { IoLogoWhatsapp } from "react-icons/io5";
 import { CiYoutube, CiLinkedin } from "react-icons/ci";
 import digitaly from "../assets/digitaly.png";
 import Google_play from "../assets/Google_play.png";
-import { Link, useNavigate } from "react-router-dom";
+import { href, Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -19,12 +19,28 @@ const Footer = () => {
     {
       icon: FaInstagram,
       color: "#e602cb",
-      href: "https://www.instagram.com/digitaly.live/?hl=en",
+      href: "https://www.instagram.com/dialkaraikudi",
     },
-    { icon: TiSocialFacebook, color: "#3f048c", href: "https://facebook.com" },
-    { icon: IoLogoWhatsapp, color: "#04b504" },
-    { icon: CiYoutube, color: "#FF0000" },
-    { icon: CiLinkedin, color: "#0e4eb5" },
+    {
+      icon: TiSocialFacebook,
+      color: "#3f048c",
+      href: "https://www.facebook.com/dialkaraikudi",
+    },
+    {
+      icon: IoLogoWhatsapp,
+      color: "#04b504",
+      href: "https://whatsapp.com/channel/0029VawzheBHAdNd163xiA0N",
+    },
+    {
+      icon: CiYoutube,
+      color: "#FF0000",
+      href: "https://www.youtube.com/@dialkaraikudi",
+    },
+    {
+      icon: CiLinkedin,
+      color: "#0e4eb5",
+      href: "https://www.linkedin.com/company/dialkaraikudi",
+    },
     // { icon: FaTwitter, color: "#1DA1F2", href: "https://twitter.com" },
   ];
   const footText1 = [
@@ -46,10 +62,10 @@ const Footer = () => {
     <footer className="bg-blue-300 transition-all duration-300 hover:shadow-lg">
       <div className="w-11/12 mx-auto md:px-2 pt-4 transition-all duration-300">
         <div className="flex flex-col w-full justify-between items-start">
-          <div className="lg:w-full flex justify-between">
-            <div className="lg:w-9/12 flex justify-between">
+          <div className="lg:w-full flex flex-col lg:flex-row justify-between">
+            <div className="w-full lg:w-9/12 flex flex-col md:flex-row justify-between">
               {/* Logo and Description */}
-              <div className="w-full flex flex-col items-center justify-center md:w-6/12 lg:w-6/12  p-3 transition-all duration-300 hover:transform hover:scale-102">
+              <div className="w-full flex flex-col items-center justify-center md:w-6/12 lg:w-6/12 transition-all duration-300 hover:transform hover:scale-102">
                 <div className="w-full px-8 flex lg:gap-10 justify-between flex-row items-center">
                   <div className="w-35 flex justify-center items-center group">
                     <img
@@ -67,7 +83,7 @@ const Footer = () => {
                       <img
                         src={digitaly}
                         onClick={() =>
-                          window.open("https://www.digitaly.live/", "_blank")
+                          window.open("https://www.digitaly.live", "_blank")
                         }
                         alt="Digitaly"
                         className="w-36 h-auto mb-4 transform transition-all duration-300 group-hover:scale-110 cursor-pointer"
@@ -75,7 +91,7 @@ const Footer = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed font-['Poppins'] text-cyan-900 text-justify md:text-left transition-all duration-300 hover:text-gray-900">
+                <p className="text-sm leading-relaxed font-['Poppins'] text-cyan-900 text-center md:text-left transition-all duration-300 hover:text-gray-900">
                   DialKaraikudi is a trusted digital platform that connects
                   users across India with verified local service professionals,
                   making it easy to discover and hire the right experts near
@@ -85,14 +101,14 @@ const Footer = () => {
 
               {/* Quick Links */}
               <div className="w-full md:w-3/12 p-3 transition-all duration-300 hover:transform hover:translate-y-[-5px]">
-                <h4 className="lg:text-lg font-semibold mb-4 text-cyan-800 md:text-gray-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
+                <h4 className="lg:text-lg font-semibold mb-4 text-center text-cyan-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
                   Quick Links
                 </h4>
                 <ul className="space-y-3 text-sm">
                   {footText1.map((item, index) => (
                     <li
                       key={index}
-                      className="transform transition-all duration-300 hover:translate-x-2"
+                      className="transform transition-all text-center duration-300 hover:translate-x-2"
                     >
                       <Link
                         to={item.path}
@@ -107,14 +123,14 @@ const Footer = () => {
 
               {/* Contact Info */}
               <div className="w-full md:w-3/12 p-3 transition-all duration-300 hover:transform hover:translate-y-[-5px]">
-                <h4 className="lg:text-lg font-semibold mb-4 text-cyan-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
+                <h4 className="lg:text-lg text-center font-semibold mb-4 text-cyan-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
                   Contact Us
                 </h4>
-                <ul className="space-y-3 text-sm">
+                <ul className="space-y-3 text-sm text-center">
                   <li className="transform transition-all duration-300 hover:translate-x-2">
                     <a
                       // href="tel:+919442338670"
-                      className="hover:text-blue-600 text-cyan-800 transition-all duration-300 flex items-center gap-2 group"
+                      className="hover:text-blue-600 text-cyan-800 transition-all duration-300 group"
                     >
                       +91 9442338670
                     </a>
@@ -122,7 +138,7 @@ const Footer = () => {
                   <li className="transform transition-all duration-300 hover:translate-x-2">
                     <a
                       // href="mailto:admin@dialkaraikudi.com"
-                      className="hover:text-blue-600 transition-all text-cyan-800 duration-300 flex items-center gap-2 group"
+                      className="hover:text-blue-600 transition-all text-cyan-800 duration-300 group"
                     >
                       admin@dialkaraikudi.com
                     </a>
@@ -132,11 +148,11 @@ const Footer = () => {
             </div>
 
             {/* Office Locations */}
-            <div className="w-full lg:w-3/12 p-3 transition-all duration-300 hover:transform hover:translate-y-[-5px]">
-              <h4 className="lg:text-lg md:text-left lg:text-left font-semibold mb-4 text-cyan-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
+            <div className="w-full lg:w-4/12 p-3 transition-all duration-300 hover:transform hover:translate-y-[-5px]">
+              <h4 className="lg:text-lg md:text-center font-semibold text-cyan-800 relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-[50px]">
                 Our Offices
               </h4>
-              <ul className="flex flex-col md:flex-row lg:flex-col space-y-2 text-sm">
+              <ul className="flex flex-col md:flex-row lg:flex-col text-sm">
                 <li className="flex items-start gap-3 group transition-all duration-300 hover:bg-white/50 p-3 rounded-lg">
                   <FaMapMarkerAlt className="text-blue-500 mt-1 transform transition-all duration-300 group-hover:scale-125 group-hover:text-red-500" />
                   <div>
@@ -180,12 +196,12 @@ const Footer = () => {
                       Icon.displayName || "social"
                     } page`}
                   >
-                    <Icon className="text-3xl lg:text-5xl transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" />
+                    <Icon className="text-3xl lg:text-5xl transition-all duration-300 hover:scale-125 " />
                   </a>
                 );
               })}
             </div>
-            <div className="w-full md:w-6/12 flex gap-3 justify-between md:justify-center lg:justify-end px-2 items-center">
+            <div className="w-full md:w-6/12 flex gap-3 justify-center lg:justify-end px-2 lg:pr-6 items-center">
               <p className="text-green-600 font-semibold">Coming Soon to </p>
               <img
                 src={Google_play}
