@@ -14,7 +14,7 @@ import { handleExportToExcel } from "../../utils/ExportToExcel";
 const CustomTable = ({
   columns,
   data,
-  allBusiness,
+  allData,
   itemsPerPage = 10,
   addButton,
   onAddClick,
@@ -145,7 +145,7 @@ const CustomTable = ({
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => handleExportToExcel({ data: allBusiness })}
+            onClick={() => handleExportToExcel({ data: allData })}
             className="bg-green-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
           >
             <FaFileExport /> Export to Excel

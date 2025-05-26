@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { FaEye, FaTrash } from 'react-icons/fa';
-import CustomTable from '../../../Components/Table';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ConfirmationModal from '../../../Components/ConfirmationModal';
-import { API } from '../../../../config/config'
-import axios from 'axios';
-import CustomModal from '../../../Components/modal';
-import Loader from '../../../Components/Loader';
-
+import React, { useState, useEffect } from "react";
+import { FaEye, FaTrash } from "react-icons/fa";
+import CustomTable from "../../../Components/Table";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ConfirmationModal from "../../../Components/ConfirmationModal";
+import { API } from "../../../../config/config";
+import axios from "axios";
+import CustomModal from "../../../Components/modal";
+import Loader from "../../../Components/Loader";
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -26,14 +26,13 @@ const UserTable = () => {
     try {
       // Replace with your actual API call
 
-      const response = await axios.get(`${API}/user`)
+      const response = await axios.get(`${API}/user`);
       console.log(response.data);
       setUsers(response.data);
-    }
-    catch (error) {
-      console.error('Error fetching users:', error);
-    }
-    finally {
+      setAllUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -52,40 +51,42 @@ const UserTable = () => {
   const confirmDelete = async () => {
     try {
       // Implement delete API call here
-      setUsers(users.filter(u => u._id !== userToDelete._id));
+      setUsers(users.filter((u) => u._id !== userToDelete._id));
       setShowModal(false);
       setShowConfirmModal(false);
-      toast.success('User deleted successfully');
+      toast.success("User deleted successfully");
     } catch (error) {
-      toast.error('Failed to delete user');
+      toast.error("Failed to delete user");
     }
   };
 
   const columns = [
     {
-      key: 'name',
-      label: 'Name'
+      key: "name",
+      label: "Name",
     },
     {
-      key: 'phone',
-      label: 'Mobile Number'
+      key: "phone",
+      label: "Mobile Number",
     },
     {
-      key: 'email',
-      label: 'Email'
+      key: "email",
+      label: "Email",
     },
     {
-      key: 'actions',
-      label: 'Actions',
+      key: "actions",
+      label: "Actions",
       render: (row) => (
         <div className="flex space-x-2 text-center justify-center">
-          <FaEye size={16}
+          <FaEye
+            size={16}
             onClick={() => handleView(row)}
             className="text-blue-600 hover:text-blue-800 cursor-pointer"
-            title="View Details" />
+            title="View Details"
+          />
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const Modal = ({ user, onClose }) => {
@@ -96,7 +97,7 @@ const UserTable = () => {
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
-          setFormData({ name: '', image: null });
+          setFormData({ name: "", image: null });
           setImagePreview(null);
           setErrors({});
         }}
@@ -133,19 +134,30 @@ const UserTable = () => {
   };
 
   if (loading) {
-    return <div><Loader/></div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   return (
     <div className="p-6">
       <ToastContainer />
-      <div className='shadow bg-white p-6 rounded-lg'>
-      <h1 className="text-2xl font-bold mb-6">User Management</h1>
-      <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+      <div className="shadow bg-white p-6 rounded-lg">
+        <h1 className="text-2xl font-bold mb-6">User Management</h1>
+        <span>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque
+          iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam
+          nostrum mollitia totam deleniti reiciendis consequuntur odio, nam
+          eaque voluptatibus eius maxime. Repellat alias quas distinctio
+          voluptatem molestiae quasi nulla nemo!
+        </span>
       </div>
       <CustomTable
         columns={columns}
         data={users}
+        allData={allUsers}
         itemsPerPage={10}
         searchPlaceholder="Search..."
       />

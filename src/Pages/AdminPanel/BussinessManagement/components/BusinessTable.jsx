@@ -87,7 +87,7 @@ const BusinessTable = ({
     <CustomTable
       columns={columns}
       data={businesses}
-      allBusiness={allBusiness}
+      allData={allBusiness}
       itemsPerPage={10}
       searchPlaceholder="Search by business detail"
     />
