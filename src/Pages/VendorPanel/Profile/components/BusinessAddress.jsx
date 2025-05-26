@@ -12,6 +12,9 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     pincode: ''
   });
   const [errors, setErrors] = useState({});
+  
+  console.log(business);
+  
 
   useEffect(() => {
     if (business?.business?.address) {
@@ -103,8 +106,6 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     }
   };
 
-console.log(business);
-
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -186,13 +187,13 @@ console.log(business);
             <button
               type="button"
               onClick={() => setShowModal(false)}
-              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
+              className="cursor-pointer px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Save Changes
             </button>

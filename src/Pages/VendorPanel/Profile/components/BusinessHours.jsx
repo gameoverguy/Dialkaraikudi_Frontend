@@ -3,14 +3,14 @@ import { FaEdit } from 'react-icons/fa';
 import CustomModal from '../../../../Components/modal';
 import FloatingInput from '../../../../Components/FloatingInput';
 
-const BusinessHours = ({ business, fetchBusinessDetails, onSubmit }) => {
+const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
   useEffect(() => {
-    if (business?.business?.businessTimings) {
+    if (showModal && business?.business?.businessTimings) {
       const initialData = {};
       days.forEach(day => {
         const timing = business.business.businessTimings[day] || {};
@@ -22,7 +22,8 @@ const BusinessHours = ({ business, fetchBusinessDetails, onSubmit }) => {
       });
       setFormData(initialData);
     }
-  }, [business]);
+  }, [showModal]);
+  
 
   const handleChange = (day, field, value) => {
     setFormData(prev => {
@@ -153,13 +154,13 @@ const BusinessHours = ({ business, fetchBusinessDetails, onSubmit }) => {
             <button
               type="button"
               onClick={() => setShowModal(false)}
-              className="px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
+              className="cursor-pointer px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Save Changes
             </button>
