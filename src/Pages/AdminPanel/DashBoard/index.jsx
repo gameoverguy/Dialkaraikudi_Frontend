@@ -31,7 +31,7 @@ ChartJS.register(
 const Dashboard = ({ onMenuSelect }) => {
   const [timeRange, setTimeRange] = useState("week");
   const navigate = useNavigate();
-  const [isloading, setIsLoading] = useState(false);
+  const [isloading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     users: 0,
     businesses: 0,

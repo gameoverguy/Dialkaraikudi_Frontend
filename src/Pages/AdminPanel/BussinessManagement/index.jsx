@@ -505,7 +505,7 @@ const BusinessManagement = () => {
         }}
         title="Business Details"
       >
-        {selectedBusiness && <BusinessDetails business={selectedBusiness} />}
+        {selectedBusiness && <BusinessDetails selectedBusiness={selectedBusiness} />}
       </CustomModal>
 
       {/* Confirmation Modal */}

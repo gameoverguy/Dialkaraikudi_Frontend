@@ -8,6 +8,7 @@ import { API } from "../../../../config/config";
 import { uploadToCloudinary } from "../../../utils/cloudinaryUpload";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
+import { toast, ToastContainer } from "react-toastify";
 
 const SlotAds = ({ slotId, type }) => {
   const [ads, setAds] = useState([]);
@@ -65,7 +66,7 @@ const SlotAds = ({ slotId, type }) => {
   //     setLoading(false);
   //   }
   // };
-  useEffect(() => {
+
     const fetchData = async () => {
       try {
         const [adsResponse, slotResponse] = await Promise.all([
@@ -95,8 +96,9 @@ const SlotAds = ({ slotId, type }) => {
       }
     };
 
-    fetchData();
-  }, [slotId]);
+    useEffect(() => {
+      fetchData();
+    }, [slotId]);
 
   console.log(allowedBusinesses, "12421421421");
 
@@ -183,9 +185,18 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
+      toast.success("Advertisement added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       fetchData();
     } catch (error) {
       console.error("Error creating ad:", error);
+     
     } finally {
       setUploadLoading(false);
     }
@@ -224,9 +235,24 @@ const SlotAds = ({ slotId, type }) => {
       await axios.delete(`${API}/adverts/${deleteConfirmation.adId}`);
       setAds(ads.filter((ad) => ad._id !== deleteConfirmation.adId));
       setDeleteConfirmation({ show: false, adId: null });
-      fetchData();
+      toast.success("Advertisement deleted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } catch (error) {
       console.error("Error deleting ad:", error);
+      toast.error("Failed to delete advertisement. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     }
   };
 
@@ -262,7 +288,6 @@ const SlotAds = ({ slotId, type }) => {
         endDate: "",
       });
       setSelectedImage(null);
-      fetchData();
     } catch (error) {
       console.error("Error updating ad:", error);
     } finally {
@@ -344,12 +369,15 @@ const SlotAds = ({ slotId, type }) => {
 
   return (
     <div className="p-6 space-y-6">
+      <ToastContainer/>
       <div className="shadow bg-white p-6 rounded-lg">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Slot Advertisements</h1>
           <button
-            onClick={() => setShowModal(true)}
-            className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
+            onClick={() => (
+              setShowModal(true), fetchData())
+            }
+            className="bg-emerald-500 text-white cursor-pointer px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
           >
             Add New Ad
           </button>
@@ -382,13 +410,13 @@ const SlotAds = ({ slotId, type }) => {
                 <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2 z-50">
                   <button
                     onClick={() => openEditModal(ad)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                    className="cursor-pointer bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
                   >
                     <FaRegEdit className="text-blue-600" />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(ad._id)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                    className="cursor-pointer bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
                   >
                     <MdDeleteOutline className="text-red-500" />
                   </button>
@@ -457,10 +485,11 @@ const SlotAds = ({ slotId, type }) => {
           });
         }}
         title={editingAd ? "Edit Advertisement" : "Add New Advertisement"}
+        classname={"w-[30%] md:w-[50%] lg:w-[40%] xl:w-[30%]"}
       >
         <form
           onSubmit={editingAd ? handleEdit : handleSubmit}
-          className="space-y-4"
+          className="space-y-4 "
         >
           <FloatingSelect
             name="businessId"
@@ -486,7 +515,7 @@ const SlotAds = ({ slotId, type }) => {
             >
               <div className="space-y-1 text-center w-full">
                 {selectedImage ||
-                (editingAd && editingAd.contentUrl && !selectedImage) ? (
+                  (editingAd && editingAd.contentUrl && !selectedImage) ? (
                   <div className="space-y-2 relative">
                     <button
                       type="button"
@@ -530,7 +559,7 @@ const SlotAds = ({ slotId, type }) => {
                         className="sr-only"
                         accept={type === "Video" ? "video/*" : "image/*"}
                         onChange={handleFileChange}
-                        // required={!editingAd}
+                      // required={!editingAd}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>

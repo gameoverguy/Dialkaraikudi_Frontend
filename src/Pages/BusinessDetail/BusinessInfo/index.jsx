@@ -26,7 +26,7 @@ const BusinessInfo = ({ formData, businessId }) => {
     if (isLoggedin) {
       setShowContact((prev) => !prev);
     } else {
-      setLoginRole("user")
+      setLoginRole("user");
       handleOpenLoginModal();
     }
   };
@@ -57,7 +57,7 @@ const BusinessInfo = ({ formData, businessId }) => {
 
   const handleBookmarkClick = async () => {
     if (!isLoggedin) {
-      setLoginRole("user")
+      setLoginRole("user");
       handleOpenLoginModal();
       return;
     }
@@ -249,7 +249,7 @@ const BusinessInfo = ({ formData, businessId }) => {
             <p>
               <MdAccessTimeFilled className="text-lg" />
             </p>
-            <p>Today</p>
+
             {(() => {
               const days = [
                 "sunday",
@@ -266,6 +266,7 @@ const BusinessInfo = ({ formData, businessId }) => {
               if (timings) {
                 return timings.isOpen ? (
                   <>
+                    <p>Today</p>
                     <p>{timings.openTime} -</p>
                     <p>{timings.closeTime}</p>
                   </>
@@ -273,33 +274,33 @@ const BusinessInfo = ({ formData, businessId }) => {
                   <p>Closed</p>
                 );
               }
-              return <p>No timing information available</p>;
+              return <p>No time slots</p>;
             })()}
           </div>
-
-          <div className="hidden md:flex text-sm md:text-base items-center gap-2">
-            <p>
-              <TbWorld className="text-lg" />
-            </p>
-            <a
-              href={
-                formData?.business.contactDetails?.website?.startsWith("http")
-                  ? formData?.business.contactDetails?.website
-                  : `https://${formData?.business.contactDetails?.website}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {formData?.business.contactDetails?.website || "No URL"}
-            </a>
-          </div>
+          {formData?.business.contactDetails?.website && (
+            <div className="hidden md:flex text-sm md:text-base items-center gap-2">
+              <p>
+                <TbWorld className="text-lg" />
+              </p>
+              <a
+                href={
+                  formData?.business.contactDetails?.website?.startsWith("http")
+                    ? formData?.business.contactDetails?.website
+                    : `https://${formData?.business.contactDetails?.website}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {formData?.business.contactDetails?.website}
+              </a>
+            </div>
+          )}
         </div>
 
-        <div className="flex md:hidden text-sm md:text-base mt-2 gap-2">
+        <div className="flex flex-wrap md:hidden text-sm md:text-base mt-2 gap-2">
           <p>
             <MdAccessTimeFilled className="text-lg" />
           </p>
-          <p>Today</p>
           {(() => {
             const days = [
               "sunday",
@@ -316,31 +317,35 @@ const BusinessInfo = ({ formData, businessId }) => {
             if (timings) {
               return timings.isOpen ? (
                 <>
+                  <p>Today</p>
                   <p>{timings.openTime} -</p>
                   <p>{timings.closeTime}</p>
                 </>
               ) : (
-                <p>No time slots</p>
+                <p>Closed</p>
               );
             }
-            return <p>No timing information available</p>;
+            return <p>No time slots</p>;
           })()}
-          <div className="flex md:hidden text-sm md:text-base gap-2">
-            <p>
-              <TbWorld className="text-lg" />
-            </p>
-            <a
-              href={
-                formData?.business.contactDetails?.website?.startsWith("http")
-                  ? formData?.business.contactDetails?.website
-                  : `https://${formData?.business.contactDetails?.website}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {formData?.business.contactDetails?.website || "No URL"}
-            </a>
-          </div>
+
+          {formData?.business.contactDetails?.website && (
+            <div className="flex md:hidden text-sm md:text-base gap-2">
+              <p>
+                <TbWorld className="text-lg" />
+              </p>
+              <a
+                href={
+                  formData?.business.contactDetails?.website?.startsWith("http")
+                    ? formData?.business.contactDetails?.website
+                    : `https://${formData?.business.contactDetails?.website}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {formData?.business.contactDetails?.website}
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">

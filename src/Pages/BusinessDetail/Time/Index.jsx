@@ -65,9 +65,9 @@ const BusinessHours = ({ formData }) => {
                   </span>
                 )}
               </div>
-              {isToday && (
+              {/* {isToday && (
                 <span className="text-xs text-blue-600 font-medium">Today</span>
-              )}
+              )} */}
             </div>
           );
         })}

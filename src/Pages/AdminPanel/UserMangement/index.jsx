@@ -159,7 +159,7 @@ const UserTable = () => {
         data={users}
         allData={allUsers}
         itemsPerPage={10}
-        searchPlaceholder="Search..."
+        searchPlaceholder="Search User Details"
       />
       {showModal && (
         <Modal
