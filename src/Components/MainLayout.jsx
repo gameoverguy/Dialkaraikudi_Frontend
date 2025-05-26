@@ -13,26 +13,25 @@ const MainLayout = () => {
   const [loading, setLoading] = useState(true);
   const [showGoTop, setShowGoTop] = useState(false);
 
-
   useEffect(() => {
-  const handleScroll = () => {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
 
-    if (scrollY > windowHeight * 0.25) {
-      setShowGoTop(true);
-    } else {
-      setShowGoTop(false);
-    }
+      if (scrollY > windowHeight * 0.25) {
+        setShowGoTop(true);
+      } else {
+        setShowGoTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleGoTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
-
-const handleGoTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
 
   useEffect(() => {
     const clearAuthentication = async () => {
@@ -67,29 +66,27 @@ const handleGoTop = () => {
     return <Loader />;
   }
 
-  
-
   // Main layout after loading is complete
   return (
     <>
-    <div className="w-full mx-auto">
-      <Header />
-      <div className="min-h-127 mx-auto">
-        <Outlet />
-        <div className="md:hidden fixed bottom-4 right-4">
-        <AiChatbox />
+      <div className="w-full mx-auto">
+        <Header />
+        <div className="min-h-127 mx-auto">
+          <Outlet />
+          <div className="md:hidden fixed bottom-4 right-4">
+            <AiChatbox />
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-    {showGoTop && (
-  <button
-    onClick={handleGoTop}
-    className="fixed bottom-20 right-4 z-30 bg-orange-500 hover:bg-orange-300 hover:scale-105 text-white p-3 rounded-full shadow-lg transition duration-300 cursor-pointer"
-  >
-    <FaArrowUp className="text-base" />
-  </button>
-)}
+      {showGoTop && (
+        <button
+          onClick={handleGoTop}
+          className="fixed bottom-20 right-4 z-30 bg-orange-500 hover:bg-orange-300 hover:scale-105 text-white p-3 rounded-full shadow-lg transition duration-300 cursor-pointer"
+        >
+          <FaArrowUp className="text-base" />
+        </button>
+      )}
     </>
   );
 };

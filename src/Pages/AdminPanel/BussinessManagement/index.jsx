@@ -1,29 +1,30 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import CustomModal from '../../../Components/modal';
-import { toast } from 'react-toastify';
-import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
-import { API } from '../../../../config/config';
-import { uploadMultipleToCloudinary } from '../../../utils/cloudinaryUpload';
-import Loader from '../../../Components/Loader';
-import BusinessForm from './components/BusinessForm';
-import BusinessDetails from './components/BusinessDetails';
-import BusinessTable from './components/BusinessTable';
-import ConfirmationModal from '../../../Components/ConfirmationModal'
+import React, { useState, useCallback, useEffect } from "react";
+import CustomModal from "../../../Components/modal";
+import { toast } from "react-toastify";
+import { useDropzone } from "react-dropzone";
+import axios from "axios";
+import { API } from "../../../../config/config";
+import { uploadMultipleToCloudinary } from "../../../utils/cloudinaryUpload";
+import Loader from "../../../Components/Loader";
+import BusinessForm from "./components/BusinessForm";
+import BusinessDetails from "./components/BusinessDetails";
+import BusinessTable from "./components/BusinessTable";
+import ConfirmationModal from "../../../Components/ConfirmationModal";
 
 const BusinessManagement = () => {
   const [businesses, setBusinesses] = useState([]);
+  const [allBusiness, setAllBusiness] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    category: '',
-    phone: '',
-    email: '',
-    address: '',  // Changed to simple string
+    name: "",
+    description: "",
+    category: "",
+    phone: "",
+    email: "",
+    address: "", // Changed to simple string
     photos: [],
-    verified: ''
+    verified: "",
   });
 
   // Add API endpoints
@@ -35,38 +36,37 @@ const BusinessManagement = () => {
       const response = await axios.get(`${API}/categories`);
       setCategories(response.data.data);
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to fetch categories');
+      console.error("Error fetching categories:", error);
+      toast.error("Failed to fetch categories");
     } finally {
       setIsLoading(false);
     }
   };
 
-
-
   const fetchBusinesses = async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`${API}/business/allbusiness`);
-      const transformedData = response.data.data.map(business => ({
+      setAllBusiness(response.data.data);
+      const transformedData = response.data.data.map((business) => ({
         id: business._id,
         name: business.businessName,
         description: business.description,
         category: business.category,
         phone: business.contactDetails?.phone,
         email: business.email,
-        address: business.address?.formattedAddress || business.address?.addressArea,
+        address:
+          business.address?.formattedAddress || business.address?.addressArea,
         photos: business.photos,
-        verified: business.verified
+        verified: business.verified,
       }));
 
       console.log(transformedData, "Geteddd");
 
-
       setBusinesses(transformedData);
     } catch (error) {
-      console.error('Error fetching businesses:', error);
-      toast.error('Failed to fetch businesses');
+      console.error("Error fetching businesses:", error);
+      toast.error("Failed to fetch businesses");
     } finally {
       setIsLoading(false);
     }
@@ -79,14 +79,14 @@ const BusinessManagement = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      category: '',
-      phone: '',
-      email: '',
-      address: '',
+      name: "",
+      description: "",
+      category: "",
+      phone: "",
+      email: "",
+      address: "",
       photos: [],
-      verified: ''
+      verified: "",
     });
     setImagePreview([]);
     setErrors({});
@@ -98,41 +98,40 @@ const BusinessManagement = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
 
-
   // Mock categories data
   const mockCategories = [
     { id: 1, name: "Electronics" },
     { id: 2, name: "Fashion" },
-    { id: 3, name: "Home Decor" }
+    { id: 3, name: "Home Decor" },
   ];
 
   const columns = [
     {
-      key: 'serialNo',
-      label: 'S.No',
-      render: (_, index) => index + 1
+      key: "serialNo",
+      label: "S.No",
+      render: (_, index) => index + 1,
     },
     {
-      key: 'name',
-      label: 'Business Name'
+      key: "name",
+      label: "Business Name",
     },
     {
-      key: 'category',
-      label: 'Category',
-      render: (row) => row.category?.displayName || 'N/A'
+      key: "category",
+      label: "Category",
+      render: (row) => row.category?.displayName || "N/A",
     },
     {
-      key: 'phone',
-      label: 'Phone'
+      key: "phone",
+      label: "Phone",
     },
     {
-      key: 'email',
-      label: 'Email'
+      key: "email",
+      label: "Email",
     },
 
     {
-      key: 'verified',
-      label: 'Verified',
+      key: "verified",
+      label: "Verified",
       render: (row) => (
         <div className="flex justify-center">
           <label className="relative inline-flex items-center cursor-pointer">
@@ -145,12 +144,12 @@ const BusinessManagement = () => {
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
-      )
+      ),
     },
 
     {
-      key: 'actions',
-      label: 'Actions',
+      key: "actions",
+      label: "Actions",
       render: (row) => (
         <div className="flex gap-2 justify-center">
           <button
@@ -175,29 +174,35 @@ const BusinessManagement = () => {
             <FaTrashAlt className="text-sm cursor-pointer" />
           </button>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const handleVerifiedToggle = async (business) => {
     try {
       setIsLoading(true);
       await axios.put(`${API}/business/${business.id}`, {
-        verified: !business.verified
+        verified: !business.verified,
       });
 
       // Update the local state
-      setBusinesses(prev => prev.map(b => {
-        if (b.id === business.id) {
-          return { ...b, verified: !b.verified };
-        }
-        return b;
-      }));
+      setBusinesses((prev) =>
+        prev.map((b) => {
+          if (b.id === business.id) {
+            return { ...b, verified: !b.verified };
+          }
+          return b;
+        })
+      );
 
-      toast.success(`Business ${!business.verified ? 'verified' : 'unverified'} successfully`);
+      toast.success(
+        `Business ${
+          !business.verified ? "verified" : "unverified"
+        } successfully`
+      );
     } catch (error) {
-      console.error('Error updating verification status:', error);
-      toast.error('Failed to update verification status');
+      console.error("Error updating verification status:", error);
+      toast.error("Failed to update verification status");
     } finally {
       setIsLoading(false);
     }
@@ -207,43 +212,43 @@ const BusinessManagement = () => {
     const newErrors = {};
 
     if (!formData.name) {
-      newErrors.name = 'Business name is required';
+      newErrors.name = "Business name is required";
     } else if (formData.name.length > 30) {
-      newErrors.name = 'Name must be less than 30 characters';
+      newErrors.name = "Name must be less than 30 characters";
     } else if (!/^[a-zA-Z\s]+$/.test(formData.name)) {
-      newErrors.name = 'Only letters and spaces are allowed';
+      newErrors.name = "Only letters and spaces are allowed";
     }
 
     if (!formData.description) {
-      newErrors.description = 'Description is required';
+      newErrors.description = "Description is required";
     } else if (formData.description.length < 20) {
-      newErrors.description = 'Description must be at least 20 characters';
+      newErrors.description = "Description must be at least 20 characters";
     }
 
     if (!formData.category) {
-      newErrors.category = 'Category is required';
+      newErrors.category = "Category is required";
     }
 
     if (!formData.phone) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "Phone number is required";
     } else if (!/^[6-9]\d{9}$/.test(formData.phone)) {
-      newErrors.phone = 'Invalid phone number';
+      newErrors.phone = "Invalid phone number";
     }
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
     }
 
     if (!formData.address) {
-      newErrors.address = 'Address is required';
+      newErrors.address = "Address is required";
     }
 
     if (!formData.photos.length) {
-      newErrors.photos = 'At least one photo is required';
+      newErrors.photos = "At least one photo is required";
     } else if (formData.photos.length > 6) {
-      newErrors.photos = 'Maximum 6 photos allowed';
+      newErrors.photos = "Maximum 6 photos allowed";
     }
 
     setErrors(newErrors);
@@ -254,81 +259,86 @@ const BusinessManagement = () => {
     const { name, value } = e.target;
 
     let validatedValue = value;
-    let error = '';
+    let error = "";
 
     switch (name) {
-      case 'name':
-        const onlyLetters = value.replace(/[^a-zA-Z\s]/g, '');
+      case "name":
+        const onlyLetters = value.replace(/[^a-zA-Z\s]/g, "");
         validatedValue = onlyLetters;
         if (value !== onlyLetters) {
-          error = 'Only letters and spaces are allowed';
+          error = "Only letters and spaces are allowed";
         }
         break;
 
-      case 'description':
+      case "description":
         if (value.length < 20) {
-          error = 'Description must be at least 20 characters';
+          error = "Description must be at least 20 characters";
         }
         break;
 
-      case 'phone':
+      case "phone":
         if (value && !/^[6-9]\d{0,9}$/.test(value)) {
-          error = 'Invalid phone number format';
+          error = "Invalid phone number format";
           validatedValue = formData.phone;
         }
         break;
 
-      case 'email':
+      case "email":
         if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          error = 'Invalid email format';
+          error = "Invalid email format";
         }
         break;
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: validatedValue
+      [name]: validatedValue,
     }));
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length + formData.photos.length > 6) {
-      setErrors(prev => ({
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (acceptedFiles.length + formData.photos.length > 6) {
+        setErrors((prev) => ({
+          ...prev,
+          photos: "Maximum 6 photos allowed",
+        }));
+        return;
+      }
+
+      const validFiles = acceptedFiles.filter(
+        (file) => file.size <= 2 * 1024 * 1024
+      );
+
+      if (validFiles.length !== acceptedFiles.length) {
+        setErrors((prev) => ({
+          ...prev,
+          photos: "Some files were skipped (max size: 2MB)",
+        }));
+      }
+
+      setFormData((prev) => ({
         ...prev,
-        photos: 'Maximum 6 photos allowed'
+        photos: [...prev.photos, ...validFiles],
       }));
-      return;
-    }
 
-    const validFiles = acceptedFiles.filter(file => file.size <= 2 * 1024 * 1024);
-
-    if (validFiles.length !== acceptedFiles.length) {
-      setErrors(prev => ({
-        ...prev,
-        photos: 'Some files were skipped (max size: 2MB)'
-      }));
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      photos: [...prev.photos, ...validFiles]
-    }));
-
-    const newPreviews = validFiles.map(file => URL.createObjectURL(file));
-    setImagePreview(prev => [...prev, ...newPreviews]);
-  }, [formData.photos]);
+      const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
+      setImagePreview((prev) => [...prev, ...newPreviews]);
+    },
+    [formData.photos]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
+      "image/*": [".jpeg", ".jpg", ".png"],
     },
-    maxFiles: 6
+    maxFiles: 6,
   });
 
   console.log(businesses, "Geteddd");
@@ -343,12 +353,12 @@ const BusinessManagement = () => {
     setFormData({
       name: business.name,
       description: business.description,
-      category: business.category?._id || '', // Make sure we're using the category ID
+      category: business.category?._id || "", // Make sure we're using the category ID
       phone: business.phone,
       email: business.email,
       address: business.address,
       photos: [...business.photos],
-      verified: business.verified
+      verified: business.verified,
     });
     setImagePreview([...business.photos]);
     setShowModal(true);
@@ -368,21 +378,24 @@ const BusinessManagement = () => {
           category: formData.category,
           contactDetails: {
             phone: formData.phone,
-            email: formData.email
+            email: formData.email,
           },
           address: {
-            formattedAddress: formData.address
+            formattedAddress: formData.address,
           },
           photos: uploadedUrls,
-          verified: formData.verified
+          verified: formData.verified,
         };
 
         if (selectedBusiness) {
-          await axios.put(`${API}/business/${selectedBusiness.id}`, requestBody);
-          toast.success('Business updated successfully');
+          await axios.put(
+            `${API}/business/${selectedBusiness.id}`,
+            requestBody
+          );
+          toast.success("Business updated successfully");
         } else {
           await axios.post(`${API}/business`, requestBody);
-          toast.success('Business added successfully');
+          toast.success("Business added successfully");
         }
 
         await fetchBusinesses();
@@ -390,8 +403,10 @@ const BusinessManagement = () => {
         resetForm();
         setSelectedBusiness(null);
       } catch (error) {
-        console.error('Error handling business:', error);
-        toast.error(error.response?.data?.message || 'Failed to process business');
+        console.error("Error handling business:", error);
+        toast.error(
+          error.response?.data?.message || "Failed to process business"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -399,11 +414,11 @@ const BusinessManagement = () => {
   };
 
   const removePhoto = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      photos: prev.photos.filter((_, i) => i !== index)
+      photos: prev.photos.filter((_, i) => i !== index),
     }));
-    setImagePreview(prev => prev.filter((_, i) => i !== index));
+    setImagePreview((prev) => prev.filter((_, i) => i !== index));
   };
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -418,11 +433,11 @@ const BusinessManagement = () => {
     try {
       setIsLoading(true);
       await axios.delete(`${API}/business/${businessToDelete.id}`);
-      setBusinesses(businesses.filter(b => b.id !== businessToDelete.id));
-      toast.success('Business deleted successfully');
+      setBusinesses(businesses.filter((b) => b.id !== businessToDelete.id));
+      toast.success("Business deleted successfully");
     } catch (error) {
-      console.error('Error deleting business:', error);
-      toast.error('Failed to delete business');
+      console.error("Error deleting business:", error);
+      toast.error("Failed to delete business");
     } finally {
       setIsLoading(false);
       setShowConfirmModal(false);
@@ -432,12 +447,19 @@ const BusinessManagement = () => {
   return (
     <div className="p-6 relative">
       {isLoading && <Loader />}
-      <div className='shadow bg-white p-6 rounded-lg'>
+      <div className="shadow bg-white p-6 rounded-lg">
         <h1 className="text-2xl font-bold mb-6">Business Management</h1>
-        <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam nostrum mollitia totam deleniti reiciendis consequuntur odio, nam eaque voluptatibus eius maxime. Repellat alias quas distinctio voluptatem molestiae quasi nulla nemo!</span>
+        <span>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui atque
+          iure reprehenderit harum tempora ex voluptas dolor recusandae aliquam
+          nostrum mollitia totam deleniti reiciendis consequuntur odio, nam
+          eaque voluptatibus eius maxime. Repellat alias quas distinctio
+          voluptatem molestiae quasi nulla nemo!
+        </span>
       </div>
       <BusinessTable
         businesses={businesses}
+        allBusiness={allBusiness}
         handleView={handleView}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
@@ -454,7 +476,7 @@ const BusinessManagement = () => {
         }}
         title={selectedBusiness ? "Edit Business" : "Add Business"}
       >
-        <BusinessForm 
+        <BusinessForm
           formData={formData}
           errors={errors}
           handleInputChange={handleInputChange}
@@ -499,5 +521,3 @@ const BusinessManagement = () => {
 };
 
 export default BusinessManagement;
-
-

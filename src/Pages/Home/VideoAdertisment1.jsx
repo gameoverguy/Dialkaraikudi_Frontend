@@ -58,14 +58,14 @@ function VideoAdertisment1({ videos }) {
 
   return (
     <div 
-      className="w-full lg:w-11/12 mx-auto h-full md:h-[50vh] relative overflow-hidden group"
+      className="w-full lg:w-11/12 mx-auto h-full md:[50vh] lg:h-[80vh] relative overflow-hidden group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Video Background */}
       <video
         id="video1"
-        className="w-full h-[230px] md:h-full object-cover"
+        className="w-full h-full object-cover"
         src={videos[currentVideoIndex]?.contentUrl}
         autoPlay
         playsInline

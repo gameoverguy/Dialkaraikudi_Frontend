@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import FloatingInput from "../../Components/FloatingInput";
 import FloatingTextarea from "../../Components/FloatingInput/FloatingTextarea";
-import axios from 'axios';
+import axios from "axios";
 import { API } from "../../../config/config";
 
 const ContactUs = () => {
@@ -53,7 +53,8 @@ const ContactUs = () => {
     {
       icon: <FaMapMarkerAlt className="w-6 h-6" />,
       title: "Location",
-      content: "No.8, Dial Karaikudi, Muthoorani East, Muthupattinam, Karaikudi – 630001",
+      content:
+        "No.8, Dial Karaikudi, Muthoorani East, Muthupattinam, Karaikudi – 630001",
       link: "https://maps.google.com",
     },
   ];
@@ -70,14 +71,18 @@ const ContactUs = () => {
       case "name":
         if (!value) error = "Name is required";
         else if (value.length < 3) error = "Name must be at least 3 characters";
-        else if (value.length > 25) error = "Name must not exceed 25 characters";
+        else if (value.length > 25)
+          error = "Name must not exceed 25 characters";
         break;
       case "email":
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!value) error = "Email is required";
-        else if (value.length < 10) error = "Email must be at least 10 characters";
-        else if (value.length > 50) error = "Email must not exceed 50 characters";
-        else if (!emailRegex.test(value)) error = "Please enter a valid email address";
+        else if (value.length < 10)
+          error = "Email must be at least 10 characters";
+        else if (value.length > 50)
+          error = "Email must not exceed 50 characters";
+        else if (!emailRegex.test(value))
+          error = "Please enter a valid email address";
         break;
       case "subject":
         if (!value) error = "Subject is required";
@@ -120,14 +125,19 @@ const ContactUs = () => {
     try {
       const response = await axios.post(`${API}/contact`, formData);
       if (response.data) {
-        setSubmitStatus({ type: "success", message: "Message sent successfully!" });
+        setSubmitStatus({
+          type: "success",
+          message: "Message sent successfully!",
+        });
         setFormData({ name: "", email: "", subject: "", message: "" });
         setErrors({ name: "", email: "", subject: "", message: "" });
       }
     } catch (error) {
       setSubmitStatus({
         type: "error",
-        message: error.response?.data?.message || "Failed to send message. Please try again.",
+        message:
+          error.response?.data?.message ||
+          "Failed to send message. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -148,8 +158,9 @@ const ContactUs = () => {
             Contact <span className="text-purple-600">Us</span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We’d love to hear from you! Whether you have questions, feedback, or need support,
-            our team is ready to assist you. Here’s how you can get in touch with us:
+            We’d love to hear from you! Whether you have questions, feedback, or
+            need support, our team is ready to assist you. Here’s how you can
+            get in touch with us:
           </p>
         </motion.div>
 
@@ -191,6 +202,7 @@ const ContactUs = () => {
                 onChange={handleChange}
                 placeholder="Subject"
                 error={errors.subject}
+                maxLength={100}
               />
               <FloatingTextarea
                 id="message"
@@ -199,12 +211,15 @@ const ContactUs = () => {
                 onChange={handleChange}
                 placeholder="Message"
                 error={errors.message}
+                maxLength={500}
               />
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
                 className={`w-full bg-purple-600 text-white py-3 rounded-lg font-semibold ${
-                  isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-700"
+                  isSubmitting
+                    ? "opacity-70 cursor-not-allowed"
+                    : "hover:bg-purple-700"
                 }`}
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
@@ -217,7 +232,9 @@ const ContactUs = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`text-center text-sm ${
-                    submitStatus.type === "success" ? "text-green-600" : "text-red-600"
+                    submitStatus.type === "success"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
                   {submitStatus.message}
@@ -263,30 +280,46 @@ const ContactUs = () => {
                 Business Inquiries
               </h3>
               <p className="text-gray-700">
-                For partnership opportunities or other business-related queries, please email:
+                For partnership opportunities or other business-related queries,
+                please email:
               </p>
-              <p className="text-purple-600 mt-2 font-medium">business@dialkaraikudi.com</p>
+              <p className="text-purple-600 mt-2 font-medium">
+                business@dialkaraikudi.com
+              </p>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Find Us</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Find Us
+              </h3>
               <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62863.95814818316!2d78.74391571889245!3d10.927358651546392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baab7bef0eaa1ad%3A0xeaf72ea253407547!2sKaraikudi%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1689612345678!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235.93097741103122!2d78.76736393528165!3d10.070653482527545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0067cfbe7cdf03%3A0xfe909af6727a8399!2sSunglasschettinad%20Retail%20Private%20Limited!5e1!3m2!1sen!2sin!4v1748093575128!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Karaikudi Map"
+                  title="Dial Karaikudi Map"
                   className="w-full h-full"
                 />
+                {/* <iframe
+                 
+                  width="400"
+                  height="300"
+                  style="border:0;"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe> */}
               </div>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Follow Us</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Follow Us
+              </h3>
               <div className="flex justify-center space-x-6">
                 {socialLinks.map((social, index) => (
                   <motion.a

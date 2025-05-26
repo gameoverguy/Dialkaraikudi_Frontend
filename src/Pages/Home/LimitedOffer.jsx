@@ -21,7 +21,7 @@ const LimitedOffer = () => {
   const [offerLeftBanner, setOfferLeftBanner] = useState([]);
   const [offerRightBanner, setOfferRightBanner] = useState([]);
   const [isInitialLeftLoad, setIsInitialLeftLoad] = useState(true);
-const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
+  const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +50,6 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682b12797e0c060d62669940" &&
             ad.isActive
         );
-        
 
         let finalSlides = [];
 
@@ -88,7 +87,6 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
             ad.slotId?._id === "682c1a7b0c32012c369edade" &&
             ad.isActive
         );
-        
 
         let finalSlides = [];
 
@@ -110,14 +108,13 @@ const [isInitialRightLoad, setIsInitialRightLoad] = useState(true);
     fetchAds();
   }, []);
 
+  useEffect(() => {
+    setIsInitialLeftLoad(false);
+  }, []);
 
   useEffect(() => {
-  setIsInitialLeftLoad(false);
-}, []);
-
-useEffect(() => {
-  setIsInitialRightLoad(false);
-}, []);
+    setIsInitialRightLoad(false);
+  }, []);
 
   return (
     <>
@@ -128,9 +125,9 @@ useEffect(() => {
         Limited Offers
       </div>
 
-      <div className="px-5 w-full lg:w-11/12 mx-auto flex flex-col lg:flex-row justify-center items-center md:px-0 gap-3 lg:gap-3 mb-6">
+      <div className="px-5 w-full h-fit lg:w-11/12 mx-auto flex flex-col lg:flex-row justify-center items-center md:px-0 gap-3 lg:gap-3 mb-6">
         {/* Left Slide */}
-        <div className="w-full lg:w-6/12 h-[25vh] md:h-[30vh] lg:h-[40vh] relative rounded-lg overflow-hidden cursor-pointer">
+        <div className="w-full lg:w-6/12 h-[20vh] md:h-[40vh] lg:h-[50vh] relative rounded-lg overflow-hidden cursor-pointer">
           {offerLeftBanner.length > 0 &&
             offerLeftBanner
               .slice(0, 2)
@@ -142,15 +139,17 @@ useEffect(() => {
                   className={`absolute inset-0 lg:object-fit-contain w-full h-full transition-opacity duration-1000 ease-in-out ${
                     leftIndex === idx ? "opacity-100 z-20" : "opacity-0 z-0"
                   } ${
-  isInitialLeftLoad ? "opacity-100" : "transition-opacity duration-1000 ease-in-out"
-}`}
+                    isInitialLeftLoad
+                      ? "opacity-100"
+                      : "transition-opacity duration-1000 ease-in-out"
+                  }`}
                   onClick={() => handleCategoryClick(item.businessId?._id)}
                 />
               ))}
         </div>
 
         {/* Right Slide */}
-        <div className="w-full lg:w-6/12 h-[25vh] md:h-[30vh] lg:h-[40vh] relative rounded-lg overflow-hidden cursor-pointer">
+        <div className="w-full lg:w-6/12 h-[20vh] md:h-[40vh] lg:h-[50vh] relative rounded-lg overflow-hidden cursor-pointer">
           {offerRightBanner.length > 0 &&
             offerRightBanner
               .slice(0, 2)
@@ -162,8 +161,10 @@ useEffect(() => {
                   className={`absolute inset-0 lg:object-fit-contain w-full h-full transition-opacity duration-1000 ease-in-out ${
                     rightIndex === idx ? "opacity-100 z-20" : "opacity-0 z-0"
                   } ${
-  isInitialRightLoad ? "opacity-100" : "transition-opacity duration-1000 ease-in-out"
-}`}
+                    isInitialRightLoad
+                      ? "opacity-100"
+                      : "transition-opacity duration-1000 ease-in-out"
+                  }`}
                   onClick={() => handleCategoryClick(item.businessId?._id)}
                 />
               ))}

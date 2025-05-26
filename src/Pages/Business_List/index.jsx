@@ -213,7 +213,7 @@ const Bussiness_List = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden lg:h-[50vh] cursor-pointer">
+      <div className="flex flex-col md:flex-row mx-auto shadow-lg overflow-hidden md:h-[30vh] lg:h-[50vh] cursor-pointer">
         <div className="w-full">
           {fetchBanner && fetchBanner.length > 0 && (
             <img
@@ -332,13 +332,13 @@ const Bussiness_List = () => {
                       <div className="md:flex w-full md:gap-3 border cursor-pointer border-gray-300 rounded-lg gap-2">
                         {/* Business card content */}
                         <div
-                          className="w-full md:w-[25%]"
+                          className="w-full md:w-6/12 lg:w-4/12"
                           onClick={() => handleBusinessClick(data._id)}
                         >
                           <img
                             src={data.photos[0]}
                             alt="Business"
-                            className="w-full h-60 md:h-40 object-cover rounded"
+                            className="w-full h-60 md:h-full lg:h-40 object-cover rounded"
                           />
                         </div>
 
@@ -361,10 +361,10 @@ const Bussiness_List = () => {
                               </div>
                               {data.reviewCount} Ratings
                             </div>
-                            <p className="md:flex">
-                              <CiLocationOn className="text-lg" />
-                              {data?.address?.formattedAddress ||
-                                data?.address?.addressArea}
+                            <p className="md:flex md:items-center">
+                              <CiLocationOn className="text-2xl pr-1 text-green-800" />
+                              <p className="line-clamp-1">{data?.address?.formattedAddress ||
+                                data?.address?.addressArea}</p>
                             </p>
                           </div>
                           {/* <div>

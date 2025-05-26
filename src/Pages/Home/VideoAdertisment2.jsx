@@ -58,7 +58,7 @@ function VideoAdertisment2({videos}) {
 
   return (
     <div 
-      className="w-full lg:w-11/12 mx-auto h-full md:h-[50vh] relative overflow-hidden group"
+      className="w-full lg:w-11/12 mx-auto h-full md:[50vh] lg:h-[75vh] relative overflow-hidden group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

@@ -11,7 +11,7 @@ import {
   LineElement,
   Title,
 } from "chart.js";
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie, Bar, Line } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../../../config/config";
 import axios from "axios";
@@ -51,6 +51,8 @@ const Dashboard = ({ onMenuSelect }) => {
       const { data } = await axios.get(`${API}/admin/dashboard`);
 
       if (data.success) {
+        console.log(data.data);
+
         setStats({
           users: data.data.totalUsers,
           businesses: data.data.totalBusinesses,
@@ -183,14 +185,18 @@ const Dashboard = ({ onMenuSelect }) => {
       {
         label: "Users Growth",
         data: chartData.users,
-        borderColor: "rgb(54, 162, 235)",
-        tension: 0.1,
+        tension: 0.2,
+        fill: false,
+        borderColor: "rgba(0, 98, 255,1)",
+        backgroundColor: "rgba(0, 98, 255,0.4)",
       },
       {
         label: "Business Growth",
         data: chartData.businesses,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
+        tension: 0.2,
+        fill: false,
+        borderColor: "rgba(255, 0, 25,1)",
+        backgroundColor: "rgba(255, 0, 25,0.4)",
       },
     ],
   };
@@ -267,7 +273,7 @@ const Dashboard = ({ onMenuSelect }) => {
             Growth Trends
           </h2>
           <div className="h-[300px] flex items-center justify-center">
-            <Bar
+            {/* <Bar
               data={barChartData}
               options={{
                 maintainAspectRatio: false,
@@ -287,6 +293,34 @@ const Dashboard = ({ onMenuSelect }) => {
                 maxBarThickness: 40,
                 categoryPercentage: 0.8,
                 barPercentage: 0.9,
+              }}
+            /> */}
+            <Line
+              data={lineChartData} // You can use the same data format if it fits
+              options={{
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    grid: { display: true },
+                  },
+                  x: {
+                    grid: { display: false },
+                  },
+                },
+                plugins: {
+                  legend: { position: "top" },
+                },
+                elements: {
+                  line: {
+                    tension: 0.3, // 0 for straight lines, 0.4 for curves
+                    borderWidth: 2,
+                  },
+                  point: {
+                    radius: 3,
+                    hoverRadius: 6,
+                  },
+                },
               }}
             />
           </div>

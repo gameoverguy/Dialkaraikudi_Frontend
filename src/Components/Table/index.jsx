@@ -1,26 +1,34 @@
-import React, { useState, useMemo } from 'react';
-import { FaSort, FaSortUp, FaSortDown, FaSearch, FaArrowLeft, FaArrowRight, FaFileExport } from 'react-icons/fa';
-import * as XLSX from 'xlsx';
+import React, { useState, useMemo } from "react";
+import {
+  FaSort,
+  FaSortUp,
+  FaSortDown,
+  FaSearch,
+  FaArrowLeft,
+  FaArrowRight,
+  FaFileExport,
+} from "react-icons/fa";
+import * as XLSX from "xlsx";
+import { handleExportToExcel } from "../../utils/ExportToExcel";
 
 const CustomTable = ({
   columns,
   data,
+  allData,
   itemsPerPage = 10,
   addButton,
   onAddClick,
-  searchPlaceholder = "Search..."
+  searchPlaceholder = "Search...",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   // Search functionality
   const filteredData = useMemo(() => {
-    return data?.filter(item =>
-      Object.keys(item).some(key =>
-        String(item[key])
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+    return data?.filter((item) =>
+      Object.keys(item).some((key) =>
+        String(item[key]).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [data, searchTerm]);
@@ -31,10 +39,10 @@ const CustomTable = ({
 
     return [...filteredData].sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
+        return sortConfig.direction === "ascending" ? -1 : 1;
       }
       if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
+        return sortConfig.direction === "ascending" ? 1 : -1;
       }
       return 0;
     });
@@ -48,74 +56,78 @@ const CustomTable = ({
   );
 
   const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
     }
     setSortConfig({ key, direction });
   };
 
   const getSortIcon = (columnKey) => {
     if (sortConfig.key !== columnKey) return <FaSort />;
-    return sortConfig.direction === 'ascending' ? <FaSortUp /> : <FaSortDown />;
+    return sortConfig.direction === "ascending" ? <FaSortUp /> : <FaSortDown />;
   };
 
-  const handleExportToExcel = () => {
-    // Create worksheet from all data (not just filtered)
-    const ws = XLSX.utils.json_to_sheet(
-      data.map((item, index) => {
-        const row = {};
-        // Add S.No. as first column
-        row['S.No.'] = index + 1;
-        
-        columns.forEach(column => {
-          try {
-            if (column.render) {
-              // For rendered columns, get the actual data
-              if (item[column.key] && typeof item[column.key] === 'object') {
-                // Handle nested objects (like category, business details etc)
-                if (item[column.key].name) {
-                  row[column.label] = item[column.key].name;
-                } else if (item[column.key].businessName) {
-                  row[column.label] = item[column.key].businessName;
-                } else {
-                  const nestedValues = Object.values(item[column.key] || {})
-                    .filter(value => value !== null && value !== undefined);
-                  row[column.label] = nestedValues.length > 0 ? nestedValues.join(' - ') : '';
-                }
-              } else {
-                // Handle other rendered values with null check
-                row[column.label] = item[column.key] ? item[column.key].toString() : '';
-              }
-            } else {
-              // Handle direct values with null check
-              row[column.label] = item[column.key] || '';
-            }
-          } catch (error) {
-            // If any error occurs while processing a field, set it to empty string
-            row[column.label] = '';
-          }
-        });
-        return row;
-      })
-    );
-  
-    // Set column widths
-    const colWidths = columns.map(col => ({
-      wch: Math.max(col.label.length, 15)
-    }));
-    ws['!cols'] = colWidths;
-  
-    // Create workbook and add the worksheet
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Data');
-  
-    // Generate timestamp for filename
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    
-    // Save to file with timestamp
-    XLSX.writeFile(wb, `data-export-${timestamp}.xlsx`);
-  };
+  // const handleExportToExcel = () => {
+  //   // Create worksheet from all data (not just filtered)
+  //   const ws = XLSX.utils.json_to_sheet(
+  //     data.map((item, index) => {
+  //       const row = {};
+  //       // Add S.No. as first column
+  //       row["S.No."] = index + 1;
+
+  //       columns.forEach((column) => {
+  //         try {
+  //           if (column.render) {
+  //             // For rendered columns, get the actual data
+  //             if (item[column.key] && typeof item[column.key] === "object") {
+  //               // Handle nested objects (like category, business details etc)
+  //               if (item[column.key].name) {
+  //                 row[column.label] = item[column.key].name;
+  //               } else if (item[column.key].businessName) {
+  //                 row[column.label] = item[column.key].businessName;
+  //               } else {
+  //                 const nestedValues = Object.values(
+  //                   item[column.key] || {}
+  //                 ).filter((value) => value !== null && value !== undefined);
+  //                 row[column.label] =
+  //                   nestedValues.length > 0 ? nestedValues.join(" - ") : "";
+  //               }
+  //             } else {
+  //               // Handle other rendered values with null check
+  //               row[column.label] = item[column.key]
+  //                 ? item[column.key].toString()
+  //                 : "";
+  //             }
+  //           } else {
+  //             // Handle direct values with null check
+  //             row[column.label] = item[column.key] || "";
+  //           }
+  //         } catch (error) {
+  //           // If any error occurs while processing a field, set it to empty string
+  //           row[column.label] = "";
+  //         }
+  //       });
+  //       return row;
+  //     })
+  //   );
+
+  //   // Set column widths
+  //   const colWidths = columns.map((col) => ({
+  //     wch: Math.max(col.label.length, 15),
+  //   }));
+  //   ws["!cols"] = colWidths;
+
+  //   // Create workbook and add the worksheet
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+  //   // Generate timestamp for filename
+  //   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+
+  //   // Save to file with timestamp
+  //   XLSX.writeFile(wb, `data-export-${timestamp}.xlsx`);
+  // };
 
   return (
     <div className="w-full p-6 bg-white mt-4 shadow rounded-lg">
@@ -133,8 +145,8 @@ const CustomTable = ({
         </div>
         <div className="flex gap-2">
           <button
-            onClick={handleExportToExcel}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            onClick={() => handleExportToExcel({ data: allData })}
+            className="bg-green-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
           >
             <FaFileExport /> Export to Excel
           </button>
@@ -162,7 +174,9 @@ const CustomTable = ({
                 >
                   <div className="flex items-center justify-center space-x-1">
                     <span>{column.label}</span>
-                    <span className="text-gray-400">{getSortIcon(column.key)}</span>
+                    <span className="text-gray-400">
+                      {getSortIcon(column.key)}
+                    </span>
                   </div>
                 </th>
               ))}
@@ -170,20 +184,22 @@ const CustomTable = ({
           </thead>
           <tbody>
             {paginatedData?.map((item, index) => (
-              <tr 
-                key={index} 
+              <tr
+                key={index}
                 className="hover:bg-green-100 text-center transition-colors duration-150 ease-in-out border-gray-400 border-b last:border-b-0"
               >
                 {columns.map((column) => (
-                  <td 
-                    key={column.key} 
+                  <td
+                    key={column.key}
                     className="px-6 py-4 text-sm text-gray-800"
                   >
                     <div className="flex items-center justify-center">
-                      {column.render ? 
-                        column.render(item, ((currentPage - 1) * itemsPerPage) + index ) : 
-                        item[column.key]
-                      }
+                      {column.render
+                        ? column.render(
+                            item,
+                            (currentPage - 1) * itemsPerPage + index
+                          )
+                        : item[column.key]}
                     </div>
                   </td>
                 ))}
@@ -196,23 +212,25 @@ const CustomTable = ({
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-700">
-          Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, sortedData?.length)} of {sortedData?.length} entries
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, sortedData?.length)} of{" "}
+          {sortedData?.length} entries
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className="cursor-pointer  px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
             <FaArrowLeft />
           </button>
-          <button
-            className="px-4 py-2 text-sm font-medium rounded border bg-blue-500 text-white border-blue-500"
-          >
+          <button className="px-4 py-2 text-sm font-medium rounded border bg-blue-500 text-white border-blue-500">
             {currentPage}
           </button>
           <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
             className="cursor-pointer px-4 py-2 text-sm font-medium rounded border disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
@@ -235,8 +253,8 @@ export default CustomTable;
 //   const columns = [
 //     { key: 'name', label: 'Name' },
 //     { key: 'email', label: 'Email' },
-//     { 
-//       key: 'status', 
+//     {
+//       key: 'status',
 //       label: 'Status',
 //       render: (row) => (
 //         <span className={`px-2 py-1 rounded ${
