@@ -304,7 +304,7 @@ const HomePage = () => {
           </h1>
           <button
             onClick={() => setSelectedSlot(null)}
-            className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+            className="cursor-pointer bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
           >
             <span>←</span> Back to Slots
           </button>
@@ -342,7 +342,7 @@ const HomePage = () => {
                   isActive: true,
                 });
               }}
-              className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
+              className="cursor-pointer bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
             >
               Add New Slot
             </button>
@@ -401,13 +401,13 @@ const HomePage = () => {
                           e.stopPropagation();
                           handleEdit(slot);
                         }}
-                        className="bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-200 transition-all duration-300 flex items-center gap-2"
+                        className="cursor-pointer bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-200 transition-all duration-300 flex items-center gap-2"
                       >
                         <FaRegEdit />
                       </button>
                       <button
                         onClick={() => handleManageAds(slot._id)}
-                        className="bg-emerald-100 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition-all duration-300 flex items-center gap-2 font-medium text-sm"
+                        className="cursor-pointer bg-emerald-100 text-emerald-600 px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition-all duration-300 flex items-center gap-2 font-medium text-sm"
                       >
                         Manage Ads
                         <span className="transform transition-transform group-hover:translate-x-1">

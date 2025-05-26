@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   FaSort,
   FaSortUp,
@@ -24,19 +24,19 @@ const CustomTable = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
-  // Search functionality
+  // Search functionality - Move before pagination
   const filteredData = useMemo(() => {
+    if (!searchTerm) return data;
     return data?.filter((item) =>
-      Object.keys(item).some((key) =>
-        String(item[key]).toLowerCase().includes(searchTerm.toLowerCase())
+      Object.values(item).some((value) =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [data, searchTerm]);
 
-  // Sorting functionality
+  // Sorting functionality - Apply to filtered data
   const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
-
     return [...filteredData].sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "ascending" ? -1 : 1;
@@ -48,7 +48,12 @@ const CustomTable = ({
     });
   }, [filteredData, sortConfig]);
 
-  // Pagination
+  // Reset to first page when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  // Pagination - Apply after search and sort
   const totalPages = Math.ceil(sortedData?.length / itemsPerPage);
   const paginatedData = sortedData?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -212,9 +217,11 @@ const CustomTable = ({
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-700">
-          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-          {Math.min(currentPage * itemsPerPage, sortedData?.length)} of{" "}
-          {sortedData?.length} entries
+          {sortedData?.length > 0 ? (
+            <>Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, sortedData?.length)} of {sortedData?.length} entries {searchTerm && `(filtered from ${data?.length} total entries)`}</>
+          ) : (
+            <span>No matching records found</span>
+          )}
         </div>
         <div className="flex space-x-2">
           <button

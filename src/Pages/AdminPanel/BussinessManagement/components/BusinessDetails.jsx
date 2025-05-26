@@ -2,6 +2,7 @@ import React from 'react';
 import { MdVerifiedUser } from 'react-icons/md';
 
 const BusinessDetails = ({ selectedBusiness , setViewModalOpen, setSelectedBusiness}) => {
+  
   return (
     <div className="space-y-6">
     <div className="grid grid-cols-2 gap-4">
@@ -65,7 +66,7 @@ const BusinessDetails = ({ selectedBusiness , setViewModalOpen, setSelectedBusin
           setViewModalOpen(false);
           setSelectedBusiness(null);
         }}
-        className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
+        className="cursor-pointer px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
       >
         Close
       </button>

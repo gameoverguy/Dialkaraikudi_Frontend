@@ -133,66 +133,77 @@ const VendorSubscription = ({ businessData }) => {
             </ul>
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 bg-white">
           {adSlots.map((slot, index) => (
             <div
               key={index}
-              className={`bg-white mb-1 flex flex-col justify-between rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300
-                ${isSlotPurchased(slot) ? "bg-green-50 ring-2 ring-green-500" : ""}
-                ${isSlotFull(slot) && !isSlotPurchased(slot) ? "bg-red-50 ring-2 ring-red-500" : ""}`}
+              className={`bg-gray-800 rounded-2xl overflow-hidden relative flex flex-col ${isSlotPurchased(slot) ? 'ring-2 ring-green-500' : ''}`}
             >
-              <div className="p-6 pb-0">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">
-                    {slot.name}
+              {/* Diagonal Color Block */}
+              <div
+                className={`absolute top-0 right-0 w-32 h-32 transform rotate-45 translate-x-16 -translate-y-16
+                  ${isSlotPurchased(slot) ? 'bg-green-500' : isSlotFull(slot) ? 'bg-red-500':'bg-blue-500'}`}
+              />
+
+              {/* Content */}
+              <div className="p-6 relative flex-grow flex flex-col">
+                {/* Price Display */}
+                <div className="mb-6">
+                  <div className="flex items-baseline text-white">
+                    <span className="text-2xl font-bold">₹ </span>
+                    <span className="text-4xl font-bold"> {slot.price}</span>
+                    <span className="ml-1 text-gray-400">/{slot.adDurationInDays} days</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mt-2">
+                    {slot.name.toUpperCase()}
                   </h3>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium
-                  ${
-                    isSlotPurchased(slot)
-                      ? "bg-green-100 text-green-800"
-                      : "bg-blue-100 text-blue-800"
-                  }`}
-                  >
-                    {slot.page}
-                  </span>
                 </div>
-                <p className="text-gray-600 mb-4">{slot.description}</p>
-                <div className="space-y-3">
-                  <div className="flex items-center text-gray-600">
-                    <FaImage className="mr-2" />
-                    <span>Type: {slot.slotType}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <FaClock className="mr-2" />
-                    <span>Duration: {slot.adDurationInDays} days</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <FaInfoCircle className="mr-2" />
-                    <span>Max Ads: {slot.maxAds}</span>
-                  </div>
-                </div>
-                
-              </div>
-              <div className="p-6 pt-0">
-              <button
+
+                {/* Features List */}
+                <ul className="space-y-3 flex-grow">
+                  {slot.description && (
+                    <li className="text-gray-400 text-sm border-b border-gray-700 pb-2">
+                      {slot.description}
+                    </li>
+                  )}
+                  <li className="flex items-center text-gray-300">
+                    <svg className={`w-4 h-4 mr-2 ${isSlotPurchased(slot) ? 'text-green-500' : 'text-blue-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {slot.slotType}
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <svg className={`w-4 h-4 mr-2 ${isSlotPurchased(slot) ? 'text-green-500' : 'text-blue-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {slot.adDurationInDays} days
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <svg className={`w-4 h-4 mr-2 ${isSlotPurchased(slot) ? 'text-green-500' : 'text-blue-500'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Max Ads: {slot.maxAds}
+                  </li>
+                </ul>
+
+                {/* Action Button */}
+                <button
                   onClick={() => handlePurchaseSlot(slot._id)}
                   disabled={isSlotPurchased(slot) || isSlotFull(slot)}
-                  className={`mt-6 w-full  py-2 px-4 rounded-lg transition-colors
-                  ${isSlotPurchased(slot)
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : isSlotFull(slot)
-                    ? "bg-red-300 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer" 
-                  }`}
+                  className={`w-full py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-200 mt-6
+                    ${isSlotPurchased(slot)
+                      ? "bg-green-500 text-white cursor-not-allowed"
+                      : isSlotFull(slot)
+                      ? "bg-red-500 text-red-200 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"}`}
                 >
                   {isSlotPurchased(slot)
-                    ? "Already Purchased"
+                    ? "Purchased"
                     : isSlotFull(slot)
                     ? "Slot Full"
-                    : "Purchase Slot"}
+                    : "Purchase Now"}
                 </button>
-                </div>
+              </div>
             </div>
           ))}
         </div>

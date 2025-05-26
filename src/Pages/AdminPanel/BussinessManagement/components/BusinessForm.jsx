@@ -163,13 +163,13 @@ const BusinessForm = ({
           setErrors({});
           setSelectedBusiness(null);
         }}
-        className="px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
+        className="cursor-pointer px-6 py-2.5 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition duration-200"
       >
         Cancel
       </button>
       <button
         type="submit"
-        className="px-6 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
+        className="cursor-pointer px-6 py-2.5 rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
       >
         {selectedBusiness ? "Update Business" : "Add Business"}
       </button>

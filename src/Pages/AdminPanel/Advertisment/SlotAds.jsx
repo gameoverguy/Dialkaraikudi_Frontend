@@ -410,13 +410,13 @@ const SlotAds = ({ slotId, type }) => {
                 <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2 z-50">
                   <button
                     onClick={() => openEditModal(ad)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                    className="cursor-pointer bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
                   >
                     <FaRegEdit className="text-blue-600" />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(ad._id)}
-                    className="bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
+                    className="cursor-pointer bg-white p-2 rounded-full text-sm md:text-xl shadow-lg hover:bg-gray-100 transition-colors"
                   >
                     <MdDeleteOutline className="text-red-500" />
                   </button>

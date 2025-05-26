@@ -99,7 +99,7 @@ const BusinessInfo = ({ formData, businessId }) => {
       }, 100);
     }
   };
-  
+
 
   return (
     <div className="rounded-md mx-4 bg-white">
@@ -190,8 +190,8 @@ const BusinessInfo = ({ formData, businessId }) => {
           <button onClick={handleBookmarkClick}
             className={`relative group p-2.5 rounded-full transition-all duration-300 transform
               hover:scale-110 active:scale-95 ${isLoggedin && isBookmarked
-              ? "text-red-600 hover:text-red-700 bg-red-50"
-              : "text-gray-400 hover:text-red-500 hover:bg-red-50"}`}>
+                ? "text-red-600 hover:text-red-700 bg-red-50"
+                : "text-gray-400 hover:text-red-500 hover:bg-red-50"}`}>
             {isLoggedin && isBookmarked ? (
               <FaHeart className="text-2xl transition-transform" />
             ) : (
@@ -206,10 +206,10 @@ const BusinessInfo = ({ formData, businessId }) => {
             <MdOutlineStar className="ml-1" />
           </div>
           <span className="text-gray-600">{formData?.business.reviewCount} Ratings</span>
-          
+
           <div className="hidden md:flex text-sm md:text-base items-center gap-2">
             <p><MdAccessTimeFilled className="text-lg" /></p>
-            <p>Today</p>
+           
             {(() => {
               const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
               const today = days[new Date().getDay()];
@@ -218,29 +218,30 @@ const BusinessInfo = ({ formData, businessId }) => {
               if (timings) {
                 return timings.isOpen ? (
                   <>
+                   <p>Today</p>
                     <p>{timings.openTime} -</p>
                     <p>{timings.closeTime}</p>
                   </>
                 ) : <p>Closed</p>;
               }
-              return <p>No timing information available</p>;
+              return <p>No time slots</p>;
             })()}
           </div>
-          
-          <div className="hidden md:flex text-sm md:text-base items-center gap-2">
-            <p><TbWorld className="text-lg" /></p>
-            <a href={formData?.business.contactDetails?.website?.startsWith('http') 
-              ? formData?.business.contactDetails?.website 
-              : `https://${formData?.business.contactDetails?.website}`} 
-              target="_blank" rel="noopener noreferrer">
-              {formData?.business.contactDetails?.website || 'No URL'} 
-            </a>
-          </div>
+          {formData?.business.contactDetails?.website &&
+            <div className="hidden md:flex text-sm md:text-base items-center gap-2">
+              <p><TbWorld className="text-lg" /></p>
+              <a href={formData?.business.contactDetails?.website?.startsWith('http')
+                ? formData?.business.contactDetails?.website
+                : `https://${formData?.business.contactDetails?.website}`}
+                target="_blank" rel="noopener noreferrer">
+                {formData?.business.contactDetails?.website}
+              </a>
+            </div>
+          }
         </div>
 
-        <div className="flex md:hidden text-sm md:text-base mt-2 gap-2">
+        <div className="flex flex-wrap md:hidden text-sm md:text-base mt-2 gap-2">
           <p><MdAccessTimeFilled className="text-lg" /></p>
-          <p>Today</p>
           {(() => {
             const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
             const today = days[new Date().getDay()];
@@ -249,22 +250,28 @@ const BusinessInfo = ({ formData, businessId }) => {
             if (timings) {
               return timings.isOpen ? (
                 <>
+
+                  <p>Today</p>
                   <p>{timings.openTime} -</p>
                   <p>{timings.closeTime}</p>
                 </>
-              ) : <p>No time slots</p>;
+              ) : <p>Closed</p>;
             }
-            return <p>No timing information available</p>;
+            return <p>No time slots</p>;
           })()}
-          <div className="flex md:hidden text-sm md:text-base gap-2">
-            <p><TbWorld className="text-lg" /></p>
-            <a href={formData?.business.contactDetails?.website?.startsWith('http') 
-              ? formData?.business.contactDetails?.website 
-              : `https://${formData?.business.contactDetails?.website}`} 
-              target="_blank" rel="noopener noreferrer">
-              {formData?.business.contactDetails?.website || 'No URL'} 
-            </a>
-          </div>
+
+          {formData?.business.contactDetails?.website &&
+            <div className="flex md:hidden text-sm md:text-base gap-2">
+              <p><TbWorld className="text-lg" /></p>
+              <a href={formData?.business.contactDetails?.website?.startsWith('http')
+                ? formData?.business.contactDetails?.website
+                : `https://${formData?.business.contactDetails?.website}`}
+                target="_blank" rel="noopener noreferrer">
+                {formData?.business.contactDetails?.website}
+              </a>
+            </div>
+          }
+
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-3 text-sm">
@@ -289,7 +296,7 @@ const BusinessInfo = ({ formData, businessId }) => {
                 ? formData?.business.contactDetails?.phone
                 : "Show Number"}
             </div>
-            
+
             <button onClick={() => handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)}
               className={`hidden md:flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start 
                 ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
@@ -320,7 +327,7 @@ const BusinessInfo = ({ formData, businessId }) => {
               </button>
             </div>
           </div>
-          
+
           <div className="hidden md:block">
             <p className="flex justify-end font-semibold">Click to Rate</p>
             <StarRating formData={formData} businessId={formData.business._id} />

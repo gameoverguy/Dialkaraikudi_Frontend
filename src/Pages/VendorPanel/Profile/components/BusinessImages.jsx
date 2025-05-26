@@ -112,85 +112,79 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
       {isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div
-            className="relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer bg-gray-50 hover:bg-blue-50"
+            className="border-2 border-dashed border-gray-300 p-4 rounded-lg"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            onClick={() => document.getElementById('file-input').click()}
           >
             <input
-              id="file-input"
               type="file"
               multiple
               accept="image/*"
               onChange={handleImageChange}
-              className="hidden"
+              className="w-full"
               disabled={isUploading}
             />
-            <div className="space-y-4">
-              <div className="flex justify-center">
-                <FaPlus className="text-gray-400 text-4xl hover:text-blue-500 transition-colors" />
-              </div>
-              <div className="text-lg font-medium text-gray-700">
-                Drop your images here
-              </div>
-              <div className="text-sm text-gray-500">
-                or <span className="text-blue-500 hover:text-blue-600 font-medium">click to select</span>
-              </div>
-              <div className="text-xs text-gray-400">
-                Maximum 6 images, 2MB each
-              </div>
-            </div>
+            <p className="text-center text-gray-500 mt-2">
+              Drag and drop images here or click to select
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="flex flex-row gap-4 flex-wrap">
             {business?.business?.photos?.map((photo, index) => (
-              <div key={`existing-${index}`} className="relative group aspect-square">
+              <div key={`existing-${index}`} className="relative group">
                 <img
                   src={photo}
                   alt={`Business ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                  className="w-40 h-40 object-cover rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => handleImageDelete(photo)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-600 shadow-lg"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 >
-                  <MdDelete size={16} />
+                  <MdDelete size={20} />
                 </button>
               </div>
             ))}
             {previewImages.map((preview, index) => (
-              <div key={`preview-${index}`} className="relative group aspect-square">
+              <div key={`preview-${index}`} className="relative group">
                 <img
                   src={preview}
                   alt={`Preview ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                  className="w-40 h-40 object-cover rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => handleImageDelete(null, true, index)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-600 shadow-lg"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 >
-                  <MdDelete size={16} />
+                  <MdDelete size={20} />
                 </button>
               </div>
             ))}
+            {/* {Array.from({
+              length:
+                6 -
+                ((business?.business?.photos?.length || 0) +
+                  previewImages.length),
+            }).map((_, index) => (
+              <div
+                key={`empty-${index}`}
+                className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center"
+              >
+                <FaPlus className="text-gray-400 text-3xl" />
+              </div>
+            ))} */}
           </div>
 
           <button
             type="submit"
-            className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'}`}
+            className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+              isUploading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={isUploading}
           >
-            {isUploading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Uploading...
-              </span>
-            ) : 'Upload Images'}
+            {isUploading ? "Uploading..." : "Upload Images"}
           </button>
         </form>
       ) : (
