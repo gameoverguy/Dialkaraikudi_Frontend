@@ -19,8 +19,6 @@ const VendorProfile = ({ businessData }) => {
       const response = await axios.get(`${API}/business/${businessData.user_id}`);
       setBusiness(response.data.data);      
       setLoading(false);
-      console.log(response.data.data);
-      
     } catch (error) {
       console.error("Error fetching business details:", error);
     }
@@ -36,8 +34,6 @@ const VendorProfile = ({ businessData }) => {
         `${API}/business/${businessData.user_id}`,
         formData
       );
-      console.log(formData);
-      
       if (response.data.success) {
         toast.success("Business details updated successfully");
         await fetchBusinessDetails();
@@ -72,7 +68,7 @@ const VendorProfile = ({ businessData }) => {
             onSubmit={handleSubmit}
           />
           <BusinessAddress
-            business={business}
+            business={businessData}
             onSubmit={handleSubmit}
             fetchBusinessDetails={fetchBusinessDetails}
           />
