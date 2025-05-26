@@ -39,7 +39,7 @@ const Bussiness_List = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const { id } = useParams();
-  const { handleOpenLoginModal } = useLoginModal();
+  const { handleOpenLoginModal, setLoginRole } = useLoginModal();
 
   const [activeFilter, setActiveFilter] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
@@ -160,6 +160,7 @@ const Bussiness_List = () => {
     } else {
       // toast.warning("Please Login to show contact number");
       setTimeout(() => {
+        setLoginRole("user");
         handleOpenLoginModal();
       }, 100);
     }
@@ -252,60 +253,40 @@ const Bussiness_List = () => {
                   Best Businesses in Karaikudi
                 </h1>
               </div>
-              <div className="relative  bg-white">
-                <div className="sticky flex space-x-3 top-20 bg-white py-2 px-2">
+              <div className="relative bg-white w-full">
+                <div className="sticky flex flex-wrap gap-2 sm:flex-nowrap sm:space-x-3 top-20 bg-white py-3 px-4">
                   <button
-                    className="hidden md:flex border  items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                    className="hidden sm:flex border items-center gap-2 border-gray-400 px-3 py-1.5 rounded hover:bg-gray-50 text-sm"
                     onClick={() => handleFilter(null)}
                   >
-                    Reset <FaFilter />
+                    Reset <FaFilter className="text-gray-600" />
                   </button>
                   <button
-                    className="border flex md:hidden items-center gap-2 border-gray-400 px-2 py-1 rounded"
+                    className="border flex sm:hidden items-center gap-2 border-gray-400 px-3 py-1.5 rounded hover:bg-gray-50"
                     onClick={() => handleFilter(null)}
                   >
-                    <FaFilter />
+                    <FaFilter className="text-gray-600" />
                   </button>
+                  {[5, 4, 3].map((rating) => (
+                    <button
+                      key={rating}
+                      className={`border flex items-center border-gray-400 px-3 py-1.5 rounded cursor-pointer transition-colors duration-200 text-sm min-w-[70px] justify-center
+          ${
+            activeFilter === rating
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-50"
+          }`}
+                      onClick={() => handleFilter(rating)}
+                    >
+                      {rating}{" "}
+                      <IoMdStar className="text-lg ml-1 text-yellow-400" />
+                    </button>
+                  ))}
                   <button
-                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${
-              activeFilter === 5
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-            }`}
-                    onClick={() => handleFilter(5)}
-                  >
-                    5 <IoMdStar className="text-lg m-1 text-yellow-400" />
-                  </button>
-                  <button
-                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${
-              activeFilter === 4
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-            }`}
-                    onClick={() => handleFilter(4)}
-                  >
-                    4 <IoMdStar className="text-lg m-1 text-yellow-400" />
-                  </button>
-                  <button
-                    className={`border flex items-center border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${
-              activeFilter === 3
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-            }`}
-                    onClick={() => handleFilter(3)}
-                  >
-                    3 <IoMdStar className="text-lg m-1 text-yellow-400" />
-                  </button>
-                  <button
-                    className={`border flex border-gray-400 px-2 py-1 rounded cursor-pointer transition-colors duration-200
-            ${
-              activeFilter === "top"
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-            }`}
+                    className={`border flex border-gray-400 px-3 py-1.5 rounded cursor-pointer transition-colors duration-200 text-sm whitespace-nowrap
+        ${
+          activeFilter === "top" ? "bg-blue-600 text-white" : "hover:bg-gray-50"
+        }`}
                     onClick={() => handleFilter("top")}
                   >
                     Top Rating
@@ -361,11 +342,13 @@ const Bussiness_List = () => {
                               </div>
                               {data.reviewCount} Ratings
                             </div>
-                            <p className="md:flex md:items-center">
-                              <CiLocationOn className="text-2xl pr-1 text-green-800" />
-                              <p className="line-clamp-1">{data?.address?.formattedAddress ||
-                                data?.address?.addressArea}</p>
-                            </p>
+                            <div className="flex items-start gap-1 max-w-full overflow-hidden">
+                              <CiLocationOn className="text-xl flex-shrink-0 text-green-800" />
+                              <p className="text-sm text-gray-600 line-clamp-2 break-words">
+                                {data?.address?.formattedAddress ||
+                                  data?.address?.addressArea}
+                              </p>
+                            </div>
                           </div>
                           {/* <div>
                                     <AmentiesModal

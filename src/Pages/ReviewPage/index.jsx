@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { API } from "../../../config/config";
-import {motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 axios.defaults.withCredentials = true;
 
 const ReviewPage = () => {
@@ -60,6 +60,9 @@ const ReviewPage = () => {
   const handleSubmit = async () => {
     if (!comment.trim()) {
       setError("Please write your review");
+      return;
+    } else if (comment.trim().length < 3) {
+      setError("Please write your review minimum 3 characters");
       return;
     }
 
@@ -251,6 +254,7 @@ const ReviewPage = () => {
                 placeholder="Share your experience with others..."
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
+                maxLength={500}
               />
               <AnimatePresence>
                 {error && (
@@ -258,7 +262,7 @@ const ReviewPage = () => {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="text-red-500 text-sm mt-2"
+                    className="text-red-500 text-sm mt-3 h-6"
                   >
                     {error}
                   </motion.p>

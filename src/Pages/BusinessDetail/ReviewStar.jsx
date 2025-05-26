@@ -9,10 +9,11 @@ const StarRating = ({ formData, businessId }) => {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const isLoggedin = !!userData;
-  const { handleOpenLoginModal } = useLoginModal();
+  const { handleOpenLoginModal, setLoginRole } = useLoginModal();
 
   const handleRatingClick = (value) => {
     if (!isLoggedin) {
+      setLoginRole("user");
       handleOpenLoginModal();
       return;
     }

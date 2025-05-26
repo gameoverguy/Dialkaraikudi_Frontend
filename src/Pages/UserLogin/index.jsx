@@ -109,6 +109,7 @@ const UserLogin = ({
 
         if (data && data.token) {
           const userData = data.user || data.business || {};
+          localStorage.clear();
 
           localStorage.setItem(
             role === "business" ? "businessData" : "userData",
@@ -127,6 +128,8 @@ const UserLogin = ({
             if (role === "business") {
               //const userId = userData.id || userData._id;
               navigate(`/vendorpanel`);
+            } else {
+              window.location.reload(); // Refresh the current page for user login
             }
           }, 1000);
         } else {

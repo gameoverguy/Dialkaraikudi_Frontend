@@ -16,7 +16,7 @@ const BusinessInfo = ({ formData, businessId }) => {
   const [showContact, setShowContact] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { handleOpenLoginModal } = useLoginModal();
+  const { handleOpenLoginModal, setLoginRole } = useLoginModal();
   const [showImageModal, setShowImageModal] = useState(false);
   const [initialSlide, setInitialSlide] = useState(0);
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -26,6 +26,7 @@ const BusinessInfo = ({ formData, businessId }) => {
     if (isLoggedin) {
       setShowContact((prev) => !prev);
     } else {
+      setLoginRole("user")
       handleOpenLoginModal();
     }
   };
@@ -56,6 +57,7 @@ const BusinessInfo = ({ formData, businessId }) => {
 
   const handleBookmarkClick = async () => {
     if (!isLoggedin) {
+      setLoginRole("user")
       handleOpenLoginModal();
       return;
     }
@@ -95,11 +97,11 @@ const BusinessInfo = ({ formData, businessId }) => {
       window.open(whatsappUrl, "_blank");
     } else {
       setTimeout(() => {
+        setLoginRole("user");
         handleOpenLoginModal();
       }, 100);
     }
   };
-  
 
   return (
     <div className="rounded-md mx-4 bg-white">
@@ -123,16 +125,26 @@ const BusinessInfo = ({ formData, businessId }) => {
         <div className="grid grid-cols-6 gap-2 h-[300px]">
           {formData?.business.photos?.length > 0 ? (
             <>
-              <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative rounded-tl-lg"
-                onClick={() => handleImageClick(0)}>
-                <img src={formData.business.photos[0]} alt="Main"
-                  className="w-full h-full object-cover absolute inset-0" />
+              <div
+                className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative rounded-tl-lg"
+                onClick={() => handleImageClick(0)}
+              >
+                <img
+                  src={formData.business.photos[0]}
+                  alt="Main"
+                  className="w-full h-full object-cover absolute inset-0"
+                />
               </div>
               {formData.business.photos[1] && (
-                <div className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative"
-                  onClick={() => handleImageClick(1)}>
-                  <img src={formData.business.photos[1]} alt="Secondary"
-                    className="w-full h-full object-cover absolute inset-0" />
+                <div
+                  className="col-span-2 row-span-2 overflow-hidden cursor-pointer relative"
+                  onClick={() => handleImageClick(1)}
+                >
+                  <img
+                    src={formData.business.photos[1]}
+                    alt="Secondary"
+                    className="w-full h-full object-cover absolute inset-0"
+                  />
                 </div>
               )}
             </>
@@ -142,14 +154,22 @@ const BusinessInfo = ({ formData, businessId }) => {
             </div>
           )}
           {[2, 3, 4, 5].map((index) => (
-            <div key={index} className={`col-span-1 relative cursor-pointer overflow-hidden
+            <div
+              key={index}
+              className={`col-span-1 relative cursor-pointer overflow-hidden
               ${index === 5 ? "rounded-tr-lg" : ""}
               ${index === 4 ? "rounded-br-lg" : ""}
               ${index <= 3 ? "h-[148px]" : "h-[150px]"}`}
-              onClick={() => formData?.business.photos?.[index] && handleImageClick(index)}>
+              onClick={() =>
+                formData?.business.photos?.[index] && handleImageClick(index)
+              }
+            >
               {formData?.business.photos?.[index] ? (
-                <img src={formData.business.photos[index]} alt={`Image ${index + 1}`}
-                  className="w-full h-full object-cover absolute inset-0" />
+                <img
+                  src={formData.business.photos[index]}
+                  alt={`Image ${index + 1}`}
+                  className="w-full h-full object-cover absolute inset-0"
+                />
               ) : (
                 <div className="bg-gray-100 h-full w-full flex items-center justify-center absolute inset-0">
                   <span className="text-gray-400 text-sm">No More Images</span>
@@ -167,15 +187,27 @@ const BusinessInfo = ({ formData, businessId }) => {
         </div>
       </div>
 
-      <CustomModal isOpen={showImageModal} onClose={() => setShowImageModal(false)}
-        classname="w-11/12 md:w-3/4 lg:w-4/5" title="Gallery">
-        <Swiper modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }}
-          initialSlide={initialSlide} className="h-[70vh]">
+      <CustomModal
+        isOpen={showImageModal}
+        onClose={() => setShowImageModal(false)}
+        classname="w-11/12 md:w-3/4 lg:w-4/5"
+        title="Gallery"
+      >
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+          initialSlide={initialSlide}
+          className="h-[70vh]"
+        >
           {formData?.business.photos?.map((photo, index) => (
             <SwiperSlide key={index}>
               <div className="w-full h-full flex items-center justify-center">
-                <img src={photo} alt={`Gallery ${index + 1}`}
-                  className="min-h-full min-w-full object-contain" />
+                <img
+                  src={photo}
+                  alt={`Gallery ${index + 1}`}
+                  className="min-h-full min-w-full object-contain"
+                />
               </div>
             </SwiperSlide>
           ))}
@@ -187,11 +219,15 @@ const BusinessInfo = ({ formData, businessId }) => {
           <h1 className="flex items-center gap-2 text-lg font-bold md:text-xl lg:text-2xl">
             {formData?.business.businessName}
           </h1>
-          <button onClick={handleBookmarkClick}
+          <button
+            onClick={handleBookmarkClick}
             className={`relative group p-2.5 rounded-full transition-all duration-300 transform
-              hover:scale-110 active:scale-95 ${isLoggedin && isBookmarked
-              ? "text-red-600 hover:text-red-700 bg-red-50"
-              : "text-gray-400 hover:text-red-500 hover:bg-red-50"}`}>
+              hover:scale-110 active:scale-95 ${
+                isLoggedin && isBookmarked
+                  ? "text-red-600 hover:text-red-700 bg-red-50"
+                  : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+              }`}
+          >
             {isLoggedin && isBookmarked ? (
               <FaHeart className="text-2xl transition-transform" />
             ) : (
@@ -205,13 +241,25 @@ const BusinessInfo = ({ formData, businessId }) => {
             {formData?.business.ratings}
             <MdOutlineStar className="ml-1" />
           </div>
-          <span className="text-gray-600">{formData?.business.reviewCount} Ratings</span>
-          
+          <span className="text-gray-600">
+            {formData?.business.reviewCount} Ratings
+          </span>
+
           <div className="hidden md:flex text-sm md:text-base items-center gap-2">
-            <p><MdAccessTimeFilled className="text-lg" /></p>
+            <p>
+              <MdAccessTimeFilled className="text-lg" />
+            </p>
             <p>Today</p>
             {(() => {
-              const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+              const days = [
+                "sunday",
+                "monday",
+                "tuesday",
+                "wednesday",
+                "thursday",
+                "friday",
+                "saturday",
+              ];
               const today = days[new Date().getDay()];
               const timings = formData?.business?.businessTimings?.[today];
 
@@ -221,28 +269,47 @@ const BusinessInfo = ({ formData, businessId }) => {
                     <p>{timings.openTime} -</p>
                     <p>{timings.closeTime}</p>
                   </>
-                ) : <p>Closed</p>;
+                ) : (
+                  <p>Closed</p>
+                );
               }
               return <p>No timing information available</p>;
             })()}
           </div>
-          
+
           <div className="hidden md:flex text-sm md:text-base items-center gap-2">
-            <p><TbWorld className="text-lg" /></p>
-            <a href={formData?.business.contactDetails?.website?.startsWith('http') 
-              ? formData?.business.contactDetails?.website 
-              : `https://${formData?.business.contactDetails?.website}`} 
-              target="_blank" rel="noopener noreferrer">
-              {formData?.business.contactDetails?.website || 'No URL'} 
+            <p>
+              <TbWorld className="text-lg" />
+            </p>
+            <a
+              href={
+                formData?.business.contactDetails?.website?.startsWith("http")
+                  ? formData?.business.contactDetails?.website
+                  : `https://${formData?.business.contactDetails?.website}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {formData?.business.contactDetails?.website || "No URL"}
             </a>
           </div>
         </div>
 
         <div className="flex md:hidden text-sm md:text-base mt-2 gap-2">
-          <p><MdAccessTimeFilled className="text-lg" /></p>
+          <p>
+            <MdAccessTimeFilled className="text-lg" />
+          </p>
           <p>Today</p>
           {(() => {
-            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const days = [
+              "sunday",
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+            ];
             const today = days[new Date().getDay()];
             const timings = formData?.business?.businessTimings?.[today];
 
@@ -252,17 +319,26 @@ const BusinessInfo = ({ formData, businessId }) => {
                   <p>{timings.openTime} -</p>
                   <p>{timings.closeTime}</p>
                 </>
-              ) : <p>No time slots</p>;
+              ) : (
+                <p>No time slots</p>
+              );
             }
             return <p>No timing information available</p>;
           })()}
           <div className="flex md:hidden text-sm md:text-base gap-2">
-            <p><TbWorld className="text-lg" /></p>
-            <a href={formData?.business.contactDetails?.website?.startsWith('http') 
-              ? formData?.business.contactDetails?.website 
-              : `https://${formData?.business.contactDetails?.website}`} 
-              target="_blank" rel="noopener noreferrer">
-              {formData?.business.contactDetails?.website || 'No URL'} 
+            <p>
+              <TbWorld className="text-lg" />
+            </p>
+            <a
+              href={
+                formData?.business.contactDetails?.website?.startsWith("http")
+                  ? formData?.business.contactDetails?.website
+                  : `https://${formData?.business.contactDetails?.website}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {formData?.business.contactDetails?.website || "No URL"}
             </a>
           </div>
         </div>
@@ -279,8 +355,10 @@ const BusinessInfo = ({ formData, businessId }) => {
 
         <div className="flex justify-between">
           <div className="md:flex truncate gap-2 mt-4 text-sm">
-            <div className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2 cursor-pointer hover:bg-green-700"
-              onClick={handleShowContact}>
+            <div
+              className="hidden bg-green-600 text-white rounded md:flex items-center px-3 py-2 cursor-pointer hover:bg-green-700"
+              onClick={handleShowContact}
+            >
               <FaPhone
                 className="animate-bounce mr-2"
                 style={{ animationDuration: "0.7s" }}
@@ -289,11 +367,19 @@ const BusinessInfo = ({ formData, businessId }) => {
                 ? formData?.business.contactDetails?.phone
                 : "Show Number"}
             </div>
-            
-            <button onClick={() => handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)}
+
+            <button
+              onClick={() =>
+                handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)
+              }
               className={`hidden md:flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start 
-                ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-              disabled={!formData?.business?.contactDetails?.whatsapp}>
+                ${
+                  !formData?.business.contactDetails?.whatsapp
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              disabled={!formData?.business?.contactDetails?.whatsapp}
+            >
               <span className="text-xl px-1 text-white">
                 <FaWhatsapp size={16} className="text-white" />
               </span>
@@ -301,18 +387,28 @@ const BusinessInfo = ({ formData, businessId }) => {
             </button>
 
             <div className="md:hidden flex justify-around text-center gap-6 pl-2">
-              <a href={`tel:${formData?.business.contactDetails?.phone}`}
-                className="flex flex-col items-center w-20">
+              <a
+                href={`tel:${formData?.business.contactDetails?.phone}`}
+                className="flex flex-col items-center w-20"
+              >
                 <div className="bg-blue-600 text-white rounded flex items-center justify-center p-2 truncate">
-                  <FaPhone
-                    className="text-base mr-1"
-                  /> Call Now
+                  <FaPhone className="text-base mr-1" /> Call Now
                 </div>
               </a>
-              <button onClick={() => handleWhatsAppClick(formData?.business.contactDetails?.whatsapp)}
+              <button
+                onClick={() =>
+                  handleWhatsAppClick(
+                    formData?.business.contactDetails?.whatsapp
+                  )
+                }
                 className={`flex items-center border-gray-600 px-2 py-2 rounded bg-green-600 text-white md:w-full w-6/12 justify-center md:justify-start 
-                  ${!formData?.business.contactDetails?.whatsapp ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                disabled={!formData?.business?.contactDetails?.whatsapp}>
+                  ${
+                    !formData?.business.contactDetails?.whatsapp
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }`}
+                disabled={!formData?.business?.contactDetails?.whatsapp}
+              >
                 <span className="text-xl px-1 text-white">
                   <FaWhatsapp size={16} className="text-white" />
                 </span>
@@ -320,10 +416,13 @@ const BusinessInfo = ({ formData, businessId }) => {
               </button>
             </div>
           </div>
-          
+
           <div className="hidden md:block">
             <p className="flex justify-end font-semibold">Click to Rate</p>
-            <StarRating formData={formData} businessId={formData.business._id} />
+            <StarRating
+              formData={formData}
+              businessId={formData.business._id}
+            />
           </div>
         </div>
       </div>
