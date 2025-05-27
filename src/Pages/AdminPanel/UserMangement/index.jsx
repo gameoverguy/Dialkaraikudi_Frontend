@@ -60,6 +60,31 @@ const UserTable = () => {
     }
   };
 
+  const handleBlockToggle = async (userId, currentStatus) => {
+    try {
+      const response = await axios.put(`${API}/user/${userId}`, {
+        isBlocked: !currentStatus
+      });
+      
+      if (response.data) {
+        // Update local state
+        const updatedUsers = users.map(user => {
+          if (user._id === userId) {
+            return { ...user, isBlocked: !currentStatus };
+          }
+          return user;
+        });
+        setUsers(updatedUsers);
+        setAllUsers(updatedUsers);
+        
+        toast.success(`User ${!currentStatus ? 'blocked' : 'unblocked'} successfully`);
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      toast.error('Failed to update user status');
+    }
+  };
+
   const columns = [
     {
       key: "name",
@@ -72,6 +97,56 @@ const UserTable = () => {
     {
       key: "email",
       label: "Email",
+    },
+    {
+      key: "block",
+      label: "Block Status",
+      render: (row) => (
+        <div className="flex items-center justify-center space-x-3">
+          {/* <div className="relative inline-block w-14 h-7">
+            <input
+              type="checkbox"
+              checked={row.isBlocked}
+              onChange={() => handleBlockToggle(row._id, row.isBlocked)}
+              className="sr-only peer"
+            />
+            <div
+              className={`absolute inset-0 rounded-full transition duration-300 cursor-pointer
+                ${row.isBlocked ? 'bg-red-500' : 'bg-green-500'}`}
+            />
+            <div
+              className={`absolute inset-y-0 left-0 w-5 h-5 m-1 rounded-full bg-white transition-all duration-300
+                ${row.isBlocked ? 'translate-x-7' : 'translate-x-0'}`}
+            />
+          </div> */}
+
+
+          <div className="flex justify-center">
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={row.isBlocked}
+              onChange={() => handleBlockToggle(row._id, row.isBlocked)}
+            />
+             <div className={`w-8 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all ${row.isBlocked ? 'bg-red-500' : 'bg-green-500'}`}></div>
+             {/* <div
+              className={`absolute inset-0 rounded-full transition duration-300 cursor-pointer
+                ${row.isBlocked ? 'bg-red-500' : 'bg-green-500'}`}
+            />
+            <div
+              className={`absolute inset-y-0 left-0 w-3 h-3 m-0.5 rounded-full bg-white transition-all duration-300
+                ${row.isBlocked ? 'translate-x-7' : 'translate-x-0'}`}
+            /> */}
+          </label>
+        </div>
+
+
+          <span className="text-sm font-medium text-gray-700">
+            {row.isBlocked ? 'Blocked' : 'Active'}
+          </span>
+        </div>
+      ),
     },
     {
       key: "actions",
@@ -116,19 +191,20 @@ const UserTable = () => {
             <label className="font-semibold">Email:</label>
             <p>{user.email}</p>
           </div>
-          {/* <div>
-            <label className="font-semibold">Password:</label>
-            <p>{user.password}</p>
-          </div> */}
+          <div>
+            <label className="font-semibold">Blocked:</label>
+           {user.isBlocked && <p>Yes</p> }
+           {!user.isBlocked && <p>No</p> }
+          </div>
         </div>
-        <div className="mt-6 flex  justify-end">
+        {/* <div className="mt-6 flex  justify-end">
           <button
             onClick={() => handleDelete(user)}
             className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-red-600"
           >
             Delete User
           </button>
-        </div>
+        </div> */}
       </CustomModal>
     );
   };
@@ -171,13 +247,13 @@ const UserTable = () => {
         />
       )}
 
-      <ConfirmationModal
+      {/* <ConfirmationModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={confirmDelete}
         title="Delete User"
         message="Are you sure you want to delete this user? This action cannot be undone."
-      />
+      /> */}
     </div>
   );
 };

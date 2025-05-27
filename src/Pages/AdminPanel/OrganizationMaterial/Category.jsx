@@ -366,6 +366,7 @@ const CategoryManagement = () => {
               placeholder="Description"
               className={`w-full px-4 py-3 rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
               error={errors.description}
+              maxLength={200}
               rows={4}
             />
           </div>
@@ -396,9 +397,11 @@ const CategoryManagement = () => {
                 <span className="ml-2">Service</span>
               </label>
             </div>
+            <div className='h-2'>
             {errors.categoryType && (
               <p className="mt-1 text-xs text-red-500">{errors.categoryType}</p>
             )}
+            </div>
           </div>
 
           <div className="mt-4">
@@ -431,8 +434,11 @@ const CategoryManagement = () => {
                 </div>
               )}
             </div>
+            <div className='h-2'>
             {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}
+            </div>
           </div>
+
 
           {/* Icon Upload */}
           <div className="mt-4">
@@ -465,7 +471,9 @@ const CategoryManagement = () => {
                 </div>
               )}
             </div>
+            <div className='h-2'>
             {errors.icon && <p className="mt-1 text-xs text-red-500">{errors.icon}</p>}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
