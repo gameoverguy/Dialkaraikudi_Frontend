@@ -8,6 +8,7 @@ export default function GoogleAuthSection({
   onLoginSuccess,
   role,
   setSuccessMessage,
+  setErrorOverall,
   setShowLoginModal,
   onClose,
 }) {
@@ -71,6 +72,9 @@ export default function GoogleAuthSection({
       console.error(
         "Google Login Failed:",
         error.response?.data || error.message
+      );
+      setErrorOverall(
+        error.response?.data?.message || "Invalid email or password"
       );
     }
   };

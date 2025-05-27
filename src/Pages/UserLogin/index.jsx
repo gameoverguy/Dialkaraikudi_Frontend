@@ -272,6 +272,7 @@ const UserLogin = ({
             <GoogleAuthSection
               role={role}
               setSuccessMessage={setSuccessMessage}
+              setErrorOverall={setErrorOverall}
               setShowLoginModal={setShowLoginModal}
             />
           )}
