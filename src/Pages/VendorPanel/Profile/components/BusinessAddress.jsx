@@ -1,81 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { FaEdit, FaMapMarkerAlt } from 'react-icons/fa';
-import CustomModal from '../../../../Components/modal';
-import FloatingInput from '../../../../Components/FloatingInput';
+import React, { useState, useEffect } from "react";
+import { FaEdit, FaMapMarkerAlt } from "react-icons/fa";
+import CustomModal from "../../../../Components/modal";
+import FloatingInput from "../../../../Components/FloatingInput";
 
-const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => {
+const BusinessAddress = ({
+  business,
+  onEdit,
+  fetchBusinessDetails,
+  onSubmit,
+}) => {
   const [showModal, setShowModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
-    addressArea: '',
-    city: '',
-    state: '',
-    pincode: ''
+    addressArea: "",
+    city: "",
+    state: "",
+    pincode: "",
   });
   const [errors, setErrors] = useState({});
-  
-  console.log(business);
-  
+
+  // console.log(business);
 
   useEffect(() => {
     if (business?.business?.address) {
       setFormData({
-        addressArea: business?.business?.address?.addressArea || '',
-        city: business?.business?.address?.city || '',
-        state: business?.business?.address?.state || '',
-        pincode: business?.business?.address?.pincode || ''
+        addressArea: business?.business?.address?.addressArea || "",
+        city: business?.business?.address?.city || "",
+        state: business?.business?.address?.state || "",
+        pincode: business?.business?.address?.pincode || "",
       });
     }
-  }, [business]);
+  }, [showModal]);
 
   const validateField = (name, value) => {
     switch (name) {
-      case 'addressArea':
-        return !value.trim() ? 'Address area is required' : '';
-      case 'city':
-        return !value.trim() ? 'City is required' : '';
-      case 'state':
-        return !value.trim() ? 'State is required' : '';
-      case 'pincode':
+      case "addressArea":
+        return !value.trim() ? "Address area is required" : "";
+      case "city":
+        return !value.trim() ? "City is required" : "";
+      case "state":
+        return !value.trim() ? "State is required" : "";
+      case "pincode":
         const pincodeRegex = /^\d{6}$/;
-        if (!value) return 'Pincode is required';
-        if (!pincodeRegex.test(value)) return 'Enter valid 6-digit pincode';
-        return '';
+        if (!value) return "Pincode is required";
+        if (!pincodeRegex.test(value)) return "Enter valid 6-digit pincode";
+        return "";
       default:
-        return '';
+        return "";
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    if (name === 'pincode') {
-      const numbersOnly = value.replace(/[^0-9]/g, '');
+
+    if (name === "pincode") {
+      const numbersOnly = value.replace(/[^0-9]/g, "");
       const limitedLength = numbersOnly.slice(0, 6);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: limitedLength
+        [name]: limitedLength,
       }));
       // Validate pincode immediately
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: validateField(name, limitedLength)
+        [name]: validateField(name, limitedLength),
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
       // Validate other fields immediately
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: validateField(name, value)
+        [name]: validateField(name, value),
       }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) newErrors[key] = error;
     });
@@ -87,12 +92,13 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
+      setIsSaving(true);
       const formattedAddress = `${formData.addressArea}, ${formData.city}, ${formData.state} ${formData.pincode}, India`;
       const updatedData = {
         address: {
           ...formData,
-          formattedAddress
-        }
+          formattedAddress,
+        },
       };
 
       try {
@@ -101,18 +107,20 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           setShowModal(false);
         }
       } catch (error) {
-        console.error('Error updating address:', error);
+        console.error("Error updating address:", error);
+      } finally {
+        setIsSaving(false);
       }
     }
   };
-
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold flex">
-        {/* <FaMapMarkerAlt className="text-red-500 mt-1 mr-2" /> */}
-            Address  </h2>
+          {/* <FaMapMarkerAlt className="text-red-500 mt-1 mr-2" /> */}
+          Address{" "}
+        </h2>
         <button
           onClick={() => setShowModal(true)}
           className="text-blue-600 hover:text-blue-700 cursor-pointer"
@@ -122,20 +130,23 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
       </div>
       <div className="space-y-3">
         <div className="flex items-start">
-         
-          <div className='space-y-3'>
-            <p className=''>
-              <span className='font-medium'>Address Area:</span> {business?.business?.address?.addressArea || '-'}
+          <div className="space-y-3">
+            <p className="">
+              <span className="font-medium">Address Area:</span>{" "}
+              {business?.business?.address?.addressArea || "-"}
             </p>
             <p className="">
-            <span className='font-medium'>City:</span> {business?.business?.address?.city || '-'}
+              <span className="font-medium">City:</span>{" "}
+              {business?.business?.address?.city || "-"}
             </p>
             <p className="">
-            <span className='font-medium'>State:</span> {business?.business?.address?.state ||  '-'}
+              <span className="font-medium">State:</span>{" "}
+              {business?.business?.address?.state || "-"}
             </p>
             <p className="">
-            <span className='font-medium'>Pincode:</span> {business?.business?.address?.pincode ||  '-'}
-            </p>         
+              <span className="font-medium">Pincode:</span>{" "}
+              {business?.business?.address?.pincode || "-"}
+            </p>
           </div>
         </div>
       </div>
@@ -143,6 +154,7 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
       <CustomModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
+        classname={"md:w-[40%] lg:w-[30%] xl:w-[25%]"}
         title="Edit Address"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -176,7 +188,7 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           <FloatingInput
             id="pincode"
             name="pincode"
-            type='text'
+            type="text"
             value={formData.pincode}
             onChange={handleChange}
             placeholder="Pincode"
@@ -187,15 +199,17 @@ const BusinessAddress = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
             <button
               type="button"
               onClick={() => setShowModal(false)}
+              disabled={isSaving}
               className="cursor-pointer px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSaving}
             >
-              Save Changes
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

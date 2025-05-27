@@ -1,75 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { FaEdit } from 'react-icons/fa';
-import CustomModal from '../../../../Components/modal';
-import FloatingInput from '../../../../Components/FloatingInput';
+import React, { useState, useEffect } from "react";
+import { FaEdit } from "react-icons/fa";
+import CustomModal from "../../../../Components/modal";
+import FloatingInput from "../../../../Components/FloatingInput";
 
-const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => {
+const BusinessHours = ({
+  business,
+  onEdit,
+  fetchBusinessDetails,
+  onSubmit,
+}) => {
   const [showModal, setShowModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
   useEffect(() => {
     if (showModal && business?.business?.businessTimings) {
       const initialData = {};
-      days.forEach(day => {
+      days.forEach((day) => {
         const timing = business.business.businessTimings[day] || {};
         initialData[day] = {
           isOpen: timing.isOpen || false,
-          openTime: timing.openTime || '',
-          closeTime: timing.closeTime || ''
+          openTime: timing.openTime || "",
+          closeTime: timing.closeTime || "",
         };
       });
       setFormData(initialData);
     }
   }, [showModal]);
-  
 
   const handleChange = (day, field, value) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const updatedDay = {
         ...prev[day],
-        [field]: value
+        [field]: value,
       };
 
       // Handle checkbox change
-      if (field === 'isOpen') {
+      if (field === "isOpen") {
         if (!value) {
-          updatedDay.openTime = '';
-          updatedDay.closeTime = '';
+          updatedDay.openTime = "";
+          updatedDay.closeTime = "";
         } else if (!updatedDay.openTime && !updatedDay.closeTime) {
-          updatedDay.openTime = '09:00';
-          updatedDay.closeTime = '17:00';
+          updatedDay.openTime = "09:00";
+          updatedDay.closeTime = "17:00";
         }
       }
 
       return {
         ...prev,
-        [day]: updatedDay
+        [day]: updatedDay,
       };
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       await onSubmit({ businessTimings: formData });
       setShowModal(false);
     } catch (error) {
-      console.error('Error updating business hours:', error);
+      console.error("Error updating business hours:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const formatTimeForDisplay = (time) => {
-    if (!time) return '';
+    if (!time) return "";
     try {
-      const [hours, minutes] = time.split(':');
+      const [hours, minutes] = time.split(":");
       const date = new Date();
       date.setHours(parseInt(hours), parseInt(minutes));
-      return date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
       });
     } catch (error) {
       return time;
@@ -92,11 +108,16 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
         {days.map((day) => {
           const timing = business?.business?.businessTimings?.[day];
           return (
-            <div key={day} className="flex justify-between items-center py-2 border-b">
+            <div
+              key={day}
+              className="flex justify-between items-center py-2 border-b"
+            >
               <span className="capitalize font-medium">{day}</span>
               <span className="text-gray-600">
                 {timing?.isOpen ? (
-                  `${formatTimeForDisplay(timing.openTime)} - ${formatTimeForDisplay(timing.closeTime)}`
+                  `${formatTimeForDisplay(
+                    timing.openTime
+                  )} - ${formatTimeForDisplay(timing.closeTime)}`
                 ) : (
                   <span className="text-red-500">Closed</span>
                 )}
@@ -112,7 +133,7 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
         title="Edit Business Hours"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className='grid grid-cols-2 xl:grid-cols-3 gap-7'>
+          <div className="grid grid-cols-2 xl:grid-cols-3 gap-7">
             {days.map((day) => (
               <div key={day} className="p-4 border rounded-lg">
                 <div className="flex items-center justify-between mb-3">
@@ -122,27 +143,33 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
                       type="checkbox"
                       id={`isOpen-${day}`}
                       checked={formData[day]?.isOpen || false}
-                      onChange={(e) => handleChange(day, 'isOpen', e.target.checked)}
+                      onChange={(e) =>
+                        handleChange(day, "isOpen", e.target.checked)
+                      }
                       className="mr-2"
                     />
                     <label htmlFor={`isOpen-${day}`}>Open</label>
                   </div>
                 </div>
-                
+
                 {formData[day]?.isOpen && (
                   <div className="flex flex-col gap-4">
                     <FloatingInput
                       type="time"
                       id={`openTime-${day}`}
-                      value={formData[day]?.openTime || ''}
-                      onChange={(e) => handleChange(day, 'openTime', e.target.value)}
+                      value={formData[day]?.openTime || ""}
+                      onChange={(e) =>
+                        handleChange(day, "openTime", e.target.value)
+                      }
                       placeholder="Opening Time"
                     />
                     <FloatingInput
                       type="time"
                       id={`closeTime-${day}`}
-                      value={formData[day]?.closeTime || ''}
-                      onChange={(e) => handleChange(day, 'closeTime', e.target.value)}
+                      value={formData[day]?.closeTime || ""}
+                      onChange={(e) =>
+                        handleChange(day, "closeTime", e.target.value)
+                      }
                       placeholder="Closing Time"
                     />
                   </div>
@@ -154,15 +181,17 @@ const BusinessHours = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => 
             <button
               type="button"
               onClick={() => setShowModal(false)}
+              disabled={isSaving}
               className="cursor-pointer px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSaving}
             >
-              Save Changes
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
