@@ -289,7 +289,7 @@ const VendorPanel = () => {
           >
             <MdLogout size={20} />
             {(!collapsed || (collapsed && "group-hover:block")) && (
-              <span className="ml-3">Logout</span>
+              <span className={`ml-3 ${(collapsed || (collapsed && "group-hover:block"))   ? "hidden": "block" }`}>Logout</span>
             )}
           </button>
         </div>

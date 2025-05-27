@@ -88,7 +88,7 @@ const VendorProfile = ({ businessData }) => {
       <ToastContainer />
       <div className="p-2">
         <div className="bg-white shadow rounded mb-4 p-4">
-          <h1 className="mb-2 text-2xl font-bold">Profile</h1>
+          <h1 className="mb-2 text-2xl font-bold">Business Profile</h1>
           <p>
             The profile section allows vendors to manage business details and
             update address information, ensuring accurate contact data and a
@@ -110,7 +110,7 @@ const VendorProfile = ({ businessData }) => {
             onSubmit={handleSubmit}
           />
           <BusinessAddress
-            business={businessData}
+            business={business}
             onEdit={handleEdit}
             onSubmit={handleSubmit}
             fetchBusinessDetails={fetchBusinessDetails}
