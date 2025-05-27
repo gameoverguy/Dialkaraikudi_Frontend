@@ -84,6 +84,7 @@ const AdminLogin = () => {
 
         if (response.data) {
           const { admin } = response.data;
+          localStorage.clear();
           localStorage.setItem(
             "adminData",
             JSON.stringify({
