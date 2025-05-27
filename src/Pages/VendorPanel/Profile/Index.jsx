@@ -21,7 +21,7 @@ const VendorProfile = ({ businessData }) => {
   const fetchBusinessDetails = async () => {
     try {
       const response = await axios.get(
-        `${API}/business/${businessData.user_id}`
+        `${API}/business/getbusinessforpanel/${businessData.user_id}`
       );
       setBusiness(response.data.data);      
       setLoading(false);

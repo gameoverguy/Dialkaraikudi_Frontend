@@ -46,6 +46,7 @@ const VendorDashboard = ({ businessData }) => {
       monthly: { labels: [], data: [], totalReviews: 0, averageRating: "0.0" },
       yearly: { labels: [], data: [], totalReviews: 0, averageRating: "0.0" },
     },
+    favourites: 0
   });
   const [loading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -139,11 +140,12 @@ const VendorDashboard = ({ businessData }) => {
               monthly: transformReviewsData(data.reviews.reviewStatsMonthly),
               yearly: transformReviewsData(data.reviews.reviewStatsYearly),
             },
+            favourites: data.favourites || 0
           });
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      }finally {
+      } finally {
         setIsLoading(false);
       }
     };
@@ -199,7 +201,7 @@ const VendorDashboard = ({ businessData }) => {
         <button
           key={value}
           onClick={() => setPeriod(value)}
-          className={`px-3 py-1 rounded transition-all duration-200 ${
+          className={`px-3 py-1 rounded transition-all duration-200 cursor-pointer ${
             period === value
               ? "bg-blue-600 text-white shadow-md"
               : "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -210,8 +212,12 @@ const VendorDashboard = ({ businessData }) => {
       ))}
     </div>
   );
-if (loading) {
-    return <div><LottieLoader /></div>;
+  if (loading) {
+    return (
+      <div>
+        <LottieLoader />
+      </div>
+    );
   }
   return (
     <div className="p-4 bg-gray-50">
@@ -237,9 +243,14 @@ if (loading) {
                 const timing = business?.businessTimings?.[currentDay];
                 const formattedDay =
                   currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
-                return timing
-                  ? `${formattedDay}: Open ${timing.openTime} - ${timing.closeTime}`
-                  : `${formattedDay}: Timing not available`;
+                if (
+                  !timing ||
+                  !timing.isOpen ||
+                  (!timing.openTime && !timing.closeTime)
+                ) {
+                  return `${formattedDay}: Closed`;
+                }
+                return `${formattedDay}: Open ${timing.openTime} - ${timing.closeTime}`;
               })()}
             </span>
           </div>
@@ -285,7 +296,7 @@ if (loading) {
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold text-gray-700">Favorites</h3>
           <p className="text-3xl font-bold text-red-600">
-            {business?.favoritesCount || 0}
+            {dashboardData?.favourites || 0}
           </p>
         </div>
       </div>

@@ -33,7 +33,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
       validFiles.length;
 
     if (totalImages > 6) {
-      toast.warning("Maximum 6 images allowed");
+      toast.warning("Upload images allowed");
       return;
     }
 
@@ -137,7 +137,7 @@ const BusinessImages = ({ business, onEdit, onSubmit }) => {
                 or <span className="text-blue-500 hover:text-blue-600 font-medium">click to select</span>
               </div>
               <div className="text-xs text-gray-400">
-                Maximum 6 images, 2MB each
+                Upload images, 2MB each
               </div>
             </div>
           </div>

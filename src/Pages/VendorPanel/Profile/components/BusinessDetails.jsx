@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
-import { FaEdit } from 'react-icons/fa';
-import CustomModal from '../../../../Components/modal';
-import FloatingInput from '../../../../Components/FloatingInput';
-import FloatingTextarea from '../../../../Components/FloatingInput/FloatingTextarea';
+import React, { useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import CustomModal from "../../../../Components/modal";
+import FloatingInput from "../../../../Components/FloatingInput";
+import FloatingTextarea from "../../../../Components/FloatingInput/FloatingTextarea";
 
-
-const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) => {
+const BusinessDetails = ({
+  business,
+  onEdit,
+  fetchBusinessDetails,
+  onSubmit,
+}) => {
   const [showModal, setShowModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
-    businessName: business?.business?.businessName || '',
-    description: business?.business?.description || '',
-    phone: business?.business?.contactDetails?.phone || '',
-    gst: business?.business?.gst || '',
-    whatsapp: business?.business?.contactDetails?.whatsapp || '',
-    email: business?.business?.email || '',
-    website: business?.business?.contactDetails?.website || ''
+    businessName: business?.business?.businessName || "",
+    description: business?.business?.description || "",
+    phone: business?.business?.contactDetails?.phone || "",
+    gst: business?.business?.gst || "",
+    whatsapp: business?.business?.contactDetails?.whatsapp || "",
+    email: business?.business?.email || "",
+    website: business?.business?.contactDetails?.website || "",
   });
   const [errors, setErrors] = useState({});
 
@@ -22,69 +27,75 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     const phoneRegex = /^[6-9]\d{9}$/;
     const nameRegex = /^[a-zA-Z\s]+$/;
-    const websiteRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    const websiteRegex =
+      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    const gstRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
     switch (name) {
-      case 'businessName':
-        if (!value.trim()) return 'Business name is required';
-        if (!nameRegex.test(value)) return 'Only letters and spaces are allowed';
-        return '';
-      case 'description':
-        if (!value.trim()) return 'Description is required';
-        if (value.length < 25) return 'Description must be at least 25 characters';
-        return '';
-      case 'phone':
-        if (!value) return 'Phone number is required';
-        if (!phoneRegex.test(value)) return 'Enter valid 10 digit phone number';
-        return '';
-      case 'whatsapp':
-        if (value && !phoneRegex.test(value)) return 'Enter valid 10 digit WhatsApp number';
-        return '';
-      case 'email':
-        if (!value) return 'Email is required';
-        if (!emailRegex.test(value)) return 'Enter valid email address';
-        return '';
-      case 'website':
-        if (value && !websiteRegex.test(value)) return 'Enter valid website URL';
-        return '';
-      case 'gst':
-        if (value && !gstRegex.test(value)) return 'Enter valid GST number';
-        return '';
+      case "businessName":
+        if (!value.trim()) return "Business name is required";
+        if (!nameRegex.test(value))
+          return "Only letters and spaces are allowed";
+        return "";
+      case "description":
+        if (!value.trim()) return "Description is required";
+        if (value.length < 25)
+          return "Description must be at least 25 characters";
+        return "";
+      case "phone":
+        if (!value) return "Phone number is required";
+        if (!phoneRegex.test(value)) return "Enter valid 10 digit phone number";
+        return "";
+      case "whatsapp":
+        if (value && !phoneRegex.test(value))
+          return "Enter valid 10 digit WhatsApp number";
+        return "";
+      case "email":
+        if (!value) return "Email is required";
+        if (!emailRegex.test(value)) return "Enter valid email address";
+        return "";
+      case "website":
+        if (value && !websiteRegex.test(value))
+          return "Enter valid website URL";
+        return "";
+      case "gst":
+        if (value && !gstRegex.test(value)) return "Enter valid GST number";
+        return "";
       default:
-        return '';
+        return "";
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'phone' || name === 'whatsapp') {
-      const numbersOnly = value.replace(/[^0-9]/g, '');
+    if (name === "phone" || name === "whatsapp") {
+      const numbersOnly = value.replace(/[^0-9]/g, "");
       const limitedLength = numbersOnly.slice(0, 10);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: limitedLength
+        [name]: limitedLength,
       }));
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: validateField(name, limitedLength)
+        [name]: validateField(name, limitedLength),
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: validateField(name, value)
+        [name]: validateField(name, value),
       }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) newErrors[key] = error;
     });
@@ -96,6 +107,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
+      setIsSaving(true);
       const updatedData = {
         email: formData.email,
         businessName: formData.businessName,
@@ -103,19 +115,24 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         contactDetails: {
           phone: formData.phone,
           whatsapp: formData.whatsapp,
-          website: formData.website
+          website: formData.website,
         },
-        gst: formData.gst
+        gst: formData.gst,
       };
 
       try {
         await onSubmit(updatedData);
         setShowModal(false);
-
       } catch (error) {
-        console.error('Error updating business:', error);
+        console.error("Error updating business:", error);
+      } finally {
+        setIsSaving(false);
       }
     }
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setIsSaving(false);
   };
 
   return (
@@ -130,11 +147,15 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         </button>
       </div>
       <div className="space-y-3">
-        <h3 className="text-2xl font-semibold">{business?.business?.businessName}</h3>
+        <h3 className="text-2xl font-semibold">
+          {business?.business?.businessName}
+        </h3>
         <p className="text-gray-600 ">{business?.business.description}</p>
         <div className="flex items-center">
           <span className="font-medium">Category:</span>
-          <span className="ml-2">{business?.business?.category?.displayName}</span>
+          <span className="ml-2">
+            {business?.business?.category?.displayName}
+          </span>
         </div>
         <div className="flex items-center">
           <span className="font-medium">Gst No:</span>
@@ -143,11 +164,15 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
         <div className="flex flex-col gap-2">
           <div className="flex items-center">
             <span className="font-medium">Phone:</span>
-            <span className="ml-2">{business?.business?.contactDetails?.phone}</span>
+            <span className="ml-2">
+              {business?.business?.contactDetails?.phone}
+            </span>
           </div>
           <div className="flex items-center">
             <span className="font-medium">WhatsApp:</span>
-            <span className="ml-2">{business?.business?.contactDetails?.whatsapp || '-'}</span>
+            <span className="ml-2">
+              {business?.business?.contactDetails?.whatsapp || "-"}
+            </span>
           </div>
           <div className="flex items-center">
             <span className="font-medium">Email:</span>
@@ -156,16 +181,18 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
 
           <div className="flex items-center">
             <span className="font-medium">Website:</span>
-            <a href={business?.business?.contactDetails?.website} className="ml-2 text-blue-600 hover:text-blue-700">
-              {business?.business?.contactDetails?.website || '-'}
+            <a
+              href={business?.business?.contactDetails?.website}
+              className="ml-2 text-blue-600 hover:text-blue-700"
+            >
+              {business?.business?.contactDetails?.website || "-"}
             </a>
           </div>
-
         </div>
       </div>
       <CustomModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={handleCloseModal}
         title="Edit Business Details"
       >
         <form onSubmit={handleSubmit} className="space-y-4 ">
@@ -177,6 +204,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
               onChange={handleChange}
               placeholder="Business Name"
               error={errors.businessName}
+              maxLength={50}
             />
 
             <FloatingInput
@@ -187,7 +215,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
               placeholder="Phone Number"
               error={errors.phone}
             />
-
+{/* 
             <FloatingInput
               id="email"
               name="email"
@@ -196,7 +224,7 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
               onChange={handleChange}
               placeholder="Email Address"
               error={errors.email}
-            />
+            /> */}
 
             <FloatingInput
               id="gst"
@@ -216,13 +244,12 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
               error={errors.website}
             />
 
-
             <FloatingInput
               id="whatsapp"
               name="whatsapp"
               value={formData.whatsapp}
               onChange={handleChange}
-              placeholder="W.Number (Optional)"
+              placeholder="Whatsapp (Optional)"
               error={errors.whatsapp}
             />
           </div>
@@ -238,16 +265,18 @@ const BusinessDetails = ({ business, onEdit, fetchBusinessDetails, onSubmit }) =
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              onClick={() => setShowModal(false)}
+              onClick={handleCloseModal}
               className="cursor-pointer px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
+              disabled={isSaving}
             >
               Cancel
             </button>
             <button
+              disabled={isSaving}
               type="submit"
-              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              className="cursor-pointer px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Save Changes
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
